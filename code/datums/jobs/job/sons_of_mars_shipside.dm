@@ -226,8 +226,8 @@ You are in charge of logistics and the overwatch system. You are also in line to
 	paygrade = "SOM_W2"
 	comm_title = "PO"
 	total_positions = 2
-	access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_COMMAND,ACCESS_SOM_ENGINEERING,ACCESS_MARINE_ENGINEERING)
-	minimal_access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_COMMAND,ACCESS_SOM_ENGINEERING,ACCESS_MARINE_ENGINEERING)
+	access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_COMMAND,ACCESS_SOM_ENGINEERING,ACCESS_MARINE_ENGINEERING, ACCESS_SOM_REQUESITIONS)
+	minimal_access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_COMMAND,ACCESS_SOM_ENGINEERING,ACCESS_MARINE_ENGINEERING, ACCESS_SOM_REQUESITIONS)
 	skills_type = /datum/skills/pilot
 	display_order = JOB_DISPLAY_ORDER_PILOT_OFFICER
 	outfit = /datum/outfit/job/som/command/pilot
@@ -294,8 +294,8 @@ Though you are a warrant officer, your authority is limited to the dropship and 
 	comm_title = "MCH"
 	total_positions = 0
 	skills_type = /datum/skills/mech_pilot
-	access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_MECHBAY,ACCESS_SOM_ENGINEERING,ACCESS_MARINE_ENGINEERING)
-	minimal_access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_MECHBAY,ACCESS_SOM_ENGINEERING,ACCESS_MARINE_ENGINEERING)
+	access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_MECHBAY,ACCESS_SOM_ENGINEERING,ACCESS_MARINE_ENGINEERING, ACCESS_SOM_REQUESITIONS)
+	minimal_access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_MECHBAY,ACCESS_SOM_ENGINEERING,ACCESS_MARINE_ENGINEERING, ACCESS_SOM_REQUESITIONS)
 	display_order = JOB_DISPLAY_ORDER_MECH_PILOT
 	outfit = /datum/outfit/job/som/command/mech_pilot
 	exp_requirements = XP_REQ_EXPERT
@@ -637,8 +637,8 @@ Make sure that the doctors and nurses are doing their jobs and keeping the SOM h
 
 /datum/outfit/job/som/medical/professor/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	. = ..()
-	H.equip_to_slot_or_del(new /obj/item/tweezers_advanced, SLOT_IN_BACKPACK)
-	H.equip_to_slot_or_del(new /obj/item/reagent_containers/glass/bottle/lemoline/doctor, SLOT_IN_BACKPACK)
+	H.equip_to_slot_or_del(new /obj/item/tweezers_advanced, SLOT_IN_L_POUCH)
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/glass/bottle/lemoline/doctor, SLOT_S_STORE)
 
 //Medical Officer
 /datum/job/som/medical/medicalofficer
@@ -697,11 +697,13 @@ You are also an expert when it comes to medication and treatment. If you do not 
 	glasses = /obj/item/clothing/glasses/hud/health
 	mask = /obj/item/clothing/mask/surgical
 	head = /obj/item/clothing/head/surgery/purple
+	r_store = /obj/item/storage/pouch/surgery
+	l_store = /obj/item/storage/pouch/medkit/doctor
 
 /datum/outfit/job/som/medical/medicalofficer/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	. = ..()
-	H.equip_to_slot_or_del(new /obj/item/tweezers_advanced, SLOT_IN_BACKPACK)
-	H.equip_to_slot_or_del(new /obj/item/reagent_containers/glass/bottle/lemoline/doctor, SLOT_IN_BACKPACK)
+	H.equip_to_slot_or_del(new /obj/item/tweezers_advanced, SLOT_IN_R_POUCH)
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/glass/bottle/lemoline/doctor, SLOT_S_STORE)
 
 
 /datum/job/som/civilian

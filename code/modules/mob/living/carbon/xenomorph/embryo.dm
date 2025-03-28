@@ -24,6 +24,8 @@
 	. = ..()
 	if(!isliving(loc))
 		return
+	if(istype(loc, /mob/living/carbon/xenomorph/puppet))
+		return INITIALIZE_HINT_QDEL //letting puppets be larva farms makes it too easy to get larva.
 	affected_mob = loc
 	affected_mob.status_flags |= XENO_HOST
 	log_combat(affected_mob, null, "been infected with an embryo")
@@ -179,7 +181,8 @@
 	if(birth_owner.emerge_target == 1)
 		playsound(victim, 'modular_skyrat/sound/weapons/gagging.ogg', 15, TRUE)
 	else
-		victim.emote_burstscream()
+		if(victim.client.prefs.burst_screams_enabled)
+			victim.emote_burstscream()
 	victim.Paralyze(15 SECONDS)
 	victim.visible_message("<span class='danger'>\The [victim] starts shaking uncontrollably!</span>", \
 								"<span class='danger'>You feel something wiggling in your [birth_owner.emerge_target_flavor]!</span>")

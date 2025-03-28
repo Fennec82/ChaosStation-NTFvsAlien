@@ -1,7 +1,7 @@
 /obj/machinery/vending/weapon/som
-	name = "/improper SOC weapon rack"
+	name = "\improper SOM automated weapons rack"
 	faction = FACTION_SOM
-	desc = "Syndicate Official Contraband weapon rack, here you get your guns."
+	desc = "An automated weapon rack hooked up to a colossal storage of standard-issue weapons."
 	icon_state = "marinearmory"
 	icon_vend = "marinearmory-vend"
 	icon_deny = "marinearmory"
@@ -484,6 +484,7 @@
 			/obj/item/clothing/head/helmet/marine/icc/guard = -1,
 			/obj/item/clothing/head/helmet/marine/icc/guard/heavy = -1,
 			/obj/item/clothing/head/helmet/marine/stolen = -1,
+			/obj/item/clothing/head/modular/m10x/stolen = -1,
 		),
 		"Combat Drone" = list(
 			/obj/item/clothing/suit/modular/robot/light = -1,

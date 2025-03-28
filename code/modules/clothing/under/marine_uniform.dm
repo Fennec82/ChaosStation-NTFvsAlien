@@ -191,7 +191,6 @@
 	soft_armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 10, BIO = 15, FIRE = 15, ACID = 15)
 	cold_protection_flags = CHEST|GROIN|LEGS|ARMS|HANDS|FEET
 	min_cold_protection_temperature = SPACE_SUIT_MIN_COLD_PROTECTION_TEMPERATURE
-	slowdown= -0.25
 
 /obj/item/clothing/under/marine/spec_operative/equipped(mob/user, i_clothing)
 	. = ..()
@@ -633,6 +632,9 @@
 
 /obj/item/clothing/under/icc/webbing
 	starting_attachments = list(/obj/item/armor_module/storage/uniform/brown_vest)
+
+/obj/item/clothing/under/icc/medic
+	starting_attachments = list(/obj/item/armor_module/storage/uniform/white_vest)
 
 /obj/item/clothing/under/sectoid
 	name = "psionic field"
