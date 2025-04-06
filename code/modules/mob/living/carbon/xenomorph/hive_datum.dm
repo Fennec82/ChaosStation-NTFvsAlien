@@ -30,6 +30,8 @@
 	var/list/client/candidates
 	/// Amount of special resin points used to build special resin walls by each hive.
 	var/special_build_points = 50
+	/// These factions cannot sell this hive's corpses.
+	var/list/allied_factions = list(FACTION_CLF, FACTION_XENO)
 
 	///Reference to upgrades available and purchased by this hive.
 	var/datum/hive_purchases/purchases = new
@@ -296,6 +298,15 @@
 		if(t == XENO_TIER_MINION)
 			continue
 		. += length(xenos_by_tier[t])
+
+/datum/hive_status/proc/get_all_caste_members(caste_type)
+	RETURN_TYPE(/list)
+
+	ASSERT(ispath(caste_type, /datum/xeno_caste))
+	. = list()
+	var/list/all_strain_types = get_strain_options(caste_type)
+	for(var/strain_type in all_strain_types)
+		. += xenos_by_typepath[strain_type]
 
 /datum/hive_status/proc/post_add(mob/living/carbon/xenomorph/X)
 	X.color = color
@@ -756,7 +767,7 @@
 
 	var/mob/living/carbon/xenomorph/successor
 
-	var/list/candidates = xenos_by_typepath[/datum/xeno_caste/queen] + xenos_by_typepath[/datum/xeno_caste/shrike] + xenos_by_typepath[/datum/xeno_caste/king] + xenos_by_typepath[/datum/xeno_caste/dragon]
+	var/list/candidates = xenos_by_typepath[/datum/xeno_caste/queen] + xenos_by_typepath[/datum/xeno_caste/shrike] + xenos_by_typepath[/datum/xeno_caste/king] + xenos_by_typepath[/datum/xeno_caste/dragon] + xenos_by_typepath[/datum/xeno_caste/king/conqueror]
 	if(length(candidates)) //Priority to the queens.
 		successor = candidates[1] //First come, first serve.
 
@@ -1210,6 +1221,7 @@ to_chat will check for valid clients itself already so no need to double check f
 	hivenumber = XENO_HIVE_CORRUPTED
 	prefix = "Corrupted "
 	color = "#00ff80"
+	allied_factions = list(FACTION_TERRAGOV)
 
 // Make sure they can understand english
 /datum/hive_status/corrupted/post_add(mob/living/carbon/xenomorph/X)
@@ -1301,6 +1313,7 @@ to_chat will check for valid clients itself already so no need to double check f
 	hivenumber = XENO_HIVE_ALPHA
 	prefix = "Alpha "
 	color = "#cccc00"
+	allied_factions = list()
 
 /mob/living/carbon/xenomorph/queen/Alpha
 	hivenumber = XENO_HIVE_ALPHA
@@ -1376,6 +1389,7 @@ to_chat will check for valid clients itself already so no need to double check f
 	hivenumber = XENO_HIVE_BETA
 	prefix = "Beta "
 	color = "#9999ff"
+	allied_factions = list()
 
 /mob/living/carbon/xenomorph/queen/Beta
 	hivenumber = XENO_HIVE_BETA
@@ -1451,6 +1465,7 @@ to_chat will check for valid clients itself already so no need to double check f
 	hivenumber = XENO_HIVE_ZETA
 	prefix = "Zeta "
 	color = "#606060"
+	allied_factions = list()
 
 /mob/living/carbon/xenomorph/queen/Zeta
 	hivenumber = XENO_HIVE_ZETA
@@ -1525,6 +1540,7 @@ to_chat will check for valid clients itself already so no need to double check f
 	name = "Admeme"
 	hivenumber = XENO_HIVE_ADMEME
 	prefix = "Admeme "
+	allied_factions = list()
 
 /mob/living/carbon/xenomorph/queen/admeme
 	hivenumber = XENO_HIVE_ADMEME
@@ -1537,6 +1553,7 @@ to_chat will check for valid clients itself already so no need to double check f
 	hivenumber = XENO_HIVE_FALLEN
 	prefix = "Fallen "
 	color = "#8046ba"
+	allied_factions = list()
 
 /datum/hive_status/corrupted/fallen/can_xeno_message()
 	return FALSE
@@ -1552,6 +1569,7 @@ to_chat will check for valid clients itself already so no need to double check f
 	hivenumber = XENO_HIVE_FORSAKEN
 	prefix = "Forsaken "
 	color = "#5b3f5b"
+	allied_factions = list(FACTION_CLF, FACTION_XENO)
 
 /mob/living/carbon/xenomorph/queen/Forsaken
 	hivenumber = XENO_HIVE_FORSAKEN

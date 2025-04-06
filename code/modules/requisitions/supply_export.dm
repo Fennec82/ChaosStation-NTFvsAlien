@@ -5,20 +5,29 @@
 		return FALSE
 	SSpoints.supply_points[faction_selling] = clamp((SSpoints.supply_points[faction_selling]+=points[1]),0,HUMAN_FACTION_MAX_POINTS) //NTF edit. Forcibly caps exports to stop infinite Jims
 	SSpoints.dropship_points += points[2]
-	return new /datum/export_report(points[1], name, faction_selling)
+	return list(new /datum/export_report(points[1], name, faction_selling))
 
 /mob/living/carbon/human/supply_export(faction_selling)
 	if(!can_sell_human_body(src, faction_selling))
-		return new /datum/export_report(0, name, faction_selling)
+		return list(new /datum/export_report(0, name, faction_selling))
 	return ..()
 
 /mob/living/carbon/xenomorph/supply_export(faction_selling)
+	var/datum/hive_status/hive = GLOB.hive_datums[hivenumber]
+	if(faction_selling in hive.allied_factions)
+		return list(new /datum/export_report(0, name, faction_selling))
 	. = ..()
 	if(!.)
 		return FALSE
 
 	var/list/points = get_export_value()
 	GLOB.round_statistics.points_from_xenos += points[1]
+
+/obj/structure/closet/supply_export(faction_selling)
+	. = ..()
+	for(var/atom/movable/AM in contents)
+		. += AM.supply_export(faction_selling)
+		qdel(AM)
 
 /**
  * Getter proc for the point value of this object
