@@ -559,8 +559,6 @@
 	if(!hive.remove_xeno(src))
 		CRASH("failed to remove xeno from a hive")
 
-	LAZYREMOVE(GLOB.alive_xeno_list_hive[hivenumber], src)
-	
 	if((xeno_flags & XENO_LEADER) || (src in hive.xeno_leader_list))
 		hive.remove_leader(src)
 

@@ -1,32 +1,12 @@
-
-/atom/movable/screen/map_view/preference_preview
-	/// All the plane masters that need to be applied.
-	var/atom/movable/screen/background/screen_bg
-
-/atom/movable/screen/map_view/preference_preview/Destroy()
-	QDEL_NULL(screen_bg)
-	return ..()
-
-/atom/movable/screen/map_view/preference_preview/generate_view(map_key)
-	. = ..()
-	screen_bg = new
-	screen_bg.del_on_map_removal = FALSE
-	screen_bg.assigned_map = assigned_map
-	screen_bg.icon_state = "clear"
-	screen_bg.fill_rect(1, 1, 4, 1)
-
-/atom/movable/screen/map_view/preference_preview/display_to_client(client/show_to)
-	show_to.register_map_obj(screen_bg)
-	return ..()
-
 /datum/preferences/ui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
+		user.client.register_map_obj(screen_main)
+		user.client.register_map_obj(screen_bg)
 
 		ui = new(user, src, "PlayerPreferences", "Preferences")
 		ui.set_autoupdate(FALSE)
 		ui.open()
-		screen_main.display_to(user, ui.window)
 
 /datum/preferences/ui_close(mob/user)
 	. = ..()
@@ -39,20 +19,19 @@
 /datum/preferences/ui_data(mob/user)
 	var/list/data = list()
 	data["tabIndex"] = tab_index
-	data["slot"] = default_slot
-	data["save_slot_names"] = list()
 	if(!path)
-		return data
+		. = data
+		CRASH("no path")
 	var/savefile/S = new (path)
 	if(!S)
-		return data
-	var/name
-	for(var/i in 1 to MAX_SAVE_SLOTS)
-		S.cd = "/character[i]"
-		S["real_name"] >> name
-		if(!name)
-			continue
-		data["save_slot_names"]["[i]"] = name
+		. = data
+		CRASH("no savefile for path [path]")
+	var/slotname
+	S.cd = "/character[default_slot]"
+	S["real_name"] >> slotname
+	if(!slotname)
+		slotname = "\[empty\]"
+	data["slot"] = "[default_slot] - [slotname]"
 
 	data["unique_action_use_active_hand"] = unique_action_use_active_hand
 
@@ -91,10 +70,10 @@
 			data["grad_style"] = grad_style
 			data["f_style"] = f_style
 		if(BACKGROUND_INFORMATION)
-			data["slot"] = default_slot
 			data["flavor_text"] = html_decode(flavor_text)
 			data["xeno_desc"] = html_decode(xeno_desc)
 			data["profile_pic"] = html_decode(profile_pic)
+			data["nsfwprofile_pic"] = html_decode(nsfwprofile_pic)
 			data["xenoprofile_pic"] = html_decode(xenoprofile_pic)
 			data["med_record"] = html_decode(med_record)
 			data["gen_record"] = html_decode(gen_record)
@@ -134,7 +113,6 @@
 			data["accessible_tgui_themes"] = accessible_tgui_themes
 			data["tgui_fancy"] = tgui_fancy
 			data["tgui_lock"] = tgui_lock
-			data["ui_scale"] = ui_scale
 			data["tgui_input"] = tgui_input
 			data["tgui_input_big_buttons"] = tgui_input_big_buttons
 			data["tgui_input_buttons_swap"] = tgui_input_buttons_swap
@@ -165,7 +143,6 @@
 			data["pixel_size"] = pixel_size
 			data["parallax"] = parallax
 			data["fullscreen_mode"] = fullscreen_mode
-			data["show_status_bar"] = show_status_bar
 			data["fast_mc_refresh"] = fast_mc_refresh
 			data["split_admin_tabs"] = split_admin_tabs
 		if(KEYBIND_SETTINGS)
@@ -252,7 +229,23 @@
 
 	switch(action)
 		if("changeslot")
-			if(!load_character(text2num(params["changeslot"])))
+			var/list/slots = list()
+			if(!path)
+				CRASH("no path")
+			var/savefile/S = new (path)
+			if(!S)
+				CRASH("no savefile for path [path]")
+			var/slotname
+			for(var/i in 1 to MAX_SAVE_SLOTS)
+				S.cd = "/character[i]"
+				S["real_name"] >> slotname
+				if(!slotname)
+					slotname = "\[empty\]"
+				slots += "[i] - [slotname]"
+			var/choice = tgui_input_list(ui.user, "What slot do you want to load?", "Character slot choice", slots)
+			if(!choice)
+				return
+			if(!load_character(text2num(splittext(choice," - ")[1])))
 				random_character()
 				real_name = random_unique_name(gender)
 				save_character()
@@ -652,12 +645,24 @@
 			var/new_record = trim(html_encode(params["profilePic"]), MAX_MESSAGE_LEN)
 			if(!new_record)
 				return
+			if(new_record == "!clear")
+				new_record = ""
 			profile_pic = new_record
+
+		if("nsfwprofile_pic")
+			var/new_record = trim(html_encode(params["nsfwprofilePic"]), MAX_MESSAGE_LEN)
+			if(!new_record)
+				return
+			if(new_record == "!clear")
+				new_record = ""
+			nsfwprofile_pic = new_record
 
 		if("xenoprofile_pic")
 			var/new_record = trim(html_encode(params["xenoprofilePic"]), MAX_MESSAGE_LEN)
 			if(!new_record)
 				return
+			if(new_record == "!clear")
+				new_record = ""
 			xenoprofile_pic = new_record
 
 		if("xenogender")
@@ -672,7 +677,8 @@
 
 		if("auto_fit_viewport")
 			auto_fit_viewport = !auto_fit_viewport
-			parent?.attempt_auto_fit_viewport()
+			if(auto_fit_viewport && parent)
+				parent.fit_viewport()
 
 		if("mute_xeno_health_alert_messages")
 			mute_xeno_health_alert_messages = !mute_xeno_health_alert_messages
@@ -725,12 +731,6 @@
 
 		if("tgui_lock")
 			tgui_lock = !tgui_lock
-
-		if("ui_scale")
-			ui_scale = !ui_scale
-
-			INVOKE_ASYNC(usr.client, TYPE_VERB_REF(/client, refresh_tgui))
-			usr.client.tgui_say?.load()
 
 		if("tgui_input")
 			tgui_input = !tgui_input
@@ -847,10 +847,6 @@
 		if("fullscreen_mode")
 			fullscreen_mode = !fullscreen_mode
 			user.client?.set_fullscreen(fullscreen_mode)
-
-		if("show_status_bar")
-			show_status_bar = !show_status_bar
-			user.client?.toggle_status_bar(show_status_bar)
 
 		if("set_keybind")
 			var/kb_name = params["keybind_name"]
