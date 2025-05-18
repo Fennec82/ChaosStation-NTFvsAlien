@@ -3,8 +3,9 @@
 	var/list/points = get_export_value()
 	if(!points)
 		return FALSE
-	SSpoints.supply_points[faction_selling] = clamp((SSpoints.supply_points[faction_selling]+=points[1]),0,HUMAN_FACTION_MAX_POINTS) //NTF edit. Forcibly caps exports to stop infinite Jims
-	SSpoints.dropship_points += points[2]
+
+	SSpoints.add_supply_points(faction_selling, points[1])
+	SSpoints.add_dropship_points(faction_selling, points[2])
 	return list(new /datum/export_report(points[1], name, faction_selling))
 
 /mob/living/carbon/human/supply_export(faction_selling)
@@ -68,7 +69,7 @@
 
 //I hate it but it's how it was so I'm not touching it further than this
 /mob/living/carbon/xenomorph/shrike/get_export_value()
-	return list(600, 50)
+	return list(300, 30)
 
 /obj/item/reagent_containers/food/snacks/req_pizza/get_export_value()
 	return list(10, 0)

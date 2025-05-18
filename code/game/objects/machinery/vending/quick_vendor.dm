@@ -85,7 +85,7 @@ GLOBAL_LIST_INIT(quick_loadouts, init_quick_loadouts())
 		/datum/outfit/quick/vsd/medic/vsd_pdw,
 		/datum/outfit/quick/vsd/spec/flamer,
 		/datum/outfit/quick/vsd/spec/demolitionist,
-		// /datum/outfit/quick/vsd/spec/gunslinger,
+		/datum/outfit/quick/vsd/spec/gunslinger,
 		// /datum/outfit/quick/vsd/spec/uslspec_one,
 		// /datum/outfit/quick/vsd/spec/uslspec_two,
 		/datum/outfit/quick/vsd/juggernaut,
@@ -110,7 +110,7 @@ GLOBAL_LIST_INIT(quick_loadouts, init_quick_loadouts())
 		.[X] = new X
 
 /obj/machinery/quick_vendor
-	name = "Kwik-E-Quip vendor"
+	name = "\improper Kwik-E-Quip vendor"
 	desc = "An advanced vendor to instantly arm soldiers with specific sets of equipment, allowing for immediate combat deployment. \
 	Mutually exclusive with the GHMME."
 	icon = 'icons/obj/machines/vending.dmi'
@@ -124,14 +124,14 @@ GLOBAL_LIST_INIT(quick_loadouts, init_quick_loadouts())
 	light_range = 1
 	light_power = 0.5
 	light_color = LIGHT_COLOR_BLUE
-	///The faction of this quick load vendor
-	var/faction = FACTION_NEUTRAL
+	faction = FACTION_NEUTRAL
 	//the different tabs in the vendor
 	var/list/categories = list(
 		"Squad Operative",
 		"Squad Engineer",
 		"Squad Corpsman",
 		"Squad Smartgunner",
+		"Squad Specialist",
 		"Squad Leader",
 	)
 	///Whichever global loadout is used to build the vendor stock
@@ -169,7 +169,7 @@ GLOBAL_LIST_INIT(quick_loadouts, init_quick_loadouts())
 	. = ..()
 	if(!is_operational())
 		return
-	. += emissive_appearance(icon, "[icon_state]_emissive")
+	. += emissive_appearance(icon, "[icon_state]_emissive", src)
 
 /obj/machinery/quick_vendor/can_interact(mob/user)
 	. = ..()
@@ -290,15 +290,14 @@ GLOBAL_LIST_INIT(quick_loadouts, init_quick_loadouts())
 	)
 
 /obj/machinery/quick_vendor/vsd
-	name = "VSD Kwik-E-Quip vendor"
+	name = "KZ Kwik-E-Quip vendor"
 	icon_state = "loadoutvendor"
-	faction = FACTION_SOM
+	faction = FACTION_VSD
 	categories = list(
-		"VSD Standard",
-		"VSD Engineer",
-		"VSD Medic",
-		"VSD Specialist",
-		"VSD Squad Leader",
+		"KZ Standard",
+		"KZ Engineer",
+		"KZ Specialist",
+		"KZ Squad Leader",
 	)
 
 /obj/machinery/quick_vendor/pmc
@@ -315,12 +314,46 @@ GLOBAL_LIST_INIT(quick_loadouts, init_quick_loadouts())
 	)
 
 /obj/machinery/quick_vendor/icc
-	name = "ICC Kwik-E-Quip Vendor"
+	name = "CM Kwik-E-Quip Vendor"
 	icon_state = "loadoutvendor"
 	faction = FACTION_ICC
 	categories = list(
-		"ICC Standard",
-		"ICC Medic",
-		"ICC Guardsman",
-		"ICC Squad Leader",
+		"CM Standard",
+		"CM Medic",
+		"CM Guardsman",
+		"CM Squad Leader",
+	)
+
+
+/obj/machinery/quick_vendor/som
+	desc = "An advanced vendor used by the SOM to rapidly equip their soldiers"
+	faction = VENDOR_FACTION_SOM
+	categories = list(
+		"SOM Squad Standard",
+		"SOM Squad Engineer",
+		"SOM Squad Medic",
+		"SOM Squad Veteran",
+		"SOM Squad Leader",
+	)
+
+
+/obj/machinery/quick_vendor/vsd
+	desc = "An advanced vendor used by the VSD to rapidly equip their operatives"
+	faction = VENDOR_FACTION_VSD
+	categories = list(
+		"KZ Standard",
+		"KZ Engineer",
+		"KZ Specialist",
+		"KZ Squad Leader",
+	)
+
+
+/obj/machinery/quick_vendor/clf
+	desc = "An advanced vendor used by the CLF to rapidly equip their devotees"
+	faction = VENDOR_FACTION_CLF
+	categories = list(
+		"CLF Standard",
+		"CLF Medic",
+		"CLF Breeder",
+		"CLF Leader",
 	)

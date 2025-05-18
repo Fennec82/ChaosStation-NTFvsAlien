@@ -59,6 +59,7 @@
 #include "code\datums\sexcon\sexcon_helpers.dm"
 #include "code\game\objects\effects\landmarks\marine_spawns.dm"
 #include "code\game\objects\items.dm"
+#include "code\game\objects\machinery\computer\voucher.dm"
 #include "code\game\objects\structures\crates_lockers\largecrate_supplies.dm"
 #include "code\game\objects\structures\dancing_pole.dm"
 #include "code\game\objects\structures\droppod.dm"
@@ -90,3 +91,4 @@
 #include "modules\underwear\underwear\shirts.dm"
 #include "modules\underwear\underwear\socks.dm"
 #include "modules\underwear\underwear\underwear.dm"
+#include "code\modules\projectiles\guns\rifles.dm"

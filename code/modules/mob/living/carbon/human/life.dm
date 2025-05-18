@@ -45,14 +45,20 @@
 /mob/living/carbon/human/proc/set_undefibbable()
 	if(issynth(src)) //synths do not dnr.
 		return
+	if(HAS_TRAIT(src, TRAIT_UNDEFIBBABLE))
+		return
 	ADD_TRAIT(src, TRAIT_UNDEFIBBABLE , TRAIT_UNDEFIBBABLE)
 	SEND_SIGNAL(src, COMSIG_HUMAN_SET_UNDEFIBBABLE)
 	SSmobs.stop_processing(src) //Last round of processing.
 
-	if((SSticker.mode?.round_type_flags & MODE_TWO_HUMAN_FACTIONS) && job?.job_cost)
-		job.free_job_positions(1)
+	job.free_job_positions(1)
 	if(hud_list)
 		med_hud_set_status()
+	for(var/datum/data/record/general_record in GLOB.datacore.general)
+		if(!(general_record.fields["name"] == real_name))
+			continue
+		general_record.fields["p_stat"] = "*Deceased*"
+
 
 /mob/living/carbon/human/proc/handle_breath()
 	if(species.species_flags & NO_BREATHE)
@@ -77,6 +83,6 @@
 	else
 		adjustOxyLoss(CARBON_RECOVERY_OXYLOSS, TRUE)
 		if(breath_failing)
-			to_chat(src, span_notice("Fresh air fills your lungs; you can breath again!"))
+			to_chat(src, span_notice("Fresh air fills your lungs; you can breathe again!"))
 			clear_alert(ALERT_NOT_ENOUGH_OXYGEN)
 			breath_failing = FALSE

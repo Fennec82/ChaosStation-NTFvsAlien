@@ -23,7 +23,7 @@
 	w_class = WEIGHT_CLASS_SMALL
 	default_ammo = /datum/ammo/energy/plasma_pistol
 	magazine_flags = NONE
-	icon_state_mini = "mag_tx7"
+	icon_state_mini = "mag_plasma"
 
 //-------------------------------------------------------
 //RT-3 PISTOL
@@ -223,6 +223,7 @@
 
 /obj/item/ammo_magazine/pistol/som/extended
 	name = "\improper V-11 extended magazine (9mm)"
+	default_ammo = /datum/ammo/bullet/pistol
 	max_rounds = 30
 	icon_state = "v11_extended"
 	icon_state_mini = "mag_pistol_yellow"
@@ -267,7 +268,7 @@
 	name = "\improper SP-13 magazine (9mm AP)"
 	caliber = CALIBER_9X19
 	icon_state = "tx13"
-	icon_state_mini = "mag_pistol_tube"
+	icon_state_mini = "mag_pistol_orange"
 	max_rounds = 40
 	w_class = WEIGHT_CLASS_SMALL
 	default_ammo = /datum/ammo/bullet/pistol/ap
@@ -279,6 +280,7 @@
 	default_ammo = /datum/ammo/bullet/pistol
 	caliber = CALIBER_ALIEN
 	icon_state = "knife"
+	icon_state_mini = "knife"
 	max_rounds = 1
 
 //XM104 cylinder placed in pistols
@@ -289,14 +291,14 @@
 	max_rounds = 6
 	caliber = CALIBER_357
 	icon_state = "xm104"
-	icon_state_mini = "mag_revolver_red"
+	icon_state_mini = "xm104"
 
 //c96
 
 /obj/item/ammo_magazine/pistol/vsd_pistol
 	name = "\improper C96 'riot' magazine"
-	default_ammo = /datum/ammo/bullet/pistol/ap
+	default_ammo = /datum/ammo/bullet/pistol/vsd_ap
 	caliber = CALIBER_9X19
 	icon_state = "c96"
 	icon_state_mini = "mag_pistol_normal"
-	max_rounds = 15
+	max_rounds = 22

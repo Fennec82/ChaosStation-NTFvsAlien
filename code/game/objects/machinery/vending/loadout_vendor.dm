@@ -11,8 +11,7 @@
 	light_range = 1
 	light_power = 0.5
 	light_color = LIGHT_COLOR_BLUE
-	///The faction of this loadout vendor
-	var/faction = VENDOR_FACTION_NEUTRAL
+	faction = VENDOR_FACTION_NEUTRAL
 	var/list/categories = list(
 		"Squad Marine",
 		"Squad Engineer",
@@ -45,7 +44,7 @@
 	. = ..()
 	if(!is_operational())
 		return
-	. += emissive_appearance(icon, "[icon_state]_emissive")
+	. += emissive_appearance(icon, "[icon_state]_emissive", src)
 
 /obj/machinery/loadout_vendor/can_interact(mob/user)
 	. = ..()
@@ -96,10 +95,10 @@
 	desc = "An advanced vendor used by the ICC to rapidly equip their troops"
 	faction = VENDOR_FACTION_ICC
 	categories = list(
-		"ICC Standard",
-		"ICC Medic",
-		"ICC Guardsman",
-		"ICC Squad Leader",
+		"CM Standard",
+		"CM Medic",
+		"CM Guardsman",
+		"CM Squad Leader",
 	)
 
 
@@ -119,11 +118,10 @@
 	desc = "An advanced vendor used by the VSD to rapidly equip their operatives"
 	faction = VENDOR_FACTION_VSD
 	categories = list(
-		"VSD Standard",
-		"VSD Engineer",
-		"VSD Medic",
-		"VSD Specialist",
-		"VSD Squad Leader",
+		"KZ Standard",
+		"KZ Engineer",
+		"KZ Specialist",
+		"KZ Squad Leader",
 	)
 
 

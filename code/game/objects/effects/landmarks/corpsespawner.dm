@@ -589,7 +589,7 @@
 
 //ICC
 /obj/effect/landmark/corpsespawner/icc
-	name = "ICC infantry"
+	name = "CM infantry"
 	corpseuniform = /obj/item/clothing/under/som
 	corpsesuit = /obj/item/clothing/suit/modular/som
 	corpsemask = /obj/item/clothing/mask/gas
@@ -599,7 +599,7 @@
 	corpsepocket1 = /obj/item/tool/lighter/zippo
 
 /obj/effect/landmark/corpsespawner/icc_officer
-	name = "ICC leader"
+	name = "CM leader"
 	corpseuniform = /obj/item/clothing/under/icc
 	corpsesuit = /obj/item/clothing/suit/storage/marine/icc/guard
 	corpsemask = /obj/item/clothing/mask/gas/icc
@@ -620,8 +620,8 @@
 
 /obj/effect/landmark/corpsespawner/vsd_command
 	name = "Vyacheslav officer"
-	corpseuniform = /obj/item/clothing/under/vsd/webbing
-	corpsesuit = /obj/item/clothing/suit/storage/marine/vsd/desert
+	corpseuniform = /obj/item/clothing/under/vsd/officer/webbing
+	corpsesuit = /obj/item/clothing/suit/storage/marine/vsd/alt
 	corpsemask = /obj/item/clothing/mask/gas/vsd
 	corpsehelmet = /obj/item/clothing/head/vsd/beret
 	corpsegloves = /obj/item/clothing/gloves/marine/veteran/pmc

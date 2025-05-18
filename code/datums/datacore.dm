@@ -50,7 +50,7 @@ GLOBAL_DATUM_INIT(datacore, /datum/datacore, new)
 				for(var/squad_name in squad_group)
 					squads[squad_name] = list()
 	squads["No Squad"] = list()
-	
+
 	var/non_empty_squad_exists = null
 
 	// sort mobs
@@ -59,17 +59,20 @@ GLOBAL_DATUM_INIT(datacore, /datum/datacore, new)
 		var/rank = t.fields["rank"]
 		var/squad_name = t.fields["squad"]
 		var/mobfaction = null
-		var/active = 0
+		var/active = FALSE
+		var/deceased = TRUE
 
-		for(var/mob/living/M in GLOB.player_list)
+		for(var/mob/living/M in GLOB.mob_living_list)
 			if(M.real_name == name)
+				if(ooc && !HAS_TRAIT(M, TRAIT_UNDEFIBBABLE))
+					deceased = FALSE
 				if(ooc && M.client && M.client.inactivity <= 10 * 60 * 10)
-					active = 1
+					active = TRUE
 				mobfaction = M.job?.faction
 				break
-		
+
 		if(ooc)
-			isactive[name] = active ? "Active" : "Inactive"
+			isactive[name] = deceased ? "*Deceased*" : (active ? "Active" : "Inactive")
 		else
 			isactive[name] = t.fields["p_stat"]
 
@@ -98,7 +101,7 @@ GLOBAL_DATUM_INIT(datacore, /datum/datacore, new)
 			if(rank in GLOB.jobs_regular_all)
 				misc[name] = rank
 			else
-				if(ooc || (viewfaction && viewfaction == mobfaction))
+				if(ooc || (!mobfaction) || (viewfaction && viewfaction == mobfaction))
 					other[name] = rank
 
 	//Xenomorphs
@@ -118,7 +121,7 @@ GLOBAL_DATUM_INIT(datacore, /datum/datacore, new)
 				else
 					isactive[name] = "Active"
 			xeno[name] = rank
-		
+
 	if(length(heads) > 0)
 		dat += "<tr><th colspan=3>Command</th></tr>"
 		for(var/name in heads)

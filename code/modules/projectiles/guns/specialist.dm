@@ -107,7 +107,7 @@ Note that this means that snipers will have a slowdown of 3, due to the scope
 
 /obj/item/weapon/gun/rifle/sniper/antimaterial/do_fire(obj/object_to_fire)
 	if(laser_target)
-		var/obj/projectile/projectile_to_fire = object_to_fire
+		var/atom/movable/projectile/projectile_to_fire = object_to_fire
 		projectile_to_fire.projectile_behavior_flags |= PROJECTILE_PRECISE_TARGET
 	return ..()
 
@@ -318,7 +318,6 @@ Note that this means that snipers will have a slowdown of 3, due to the scope
 		slot_r_hand_str = 'icons/mob/inhands/guns/marksman_right_1.dmi',
 	)
 	max_shells = 25 //codex
-	muzzleflash_iconstate = "muzzle_flash_medium"
 	caliber = CALIBER_10X28_CASELESS //codex
 	fire_sound = 'sound/weapons/guns/fire/t64.ogg'
 	unload_sound = 'sound/weapons/guns/interact/m4ra_unload.ogg'
@@ -343,9 +342,9 @@ Note that this means that snipers will have a slowdown of 3, due to the scope
 		/obj/item/attachable/extended_barrel,
 		/obj/item/attachable/heavy_barrel,
 		/obj/item/attachable/suppressor,
+		/obj/item/attachable/bayonet/converted,
 		/obj/item/attachable/bayonet,
-		/obj/item/attachable/bayonetknife,
-		/obj/item/attachable/bayonetknife/som,
+		/obj/item/attachable/bayonet/som,
 		/obj/item/attachable/compensator,
 		/obj/item/attachable/scope,
 		/obj/item/attachable/scope/mini,
@@ -379,8 +378,8 @@ Note that this means that snipers will have a slowdown of 3, due to the scope
 // MINIGUN
 
 /obj/item/weapon/gun/minigun
-	name = "\improper MG-100 Vindicator Minigun"
-	desc = "A six barreled rotary machine gun, The ultimate in man-portable firepower, capable of laying down high velocity armor piercing rounds this thing will no doubt pack a punch.. If you don't kill all your friends with it, you can use the stablizing system of the Powerpack to fire aimed fire, but you'll move incredibly slowly."
+	name = "\improper MG-100 Vindicator minigun"
+	desc = "A six-barreled rotary machine gun, the ultimate in man-portable firepower. Capable of laying down a steady stream high velocity armor piercing rounds. Try not to kill all of your friends with it."
 	icon = 'icons/obj/items/guns/special64.dmi'
 	icon_state = "minigun"
 	worn_icon_state = "minigun"
@@ -534,8 +533,8 @@ Note that this means that snipers will have a slowdown of 3, due to the scope
 		/obj/item/attachable/heavy_barrel,
 		/obj/item/attachable/suppressor,
 		/obj/item/attachable/bayonet,
-		/obj/item/attachable/bayonetknife,
-		/obj/item/attachable/bayonetknife/som,
+		/obj/item/attachable/bayonet,
+		/obj/item/attachable/bayonet/som,
 		/obj/item/attachable/compensator,
 		/obj/item/attachable/scope,
 		/obj/item/attachable/angledgrip,
@@ -654,11 +653,12 @@ Note that this means that snipers will have a slowdown of 3, due to the scope
 	scatter = -100
 	placed_overlay_iconstate = "sadar"
 	windup_delay = 0.4 SECONDS
+	gun_crosshair = 'icons/UI_Icons/gun_crosshairs/explosive.dmi'
 	///removes backblast damage if false
 	var/backblastdamage = TRUE
 
 //Adding in the rocket backblast. The tile behind the specialist gets blasted hard enough to down and slightly wound anyone
-/obj/item/weapon/gun/launcher/rocket/apply_gun_modifiers(obj/projectile/projectile_to_fire, atom/target)
+/obj/item/weapon/gun/launcher/rocket/apply_gun_modifiers(atom/movable/projectile/projectile_to_fire, atom/target)
 	. = ..()
 	var/turf/blast_source = get_turf(src)
 	var/thrown_dir = REVERSE_DIR(get_dir(blast_source, target))
@@ -686,7 +686,7 @@ Note that this means that snipers will have a slowdown of 3, due to the scope
 //RL-152 RPG
 
 /obj/item/weapon/gun/launcher/rocket/sadar
-	name = "\improper RL-152 sadar rocket launcher"
+	name = "\improper RL-152 SADAR rocket launcher"
 	desc = "The RL-152 is the primary anti-armor weapon of the TGMC. Used to take out light-tanks and enemy structures, the RL-152 rocket launcher is a dangerous weapon with a variety of combat uses. Uses a variety of 84mm rockets."
 	icon = 'icons/obj/items/guns/special64.dmi'
 	icon_state = "sadar"
@@ -1008,7 +1008,7 @@ Note that this means that snipers will have a slowdown of 3, due to the scope
 //VSD RPG
 /obj/item/weapon/gun/launcher/rocket/vsd
 	name = "\improper C153 shoulder launcher"
-	desc = "An Anti-personnel Rocket Launcher made by Crash Core. Used mainly by V.S.D specialists, it can fire three specialized rounds. High Explosive, Incendiary Explosive, and a Chemical Capped High Explosive."
+	desc = "An Anti-personnel Rocket Launcher made by Crash Core. Used mainly by VSD specialists, it can fire three specialized rounds. High Explosive, Incendiary Explosive, and a Chemical Capped High Explosive."
 	icon = 'icons/obj/items/guns/special64.dmi'
 	icon_state = "c153"
 	worn_icon_state = "c153"
@@ -1020,12 +1020,13 @@ Note that this means that snipers will have a slowdown of 3, due to the scope
 	inhand_y_dimension = 32
 	gun_features_flags = GUN_WIELDED_FIRING_ONLY|GUN_WIELDED_STABLE_FIRING_ONLY|GUN_AMMO_COUNTER|GUN_SHOWS_LOADED|GUN_SMOKE_PARTICLES
 	caliber = CALIBER_84MM //codex
-	load_method = MAGAZINE //codex
+	load_method = SINGLE_CASING //codex
 	default_ammo_type = /obj/item/ammo_magazine/rocket/vsd/he
 	allowed_ammo_types = list(
 		/obj/item/ammo_magazine/rocket/vsd/he,
 		/obj/item/ammo_magazine/rocket/vsd/incendiary,
 		/obj/item/ammo_magazine/rocket/vsd/chemical,
+		/obj/item/ammo_magazine/rocket/vsd/heat,
 	)
 	wield_delay = 1 SECONDS
 	aim_slowdown = 1
@@ -1034,7 +1035,7 @@ Note that this means that snipers will have a slowdown of 3, due to the scope
 	unload_sound = 'sound/weapons/guns/interact/rpg_load.ogg'
 	fire_sound = "rpg_fire"
 
-	attachable_offset = list("muzzle_x" = 53, "muzzle_y" = 20, "rail_x" = 44, "rail_y" = 21, "under_x" = 19, "under_y" = 14, "stock_x" = 19, "stock_y" = 14)
+	attachable_offset = list("muzzle_x" = 53, "muzzle_y" = 20, "rail_x" = 22, "rail_y" = 22, "under_x" = 19, "under_y" = 14, "stock_x" = 19, "stock_y" = 14)
 
 	windup_delay = 0.6 SECONDS
 	scatter = -1
@@ -1136,3 +1137,34 @@ Note that this means that snipers will have a slowdown of 3, due to the scope
 	recoil = 0
 	scatter = 0
 	movement_acc_penalty_mult = 6
+
+/obj/item/weapon/gun/minigun/vsd_autocannon
+	name = "\improper CC/AT32 Handheld Autocannon"
+	desc = "The CC/AT32, a new handheld Autocannon of the Kaizoku Corporation. Firing 20mm rounds and 40mm grenades. Its ammo variety goes from Armor Piercing, Anti-Tank, and Explosives."
+	icon = 'icons/obj/items/guns/special64.dmi'
+	icon_state = "at32"
+	worn_icon_state = "at32"
+	worn_icon_list = list(
+		slot_l_hand_str = 'icons/mob/inhands/guns/special_left_1.dmi',
+		slot_r_hand_str = 'icons/mob/inhands/guns/special_right_1.dmi',
+	)
+	fire_animation = "at32"
+	max_shells = 100 //codex
+	caliber = CALIBER_20 //codex
+	load_method = MAGAZINE //codex
+	fire_sound = 'sound/weapons/guns/fire/autocannon_1.ogg'
+	unload_sound = 'sound/weapons/guns/interact/sniper_heavy_unload.ogg'
+	reload_sound = 'sound/weapons/guns/interact/sniper_heavy_reload.ogg'
+	cocked_sound = 'sound/weapons/guns/interact/minigun_cocked.ogg'
+	default_ammo_type = /obj/item/ammo_magazine/rifle/vsd_autocannon
+	allowed_ammo_types = list(
+		/obj/item/ammo_magazine/rifle/vsd_autocannon,
+		/obj/item/ammo_magazine/rifle/vsd_autocannon/explosive,
+		/obj/item/ammo_magazine/rifle/vsd_autocannon/at,
+		)
+	attachable_allowed = list(/obj/item/attachable/flashlight, /obj/item/attachable/magnetic_harness)
+	attachable_offset = list("muzzle_x" = 33, "muzzle_y" = 19,"rail_x" = 13, "rail_y" = 22, "under_x" = 24, "under_y" = 14, "stock_x" = 24, "stock_y" = 12)
+	fire_delay = 0.7 SECONDS
+	windup_delay = 0 SECONDS
+	aim_slowdown = 2.75
+	movement_acc_penalty_mult = 5.5

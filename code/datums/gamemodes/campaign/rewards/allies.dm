@@ -1,3 +1,4 @@
+
 //Parent for all bonus role assets
 /datum/campaign_asset/bonus_job
 	asset_flags = ASSET_ACTIVATED_EFFECT|ASSET_DISABLE_ON_MISSION_END
@@ -45,7 +46,7 @@
 	)
 
 /datum/campaign_asset/bonus_job/icc
-	name = "ICC strike team"
+	name = "CM strike team"
 	desc = "A squad of ICC soldiers to support our forces"
 	detailed_desc = "A moderate number of ICC job slots are opened at no attrition cost. \
 	The ICC have authorised a small, local detachment of their troops to aid us in our conflict. They are well armed and armored, and could prove a valuable advantage in a fight."
@@ -69,7 +70,6 @@
 		/datum/job/pmc/leader/campaign_bonus = 1,
 		/datum/job/pmc/gunner/campaign_bonus = 2,
 		/datum/job/pmc/standard/campaign_bonus = 4,
-		/datum/job/pmc/medic/campaign_bonus = 2,
 	)
 
 /datum/campaign_asset/bonus_job/combat_robots
@@ -88,7 +88,7 @@
 	name = "V.S.D. PMC squad"
 	desc = "A syndicate squadron to assist the ICC joint operation"
 	detailed_desc = "A medium amount of Security Detail squadron have been opened at a no attrition cost. \
-	The Syndicate have sent their most trusted PMC squadron to assist in your aid. Complete with Ballistic armor and Old world weaponry."
+	The Syndicate have sent their most trusted PMC squadron to assist in your aid. Complete with a strong arsenal and heavy duty armor."
 	asset_portrait = /atom/movable/screen/text/screen_text/picture/potrait/vsd_reinforcement
 	ui_icon = "vsd"
 	bonus_job_list = list(

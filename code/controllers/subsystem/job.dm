@@ -109,7 +109,7 @@ SUBSYSTEM_DEF(job)
 	if(!latejoin)
 		unassigned -= player
 	if(job.job_category != JOB_CAT_XENO && !GLOB.joined_player_list.Find(player.ckey))
-		SSpoints.supply_points[job.faction] += SUPPLY_POINT_MARINE_SPAWN
+		SSpoints.add_supply_points(job.faction, SUPPLY_POINT_MARINE_SPAWN)
 	job.occupy_job_positions(1, GLOB.joined_player_list.Find(player.ckey))
 	player.mind?.assigned_role = job
 	player.assigned_role = job
@@ -259,6 +259,7 @@ SUBSYSTEM_DEF(job)
 
 //Gives the player the stuff they should have with their rank.
 /datum/controller/subsystem/job/proc/spawn_character(mob/new_player/player, joined_late = FALSE)
+	SHOULD_NOT_OVERRIDE(TRUE)
 	var/mob/living/new_character = player.new_character
 	var/datum/job/job = player.assigned_role
 
@@ -273,7 +274,7 @@ SUBSYSTEM_DEF(job)
 	else
 		SendToLateJoin(new_character, job)
 
-	job.radio_help_message(player)
+	to_chat(player, fieldset_block("[span_role_header("You are the [job.title].")]", span_role_body(jointext(job.get_spawn_message_information(player), "")), "boxed_message blue_box"))
 
 	job.after_spawn(new_character, player, joined_late) // note: this happens before new_character has a key!
 

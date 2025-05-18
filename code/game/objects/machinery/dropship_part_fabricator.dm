@@ -17,6 +17,11 @@
 	var/obj/structure/printing
 	/// Whether the fabricator is currently printing something or not
 	var/busy = FALSE
+	faction = FACTION_TERRAGOV
+
+/obj/machinery/dropship_part_fabricator/examine(mob/user)
+	. = ..()
+	. += "It belongs to [faction]"
 
 /obj/machinery/dropship_part_fabricator/update_icon_state()
 	. = ..()
@@ -33,34 +38,17 @@
 	. = ..()
 	if(.)
 		return
+
+	var/datum/browser/popup = new(user, "dropship_part_fab", "<div align='center'>Dropship Part Fabricator</div>")
+	popup.set_content(generate_content())
+	popup.open()
+
+/obj/machinery/dropship_part_fabricator/proc/generate_content()
 	var/dat
-	dat += "<h4>Points Available: [SSpoints.dropship_points]</h4>"
+	dat += "<h4>Points Available: [SSpoints.dropship_points[faction]]</h4>"
 	dat += "<a href='byond://?src=[text_ref(src)];choice=clear'>CLEAR PRINT QUEUE</a><br>"
 
-	dat += "<h3>Condor Equipment:</h3>"
-	for(var/build_type in typesof(/obj/structure/dropship_equipment/cas))
-		var/obj/structure/dropship_equipment/cas/DEC = build_type
-		var/build_name = initial(DEC.name)
-		var/build_cost = initial(DEC.point_cost)
-		if(build_cost)
-			dat += "<a href='byond://?src=[text_ref(src)];choice=[build_type]'>[build_name] ([build_cost])</a><br>"
-
-	dat += "<h3>Dropship Equipment:</h3>"
-	for(var/build_type in typesof(/obj/structure/dropship_equipment/shuttle))
-		var/obj/structure/dropship_equipment/shuttle/DES = build_type
-		var/build_name = initial(DES.name)
-		var/build_cost = initial(DES.point_cost)
-		if(build_cost)
-			dat += "<a href='byond://?src=\ref[src];choice=[build_type]'>[build_name] ([build_cost])</a><br>"
-
-	dat += "<h3>Condor Ammo:</h3>"
-	for(var/build_type in typesof(/obj/structure/ship_ammo/cas))
-		var/obj/structure/ship_ammo/cas/SAC = build_type
-		var/build_name = initial(SAC.name)
-		var/build_cost = initial(SAC.point_cost)
-		if(build_cost)
-			dat += "<a href='byond://?src=[text_ref(src)];choice=[build_type]'>[build_name] ([build_cost])</a><br>"
-
+	dat += find_equipment()
 
 	dat += "<h3>Fabricating:</h3>"
 	dat += "- " + (printing ? "[initial(printing.name)]" : "Nothing") + "<br>"
@@ -70,10 +58,25 @@
 		var/obj/structure/toprint = item_to_print[1]
 		dat += ("- " + initial(toprint.name) + "<br>")
 
-	var/datum/browser/popup = new(user, "dropship_part_fab", "<div align='center'>Dropship Part Fabricator</div>")
-	popup.set_content(dat)
-	popup.open()
+	return dat
 
+/// Returns dats of all equipment of types listed
+/obj/machinery/dropship_part_fabricator/proc/find_equipment()
+	. += "<h3>Condor Equipment:</h3>"
+	for(var/build_type in typesof(/obj/structure/dropship_equipment/cas))
+		var/obj/structure/dropship_equipment/cas/DEC = build_type
+		var/build_name = initial(DEC.name)
+		var/build_cost = initial(DEC.point_cost)
+		if(build_cost)
+			. += "<a href='byond://?src=[text_ref(src)];choice=[build_type]'>[build_name] ([build_cost])</a><br>"
+
+	. += "<h3>Condor Ammo:</h3>"
+	for(var/build_type in typesof(/obj/structure/ship_ammo/cas))
+		var/obj/structure/ship_ammo/cas/SAC = build_type
+		var/build_name = initial(SAC.name)
+		var/build_cost = initial(SAC.point_cost)
+		if(build_cost)
+			. += "<a href='byond://?src=[text_ref(src)];choice=[build_type]'>[build_name] ([build_cost])</a><br>"
 
 /// Starts the printing process, does point calculations
 /obj/machinery/dropship_part_fabricator/proc/build_dropship_part(part_type, mob/user)
@@ -83,14 +86,15 @@
 		next_queue()
 		return
 
-	if(SSpoints.dropship_points < cost) //We'll check for points again here in case queue has taken too many points
+	if(SSpoints.dropship_points[faction] < cost) //We'll check for points again here in case queue has taken too many points
 		balloon_alert_to_viewers("Not enough points")
 		next_queue()
 		return
 
 	balloon_alert_to_viewers("Printing...")
+	playsound(src, 'sound/machines/dropship_fabricator.ogg', 55)
 	printing = part_type
-	SSpoints.dropship_points -= cost
+	SSpoints.dropship_points[faction] -= cost
 	busy = TRUE
 	update_icon()
 
@@ -160,7 +164,7 @@
 		if(!build_type)
 			return
 
-		if(SSpoints.dropship_points < get_cost(build_type))
+		if(SSpoints.dropship_points[faction] < get_cost(build_type))
 			balloon_alert_to_viewers("Not enough points")
 			return
 
@@ -171,3 +175,24 @@
 
 		build_dropship_part(build_type, usr)
 		return
+
+
+//Tadpole fab
+
+/obj/machinery/dropship_part_fabricator/tadpole
+	name = "tadpole dropship fabricator"
+	icon_state = "drone_fab_idle_tadpole"
+
+/obj/machinery/dropship_part_fabricator/tadpole/update_icon_state()
+	. = ..()
+	icon_state += "_tadpole"
+
+/obj/machinery/dropship_part_fabricator/tadpole/find_equipment()
+	. += "<h3>Tadpole Equipment:</h3>"
+	for(var/build_type in typesof(/obj/structure/dropship_equipment/shuttle))
+		var/obj/structure/dropship_equipment/shuttle/DES = build_type
+		var/build_name = initial(DES.name)
+		var/build_cost = initial(DES.point_cost)
+		if(build_cost)
+			. += "<a href='byond://?src=\ref[src];choice=[build_type]'>[build_name] ([build_cost])</a><br>"
+

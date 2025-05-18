@@ -32,16 +32,16 @@
 	sound_miss = SFX_BALLISTIC_MISS
 	sound_bounce = SFX_BALLISTIC_BOUNCE
 
-/datum/ammo/energy/volkite/on_hit_mob(mob/target_mob, obj/projectile/proj)
+/datum/ammo/energy/volkite/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
 	deflagrate(target_mob, proj)
 
 /datum/ammo/energy/volkite/medium
 	max_range = 25
 	accurate_range = 12
-	damage = 20
+	damage = 30
 	accuracy_var_low = 3
 	accuracy_var_high = 3
-	fire_burst_damage = 15
+	fire_burst_damage = 20
 	deflagrate_multiplier = 0.9
 
 /datum/ammo/energy/volkite/medium/custom
@@ -60,7 +60,6 @@
 	accuracy_var_low = 3
 	accuracy_var_high = 3
 	penetration = 5
-	fire_burst_damage = 10
 	deflagrate_multiplier = 0.9
 
 /datum/ammo/energy/volkite/demi_culverin

@@ -6,10 +6,20 @@
 	faction = FACTION_ICC
 	minimap_icon = "icc"
 
+/datum/job/icc/get_spawn_message_information(mob/M)
+	. = ..()
+	. += separator_hr("[span_role_header("<b>[title] Information</b>")]")
+	. += {"You are part of the colonial militia that formed shortly after Xenomorph invasion,
+after ransacking the armories of the colonies owned by NTC, you took arms to fight against the Xenomorph assault.
+Though soon they turned less lethal, danger still persists, especially those that are alone, namely survivors. Which is your job to protect now.
+You are all former or current employees/colonists of Ninetails but there is still some tensions after what happened.
+For that CM is closer to NTC than the rest, and believes SOM and Kaizoku to be vultures on top of a stillborn colonization"}
+
+
 //ICC Standard
 /datum/job/icc/standard
-	title = "ICC Standard"
-	paygrade = "ICCH"
+	title = "CM Standard"
+	paygrade = "CMH"
 	multiple_outfits = TRUE
 	outfit = /datum/outfit/job/icc/standard/mpi_km
 	outfits = list(
@@ -20,7 +30,7 @@
 	)
 
 /datum/outfit/job/icc
-	name = "ICC Standard"
+	name = "CM Standard"
 	jobtype = /datum/job/icc
 
 	id = /obj/item/card/id/silver
@@ -40,13 +50,13 @@
 
 // Basic standard equipment
 /datum/outfit/job/icc/standard
-	name = "ICC Standard"
+	name = "CM Standard"
 	jobtype = /datum/job/icc
 
 	id = /obj/item/card/id/silver
 	gloves = /obj/item/clothing/gloves/marine/icc/insulated
-	r_store = /obj/item/storage/pouch/pistol/icc
-	l_store = /obj/item/storage/pouch/medical_injectors/icc/firstaid
+	r_pocket = /obj/item/storage/pouch/pistol/icc
+	l_pocket = /obj/item/storage/pouch/medical_injectors/icc/firstaid
 	back = /obj/item/storage/backpack/lightpack/icc
 
 
@@ -127,8 +137,8 @@
 
 //ICC Guard
 /datum/job/icc/guard
-	title = "ICC Guard"
-	paygrade = "ICC3"
+	title = "CM Guard"
+	paygrade = "CM3"
 	outfit = /datum/outfit/job/icc/guard/coilgun
 	multiple_outfits = TRUE
 	outfits = list(
@@ -138,7 +148,7 @@
 	)
 
 /datum/outfit/job/icc/guard
-	name = "ICC Guard"
+	name = "CM Guard"
 	jobtype = /datum/job/icc/guard
 
 	shoes = /obj/item/clothing/shoes/marine/icc/guard/knife
@@ -171,8 +181,8 @@
 /datum/outfit/job/icc/guard/coilgun
 	suit_store = /obj/item/weapon/gun/launcher/rocket/icc
 	back = /obj/item/weapon/gun/rifle/icc_coilgun
-	l_store = /obj/item/storage/pouch/explosive/icc
-	r_store = /obj/item/storage/pouch/explosive/icc
+	l_pocket = /obj/item/storage/pouch/explosive/icc
+	r_pocket = /obj/item/storage/pouch/explosive/icc
 
 /datum/outfit/job/icc/guard/coilgun/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	. = ..()
@@ -196,8 +206,8 @@
 /datum/outfit/job/icc/guard/icc_autoshotgun
 	suit_store = /obj/item/weapon/gun/rifle/icc_coilgun
 	back = /obj/item/weapon/gun/rifle/icc_autoshotgun/guard
-	l_store = /obj/item/storage/pouch/magazine/large/icc
-	r_store = /obj/item/storage/pouch/magazine/large/icc
+	l_pocket = /obj/item/storage/pouch/magazine/large/icc
+	r_pocket = /obj/item/storage/pouch/magazine/large/icc
 
 /datum/outfit/job/icc/guard/icc_autoshotgun/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	. = ..()
@@ -222,8 +232,8 @@
 	suit_store = /obj/item/weapon/gun/rifle/icc_coilgun
 	back = /obj/item/storage/holster/icc_mg/full
 	belt = /obj/item/ammo_magazine/icc_mg/belt
-	l_store = /obj/item/storage/pouch/magazine/large/icc
-	r_store = /obj/item/storage/pouch/magazine/large/icc
+	l_pocket = /obj/item/storage/pouch/magazine/large/icc
+	r_pocket = /obj/item/storage/pouch/magazine/large/icc
 
 /datum/outfit/job/icc/guard/icc_bagmg/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	. = ..()
@@ -237,8 +247,8 @@
 
 //ICC Medic
 /datum/job/icc/medic
-	title = "ICC Medic"
-	paygrade = "ICC2"
+	title = "CM Medic"
+	paygrade = "CM2"
 	skills_type = /datum/skills/combat_medic/crafty
 	multiple_outfits = TRUE
 	outfit = /datum/outfit/job/icc/medic/icc_machinepistol
@@ -248,7 +258,7 @@
 	)
 
 /datum/outfit/job/icc/medic
-	name = "ICC Medic"
+	name = "CM Medic"
 	jobtype = /datum/job/icc/medic
 
 	id = /obj/item/card/id/silver
@@ -283,8 +293,8 @@
 
 /datum/outfit/job/icc/medic/icc_machinepistol
 	suit_store = /obj/item/weapon/gun/smg/icc_machinepistol/medic
-	l_store = /obj/item/storage/pouch/magazine/large/icc
-	r_store = /obj/item/storage/pouch/magazine/large/icc
+	l_pocket = /obj/item/storage/pouch/magazine/large/icc
+	r_pocket = /obj/item/storage/pouch/magazine/large/icc
 
 /datum/outfit/job/icc/medic/icc_machinepistol/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	. = ..()
@@ -302,8 +312,8 @@
 
 /datum/outfit/job/icc/medic/icc_sharpshooter
 	suit_store = /obj/item/weapon/gun/rifle/icc_sharpshooter/medic
-	l_store = /obj/item/storage/pouch/magazine/large/icc
-	r_store = /obj/item/storage/pouch/magazine/large/icc
+	l_pocket = /obj/item/storage/pouch/magazine/large/icc
+	r_pocket = /obj/item/storage/pouch/magazine/large/icc
 
 /datum/outfit/job/icc/medic/icc_sharpshooter/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	. = ..()
@@ -316,8 +326,8 @@
 	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/rifle/icc_sharpshooter, SLOT_IN_L_POUCH)
 
 /datum/job/icc/leader
-	title = "ICC Leader"
-	paygrade = "ICC2"
+	title = "CM Leader"
+	paygrade = "CM2"
 	outfit = /datum/outfit/job/icc/leader/icc_heavyshotgun
 	skills_type = /datum/skills/sl/icc
 	multiple_outfits = TRUE
@@ -328,7 +338,7 @@
 
 
 /datum/outfit/job/icc/leader
-	name = "ICC Leader"
+	name = "CM Leader"
 	jobtype = /datum/job/icc/leader
 
 	shoes = /obj/item/clothing/shoes/marine/icc/knife
@@ -336,8 +346,8 @@
 	gloves = /obj/item/clothing/gloves/marine/icc/guard
 	head = /obj/item/clothing/head/helmet/marine/icc/guard
 	back = /obj/item/storage/backpack/lightpack/icc/guard
-	l_store = /obj/item/storage/pouch/medical_injectors/icc/firstaid
-	r_store = /obj/item/storage/pouch/construction/icc/full
+	l_pocket = /obj/item/storage/pouch/medical_injectors/icc/firstaid
+	r_pocket = /obj/item/storage/pouch/construction/icc/full
 
 
 /datum/outfit/job/icc/leader/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)

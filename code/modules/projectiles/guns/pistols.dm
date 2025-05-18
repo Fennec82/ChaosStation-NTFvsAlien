@@ -12,7 +12,6 @@
 	unload_sound = 'sound/weapons/guns/interact/pistol_unload.ogg'
 	reload_sound = 'sound/weapons/guns/interact/pistol_reload.ogg'
 	cocked_sound = 'sound/weapons/guns/interact/pistol_cocked.ogg'
-	muzzleflash_iconstate = "muzzle_flash_light"
 	load_method = MAGAZINE //codex
 	equip_slot_flags = ITEM_SLOT_BELT
 	w_class = WEIGHT_CLASS_NORMAL
@@ -317,10 +316,10 @@
 
 /obj/item/weapon/gun/pistol/g22/tranq
 	name = "\improper P-22 custom pistol"
-	desc = "A 20th century military firearm customized for special forces use, fires chemical loaded bullets to take down enemies nonlethally. Must be cocked manually therefore has disgusting fire rate."
+	desc = "A 20th century military firearm customized for special forces use, fires chemical loaded bullets to take down enemies nonlethally. Must be cocked manually therefore has disgusting fire rate, but custom frame allows greater accuracy."
 	icon_state = "g22"
 	worn_icon_state = "g22"
-	fire_animation = null
+	fire_animation = null //it doesnt cycle itself.
 	cock_animation = "g22_fire"
 	cock_delay = 1 SECONDS
 	caliber = CALIBER_9X19_TRANQUILIZER //codex
@@ -351,9 +350,9 @@
 	cocked_message = "You rack the pistol"
 	cock_locked_message = "The pistol is loaded! Fire it first!"
 	gun_features_flags = GUN_CAN_POINTBLANK|GUN_AMMO_COUNTER
-	fire_delay = 2 SECONDS
-	accuracy_mult = 1.5
-	accuracy_mult_unwielded = 1.2
+	fire_delay = 0.7 SECONDS //manual cock anyway, meant to be able to not get obliterated up close too badly, unlike moonbeam.
+	accuracy_mult = 1.8
+	accuracy_mult_unwielded = 1.5
 	burst_amount = 1
 	akimbo_additional_delay = 0.9
 
@@ -367,7 +366,6 @@
 	icon_state = "deagle"
 	worn_icon_state = "deagle"
 	caliber = CALIBER_50AE //codex
-	muzzleflash_iconstate = "muzzle_flash_medium"
 	max_shells = 7 //codex
 	fire_sound = 'sound/weapons/guns/fire/deagle.ogg'
 	dry_fire_sound = 'sound/weapons/guns/fire/deagle_empty.ogg'
@@ -686,11 +684,11 @@
 
 /obj/item/weapon/gun/pistol/vsd_pistol
 	name = "\improper C96 pistol"
-	desc = "A 'riot control' weapon used by the protectors of colonies. Now adopted by the V.S.D, it is the standard side arm for all members. Firing armor piercing 9x19mm parabellum with a capacity of 15 rounds."
+	desc = "A 'riot control' weapon used by the protectors of colonies. Now adopted by the KZ, it is the standard side arm for all members. Firing armor piercing 9x19mm parabellum with a capacity of 22 rounds."
 	icon_state = "c96"
 	worn_icon_state = "c96"
 	caliber = CALIBER_9X19
-	max_shells = 15
+	max_shells = 22
 	fire_sound = 'sound/weapons/guns/fire/tp23.ogg'
 	dry_fire_sound = 'sound/weapons/guns/fire/vp70_empty.ogg'
 	unload_sound = 'sound/weapons/guns/interact/uzi_unload.ogg'
@@ -709,7 +707,7 @@
 		/obj/item/attachable/burstfire_assembly,
 		/obj/item/attachable/lace,
 	)
-	attachable_offset = list("muzzle_x" = 30, "muzzle_y" = 21,"rail_x" = 11, "rail_y" = 23, "under_x" = 24, "under_y" = 15, "stock_x" = 23, "stock_y" = 13)
+	attachable_offset = list("muzzle_x" = 29, "muzzle_y" = 21,"rail_x" = 2, "rail_y" = 23, "under_x" = 22, "under_y" = 15, "stock_x" = 23, "stock_y" = 13)
 
 	fire_delay = 0.2 SECONDS
 	accuracy_mult = 1.0
@@ -723,12 +721,11 @@
 	starting_attachment_types = list(/obj/item/attachable/reddot,/obj/item/attachable/compensator,/obj/item/attachable/lasersight,)
 
 /obj/item/weapon/gun/pistol/xmdivider
-	name = "\improper XM104 'Divider' Revolver"
+	name = "\improper CC/104 'Divider' Revolver"
 	desc = "Intertech's one of a kind revolver. Fires custom incendiary .357 rounds, has firemode switch of single action and burst fire. Kicks like a fucking mule. You remember High Command saying: 'Don't let this get into enemy hands'."
-	icon = 'icons/obj/items/guns/pistols64.dmi'
-	icon_state = "xm104"
-	worn_icon_state = "xm104"
-	fire_animation = "xm104_fire"
+	icon = 'icons/obj/items/guns/pistols.dmi'
+	icon_state = "c104"
+	worn_icon_state = "c104"
 	caliber = CALIBER_357 //codex
 	max_shells = 6
 	default_ammo_type = /obj/item/ammo_magazine/pistol/xmdivider
@@ -736,7 +733,7 @@
 	force = 8
 	actions_types = null
 	attachable_allowed = list(
-		/obj/item/attachable/bayonet,
+		/obj/item/attachable/bayonet/converted,
 		/obj/item/attachable/reddot,
 		/obj/item/attachable/flashlight,
 		/obj/item/attachable/compensator,
@@ -745,7 +742,7 @@
 		/obj/item/attachable/lasersight,
 		/obj/item/attachable/lace,
 	)
-	attachable_offset = list("muzzle_x" = 39, "muzzle_y" = 19, "rail_x" = 16, "rail_y" = 22, "under_x" = 23, "under_y" = 15, "stock_x" = 10, "stock_y" = 18)
+	attachable_offset = list("muzzle_x" = 32, "muzzle_y" = 20, "rail_x" = 17, "rail_y" = 22, "under_x" = 29, "under_y" = 15, "stock_x" = 10, "stock_y" = 18)
 	windup_delay = 0.5 SECONDS
 	aim_slowdown = 0.1
 	burst_amount = 3
@@ -827,7 +824,7 @@ It is a modified Beretta 93R, and can fire three round burst or single fire. Whe
 	desc = "A powerful sidearm issued mainly to highly trained elite assassin necro-cyber-agents."
 	icon_state = "c70"
 	worn_icon_state = "c70"
-	muzzleflash_iconstate = "muzzle_flash_medium"
+
 	caliber = CALIBER_70MANKEY //codex
 	max_shells = 300 //codex
 	default_ammo_type = /obj/item/ammo_magazine/pistol/chimp
@@ -868,7 +865,7 @@ It is a modified Beretta 93R, and can fire three round burst or single fire. Whe
 	attachable_allowed = list(
 		/obj/item/attachable/quickfire,
 		/obj/item/attachable/suppressor,
-		/obj/item/attachable/bayonet,
+		/obj/item/attachable/bayonet/converted,
 		/obj/item/attachable/compensator,
 		/obj/item/attachable/reddot,
 		/obj/item/attachable/verticalgrip,

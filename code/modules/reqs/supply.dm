@@ -64,10 +64,9 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 	height = 5
 	movement_force = list("KNOCKDOWN" = 0, "THROW" = 0)
 	use_ripples = FALSE
+	faction = FACTION_TERRAGOV
 	var/list/gears = list()
 	var/list/obj/machinery/door/poddoor/railing/railings = list()
-	///The faction of this docking port (aka, on which ship it is located)
-	var/faction = FACTION_TERRAGOV
 	/// Id of the home docking port
 	var/home_id = "supply_home"
 	///prefix for railings and gear todo should probbaly be defines instead?
@@ -239,13 +238,12 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 	req_access = list(ACCESS_MARINE_CARGO)
 	equip_slot_flags = ITEM_SLOT_POCKET
 	w_class = WEIGHT_CLASS_NORMAL
+	faction = FACTION_TERRAGOV
 	var/datum/supply_ui/SU
 	///Id of the shuttle controlled
 	var/shuttle_id = SHUTTLE_SUPPLY
 	/// Id of the home docking port
 	var/home_id = "supply_home"
-	/// Faction of the tablet
-	var/faction = FACTION_TERRAGOV
 
 /obj/item/supplytablet/interact(mob/user)
 	. = ..()
@@ -268,13 +266,12 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 	screen_overlay = "supply"
 	req_access = list(ACCESS_MARINE_CARGO)
 	circuit = /obj/item/circuitboard/computer/supplycomp
+	faction = FACTION_TERRAGOV
 	var/datum/supply_ui/SU
 	///Id of the shuttle controlled
 	var/shuttle_id = SHUTTLE_SUPPLY
 	/// Id of the home docking port
 	var/home_id = "supply_home"
-	/// Faction of the computer
-	var/faction = FACTION_TERRAGOV
 
 /obj/machinery/computer/supplycomp/interact(mob/user)
 	. = ..()
@@ -660,11 +657,24 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 
 /obj/item/storage/backpack/marine/radiopack
 	name = "\improper NTC radio operator backpack"
-	desc = "A backpack that resembles the ones old-age radio operator marines would use. It has a supply ordering console installed on it, and a retractable antenna to receive supply drops."
+	desc = "A backpack that resembles the ones old-age radio operator marines would use. It has a supply ordering console installed on it, and a retractable antenna to receive supply drops. It also provides a boost to connectivity of comms of the user."
 	icon_state = "radiopack"
 	worn_icon_state = "radiopack"
 	///Var for the window pop-up
 	var/datum/supply_ui/requests/supply_interface
+
+/obj/item/storage/backpack/marine/radiopack/equipped(mob/user, slot)
+	. = ..()
+	//works on hand either i guess (probably)
+	RegisterSignal(user, COMSIG_CAVE_INTERFERENCE_CHECK, PROC_REF(on_interference_check))
+
+/obj/item/storage/backpack/marine/radiopack/unequipped(mob/unequipper, slot)
+	. = ..()
+	UnregisterSignal(unequipper, COMSIG_CAVE_INTERFERENCE_CHECK)
+
+/obj/item/storage/backpack/marine/radiopack/proc/on_interference_check(source, list/inplace_interference)
+	SIGNAL_HANDLER
+	inplace_interference[1] = max(0, inplace_interference[1] - 1)
 
 /obj/item/storage/backpack/marine/radiopack/Initialize(mapload, ...)
 	. = ..()
@@ -685,13 +695,13 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 	shuttle_id = "supplysom"
 	faction = FACTION_SOM
 	home_id = "supply_som"
-	req_access = list(213)
+	req_access = list(ACCESS_SOM_REQUESITIONS)
 
 /obj/machinery/computer/supplycomp/clf
 	shuttle_id = "supplyclf"
 	faction = FACTION_CLF
 	home_id = "supply_clf"
-	req_access = null
+	req_access = list(ACCESS_CLF_CARGO)
 
 /obj/docking_port/mobile/supply/som
 	dir = 1
@@ -930,8 +940,10 @@ GLOBAL_LIST_INIT(armored_guntypes, armored_init_guntypes())
 		if("setprimary")
 			if(!current_veh_type)
 				return
-			var/newtype = text2path(params["type"])
+			var/obj/item/armored_weapon/newtype = text2path(params["type"])
 			if(!(newtype in GLOB.armored_guntypes[current_veh_type]))
+				return
+			if(initial(newtype.armored_weapon_flags) & MODULE_NOT_FABRICABLE)
 				return
 			current_primary = newtype
 			var/list/assoc_cast = GLOB.armored_gunammo[newtype]
@@ -943,8 +955,10 @@ GLOBAL_LIST_INIT(armored_guntypes, armored_init_guntypes())
 		if("setsecondary")
 			if(!current_veh_type)
 				return
-			var/newtype = text2path(params["type"])
+			var/obj/item/armored_weapon/newtype = text2path(params["type"])
 			if(!(newtype in GLOB.armored_guntypes[current_veh_type]))
+				return
+			if(initial(newtype.armored_weapon_flags) & MODULE_NOT_FABRICABLE)
 				return
 			current_secondary = newtype
 			var/list/assoc_cast = GLOB.armored_gunammo[newtype]
