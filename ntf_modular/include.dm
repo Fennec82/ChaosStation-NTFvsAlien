@@ -1,5 +1,6 @@
 #include "code\_DEFINES\sexcon_defines.dm"
 #include "code\_DEFINES\span.dm"
+#include "code\datums\gamemodes\_game_mode.dm"
 #include "code\datums\genital_menu.dm"
 #include "code\datums\jobs\job\mothellian.dm"
 #include "code\datums\sexcon\item_helpers.dm"
@@ -92,3 +93,4 @@
 #include "modules\underwear\underwear\socks.dm"
 #include "modules\underwear\underwear\underwear.dm"
 #include "code\modules\projectiles\guns\rifles.dm"
+#include "code\_HELPERS\announce.dm"
