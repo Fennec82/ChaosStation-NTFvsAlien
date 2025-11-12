@@ -191,6 +191,10 @@
 		destination_fly_state = SHUTTLE_IN_ATMOSPHERE
 	SSshuttle.moveShuttleToTransit(shuttleId, TRUE)
 
+// Toggle the podlock shutters from the shuttle computer
+/obj/machinery/computer/camera_advanced/shuttle_docker/minidropship/proc/toggle_shutters()
+	SEND_GLOBAL_SIGNAL(COMSIG_GLOB_TADPOLE_SHUTTER)
+
 ///The action of sending the shuttle back to its shuttle port on main ship
 /obj/machinery/computer/camera_advanced/shuttle_docker/minidropship/proc/return_to_ship()
 	shuttle_port = SSshuttle.getShuttle(shuttleId)
@@ -212,7 +216,7 @@
 	nvg_vision_mode = !nvg_vision_mode
 	ui_user?.update_sight()
 
-/obj/machinery/computer/camera_advanced/shuttle_docker/minidropship/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/machinery/computer/camera_advanced/shuttle_docker/minidropship/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage * xeno_attacker.xeno_melee_damage_modifier, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
 	. = ..()
 	if(machine_stat & BROKEN)
 		return
@@ -336,6 +340,8 @@
 	switch(action)
 		if("take_off")
 			take_off()
+		if("toggle_shutters")
+			toggle_shutters()
 		if("return_to_ship")
 			return_to_ship()
 		if("toggle_nvg")

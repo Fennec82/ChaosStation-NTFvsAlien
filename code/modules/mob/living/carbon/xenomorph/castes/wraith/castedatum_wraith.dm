@@ -53,6 +53,8 @@
 		/datum/action/ability/activable/xeno/devour,
 		/datum/action/ability/activable/xeno/rewind,
 		/datum/action/ability/xeno_action/portal,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
 	)
 
 /datum/xeno_caste/wraith/normal
@@ -79,4 +81,6 @@
 		/datum/action/ability/activable/xeno/rewind,
 		/datum/action/ability/xeno_action/portal,
 		/datum/action/ability/xeno_action/timestop,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
 	)

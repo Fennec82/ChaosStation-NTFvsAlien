@@ -35,7 +35,7 @@
 	set_toggle(FALSE)
 	UnregisterSignal(owner, COMSIG_ORDER_SELECTED)
 
-/datum/action/innate/order/can_use_action()
+/datum/action/innate/order/can_use_action(silent, override_flags, selecting)
 	. = ..()
 	if(!.)
 		return
@@ -78,7 +78,7 @@
 /mob/living/carbon/human/proc/receive_order(atom/target, arrow_type, verb_name = "rally", faction)
 	if(!target || !arrow_type)
 		return
-	if(!(job.job_flags & JOB_FLAG_CAN_SEE_ORDERS))
+	if(!(job?.job_flags & JOB_FLAG_CAN_SEE_ORDERS))
 		return
 	if(z != target.z)
 		return

@@ -10,12 +10,20 @@
 	///How wide our spawner area is, used to catch mistakes in mapping
 	var/spawner_width = 0
 
+/obj/effect/spawner/modularmap/New(loc, ...)
+	log_game("loading spawner for [mapid] at [COORD(src)]")
+	. = ..()
+	log_game("loaded spawner for [mapid] at [COORD(src)]")
+
 /obj/effect/spawner/modularmap/Initialize(mapload)
+	log_game("Initializing spawner for [mapid] at [COORD(src)]")
 	. = ..()
 	SSmodularmapping.markers += src
+	log_game("Initialized spawner for [mapid] at [COORD(src)]")
 
 ///Actually loads the modularmap: called by SSmodularmapping
 /obj/effect/spawner/modularmap/proc/load_modularmap()
+	log_game("about to load spawner for [mapid] at [COORD(src)]")
 	var/datum/map_template/modular/template
 	template = pick(SSmapping.modular_templates[mapid])
 	var/errored = FALSE
@@ -36,6 +44,7 @@
 		qdel(src)
 		return
 	var/turf/loadloc = get_turf(src)
+	log_game("attempting to load [template] for [mapid] at [COORD(loadloc)]")
 	qdel(src)
 	template.load(loadloc, template.keepcentered)
 
@@ -278,3 +287,55 @@
 	mapid = "corsatdome"
 	spawner_height = 80
 	spawner_width = 80
+
+/**********Fiorina*******/
+
+/obj/effect/spawner/modularmap/fiorina/scavengership
+	mapid = "scavship"
+	spawner_width = 14
+	spawner_height = 21
+
+/obj/effect/spawner/modularmap/fiorina/medbay
+	mapid = "fimedbay"
+	spawner_width = 14
+	spawner_height = 18
+
+/obj/effect/spawner/modularmap/fiorina/warden
+	mapid = "fiwarden"
+	spawner_width = 9
+	spawner_height = 7
+
+/obj/effect/spawner/modularmap/fiorina/kitchen
+	mapid = "fikitchen"
+	spawner_width = 9
+	spawner_height = 10
+
+/obj/effect/spawner/modularmap/fiorina/gear
+	mapid = "figear"
+	spawner_width = 9
+	spawner_height = 8
+
+/obj/effect/spawner/modularmap/fiorina/panels
+	mapid = "fipanel"
+	spawner_width = 13
+	spawner_height = 9
+
+/obj/effect/spawner/modularmap/fiorina/meetingroom
+	mapid = "fimeetingroom"
+	spawner_width = 12
+	spawner_height = 13
+
+/obj/effect/spawner/modularmap/fiorina/engioffice
+	mapid = "fiengioffice"
+	spawner_width = 9
+	spawner_height = 7
+
+/obj/effect/spawner/modularmap/fiorina/researchroom
+	mapid = "firesearch"
+	spawner_width = 25
+	spawner_height = 18
+
+/obj/effect/spawner/modularmap/fiorina/corering
+	mapid = "ficore"
+	spawner_width = 25
+	spawner_height = 25

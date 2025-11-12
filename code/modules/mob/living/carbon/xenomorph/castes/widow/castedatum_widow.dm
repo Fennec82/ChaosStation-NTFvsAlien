@@ -21,7 +21,7 @@
 	plasma_gain = 55
 
 	// *** Health *** //
-	max_health = 450
+	max_health = 410
 
 	// *** Evolution *** //
 	upgrade_threshold = TIER_THREE_THRESHOLD
@@ -29,7 +29,7 @@
 	deevolves_to = /datum/xeno_caste/puppeteer
 
 	// *** Flags *** //
-	caste_flags = CASTE_EVOLUTION_ALLOWED|CASTE_IS_BUILDER
+	caste_flags = CASTE_EVOLUTION_ALLOWED|CASTE_IS_BUILDER|CASTE_MUTATIONS_ALLOWED
 	can_flags = parent_type::can_flags|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_RULER
 
 	// *** Defense *** //
@@ -45,7 +45,7 @@
 	queen_leader_limit = 4
 
 	// *** Widow Abilities *** //
-	max_spiderlings = 8
+	max_spiderlings = 5
 
 	// *** Abilities *** ///
 	resin_max_range = 1 // Widow can place resin structures from 1 tile away
@@ -77,6 +77,14 @@
 		/datum/action/ability/xeno_action/pheromones/emit_warding,
 		/datum/action/ability/xeno_action/pheromones/emit_frenzy,
 		/datum/action/ability/activable/xeno/place_pattern,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
+	)
+
+	mutations = list(
+		/datum/mutation_upgrade/shell/hive_toughness,
+		/datum/mutation_upgrade/spur/web_yank,
+		/datum/mutation_upgrade/veil/incubator
 	)
 
 /datum/xeno_caste/widow/on_caste_applied(mob/xenomorph)
@@ -127,4 +135,6 @@
 		/datum/action/ability/xeno_action/pheromones/emit_warding,
 		/datum/action/ability/xeno_action/pheromones/emit_frenzy,
 		/datum/action/ability/activable/xeno/place_pattern,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
 	)

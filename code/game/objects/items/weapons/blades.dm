@@ -54,6 +54,7 @@
 /obj/item/weapon/combat_knife/Initialize(mapload)
 	. = ..()
 	AddElement(/datum/element/scalping)
+	AddElement(/datum/element/shrapnel_removal, 15 SECONDS)
 
 /obj/item/weapon/combat_knife/suicide_act(mob/user)
 	user.visible_message(pick(span_danger("[user] is slitting [user.p_their()] wrists with the [name]! It looks like [user.p_theyre()] trying to commit suicide."), \
@@ -71,6 +72,13 @@
 	throw_speed = 2
 	throw_range = 8
 
+/obj/item/weapon/combat_knife/pmc
+	name = "\improper M2X HF-S self defense blade"
+	icon_state = "pmc_knife"
+	worn_icon_state = "pmc_knife"
+	desc = "A experemental short blade, utilizing high-frequency techology. A small but dangerous weapon, which can cut through even the heaviest of armors. Many mercenaries keep it close, for desperate situations."
+	penetration = 25
+
 /obj/item/weapon/karambit
 	name = "karambit"
 	icon = 'icons/obj/items/weapons/knives.dmi'
@@ -87,6 +95,11 @@
 	attack_speed = 8
 	hitsound = 'sound/weapons/slash.ogg'
 	attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "dices", "cuts", "hooks")
+
+/obj/item/weapon/karambit/Initialize(mapload)
+	. = ..()
+	AddElement(/datum/element/scalping)
+	AddElement(/datum/element/shrapnel_removal, 15 SECONDS)
 
 /obj/item/weapon/karambit/fade
 	icon_state = "karambit_fade"

@@ -32,20 +32,6 @@
 	icon_state = "mortar_smk"
 	ammo_type = /datum/ammo/mortar/smoke
 
-/obj/item/mortal_shell/smoke/satrapine
-	name = "\improper 80mm nerve gas mortar shell"
-	desc = "An 80mm mortar shell, loaded with nerve gas smoke dispersal agents. Can be fired at marines more-or-less safely. Way slimmer than your typical 80mm."
-	icon = 'ntf_modular/icons/obj/ammo/artillery.dmi'
-	icon_state = "mortar_ammo_nerve"
-	ammo_type = /datum/ammo/mortar/smoke/satrapine
-
-/obj/item/mortal_shell/smoke/sleep
-	name = "\improper 80mm sleep gas mortar shell"
-	desc = "An 80mm mortar shell, loaded with sleep gas smoke dispersal agents. Can be fired at marines more-or-less safely. Way slimmer than your typical 80mm."
-	icon = 'ntf_modular/icons/obj/ammo/artillery.dmi'
-	icon_state = "mortar_ammo_sleep"
-	ammo_type = /datum/ammo/mortar/smoke/sleep
-
 /obj/item/mortal_shell/plasmaloss
 	name = "\improper 80mm tangle mortar shell"
 	desc = "An 80mm mortar shell, loaded with plasma-draining Tanglefoot gas. Can be fired at marines more-or-less safely."
@@ -130,10 +116,6 @@
 /obj/structure/closet/crate/mortar_ammo/full/PopulateContents()
 	new /obj/item/mortal_shell/he(src)
 	new /obj/item/mortal_shell/he(src)
-	new /obj/item/mortal_shell/he(src)
-	new /obj/item/mortal_shell/he(src)
-	new /obj/item/mortal_shell/incendiary(src)
-	new /obj/item/mortal_shell/incendiary(src)
 	new /obj/item/mortal_shell/incendiary(src)
 	new /obj/item/mortal_shell/incendiary(src)
 	new /obj/item/mortal_shell/flare(src)
@@ -142,8 +124,20 @@
 	new /obj/item/mortal_shell/flare(src)
 	new /obj/item/mortal_shell/smoke(src)
 	new /obj/item/mortal_shell/smoke(src)
+	new /obj/item/mortal_shell/smoke/sleep(src)
+	new /obj/item/mortal_shell/smoke/sleep(src)
+	new /obj/item/mortal_shell/smoke/satrapine(src)
+	new /obj/item/mortal_shell/smoke/satrapine(src)
+	new /obj/item/mortal_shell/smoke/aphrotox(src)
+	new /obj/item/mortal_shell/smoke/aphrotox(src)
+	new /obj/item/mortal_shell/smoke/neuro(src)
+	new /obj/item/mortal_shell/smoke/neuro(src)
 	new /obj/item/mortal_shell/plasmaloss(src)
 	new /obj/item/mortal_shell/plasmaloss(src)
+	new /obj/item/mortal_shell/razorburn(src)
+	new /obj/item/mortal_shell/razorburn(src)
+	new /obj/item/mortal_shell/metalfoam(src)
+	new /obj/item/mortal_shell/metalfoam(src)
 
 /obj/structure/closet/crate/mortar_ammo/mortar_kit
 	name = "\improper TA-50S mortar kit"
@@ -157,22 +151,20 @@
 	new /obj/item/mortal_shell/he(src)
 	new /obj/item/mortal_shell/he(src)
 	new /obj/item/mortal_shell/he(src)
-	new /obj/item/mortal_shell/he(src)
-	new /obj/item/mortal_shell/he(src)
-	new /obj/item/mortal_shell/incendiary(src)
-	new /obj/item/mortal_shell/incendiary(src)
-	new /obj/item/mortal_shell/incendiary(src)
-	new /obj/item/mortal_shell/incendiary(src)
 	new /obj/item/mortal_shell/incendiary(src)
 	new /obj/item/mortal_shell/incendiary(src)
 	new /obj/item/mortal_shell/incendiary(src)
 	new /obj/item/mortal_shell/incendiary(src)
 	new /obj/item/mortal_shell/plasmaloss(src)
 	new /obj/item/mortal_shell/plasmaloss(src)
+	new /obj/item/mortal_shell/plasmaloss(src)
+	new /obj/item/mortal_shell/plasmaloss(src)
+	new /obj/item/mortal_shell/plasmaloss(src)
 	new /obj/item/mortal_shell/smoke(src)
 	new /obj/item/mortal_shell/smoke(src)
 	new /obj/item/mortal_shell/smoke(src)
 	new /obj/item/mortal_shell/smoke(src)
+	new /obj/item/mortal_shell/smoke(src)
 	new /obj/item/mortal_shell/smoke/sleep(src)
 	new /obj/item/mortal_shell/smoke/sleep(src)
 	new /obj/item/mortal_shell/smoke/sleep(src)
@@ -180,14 +172,25 @@
 	new /obj/item/mortal_shell/smoke/sleep(src)
 	new /obj/item/mortal_shell/smoke/satrapine(src)
 	new /obj/item/mortal_shell/smoke/satrapine(src)
-	new /obj/item/mortal_shell/smoke/satrapine(src)
-	new /obj/item/mortal_shell/smoke/satrapine(src)
-	new /obj/item/mortal_shell/smoke/satrapine(src)
-	new /obj/item/mortal_shell/smoke/satrapine(src)
+	new /obj/item/mortal_shell/smoke/aphrotox(src)
+	new /obj/item/mortal_shell/smoke/aphrotox(src)
+	new /obj/item/mortal_shell/smoke/aphrotox(src)
+	new /obj/item/mortal_shell/smoke/aphrotox(src)
+	new /obj/item/mortal_shell/smoke/aphrotox(src)
+	new /obj/item/mortal_shell/smoke/neuro(src)
+	new /obj/item/mortal_shell/smoke/neuro(src)
+	new /obj/item/mortal_shell/smoke/neuro(src)
+	new /obj/item/mortal_shell/smoke/neuro(src)
+	new /obj/item/mortal_shell/smoke/neuro(src)
 	new /obj/item/mortal_shell/flare(src)
 	new /obj/item/mortal_shell/flare(src)
 	new /obj/item/mortal_shell/flare(src)
 	new /obj/item/mortal_shell/flare(src)
+	new /obj/item/mortal_shell/flare(src)
+	new /obj/item/mortal_shell/razorburn(src)
+	new /obj/item/mortal_shell/razorburn(src)
+	new /obj/item/mortal_shell/metalfoam(src)
+	new /obj/item/mortal_shell/metalfoam(src)
 	new /obj/item/encryptionkey/engi(src)
 	new /obj/item/encryptionkey/engi(src)
 	new /obj/item/binoculars/tactical/range(src)

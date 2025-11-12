@@ -162,7 +162,7 @@
 	tracking_id = SSdirection.init_squad(name, squad_leader)
 
 	for(var/state in GLOB.playable_squad_icons)
-		var/icon/top = icon('icons/UI_icons/map_blips.dmi', state, frame = 1)
+		var/icon/top = icon('ntf_modular/icons/UI_icons/map_blips_job.dmi', state, frame = 1)
 		top.Blend(color, ICON_MULTIPLY)
 		var/icon/bottom = icon('icons/UI_icons/map_blips.dmi', "squad_underlay", frame = 1)
 		top.Blend(bottom, ICON_UNDERLAY)
@@ -192,8 +192,8 @@
 	if(squad_leader && squad_leader.stat != DEAD)
 		goal_list[squad_leader] = AI_ESCORT_RATING_SQUAD_LEAD
 
-/datum/squad/proc/insert_into_squad(mob/living/carbon/human/new_squaddie, give_radio = FALSE)
-	if(!(new_squaddie.job in SSjob.active_occupations))
+/datum/squad/proc/insert_into_squad(mob/living/carbon/human/new_squaddie, give_radio = FALSE, forced = FALSE)
+	if(!forced && !(new_squaddie.job in SSjob.active_occupations))
 		CRASH("attempted to insert marine [new_squaddie] from squad [name] while having job [isnull(new_squaddie.job) ? "null" : new_squaddie.job.title]")
 
 	var/obj/item/card/id/idcard = new_squaddie.get_idcard()
@@ -248,9 +248,6 @@
 
 
 /datum/squad/proc/remove_from_squad(mob/living/carbon/human/leaving_squaddie)
-	if(!(leaving_squaddie.job in SSjob.active_occupations))
-		CRASH("attempted to remove marine [leaving_squaddie] from squad [name] while having job [isnull(leaving_squaddie.job) ? "null" : leaving_squaddie.job.title]")
-
 	if(!leaving_squaddie.assigned_squad)
 		return FALSE
 
@@ -272,7 +269,7 @@
 	var/obj/item/radio/headset/mainship/headset = leaving_squaddie.wear_ear
 	if(istype(headset))
 		headset.remove_minimap()
-		headset.set_frequency(initial(headset.frequency))
+		headset.set_frequency(headset.get_initial_frequency())
 
 	for(var/datum/data/record/sheet AS in GLOB.datacore.general)
 		if(sheet.fields["name"] == leaving_squaddie.real_name)

@@ -22,7 +22,7 @@
 	plasma_gain = 40
 
 	// *** Health *** //
-	max_health = 445
+	max_health = 420
 
 	// *** Evolution *** //
 	upgrade_threshold = TIER_THREE_THRESHOLD
@@ -30,6 +30,7 @@
 	deevolves_to = /datum/xeno_caste/bull
 
 	// *** Flags *** //
+	caste_flags = CASTE_EVOLUTION_ALLOWED|CASTE_MUTATIONS_ALLOWED
 	can_flags = parent_type::can_flags|CASTE_CAN_BE_GIVEN_PLASMA
 	caste_traits = list(TRAIT_STOPS_TANK_COLLISION)
 
@@ -43,7 +44,6 @@
 	minimap_icon = "crusher"
 
 	// *** Crusher Abilities *** //
-	stomp_damage = 60
 	crest_toss_distance = 6
 
 	actions = list(
@@ -58,6 +58,14 @@
 		/datum/action/ability/activable/xeno/stomp,
 		/datum/action/ability/xeno_action/ready_charge,
 		/datum/action/ability/activable/xeno/cresttoss,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
+	)
+
+	mutations = list(
+		/datum/mutation_upgrade/shell/tough_rock,
+		/datum/mutation_upgrade/spur/earthquake,
+		/datum/mutation_upgrade/veil/friendly_chest
 	)
 
 /datum/xeno_caste/crusher/on_caste_applied(mob/xenomorph)
@@ -92,4 +100,6 @@
 		/datum/action/ability/xeno_action/ready_charge,
 		/datum/action/ability/activable/xeno/cresttoss,
 		/datum/action/ability/activable/xeno/advance,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
 	)

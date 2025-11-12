@@ -27,9 +27,14 @@
 	if(!_hivenumber)
 		return
 	hivenumber = _hivenumber
+	var/datum/hive_status/hive = GLOB.hive_datums[hivenumber]
+	name = "[hive.prefix][name]"
+	color = hive.color
 	victim = _victim
 	victim.forceMove(src)
 	START_PROCESSING(SSslowprocess, src)
+	if(SSticker.IsRoundInProgress())
+		GLOB.round_statistics.cocoons++
 	addtimer(CALLBACK(src, PROC_REF(life_draining_over), null, TRUE), cocoon_life_time)
 	RegisterSignal(SSdcs, COMSIG_GLOB_DROPSHIP_HIJACKED, PROC_REF(life_draining_over))
 	RegisterSignal(src, COMSIG_MOVABLE_SHUTTLE_CRUSH, PROC_REF(on_shuttle_crush))
@@ -42,10 +47,13 @@
 /obj/structure/cocoon/process()
 	var/psych_points_output = COCOON_PSY_POINTS_REWARD_MIN + ((HIGH_PLAYER_POP - SSmonitor.maximum_connected_players_count) / HIGH_PLAYER_POP * (COCOON_PSY_POINTS_REWARD_MAX - COCOON_PSY_POINTS_REWARD_MIN))
 	psych_points_output = clamp(psych_points_output, COCOON_PSY_POINTS_REWARD_MIN, COCOON_PSY_POINTS_REWARD_MAX)
+	GLOB.round_statistics.strategic_psypoints_from_cocoons += psych_points_output
 	SSpoints.add_strategic_psy_points(hivenumber, psych_points_output)
 	SSpoints.add_tactical_psy_points(hivenumber, psych_points_output*0.25)
 	//Gives marine cloneloss for a total of 30.
 	victim.adjustCloneLoss(0.5)
+	SSpoints.add_biomass_points(hivenumber, MUTATION_BIOMASS_PER_COCOON_TICK)
+	GLOB.round_statistics.biomass_from_cocoons += MUTATION_BIOMASS_PER_COCOON_TICK
 
 /obj/structure/cocoon/take_damage(damage_amount, damage_type = BRUTE, armor_type = null, effects = TRUE, attack_dir, armour_penetration = 0, mob/living/blame_mob)
 	. = ..()
@@ -54,7 +62,9 @@
 
 ///Allow the cocoon to be opened and dragged
 /obj/structure/cocoon/proc/unanchor_from_nest()
-	new /obj/structure/bed/nest(loc)
+	var/obj/structure/bed/nest/our_nest = locate() in loc
+	if(!our_nest)
+		our_nest = new
 	anchored = FALSE
 	update_icon()
 	playsound(loc, SFX_ALIEN_RESIN_MOVE, 35)
@@ -66,11 +76,13 @@
 	if(anchored)
 		unanchor_from_nest()
 	if(must_release_victim)
-		var/datum/job/xeno_job = SSjob.GetJobType(/datum/job/xenomorph)
+		var/datum/job/xeno_job = SSjob.GetJobType(GLOB.hivenumber_to_job_type[hivenumber])
 		xeno_job.add_job_points(larva_point_reward)
 		var/datum/hive_status/hive_status = GLOB.hive_datums[hivenumber]
 		hive_status.update_tier_limits()
 		GLOB.round_statistics.larva_from_cocoon += larva_point_reward / xeno_job.job_points_needed
+		SSpoints.add_biomass_points(hivenumber, MUTATION_BIOMASS_PER_COCOON_COMPLETION)
+		GLOB.round_statistics.biomass_from_cocoons += MUTATION_BIOMASS_PER_COCOON_COMPLETION
 		release_victim()
 	update_icon()
 

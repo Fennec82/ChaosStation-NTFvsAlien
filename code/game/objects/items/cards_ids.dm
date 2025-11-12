@@ -267,6 +267,16 @@
 	access = ALL_SOM_ACCESS
 	iff_signal = SOM_IFF
 
+/obj/item/card/id/icc_spare
+	name = "spare "+ FACTION_ICC+" command ID"
+	desc = "A spare "+ FACTION_ICC + " command ID"
+	icon_state = "gold"
+	worn_icon_state = "gold_id"
+	registered_name = FACTION_ICC + " Commander"
+	assignment = FACTION_ICC + " Commander"
+	access = ALL_ICC_ACCESS
+	iff_signal = ICC_IFF
+
 /obj/item/card/id/captains_spare/survival
 	name = "identification card"
 	desc = "A colonist generalized ID card."
@@ -309,16 +319,15 @@
 	if(!.)
 		return
 	if(dogtag_taken)
-		stripper.balloon_alert(stripper, "Info tag already taken")
+		stripper.balloon_alert(stripper, "info tag already taken!")
 		return FALSE
 	if(owner.stat != DEAD)
-		stripper.balloon_alert(stripper, "[owner] isn't dead yet")
+		stripper.balloon_alert(stripper, "[owner.p_they()] [p_are()]n't dead yet!")
 		return FALSE
 
 /obj/item/card/id/dogtag/special_stripped_behavior(mob/stripper, mob/owner)
 	if(dogtag_taken)
 		return
-	stripper.balloon_alert(stripper, "Took info tag")
 	to_chat(stripper, span_notice("You take [owner]'s information tag, leaving the ID tag."))
 	dogtag_taken = TRUE
 	update_icon()

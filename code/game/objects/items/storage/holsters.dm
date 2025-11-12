@@ -69,7 +69,7 @@
 ///Adds or removes underlay sprites, checks holstered_item to see which underlay to add
 /obj/item/storage/holster/proc/update_underlays()
 	if(holstered_item && !holstered_item_underlay)
-		holstered_item_underlay = image(icon, src, holstered_item.icon_state)
+		holstered_item_underlay = image(holstered_item.holstered_underlay_icon, src, holstered_item.icon_state)
 		underlays += holstered_item_underlay
 	else if(!holstered_item) //Only delete the underlay once our actual holstered item is gone
 		underlays -= holstered_item_underlay
@@ -157,6 +157,21 @@
 	new /obj/item/ammo_magazine/rocket/recoilless/heam(src)
 	new /obj/item/ammo_magazine/rocket/recoilless/heam(src)
 	new /obj/item/weapon/gun/launcher/rocket/recoillessrifle/heam(src)
+
+/obj/item/storage/holster/backholster/rpg/freelancer
+	name = "\improper Freelancer rocket bag"
+	desc = "This backpack can hold 6 67mm shells, in addition to a recoiless launcher."
+	icon_state = "freelancer_rocket"
+	storage_type = /datum/storage/holster/backholster/rpg/freelancer
+
+/obj/item/storage/holster/backholster/rpg/freelancer/full/PopulateContents()
+	new /obj/item/ammo_magazine/rocket/recoilless/light(src)
+	new /obj/item/ammo_magazine/rocket/recoilless/light(src)
+	new /obj/item/ammo_magazine/rocket/recoilless/light(src)
+	new /obj/item/ammo_magazine/rocket/recoilless(src)
+	new /obj/item/ammo_magazine/rocket/recoilless(src)
+	new /obj/item/ammo_magazine/rocket/recoilless(src)
+	new /obj/item/weapon/gun/launcher/rocket/recoillessrifle(src)
 
 /obj/item/storage/holster/backholster/rpg/som
 	name = "\improper SOM RPG bag"
@@ -679,8 +694,8 @@
 	new /obj/item/ammo_magazine/revolver/mateba(src)
 
 /obj/item/storage/holster/belt/korovin
-	name = "\improper Type 41 pistol holster rig"
-	desc = "A modification of the standard UPP pouch rig to carry a single Korovin PK-9 pistol. It also contains side pouches that can store .22 magazines, either hollowpoints or tranquilizers."
+	name = "\improper MT41 pistol holster rig"
+	desc = "A modification of the standard KZ pouch rig to carry a sidearm. It also contains side pouches that can store sidearm magazines."
 	icon_state = "korovin_holster"
 	storage_type = /datum/storage/holster/belt/korovin
 

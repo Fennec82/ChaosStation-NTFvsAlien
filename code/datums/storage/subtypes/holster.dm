@@ -49,6 +49,12 @@
 	max_w_class = WEIGHT_CLASS_BULKY
 	access_delay = 0.5 SECONDS
 
+/datum/storage/holster/backholster/rpg/freelancer
+	storage_slots = 7
+	max_storage_space = 30
+	max_w_class = WEIGHT_CLASS_BULKY
+	access_delay = 0.5 SECONDS
+
 /datum/storage/holster/backholster/rpg/New(atom/parent)
 	. = ..()
 	set_holdable(
@@ -67,6 +73,16 @@
 			/obj/item/weapon/gun/launcher/rocket/som,
 		),
 		storage_type_limits_list = list(/obj/item/weapon/gun/launcher/rocket/som)
+	)
+
+/datum/storage/holster/backholster/rpg/freelancer/New(atom/parent)
+	. = ..()
+	set_holdable(
+		can_hold_list = list(
+			/obj/item/ammo_magazine/rocket,
+			/obj/item/weapon/gun/launcher/rocket/recoillessrifle,
+		),
+		storage_type_limits_list = list(/obj/item/weapon/gun/launcher/rocket/recoillessrifle)
 	)
 
 /datum/storage/holster/backholster/mortar
@@ -199,6 +215,8 @@
 		/obj/item/ammo_magazine/pistol/c99t,
 		/obj/item/weapon/gun/pistol/xmdivider,
 		/obj/item/ammo_magazine/pistol/xmdivider,
+		/obj/item/weapon/gun/pistol/vsd_pistol,
+		/obj/item/ammo_magazine/pistol/vsd_pistol,
 	))
 
 /datum/storage/holster/belt/ts34

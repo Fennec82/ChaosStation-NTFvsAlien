@@ -6,17 +6,17 @@
 
 	SSpoints.add_supply_points(faction_selling, points[1])
 	SSpoints.add_dropship_points(faction_selling, points[2])
-	return list(new /datum/export_report(points[1], name, faction_selling))
+	return list(new /datum/export_report(points[1], name, faction_selling, points[2]))
 
 /mob/living/carbon/human/supply_export(faction_selling)
 	if(!can_sell_human_body(src, faction_selling))
-		return list(new /datum/export_report(0, name, faction_selling))
+		return list(new /datum/export_report(0, name, faction_selling, 0))
 	return ..()
 
 /mob/living/carbon/xenomorph/supply_export(faction_selling)
 	var/datum/hive_status/hive = GLOB.hive_datums[hivenumber]
 	if(faction_selling in hive.allied_factions)
-		return list(new /datum/export_report(0, name, faction_selling))
+		return list(new /datum/export_report(0, name, faction_selling, 0))
 	. = ..()
 	if(!.)
 		return FALSE
@@ -29,6 +29,14 @@
 	for(var/atom/movable/AM in contents)
 		. += AM.supply_export(faction_selling)
 		qdel(AM)
+
+/obj/item/resin_jelly/req_jelly/supply_export(faction_selling)
+	var/datum/hive_status/hive = GLOB.hive_datums[hivenumber]
+	if(faction_selling in hive.allied_factions)
+		return list(new /datum/export_report(0, name, faction_selling, 0))
+	. = ..()
+	var/datum/export_report/export_report = .[1]
+	GLOB.round_statistics.points_from_ambrosia += export_report.points
 
 /**
  * Getter proc for the point value of this object
@@ -88,3 +96,6 @@
 			if(GLOB.faction_to_alignement[seller_faction] == ALIGNEMENT_FRIENDLY)
 				return FALSE
 			return TRUE
+
+/obj/item/resin_jelly/reqjelly/get_export_value()
+	return list(100, 25)

@@ -48,7 +48,7 @@
 				network = list("marinesl", "marine")
 			if(/datum/job/terragov/command/pilot)
 				dat += " pilot's"
-				network = list("dropship1")
+				network = list("dropship1", "landing zones")
 			if(/datum/job/terragov/command/transportofficer)
 				dat += " transport officer's"
 				network = list("dropship2")
@@ -142,14 +142,14 @@
 	if(action == "switch_camera")
 		var/camera_reference = params["ref"]
 		var/list/cameras = get_available_cameras()
-		var/obj/machinery/camera/selected_camera
-
-		active_camera = cameras[camera_reference]
-		playsound(src, SFX_TERMINAL_TYPE, 25, FALSE)
+		var/obj/machinery/camera/selected_camera = cameras[camera_reference]
 
 		if(!selected_camera)
 			return TRUE
+		active_camera = selected_camera
+		playsound(src, SFX_TERMINAL_TYPE, 25, FALSE)
 
+		last_turf = null
 		update_active_camera_screen()
 
 		return TRUE
@@ -212,7 +212,7 @@
 
 /obj/item/hud_tablet/pilot
 	name = "pilot officers's hud tablet"
-	network = list("dropship1")
+	network = list("dropship1", "landing zones")
 	max_view_dist = WORLD_VIEW_NUM
 
 /obj/item/hud_tablet/transportofficer

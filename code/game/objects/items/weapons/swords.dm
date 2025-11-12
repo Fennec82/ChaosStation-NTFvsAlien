@@ -100,7 +100,7 @@
 	if(!ishuman(target))
 		return
 	var/mob/living/carbon/human/human_victim = target
-	human_victim.apply_damage(damage, BRUTE, BODY_ZONE_CHEST, MELEE, TRUE, TRUE, TRUE, penetration)
+	human_victim.apply_damage(damage, BRUTE, BODY_ZONE_CHEST, MELEE, TRUE, TRUE, TRUE, penetration, owner)
 	human_victim.adjust_stagger(1 SECONDS)
 	playsound(human_victim, "sound/weapons/wristblades_hit.ogg", 25, 0, 5)
 	shake_camera(human_victim, 2, 1)
@@ -121,7 +121,7 @@
 
 /obj/item/weapon/sword/machete
 	name = "\improper M2132 machete"
-	desc = "Latest issue of the TGMC Machete. Great for clearing out jungle or brush on outlying colonies. Found commonly in the hands of scouts and trackers, but difficult to carry with the usual kit."
+	desc = "Latest issue of the NTF Machete. Great for clearing out jungle or brush on outlying colonies. Found commonly in the hands of scouts and trackers, but difficult to carry with the usual kit."
 	icon_state = "machete"
 	worn_icon_state = "machete"
 	force = 75

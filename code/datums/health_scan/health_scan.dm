@@ -1,5 +1,3 @@
-GLOBAL_LIST_INIT(known_implants, subtypesof(/obj/item/implant))
-
 /**
  * An evil, no-good component-like datum for health analyzer functionality.
  *
@@ -26,8 +24,8 @@ GLOBAL_LIST_INIT(known_implants, subtypesof(/obj/item/implant))
 	/// Var for if we should set autoupdating in [/datum/health_scan/ui_status] at all.
 	/// Check the comment in that proc for more, but basically tgui's system for managing autoupdating
 	/// is far too vague for what we're doing. We have to use a workaround to avoid dimming the UI and closing it.
-	/// *This var is not for disabling autoupdates in the first place.*
-	VAR_PRIVATE/allow_live_autoupdating = TRUE
+	/// This var can't disable autoupdates in the first place—set `track_distance` to [TRACK_DISTANCE_DISABLED] for that.
+	VAR_PRIVATE/allow_live_autoupdating = FALSE
 	/// Current mob being tracked by the scanner.
 	var/mob/living/carbon/human/patient
 	/// The atom we will use for autoupdate tracking.
@@ -39,6 +37,7 @@ GLOBAL_LIST_INIT(known_implants, subtypesof(/obj/item/implant))
 	/// Skill required to have the scanner auto refresh.
 	var/upper_skill_threshold
 	/// Distance the user can be away from the patient and still get autoupdates.
+	/// Set to [TRACK_DISTANCE_DISABLED] to disable autoupdating entirely.
 	var/track_distance
 	/// Cooldown for showing a scan to somebody.
 	COOLDOWN_DECLARE(show_scan_cooldown)
@@ -55,7 +54,7 @@ GLOBAL_LIST_INIT(known_implants, subtypesof(/obj/item/implant))
 	atom/scan_owner,
 	skill_bypass_fumble = SKILL_MEDICAL_NOVICE,
 	skill_auto_update = SKILL_MEDICAL_NOVICE,
-	autoupdate_distance = DEFAULT_TRACK_DISTANCE
+	autoupdate_distance = TRACK_DISTANCE_DEFAULT
 )
 	if(!isatom(scan_owner))
 		stack_trace("[type] created on a non-atom: [scan_owner.type]")
@@ -101,6 +100,8 @@ GLOBAL_LIST_INIT(known_implants, subtypesof(/obj/item/implant))
  * Otherwise, we return `TRUE`.
  */
 /datum/health_scan/proc/autoupdate_checks(mob/living/user, mob/living/patient)
+	if(!track_distance) // checking being disabled should go first
+		return FALSE
 	if(user.skills.getRating(SKILL_MEDICAL) < upper_skill_threshold)
 		return FALSE
 	if(get_turf(owner) != get_turf(user))
@@ -120,27 +121,27 @@ GLOBAL_LIST_INIT(known_implants, subtypesof(/obj/item/implant))
  */
 /datum/health_scan/proc/analyze_vitals(mob/living/carbon/human/patient_candidate, mob/user, show_patient)
 	if(user.skills.getRating(SKILL_MEDICAL) < skill_threshold)
-		user.balloon_alert("fumbling...")
+		user.balloon_alert(user, "fumbling...")
 		if(!do_after(user, max(SKILL_TASK_AVERAGE - (1 SECONDS * user.skills.getRating(SKILL_MEDICAL)), 0), NONE, patient_candidate, BUSY_ICON_UNSKILLED))
 			return
 	if(!ishuman(patient_candidate))
-		user.balloon_alert(user, "cannot scan")
+		user.balloon_alert(user, "cannot scan!")
 		return
 	if(isxeno(patient_candidate) || patient_candidate.species.species_flags & NO_SCAN)
-		user.balloon_alert(user, "unknown error")
+		user.balloon_alert(user, "unknown error!")
 		return
 	if(patient)
 		UnregisterSignal(patient, COMSIG_QDELETING)
 	patient = patient_candidate
 	if(show_patient)
 		if(!COOLDOWN_FINISHED(src, show_scan_cooldown))
-			user.balloon_alert(user, "wait [DisplayTimeText(COOLDOWN_TIMELEFT(src, show_scan_cooldown))]")
+			user.balloon_alert(user, "wait [DisplayTimeText(COOLDOWN_TIMELEFT(src, show_scan_cooldown))]!")
 			return
 		if(patient_candidate.faction != user.faction)
-			user.balloon_alert(user, "incompatible factions")
+			user.balloon_alert(user, "incompatible factions!")
 			return
 		if(!patient_candidate.client?.prefs?.allow_being_shown_health_scan)
-			user.balloon_alert(user, "can't show healthscan")
+			user.balloon_alert(user, "can't show healthscan!")
 			return
 		user.balloon_alert_to_viewers("showed healthscan", vision_distance = 4)
 		ui_interact(patient_candidate)
@@ -160,8 +161,13 @@ GLOBAL_LIST_INIT(known_implants, subtypesof(/obj/item/implant))
 	. = ..()
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
-		ui = new(user, src, "MedScanner", "Medical Scanner")
+		ui = new(user, src, "MedScanner", "Health Scan")
 		ui.open()
+	if(!autoupdate_checks(user, patient))
+		// Stop native autoupdating at the gate to avoid double-dipping
+		// updates when they really shouldn't happen in the first place
+		ui.set_autoupdate(FALSE)
+		return
 	allow_live_autoupdating = TRUE
 
 /datum/health_scan/ui_status(mob/user, datum/ui_state/state)
@@ -191,8 +197,8 @@ GLOBAL_LIST_INIT(known_implants, subtypesof(/obj/item/implant))
 		"clone" = round(patient.getCloneLoss()),
 
 		"blood_type" = patient.blood_type,
-		"blood_amount" = patient.blood_volume,
-		"regular_blood_amount" = initial(patient.blood_volume),
+		"blood_amount" = patient.get_blood_volume(),
+		"regular_blood_amount" = patient.get_regular_blood_volume(),
 
 		"hugged" = !!(patient.status_flags & XENO_HOST),
 
@@ -205,7 +211,7 @@ GLOBAL_LIST_INIT(known_implants, subtypesof(/obj/item/implant))
 			"is_robotic_species" = !!(patient.species?.species_flags & ROBOTIC_LIMBS)
 		),
 
-		"accessible_theme" = user.client?.prefs?.accessible_tgui_themes
+		"accessible_theme" = user.client?.prefs?.accessible_tgui_themes,
 	)
 
 	var/temp_color = "white"
@@ -390,4 +396,5 @@ GLOBAL_LIST_INIT(known_implants, subtypesof(/obj/item/implant))
 			ssd = "Space Sleep Disorder detected." // SSD
 	data["ssd"] = ssd
 
+	SEND_SIGNAL(src, COMSIG_HEALTH_SCAN_DATA, patient, data.Copy())
 	return data

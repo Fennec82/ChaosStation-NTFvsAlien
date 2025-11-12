@@ -69,7 +69,7 @@
 #define CHAT_STATISTICS (1<<12)
 #define CHAT_LOOC (1<<13)
 
-#define TOGGLES_CHAT_DEFAULT (CHAT_OOC|CHAT_DEAD|CHAT_GHOSTEARS|CHAT_GHOSTSIGHT|CHAT_PRAYER|CHAT_RADIO|CHAT_ATTACKLOGS|CHAT_DEBUGLOGS|CHAT_GHOSTRADIO|CHAT_FFATTACKLOGS|CHAT_ENDROUNDLOGS|CHAT_GHOSTHIVEMIND|CHAT_STATISTICS|CHAT_LOOC)
+#define TOGGLES_CHAT_DEFAULT (CHAT_OOC|CHAT_DEAD|CHAT_PRAYER|CHAT_RADIO|CHAT_ATTACKLOGS|CHAT_DEBUGLOGS|CHAT_GHOSTRADIO|CHAT_FFATTACKLOGS|CHAT_ENDROUNDLOGS|CHAT_GHOSTHIVEMIND|CHAT_STATISTICS|CHAT_LOOC)
 
 #define DISABLE_DEATHRATTLE (1<<0)
 #define DISABLE_ARRIVALRATTLE (1<<1)
@@ -83,6 +83,7 @@
 #define RADIAL_LASERGUNS (1<<4)
 #define DIRECTIONAL_ATTACKS (1<<5)
 #define TOGGLE_CLICKDRAG (1<<6)
+#define TOGGLE_XENO_MOVE_INTENT_KEYBIND (1<<7)
 
 #define PARALLAX_INSANE -1 //for show offs
 #define PARALLAX_HIGH    0 //default.
@@ -104,15 +105,16 @@
 #define SCALING_METHOD_DISTORT "distort"
 #define SCALING_METHOD_BLUR "blur"
 
-#define TOGGLES_GAMEPLAY_DEFAULT (RADIAL_MEDICAL|MIDDLESHIFTCLICKING|RADIAL_STACKS|AUTO_INTERACT_DEPLOYABLES|RADIAL_LASERGUNS|DIRECTIONAL_ATTACKS)
+#define TOGGLES_GAMEPLAY_DEFAULT (RADIAL_MEDICAL|MIDDLESHIFTCLICKING|RADIAL_STACKS|AUTO_INTERACT_DEPLOYABLES|RADIAL_LASERGUNS|DIRECTIONAL_ATTACKS|TOGGLE_XENO_MOVE_INTENT_KEYBIND)
 
 #define CHARACTER_CUSTOMIZATION 1
 #define BACKGROUND_INFORMATION 2
 #define GEAR_CUSTOMIZATION 3
-#define JOB_PREFERENCES 4
-#define GAME_SETTINGS 5
-#define KEYBIND_SETTINGS 6
-#define DRAW_ORDER 7
+#define FLAVOR_CUSTOMIZATION 4
+#define JOB_PREFERENCES 5
+#define GAME_SETTINGS 6
+#define KEYBIND_SETTINGS 7
+#define DRAW_ORDER 8
 
 #define USE_GENDER "use_gender"
 
@@ -125,31 +127,17 @@
 
 
 #define RELIGION_CHOICES list(\
-	"Christianity (Catholic)",\
-	"Christianity (Protestant, Anglicanism)",\
-	"Christianity (Protestant, Baptist)",\
-	"Christianity (Protestant, Lutheranism)",\
-	"Christianity (Protestant, Calvinism)",\
-	"Christianity (Protestant, Methodism)",\
-	"Christianity (Protestant, Adventism)",\
-	"Christianity (Protestant, Pentecostalism)",\
-	"Christianity (Protestant, Other)",\
-	"Christianity (Eastern Orthodoxy)",\
-	"Christianity (Oriental Orthodoxy)",\
-	"Christianity (Non-trinitarian Restorationism, Mormonism)",\
-	"Christianity (Non-trinitarian Restorationism, Jehovah's Witnesses)",\
-	"Christianity (Non-trinitarian Restorationism, Oneness Pentecostalism)",\
-	"Christianity (Other)",\
-	"Judaism",\
-	"Islam (Shia)",\
-	"Islam (Sunni)",\
-	"Buddhism",\
-	"Hinduism",\
-	"Sikhism",\
-	"Shintoism",\
-	"Adherents of the Machine God",\
-	"Paganism",\
-	"Other Religion",\
+	"Church of Moonbeam",\
+	"Church of Death",\
+	"Church of Solaria",\
+	"Church of Lunaria",\
+	"Church of Wanderer",\
+	"Church of The Plantmother",\
+	"Cult of Lamashtu",\
+	"Cult of Dismas",\
+	"Cult of Sinius",\
+	"Cult of Tenebrase",\
+	"Some Old world religion",\
 	"Atheism",\
 	"None"\
 	)

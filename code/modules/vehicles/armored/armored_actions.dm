@@ -98,9 +98,10 @@
 	chassis.armored_flags ^= ARMORED_LIGHTS_ON
 	if(chassis.armored_flags & ARMORED_LIGHTS_ON)
 		action_icon_state = "mech_lights_on"
+		chassis.set_light(initial(chassis.light_range))
 	else
 		action_icon_state = "mech_lights_off"
-	chassis.set_light_on(chassis.armored_flags & ARMORED_LIGHTS_ON)
+		chassis.set_light(0)
 	chassis.balloon_alert(owner, "toggled lights [chassis.armored_flags & ARMORED_LIGHTS_ON ? "on":"off"]")
 	playsound(chassis,'sound/mecha/brass_skewer.ogg', 40, TRUE)
 	chassis.log_message("Toggled lights [(chassis.armored_flags & ARMORED_LIGHTS_ON)?"on":"off"].", LOG_MECHA)
@@ -121,10 +122,10 @@
 	chassis.log_message("Toggled zoom mode.", LOG_MECHA)
 	to_chat(owner, "<font color='[chassis.zoom_mode?"blue":"red"]'>Zoom mode [chassis.zoom_mode?"en":"dis"]abled.</font>")
 	if(chassis.zoom_mode)
-		owner.client.view_size.add(3)
+		owner.client.view_size.add(5)
 		SEND_SOUND(owner, sound('sound/mecha/imag_enh.ogg', volume=50))
 	else
-		owner.client.view_size.add(-3)
+		owner.client.view_size.add(-5)
 	update_button_icon()
 
 /datum/action/vehicle/sealed/armored/zoom/remove_action(mob/M)

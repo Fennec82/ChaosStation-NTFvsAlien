@@ -32,6 +32,7 @@
 #define RESIN_MEMBRANE "resin membrane"
 #define WALL_RESIN_NEST "wall resin nest"
 #define LIGHT_TOWER "light tower"
+#define ADVANCED_RESIN_NEST "tentacle breeding nest"
 
 //Special resin defines
 #define BULLETPROOF_WALL "bulletproof resin wall"
@@ -70,6 +71,16 @@ GLOBAL_LIST_INIT(weed_type_list, typecacheof(list(
 	/obj/alien/weeds/node,
 	/obj/alien/weeds/node/sticky,
 	/obj/alien/weeds/node/resting,
+)))
+
+//List of xeno objects immune friendly xeno attacks by default
+GLOBAL_LIST_INIT(xeno_object_list, typecacheof(list(
+	/obj/alien,
+	/obj/structure/xeno,
+	/obj/structure/mineral_door/resin,
+	/obj/structure/bed/nest,
+	/obj/structure/cocoon,
+	/obj/item/clothing/mask/facehugger,
 )))
 
 //List of weeds with probability of spawning
@@ -152,6 +163,7 @@ GLOBAL_LIST_INIT(resin_images_list, list(
 		BULLETPROOF_WALL = image('icons/Xeno/actions/construction.dmi', icon_state = BULLETPROOF_WALL),
 		FIREPROOF_WALL = image('icons/Xeno/actions/construction.dmi', icon_state = FIREPROOF_WALL),
 		HARDY_WALL = image('icons/Xeno/actions/construction.dmi', icon_state = HARDY_WALL),
+		ADVANCED_RESIN_NEST = image('ntf_modular/icons/Xeno/construction.dmi', icon_state = RESIN_NEST),
 		))
 
 /*List of special resin structure images
@@ -201,15 +213,6 @@ GLOBAL_LIST_INIT(xeno_ai_spawnable, list(
 	} \
 } while(FALSE)
 
-///Adjusts overheal and returns the amount by which it was adjusted
-#define adjustOverheal(xeno, amount) \
-	xeno.overheal = max(min(xeno.overheal + amount, xeno.xeno_caste.overheal_max), 0); \
-	if(xeno.overheal > 0) { \
-		xeno.add_filter("overheal_vis", 1, outline_filter(4 * (xeno.overheal / xeno.xeno_caste.overheal_max), "#60ce6f60")); \
-	} else { \
-		xeno.remove_filter("overheal_vis"); \
-	}
-
 /// Used by the is_valid_for_resin_structure proc.
 /// 0 is considered valid , anything thats not 0 is false
 /// Simply not allowed by the area to build
@@ -228,6 +231,8 @@ GLOBAL_LIST_INIT(xeno_ai_spawnable, list(
 #define ERROR_NO_SUPPORT 7
 /// Failed to other blockers such as egg, power plant , coocon , traps
 #define ERROR_CONSTRUCT 8
+// Failed due to enemy weeds
+#define ERROR_ENEMY_WEED 9
 
 #define WEED_REQUIRES_LOS (1<<0)
 #define WEED_TAKES_TIME (1<<1)

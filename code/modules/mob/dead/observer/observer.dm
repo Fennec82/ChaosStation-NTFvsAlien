@@ -13,9 +13,9 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 	density = FALSE
 	see_invisible = SEE_INVISIBLE_OBSERVER
 	invisibility = INVISIBILITY_OBSERVER
-	sight = SEE_TURFS|SEE_MOBS|SEE_OBJS|SEE_SELF
+	sight = SEE_SELF
 	hud_type = /datum/hud/ghost
-	lighting_cutoff = LIGHTING_CUTOFF_HIGH
+	//lighting_cutoff = LIGHTING_CUTOFF_HIGH
 	dextrous = TRUE
 	status_flags = GODMODE | INCORPOREAL
 
@@ -117,7 +117,10 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 
 	QDEL_NULL(orbit_menu)
 	GLOB.observer_list -= src //"wait isnt this done in logout?" Yes it is but because this is clients thats unreliable so we do it again here
-	SSmobs.dead_players_by_zlevel[z] -= src
+	if(z)
+		var/list/deadlist = SSmobs.dead_players_by_zlevel[z]
+		if(islist(deadlist))
+			deadlist -= src
 
 	QDEL_NULL(scanner_functionality)
 
@@ -158,25 +161,9 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 			return
 		else
 			var/atom/movable/AM = locate(href_list["track"])
-			ManualFollow(AM)
-			return
-
-
-	else if(href_list["jump"])
-		var/x = text2num(href_list["x"])
-		var/y = text2num(href_list["y"])
-		var/z = text2num(href_list["z"])
-
-		if(x == 0 && y == 0 && z == 0)
-			return
-
-		var/turf/T = locate(x, y, z)
-		if(!T)
-			return
-
-		var/mob/dead/observer/A = usr
-		A.abstract_move(T)
-		return
+			if(istype(AM))
+				ManualFollow(AM)
+				return
 
 	else if(href_list["claim"])
 		var/mob/living/target = locate(href_list["claim"]) in GLOB.offered_mob_list
@@ -217,81 +204,128 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 		stack_trace("This code path is no longer valid, migrate this to new TGUI prefs")
 		return
 
-	else if(href_list["track_xeno_name"])
+	var/track_hivenumber = href_list["track_hive"] || XENO_HIVE_NORMAL
+	if(href_list["track_xeno_name"])
 		var/xeno_name = href_list["track_xeno_name"]
-		for(var/Y in GLOB.hive_datums[XENO_HIVE_NORMAL].get_all_xenos())
+		var/datum/hive_status/track_hive = GLOB.hive_datums[track_hivenumber]
+		if(!istype(track_hive))
+			track_hive = GLOB.hive_datums[XENO_HIVE_NORMAL]
+		for(var/Y in track_hive.get_all_xenos())
 			var/mob/living/carbon/xenomorph/X = Y
-			if(isnum(X.nicknumber))
-				if(num2text(X.nicknumber) != xeno_name)
-					continue
-			else
-				if(X.nicknumber != xeno_name)
-					continue
+			if("[X.nicknumber]" != xeno_name)
+				continue
 			ManualFollow(X)
-			break
+			return
 
-	else if(href_list["track_silo_number"])
+	if(href_list["track_silo_number"])
 		var/silo_number = href_list["track_silo_number"]
-		for(var/obj/structure/xeno/silo/resin_silo in GLOB.xeno_resin_silos_by_hive[XENO_HIVE_NORMAL])
+		var/list/silo_list = GLOB.xeno_resin_silos_by_hive[track_hivenumber]
+		if(!islist(silo_list) || !length(silo_list))
+			silo_list = GLOB.xeno_resin_silos_by_hive[XENO_HIVE_NORMAL]
+		for(var/obj/structure/xeno/silo/resin_silo in silo_list)
 			if(num2text(resin_silo.number_silo) == silo_number)
-				var/mob/dead/observer/ghost = usr
-				ghost.abstract_move(resin_silo.loc)
-				break
+				ManualFollow(resin_silo)
+				return
 
-/mob/proc/ghostize(can_reenter_corpse = TRUE, aghosting = FALSE)
-	if(!key || isaghost(src))
+	if(href_list["jump"])
+		var/x = text2num(href_list["x"])
+		var/y = text2num(href_list["y"])
+		var/z = text2num(href_list["z"])
+
+		if(x == 0 && y == 0 && z == 0)
+			return
+
+		var/turf/T = locate(x, y, z)
+		if(!T)
+			return
+
+		if(!(check_other_rights(usr.client, R_ADMIN, FALSE)))
+			if(!GLOB.observer_freedom)
+				to_chat(usr, span_warning("Can only teleport to your own faction."))
+				return
+		var/mob/dead/observer/A = usr
+		A.abstract_move(T)
+		return
+
+/mob/proc/ghostize(can_reenter_corpse = TRUE, aghosting = FALSE, force_lobby = FALSE)
+	if(!key)
+		return FALSE
+	if(isobserver(src) && !force_lobby)
 		return FALSE
 	SEND_SIGNAL(SSdcs, COMSIG_MOB_GHOSTIZE, src, can_reenter_corpse)
-	var/mob/dead/observer/ghost = new(src)
-	var/turf/T = get_turf(src)
 
-	if(client)
-		animate(client, pixel_x = 0, pixel_y = 0)
+	if(force_lobby || ((!SSticker.mode || CHECK_BITFIELD(SSticker.mode.round_type_flags, MODE_NO_GHOSTS)) && !(client && check_rights_for(client, R_ADMIN))))
+		if(client)
+			client?.screen?.Cut()
+		var/mob/new_player/new_player = new /mob/new_player()
+		new_player.key = key
+		new_player.name = "[key](In Lobby)"
+		if(isobserver(src))
+			qdel(src)
+		if(new_player.client)
+			new_player.client?.init_verbs()
 
-	//dont copy the appearance so we keep verbs, etc.
-	ghost.overlays = overlays
-	ghost.underlays = underlays
-	ghost.icon = icon
-	ghost.icon_state = icon_state
-	ghost.appearance = strip_appearance_underlays(ghost)
+		. = new_player
+		qdel(mind)
+	else
+		var/mob/dead/observer/ghost = new(src)
+		var/turf/T = get_turf(src)
+
+		if(client)
+			animate(client, pixel_x = 0, pixel_y = 0)
+
+		//dont copy the appearance so we keep verbs, etc.
+		ghost.overlays = overlays
+		ghost.underlays = underlays
+		ghost.icon = icon
+		ghost.icon_state = icon_state
+		ghost.appearance = strip_appearance_underlays(ghost)
+
+
+		if(mind?.name)
+			ghost.real_name = mind.name
+		else if(real_name)
+			ghost.real_name = real_name
+		else
+			ghost.real_name = GLOB.namepool[/datum/namepool].get_random_name(gender)
+
+		ghost.name = ghost.real_name
+		ghost.gender = gender
+		ghost.alpha = 127
+		ghost.can_reenter_corpse = can_reenter_corpse ? WEAKREF(src) : null
+		ghost.mind = mind
+
+		ghost.key = key
+		ghost.client?.init_verbs()
+		ghost.mind?.current = ghost
+		ghost.faction = faction
+		ghost.pose = pose
+		ghost.ooc_notes = ooc_notes
+		ghost.ooc_notes_likes = ooc_notes_likes
+		ghost.ooc_notes_dislikes = ooc_notes_dislikes
+		ghost.ooc_notes_maybes = ooc_notes_maybes
+		ghost.ooc_notes_favs = ooc_notes_favs
+		ghost.ooc_notes_style = ooc_notes_style
+		if(client && check_rights_for(client, R_ADMIN))
+			ghost.set_sight(SEE_SELF|SEE_TURFS|SEE_MOBS|SEE_OBJS)
+			ghost.set_invis_see(SEE_INVISIBLE_OBSERVER)
+			ghost.update_sight()
+
+		if(!T)
+			T = SAFEPICK(GLOB.latejoin)
+		if(!T)
+			stack_trace("no latejoin landmark detected")
+
+		ghost.abstract_move(T)
+
+		. = ghost
+
 	if(!can_reenter_corpse && ishuman(src) && src.stat == DEAD)
 		var/mob/living/carbon/human/H = src
 		H.set_undefibbable()
-
-	if(mind?.name)
-		ghost.real_name = mind.name
-	else if(real_name)
-		ghost.real_name = real_name
-	else
-		ghost.real_name = GLOB.namepool[/datum/namepool].get_random_name(gender)
-
-	ghost.name = ghost.real_name
-	ghost.gender = gender
-	ghost.alpha = 127
-	ghost.can_reenter_corpse = can_reenter_corpse ? WEAKREF(src) : null
-	ghost.mind = mind
 	mind = null
-	ghost.key = key
-	ghost.client?.init_verbs()
-	ghost.mind?.current = ghost
-	ghost.faction = faction
-	ghost.ooc_notes = ooc_notes
-	ghost.ooc_notes_likes = ooc_notes_likes
-	ghost.ooc_notes_dislikes = ooc_notes_dislikes
-	ghost.ooc_notes_maybes = ooc_notes_maybes
-	ghost.ooc_notes_favs = ooc_notes_favs
-	ghost.ooc_notes_style = ooc_notes_style
 
-	if(!T)
-		T = SAFEPICK(GLOB.latejoin)
-	if(!T)
-		stack_trace("no latejoin landmark detected")
-
-	ghost.abstract_move(T)
-
-	return ghost
-
-/mob/living/ghostize(can_reenter_corpse = TRUE, aghosting = FALSE)
+/mob/living/ghostize(can_reenter_corpse = TRUE, aghosting = FALSE, force_lobby = FALSE)
 	if(aghosting)
 		set_afk_status(MOB_AGHOSTED)
 	reset_perspective()
@@ -303,14 +337,13 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 	if(!aghosting && job?.job_flags & (JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE))//Only some jobs cost you your respawn timer.
 		GLOB.key_to_time_of_role_death[ghost.key] = world.time
 
-/mob/living/carbon/xenomorph/ghostize(can_reenter_corpse = TRUE, aghosting = FALSE)
+/mob/living/carbon/xenomorph/ghostize(can_reenter_corpse = TRUE, aghosting = FALSE, force_lobby = FALSE)
 	. = ..()
 	if(!. || can_reenter_corpse || aghosting)
 		return
 	var/mob/ghost = .
-	if(tier != XENO_TIER_MINION && hivenumber == XENO_HIVE_NORMAL)
+	if(tier != XENO_TIER_MINION)
 		GLOB.key_to_time_of_xeno_death[ghost.key] = world.time //If you ghost as a xeno that is not a minion, sets respawn timer
-
 
 /mob/dead/observer/Move(atom/newloc, direct, glide_size_override = 32)
 	if(updatedir)
@@ -493,6 +526,10 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 /mob/dead/observer/proc/ManualFollow(atom/movable/target)
 	if(!istype(target))
 		return
+	if(!(check_other_rights(client, R_ADMIN, FALSE)))
+		if(faction != target.faction && !GLOB.observer_freedom)
+			to_chat(src, span_warning("Can't teleport to other factions."))
+			return
 
 	var/orbitsize = (target.get_cached_width() + target.get_cached_height()) * 0.5
 	orbitsize -= (orbitsize / world.icon_size) * (world.icon_size * 0.25)
@@ -511,7 +548,7 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 		else //Circular
 			rot_seg = 36
 
-	orbit(target, orbitsize, FALSE, 20, rot_seg)
+	. = orbit(target, orbitsize, FALSE, 20, rot_seg)
 
 
 /mob/dead/observer/orbit()
@@ -550,6 +587,9 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 	set category = "Ghost.Toggles"
 	set name = "Toggle Darkness"
 
+	if(client && !check_rights_for(client, R_ADMIN))
+		to_chat(src, span_notice("Must be an admin to see more than the rest."))
+		return
 	switch(lighting_cutoff)
 		if (LIGHTING_CUTOFF_VISIBLE)
 			lighting_cutoff = LIGHTING_CUTOFF_MEDIUM
@@ -583,6 +623,8 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 		set_invis_see(SEE_INVISIBLE_OBSERVER)
 	else
 		set_invis_see(SEE_INVISIBLE_LIVING)
+	if(client && check_rights_for(client, R_ADMIN))
+		set_sight(SEE_TURFS|SEE_MOBS|SEE_OBJS)
 
 	updateghostimages()
 
@@ -646,6 +688,11 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 
 	reset_perspective(null)
 
+	var/list/available_targets = GLOB.mob_living_list.Copy()
+	if(!(check_other_rights(client, R_ADMIN, FALSE)))
+		for(var/mob/possible_target AS in available_targets)
+			if(!istype(possible_target) || possible_target.faction != faction)
+				available_targets -= possible_target
 	var/mob/target = tgui_input_list(usr, "Please select a mob:", "Observe", GLOB.mob_living_list)
 	if(!target)
 		return
@@ -656,6 +703,11 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 /mob/dead/observer/proc/do_observe(mob/target)
 	if(!client || !target || !isliving(target))
 		return
+
+	if(!(check_other_rights(client, R_ADMIN, FALSE)))
+		if(faction != target.faction && !GLOB.observer_freedom)
+			to_chat(src, span_warning("Can't observe other factions."))
+			return
 
 	client.set_eye(target)
 
@@ -763,6 +815,7 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 		new_xeno.apply_assigned_role_to_spawn(xallhala_job)
 		SSpoints.xeno_strategic_points_by_hive[XENO_HIVE_FALLEN] = 10000
 		SSpoints.xeno_tactical_points_by_hive[XENO_HIVE_FALLEN] = 10000
+		SSpoints.xeno_biomass_points_by_hive[XENO_HIVE_FALLEN] = MUTATION_BIOMASS_MAXIMUM
 		mind.transfer_to(new_xeno, TRUE)
 		xallhala_job.after_spawn(new_xeno)
 		return

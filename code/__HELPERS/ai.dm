@@ -56,6 +56,35 @@
 			continue
 		. += nearby_mech
 
+///Returns a list of mechs via get_dist and same z level method, very cheap compared to range()
+/proc/cheap_get_ridden_vehicles_near(atom/source, distance)
+	. = list()
+	var/turf/source_turf = get_turf(source)
+	if(!source_turf)
+		return
+	for(var/obj/vehicle/ridden/nearby_ridden AS in GLOB.ridden_vehicles_list)
+		if(isnull(nearby_ridden))
+			continue
+		if(source_turf.z != nearby_ridden.z)
+			continue
+		if(get_dist(source_turf, nearby_ridden) > distance)
+			continue
+		. += nearby_ridden
+
+/proc/cheap_get_unmanned_vehicles_near(atom/source, distance)
+	. = list()
+	var/turf/source_turf = get_turf(source)
+	if(!source_turf)
+		return
+	for(var/obj/vehicle/unmanned/nearby_unmanned AS in GLOB.unmanned_vehicles)
+		if(isnull(nearby_unmanned))
+			continue
+		if(source_turf.z != nearby_unmanned.z)
+			continue
+		if(get_dist(source_turf, nearby_unmanned) > distance)
+			continue
+		. += nearby_unmanned
+
 ///Returns a list of vehicles via get_dist and same z level method, very cheap compared to range()
 /proc/cheap_get_tanks_near(atom/source, distance)
 	. = list()
@@ -75,6 +104,20 @@
 		if(get_dist(source_turf, nearby_tank) > distance + bound_max - 1)
 			continue
 		. += nearby_tank
+
+/proc/cheap_get_sentries_near(atom/source, distance)
+	. = list()
+	var/turf/source_turf = get_turf(source)
+	if(!source_turf)
+		return
+	for(var/obj/machinery/deployable/mounted/sentry/nearby_sentry AS in GLOB.sentry_list)
+		if(isnull(nearby_sentry))
+			continue
+		if(source_turf.z != nearby_sentry.z)
+			continue
+		if(get_dist(source_turf, nearby_sentry) > distance)
+			continue
+		. += nearby_sentry
 
 ///Returns the nearest target that has the right target flag
 /proc/get_nearest_target(atom/source, distance, target_flags, attacker_faction, attacker_hive, need_los = FALSE)
@@ -98,6 +141,20 @@
 				nearest_target = nearby_human
 				shorter_distance = get_dist(source, nearby_human) //better to recalculate than to save the var
 	if(target_flags & TARGET_XENO)
+		for(var/obj/item/clothing/mask/facehugger/hugger AS in GLOB.alive_hugger_list)
+			if(hugger.z != source.z)
+				continue
+			if(!isturf(hugger.loc))
+				continue
+			if(attacker_hive == hugger.get_xeno_hivenumber())
+				continue
+			if(get_dist(source, hugger) >= shorter_distance)
+				continue
+			if(need_los && !line_of_sight(source, hugger))
+				continue
+			nearest_target = hugger
+			shorter_distance = get_dist(source, hugger)
+
 		nearby_xeno_list = cheap_get_xenos_near(source, shorter_distance - 1)
 		for(var/mob/nearby_xeno AS in nearby_xeno_list)
 			if(attacker_hive == nearby_xeno.get_xeno_hivenumber())
@@ -112,6 +169,20 @@
 				continue
 			nearest_target = nearby_xeno
 			shorter_distance = get_dist(source, nearby_xeno)
+
+		for(var/hive in GLOB.xeno_resin_turrets_by_hive) //we could check all xeno structures, but most of them are not shootable
+			for(var/obj/structure/xeno/xeno_turret/xeno_structure AS in GLOB.xeno_resin_turrets_by_hive[hive])
+				if(xeno_structure.z != source.z)
+					continue
+				if(attacker_hive == xeno_structure.get_xeno_hivenumber())
+					continue
+				if(get_dist(source, xeno_structure) >= shorter_distance)
+					continue
+				if(need_los && !line_of_sight(source, xeno_structure))
+					continue
+				nearest_target = xeno_structure
+				shorter_distance = get_dist(source, xeno_structure)
+
 	if(target_flags & TARGET_HUMAN_TURRETS)
 		for(var/obj/machinery/deployable/mounted/sentry/nearby_turret AS in GLOB.marine_turrets)
 			if(source.issamexenohive(nearby_turret))

@@ -199,6 +199,9 @@
 /datum/greyscale_config/xenonaut/bulletproof
 	prefix = "bulletproof_"
 
+/datum/greyscale_config/xenonaut/ablative
+	prefix = "ablative_"
+
 /datum/greyscale_config/xenonaut/bikini
 	prefix = "bikini_"
 
@@ -277,6 +280,10 @@
 /datum/greyscale_config/protein
 	json_config = 'code/datums/greyscale/json_configs/protein.json'
 	icon_file = 'icons/obj/items/food/mre.dmi'
+
+/datum/greyscale_config/nutrient_jelly
+	json_config = 'code/datums/greyscale/json_configs/nutrient_jelly.json'
+	icon_file = 'icons/obj/items/food/xeno.dmi'
 
 ///AMMO - for both bullets and magazines
 /datum/greyscale_config/ammo

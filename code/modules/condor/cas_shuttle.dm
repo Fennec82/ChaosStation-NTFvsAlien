@@ -8,7 +8,6 @@
 	id = SHUTTLE_CAS_DOCK
 	width = 11
 	height = 12
-
 	callTime = 0
 	ignitionTime = 10 SECONDS
 	rechargeTime = 0
@@ -119,7 +118,7 @@
 	SIGNAL_HANDLER
 	if(state == PLANE_STATE_DEACTIVATED)
 		return
-	if(!is_mainship_level(z) || mode != SHUTTLE_IDLE)
+	if(!(is_mainship_level(z) || is_antagmainship_level(z)) || mode != SHUTTLE_IDLE)
 		state = PLANE_STATE_FLYING
 		return
 	if(engines_on)
@@ -132,16 +131,20 @@
 	if(!fuel_left)
 		to_chat(user, span_warning("No fuel remaining!"))
 		return
-	if(state != PLANE_STATE_FLYING || is_mainship_level(z))
+	if(state != PLANE_STATE_FLYING || (is_mainship_level(z) || is_antagmainship_level(z)))
 		to_chat(user, span_warning("You are not in-flight!"))
 		return
 	if(currently_returning)
 		to_chat(user, span_warning("You are currently on your return flight!"))
 		return
 	if(!eyeobj)
-		eyeobj = new()
-		eyeobj.origin = src
-		cas_mini.override_locator(eyeobj)
+		if(user.faction == FACTION_SOM)
+			eyeobj = new /mob/camera/aiEye/remote/hud/som(null, GLOB.som_cameranet)
+		else
+			eyeobj = new()
+	cas_mini.minimap_flags = GLOB.faction_to_minimap_flag[user.faction]
+	cas_mini.marker_flags = GLOB.faction_to_minimap_flag[user.faction]
+	cas_mini.override_locator(eyeobj)
 
 	if(eyeobj.eye_user)
 		to_chat(user, span_warning("CAS mode is already in-use!"))
@@ -150,7 +153,7 @@
 	SSmonitor.process_human_positions()
 
 	#ifndef TESTING
-	if(SSmonitor.human_on_ground <= 1)
+	if(SSmonitor.human_on_ground < 1)
 		to_chat(user, span_warning("The signal from the area of operations is too weak, you cannot route towards the battlefield."))
 		return
 	#endif
@@ -162,7 +165,7 @@
 		starting_point = tgui_input_list(user, "Select a CAS target", "CAS Targeting", GLOB.active_cas_targets)
 
 	else //if we don't have any targets use the minimap to select a starting position
-		var/atom/movable/screen/minimap/map = SSminimaps.fetch_minimap_object(2, MINIMAP_FLAG_MARINE)
+		var/atom/movable/screen/minimap/map = SSminimaps.fetch_minimap_object(2, GLOB.faction_to_minimap_flag[user.faction])
 		user.client.screen += map
 		var/list/polled_coords = map.get_coords_from_click(user)
 		user?.client?.screen -= map
@@ -176,7 +179,7 @@
 	if(!starting_point)
 		return
 
-	if(state != PLANE_STATE_FLYING || is_mainship_level(z)) //Secondary safety due to input being able to delay time.
+	if(state != PLANE_STATE_FLYING || (is_mainship_level(z) || is_antagmainship_level(z))) //Secondary safety due to input being able to delay time.
 		to_chat(user, span_warning("You are not in-flight!"))
 		return
 	if(currently_returning)
@@ -287,7 +290,7 @@
 /obj/docking_port/mobile/marine_dropship/casplane/ui_data(mob/user)
 	. = list()
 	.["plane_state"] = state
-	.["location_state"] = !is_mainship_level(z)
+	.["location_state"] = !(is_mainship_level(z) || is_antagmainship_level(z))
 	.["plane_mode"] = mode
 	.["fuel_left"] = fuel_left
 	.["fuel_max"] = fuel_max
@@ -322,6 +325,9 @@
 		var/obj/effect/overlay/temp/laser_target/cas/lase = locate(href_list["cas_jump"]) in GLOB.active_cas_targets
 		if(!istype(lase))
 			to_chat(user, span_warning("That marker has expired."))
+			return
+		if(lase.assigned_faction != user.faction)
+			to_chat(user, span_warning("That marker does not belong to us."))
 			return
 
 		eyeobj.setLoc(get_turf(lase))

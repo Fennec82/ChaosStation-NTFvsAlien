@@ -24,6 +24,7 @@ type InputPack = {
   hive_larva_threshold: number;
   hive_larva_rate: number;
   hive_larva_burrowed: number;
+  hive_larva_debt: number;
   hive_strategic_psy_points: number;
   hive_tactical_psy_points: number;
   hive_orphan_collapse: number;
@@ -47,6 +48,7 @@ type InputPack = {
   user_maturity: number;
   user_next_mat_level: number;
   user_tracked: string;
+  user_can_mutate: boolean;
   user_show_compact: boolean;
   user_show_empty: boolean;
   user_show_general: boolean;
@@ -191,17 +193,31 @@ const BlessingsButton = (_props: any) => {
   const { act, data } = useBackend<InputPack>();
   const { user_purchase_perms, user_ref } = data;
 
-  if (!user_purchase_perms) {
-    return <Box />;
-  }
-
   return (
     <Box className="Section__buttons">
       <Button
         onClick={() => act('Blessings', { xeno: user_ref })}
         icon={'store'}
+        disabled={!user_purchase_perms}
       >
         Blessings
+      </Button>
+    </Box>
+  );
+};
+
+const MutationsButton = (_props: any) => {
+  const { act, data } = useBackend<InputPack>();
+  const { user_ref, user_can_mutate } = data;
+
+  return (
+    <Box className="Section__buttons" mr="90px">
+      <Button
+        onClick={() => act('Mutations', { xeno: user_ref })}
+        icon={'store'}
+        disabled={!user_can_mutate}
+      >
+        Mutations
       </Button>
     </Box>
   );
@@ -211,6 +227,7 @@ const GeneralInfo = (_props: any) => {
   const { data } = useBackend<InputPack>();
   const {
     hive_larva_burrowed,
+    hive_larva_debt,
     hive_strategic_psy_points,
     hive_tactical_psy_points,
     hive_orphan_collapse,
@@ -251,10 +268,17 @@ const GeneralInfo = (_props: any) => {
           </Box>
           | Burrowed Larva:
           <Box as="span" color={hive_larva_burrowed > 0 ? 'good' : 'bad'}>
-            {' ' + hive_larva_burrowed}
+            {' ' +
+              hive_larva_burrowed +
+              (hive_larva_debt > 0
+                ? '(+ debt of ' + hive_larva_debt + ')'
+                : '')}
           </Box>
         </Box>
-        <BlessingsButton />
+        <Box as="span">
+          <MutationsButton />
+          <BlessingsButton />
+        </Box>
       </Box>
       <Flex direction="column" className="Section__content">
         <Flex.Item>
@@ -568,6 +592,7 @@ const PopulationPyramid = (_props: any) => {
                   })
                   .filter((ti) => ti !== null)
                   .join(' | ')}
+                {primordial}
               </Box>
             );
           }

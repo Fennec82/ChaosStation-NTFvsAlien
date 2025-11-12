@@ -38,6 +38,7 @@ export const MESSAGE_TYPE_ADMINLOG = 'adminlog';
 export const MESSAGE_TYPE_STAFFLOG = 'stafflog';
 export const MESSAGE_TYPE_ATTACKLOG = 'attacklog';
 export const MESSAGE_TYPE_DEBUG = 'debug';
+export const MESSAGE_TYPE_ERP = 'erp';
 
 // Metadata for each message type
 export const MESSAGE_TYPES = [
@@ -61,7 +62,7 @@ export const MESSAGE_TYPES = [
     name: 'Radio',
     description: 'All departments of radio messages',
     selector:
-      '.radio, .deptradio, .syndradio, .comradio, .casradio, .engradio, .medradio, .sciradio, .supradio, .alpharadio, .bravoradio, .charlieradio, .deltaradio, .zuluradio, .yankeeradio, .xrayradio, .whiskeyradio, .newscaster, .binarysay, .hivemind, .secradio',
+      '.radio, .deptradio, .syndradio, .comradio, .casradio, .engradio, .medradio, .sciradio, .supradio, .alpharadio, .bravoradio, .charlieradio, .deltaradio, .zuluradio, .yankeeradio, .xrayradio, .whiskeyradio, .newscaster, .binarysay, .hivemind, .secradio, .civradio',
   },
   {
     type: MESSAGE_TYPE_INFO,
@@ -110,6 +111,13 @@ export const MESSAGE_TYPES = [
     description: 'Urist McTraitor has stabbed you with a knife!',
     selector:
       '.danger, .userdanger, .xenodanger, .xenouserdanger, .attack, .moderate, .disarm, .passive',
+  },
+  {
+    type: MESSAGE_TYPE_ERP,
+    name: 'ERP',
+    description: 'Messages from the ERP panel',
+    selector:
+      '.love, .lovebold, .love_low, .love_mid, .love_high, .love_extreme',
   },
   {
     type: MESSAGE_TYPE_UNKNOWN,

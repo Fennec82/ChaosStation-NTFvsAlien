@@ -1,5 +1,7 @@
 
 /mob/Destroy()//This makes sure that mobs with clients/keys are not just deleted from the game.
+	if(ckey)
+		GLOB.mobs_by_ckey_list -= ckey
 	GLOB.mob_list -= src
 	GLOB.dead_mob_list -= src
 	GLOB.offered_mob_list -= src
@@ -11,6 +13,8 @@
 	ghostize()
 	clear_fullscreens()
 	if(mind)
+		if(src == mind.current)
+			mind.current = null
 		mind = null
 	if(hud_used)
 		QDEL_NULL(hud_used)
@@ -77,23 +81,23 @@
 	msg = copytext_char(msg, 1, MAX_MESSAGE_LEN)
 
 	if(type)
-		if(type == EMOTE_VISIBLE && eye_blind) //Vision related
+		if(type == EMOTE_TYPE_VISIBLE && eye_blind) //Vision related
 			if(!alt_msg)
 				return FALSE
 			else
 				msg = alt_msg
 				type = alt_type
 
-		if(type == EMOTE_AUDIBLE && isdeaf(src)) //Hearing related
+		if(type == EMOTE_TYPE_AUDIBLE && isdeaf(src)) //Hearing related
 			if(!alt_msg)
 				return FALSE
 			else
 				msg = alt_msg
 				type = alt_type
-				if(type == EMOTE_VISIBLE && eye_blind)
+				if(type == EMOTE_TYPE_VISIBLE && eye_blind)
 					return FALSE
 
-	if(stat == UNCONSCIOUS && type == EMOTE_AUDIBLE)
+	if(stat == UNCONSCIOUS && type == EMOTE_TYPE_AUDIBLE)
 		to_chat(src, "<i>... You can almost hear something ...</i>")
 		return FALSE
 	to_chat(src, msg, avoid_highlighting = avoid_highlight)
@@ -133,6 +137,10 @@
 		if(!ghost_visible && isdead(M))
 			continue
 
+		if(M.stat == DEAD)
+			if((!SSticker.mode || CHECK_BITFIELD(SSticker.mode.round_type_flags, MODE_NO_GHOSTS)) && !check_rights_for(M.client, R_ADMIN)) // no getting to know what you shouldn't
+				continue
+
 		var/msg = message
 
 		if(M == src && self_message) //the src always see the main message or self message
@@ -151,14 +159,14 @@
 			if(T != loc && T != src) //if src is inside something (and isn't a turf),
 				if(!isnull(blind_message))  // then people see blind message if set, otherwise full message
 					msg = blind_message
-					
+
 			if((visible_message_flags & COMBAT_MESSAGE) && M.client.prefs.mute_others_combat_messages)
 				continue
 
 		if(visible_message_flags & EMOTE_MESSAGE && rc_vc_msg_prefs_check(M, visible_message_flags) && !is_blind(M))
 			M.create_chat_message(src, raw_message = raw_msg, runechat_flags = visible_message_flags)
 
-		M.show_message(msg, EMOTE_VISIBLE, blind_message, EMOTE_AUDIBLE)
+		M.show_message(msg, EMOTE_TYPE_VISIBLE, blind_message, EMOTE_TYPE_AUDIBLE)
 
 
 ///Returns the client runechat visible messages preference according to the message type.
@@ -169,7 +177,7 @@
 		return FALSE
 	return TRUE
 
-/mob/rc_vc_msg_prefs_check(mob/target, message, visible_message_flags = NONE)
+/mob/rc_vc_msg_prefs_check(mob/target, visible_message_flags = NONE)
 	if(!target.client?.prefs.chat_on_map)
 		return FALSE
 	if(visible_message_flags & EMOTE_MESSAGE && !target.client.prefs.see_rc_emotes)
@@ -196,12 +204,17 @@
 		// Make sure that if this isn't meant to be heard by ghosts it's not.
 		if(!ghost_visible && isdead(M))
 			continue
+
+		if(M.stat == DEAD)
+			if((!SSticker.mode || CHECK_BITFIELD(SSticker.mode.round_type_flags, MODE_NO_GHOSTS)) && !(M.client && check_rights_for(M.client, R_ADMIN))) // no getting to know what you shouldn't
+				continue
+
 		var/msg = message
 		if(self_message && M == src)
 			msg = self_message
 		if(audible_message_flags & EMOTE_MESSAGE && rc_vc_msg_prefs_check(M, audible_message_flags) && !isdeaf(M))
 			M.create_chat_message(src, raw_message = raw_msg, runechat_flags = audible_message_flags)
-		M.show_message(msg, EMOTE_AUDIBLE, deaf_message, EMOTE_VISIBLE)
+		M.show_message(msg, EMOTE_TYPE_AUDIBLE, deaf_message, EMOTE_TYPE_VISIBLE)
 
 
 /**
@@ -222,9 +235,14 @@
 		// Make sure that if this isn't meant to be heard by ghosts it's not.
 		if(!ghost_visible && isdead(M))
 			continue
+
+		if(M.stat == DEAD)
+			if((!SSticker.mode || CHECK_BITFIELD(SSticker.mode.round_type_flags, MODE_NO_GHOSTS)) && !(M.client && check_rights_for(M.client, R_ADMIN))) // no getting to know what you shouldn't
+				continue
+
 		if(audible_message_flags & EMOTE_MESSAGE && rc_vc_msg_prefs_check(M, audible_message_flags))
 			M.create_chat_message(src, raw_message = raw_msg, runechat_flags = audible_message_flags)
-		M.show_message(message, EMOTE_AUDIBLE, deaf_message, EMOTE_VISIBLE)
+		M.show_message(message, EMOTE_TYPE_AUDIBLE, deaf_message, EMOTE_TYPE_VISIBLE)
 
 
 ///This proc is called whenever someone clicks an inventory ui slot.
@@ -258,9 +276,12 @@
 			to_chat(src, span_warning("You are unable to equip that."))
 		return FALSE
 	if(item_to_equip.equip_delay_self && !ignore_delay)
+		ADD_TRAIT(src, TRAIT_IS_EQUIPPING_ITEM, REF(src))
 		if(!do_after(src, item_to_equip.equip_delay_self, NONE, item_to_equip, BUSY_ICON_FRIENDLY))
+			REMOVE_TRAIT(src, TRAIT_IS_EQUIPPING_ITEM, REF(src))
 			to_chat(src, "You stop putting on \the [item_to_equip].")
 			return FALSE
+		REMOVE_TRAIT(src, TRAIT_IS_EQUIPPING_ITEM, REF(src))
 		//calling the proc again with ignore_delay saves a boatload of copypaste
 		return equip_to_slot_if_possible(item_to_equip, slot, TRUE, del_on_fail, warning, redraw_mob, override_nodrop)
 	//This will unwield items -without- triggering lights.
@@ -453,6 +474,9 @@
 		if(isliving(src))
 			var/mob/living/L = src
 			L.language_menu()
+
+	if(href_list["refreshwho"])
+		client?.who()
 
 /mob/living/start_pulling(atom/movable/AM, force = move_force, suppress_message = FALSE)
 	if(QDELETED(AM) || QDELETED(usr) || src == AM || !isturf(loc) || !Adjacent(AM) || status_flags & INCORPOREAL)	//if there's no person pulling OR the person is pulling themself OR the object being pulled is inside something: abort!
@@ -877,10 +901,10 @@
 
 /mob/set_throwing(new_throwing)
 	. = ..()
-	if(isnull(.))
+	if(!.)
 		return
 	if(throwing)
-		ADD_TRAIT(src, TRAIT_IMMOBILE, THROW_TRAIT)
+		ADD_TRAIT(src, TRAIT_IMMOBILE, THROW_TRAIT) // Prevents moving during the throw.
 	else
 		REMOVE_TRAIT(src, TRAIT_IMMOBILE, THROW_TRAIT)
 

@@ -37,6 +37,7 @@
 
 	gun_features_flags = GUN_CAN_POINTBLANK|GUN_AMMO_COUNTER|GUN_SMOKE_PARTICLES
 	actions_types = list(/datum/action/item_action/aim_mode) // all pistols can aim mode
+	aim_time = 1 SECONDS
 	aim_speed_modifier = 0.65
 	scatter = -2
 	scatter_unwielded = 4
@@ -313,6 +314,7 @@
 	scatter_unwielded = 0
 	aim_slowdown = 0.2
 	fire_delay = 0.2 SECONDS
+	holstered_underlay_icon = 'ntf_modular/icons/obj/items/storage/holster.dmi'
 
 /obj/item/weapon/gun/pistol/g22/tranq
 	name = "\improper P-22 custom pistol"
@@ -400,12 +402,15 @@
 	scatter_unwielded = 7
 	accuracy_mult = 1
 	accuracy_mult_unwielded = 0.7
+	damage_mult = 1.15
 
 /obj/item/weapon/gun/pistol/heavy/gold
 	name = "\improper Desert Eagle custom pistol"
 	desc = "A magnum chambered in .50AE that comes with a serious kick. This one is in a gold finish, with lots of stylistic engravings."
 	icon_state = "g_deagle"
 	worn_icon_state = "g_deagle"
+	damage_mult = 1.25
+
 //-------------------------------------------------------
 //MAUSER MERC PISTOL //Inspired by the Makarov.
 
@@ -629,6 +634,96 @@
 	starting_attachment_types = list(/obj/item/attachable/reddot, /obj/item/attachable/gyro, /obj/item/attachable/compensator)
 
 //-------------------------------------------------------
+//MK90M4, standard PMC pistol
+
+/obj/item/weapon/gun/pistol/mk90
+	name = "\improper MK90 Mod 4 combat pistol"
+	desc = "Standard issue pistol for Ninetails Contractors, based on MK88. Has inbuilt barrel charger. Lost it's inbuilt burst fire mode, but in exchange got much heavier punch. Fires 9mm armor piercing rounds."
+	icon_state = "90m4"
+	worn_icon_state = "90m4"
+	caliber = CALIBER_9X19 //codex
+	max_shells = 20 //codex
+	fire_sound = 'sound/weapons/guns/fire/tgmc/kinetic/gun_88mod4.ogg'
+	dry_fire_sound = 'sound/weapons/guns/fire/vp70_empty.ogg'
+	unload_sound = 'sound/weapons/guns/interact/vp70_unload.ogg'
+	reload_sound = 'sound/weapons/guns/interact/vp70_reload.ogg'
+	cocked_sound = 'sound/weapons/guns/interact/vp70_cocked.ogg'
+	default_ammo_type = /obj/item/ammo_magazine/pistol/mk90
+	allowed_ammo_types = list(/obj/item/ammo_magazine/pistol/mk90, /obj/item/ammo_magazine/pistol/mk90/extended)
+	force = 8
+	attachable_allowed = list(
+		/obj/item/attachable/reddot,
+		/obj/item/attachable/flashlight,
+		/obj/item/attachable/lasersight,
+		/obj/item/attachable/flashlight/under,
+		/obj/item/attachable/burstfire_assembly,
+		/obj/item/attachable/gyro,
+		/obj/item/attachable/lace,
+	)
+
+	gun_firemode_list = list(GUN_FIREMODE_AUTOMATIC)
+	attachable_offset = list("muzzle_x" = 25, "muzzle_y" = 22,"rail_x" = 10, "rail_y" = 23, "under_x" = 21, "under_y" = 16, "stock_x" = 11, "stock_y" = 10)
+
+	fire_delay = 0.2 SECONDS
+	burst_amount = 1
+	accuracy_mult = 1.2
+	accuracy_mult_unwielded = 0.95
+	recoil = 0
+	aim_slowdown = 0.2
+	scatter = 0
+	scatter_unwielded = 5
+	akimbo_additional_delay = 2
+	damage_mult = 1.25
+	shell_speed_mod = 2
+	damage_falloff_mult = 0.8
+
+/obj/item/weapon/gun/pistol/mk90/pmc_standard
+	starting_attachment_types = list(/obj/item/attachable/reddot, /obj/item/attachable/lasersight)
+
+/obj/item/weapon/gun/pistol/mk90/pmc_sniper
+	starting_attachment_types = list(/obj/item/attachable/reddot, /obj/item/attachable/burstfire_assembly, /obj/item/attachable/lace)
+	default_ammo_type = /obj/item/ammo_magazine/pistol/mk90/extended
+
+//-------------------------------------------------------
+//MK100M5, PMC heavy gyrojet pistol
+
+/obj/item/weapon/gun/pistol/mk100_gyrojet
+	name = "\improper MK100 mod 5 'Suppresor' gyrojet pistol"
+	desc = "A massive, formidable automatic handgun chambered with 15x50mm rocket propelled rounds. Commonly seen in the hands of wealthy Ninetails members, not because this weapon is expensive, but because you better have a power armor on, to not break your arm while firing this thing. Due to shell's rupture in target's body, high chance of causing shrapnel."
+	icon_state = "100m5"
+	worn_icon_state = "100m5"
+	caliber = CALIBER_15X50 //codex
+	max_shells = 10 //codex
+	fire_sound = 'sound/weapons/guns/fire/svd.ogg'
+	dry_fire_sound = 'sound/weapons/guns/fire/deagle_empty.ogg'
+	unload_sound = 'sound/weapons/guns/interact/m4ra_unload.ogg'
+	reload_sound = 'sound/weapons/guns/interact/m4ra_reload.ogg'
+	cocked_sound = 'sound/weapons/guns/interact/m4ra_cocked.ogg'
+	default_ammo_type = /obj/item/ammo_magazine/pistol/mk100_gyrojet
+	allowed_ammo_types = list(/obj/item/ammo_magazine/pistol/mk100_gyrojet)
+	force = 12
+	attachable_allowed = list(,
+		/obj/item/attachable/reddot,
+		/obj/item/attachable/flashlight,
+		/obj/item/attachable/lasersight,
+		/obj/item/attachable/lace,
+	)
+	attachable_offset = list("muzzle_x" = 30, "muzzle_y" = 21,"rail_x" = 9, "rail_y" = 23, "under_x" = 23, "under_y" = 13, "stock_x" = 23, "stock_y" = 13)
+
+	fire_delay = 0.45 SECONDS
+	burst_amount = 3
+	burst_delay = 0.2 SECONDS
+	extra_delay = 0.25 SECONDS
+	accuracy_mult = 1.15
+	accuracy_mult_unwielded = 0.75
+	recoil = 2
+	recoil_unwielded = 4
+
+/obj/item/weapon/gun/pistol/mk100_gyrojet/pmc_leader
+
+	starting_attachment_types = list(/obj/item/attachable/reddot, /obj/item/attachable/lasersight)
+
+//-------------------------------------------------------
 //SOM pistol
 
 /obj/item/weapon/gun/pistol/som
@@ -716,24 +811,27 @@
 	aim_slowdown = 0.1
 	scatter = -1
 	scatter_unwielded = 4
+	holstered_underlay_icon = 'ntf_modular/icons/obj/items/storage/holster.dmi'
 
 /obj/item/weapon/gun/pistol/vsd_pistol/standard
 	starting_attachment_types = list(/obj/item/attachable/reddot,/obj/item/attachable/compensator,/obj/item/attachable/lasersight,)
 
 /obj/item/weapon/gun/pistol/xmdivider
 	name = "\improper CC/104 'Divider' Revolver"
-	desc = "Intertech's one of a kind revolver. Fires custom incendiary .357 rounds, has firemode switch of single action and burst fire. Kicks like a fucking mule. You remember High Command saying: 'Don't let this get into enemy hands'."
-	icon = 'icons/obj/items/guns/pistols.dmi'
+	desc = "Intertech's one of a kind revolver. Fires specialized .357 rounds, has firemode switch of single action and burst fire. Kicks like a fucking mule. You remember High Command saying: 'Don't let this get into enemy hands'."
+	icon = 'ntf_modular/icons/obj/items/guns/pistols.dmi'
 	icon_state = "c104"
 	worn_icon_state = "c104"
 	caliber = CALIBER_357 //codex
 	max_shells = 6
 	default_ammo_type = /obj/item/ammo_magazine/pistol/xmdivider
-	allowed_ammo_types = list(/obj/item/ammo_magazine/pistol/xmdivider)
+	allowed_ammo_types = list(/obj/item/ammo_magazine/pistol/xmdivider, /obj/item/ammo_magazine/pistol/xmdivider/ap)
 	force = 8
 	actions_types = null
 	attachable_allowed = list(
 		/obj/item/attachable/bayonet/converted,
+		/obj/item/attachable/bayonet,
+		/obj/item/attachable/bayonet/som,
 		/obj/item/attachable/reddot,
 		/obj/item/attachable/flashlight,
 		/obj/item/attachable/compensator,
@@ -746,10 +844,10 @@
 	windup_delay = 0.5 SECONDS
 	aim_slowdown = 0.1
 	burst_amount = 3
-	gun_firemode_list = list(GUN_FIREMODE_AUTOMATIC, GUN_FIREMODE_BURSTFIRE)
+	gun_firemode_list = list(GUN_FIREMODE_SEMIAUTO, GUN_FIREMODE_BURSTFIRE)
 	windup_sound = 'sound/weapons/guns/fire/t76_start.ogg'
 	fire_sound = 'sound/weapons/guns/fire/tgmc/kinetic/gun_r76.ogg'
-	fire_delay = 0.75 SECONDS
+	fire_delay = 0.5 SECONDS
 	akimbo_additional_delay = 0.6
 	accuracy_mult_unwielded = 0.85
 	accuracy_mult = 1
@@ -757,6 +855,7 @@
 	scatter = 2
 	recoil = 4
 	recoil_unwielded = 3
+	holstered_underlay_icon = 'ntf_modular/icons/obj/items/storage/holster.dmi'
 
 /obj/item/weapon/gun/pistol/xmdivider/gunslinger
 	starting_attachment_types = list(
@@ -883,6 +982,11 @@ It is a modified Beretta 93R, and can fire three round burst or single fire. Whe
 		/obj/item/attachable/lace,
 	)
 
+/obj/item/weapon/gun/pistol/knife/Initialize(mapload)
+	. = ..()
+	AddElement(/datum/element/scalping)
+	AddElement(/datum/element/shrapnel_removal, 15 SECONDS)
+
 // Smart pistol, based on the MP-9.
 /obj/item/weapon/gun/pistol/smart_pistol
 	name = "\improper SP-13 smart machinepistol"
@@ -917,3 +1021,8 @@ It is a modified Beretta 93R, and can fire three round burst or single fire. Whe
 	scatter = 0
 	scatter_unwielded = 8
 	recoil_unwielded = 2
+
+/obj/item/weapon/gun/pistol/smart_pistol/pmc
+	starting_attachment_types = list(
+		/obj/item/attachable/reddot,
+	)

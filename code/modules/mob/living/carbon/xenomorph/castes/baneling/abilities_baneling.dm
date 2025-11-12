@@ -20,11 +20,12 @@
 
 /datum/action/ability/xeno_action/baneling_explode/handle_button_status_visuals()
 	var/mob/living/carbon/xenomorph/baneling = owner
-	button.cut_overlay(visual_references[VREF_MUTABLE_BANE_CHARGES])
 	var/mutable_appearance/number = visual_references[VREF_MUTABLE_BANE_CHARGES]
-	number.maptext = MAPTEXT("[baneling.stored_charge]")
-	visual_references[VREF_MUTABLE_BANE_CHARGES] = number
-	button.add_overlay(visual_references[VREF_MUTABLE_BANE_CHARGES])
+	if(number)
+		button.cut_overlay(visual_references[VREF_MUTABLE_BANE_CHARGES])
+		number.maptext = MAPTEXT("[baneling.stored_charge]")
+		visual_references[VREF_MUTABLE_BANE_CHARGES] = number
+		button.add_overlay(visual_references[VREF_MUTABLE_BANE_CHARGES])
 	return ..()
 
 /datum/action/ability/xeno_action/baneling_explode/give_action(mob/living/L)
@@ -43,6 +44,8 @@
 
 /datum/action/ability/xeno_action/baneling_explode/can_use_action()
 	. = ..()
+	if(!.)
+		return
 	var/mob/living/carbon/xenomorph/X = owner
 	var/datum/action/ability/xeno_action/spawn_pod/pod_action = X.actions_by_path[/datum/action/ability/xeno_action/spawn_pod]
 	if(SSmonitor.gamestate == SHUTTERS_CLOSED && isnull(pod_action.the_pod))
@@ -86,7 +89,7 @@
 		return FALSE
 	if(target.get_xeno_hivenumber() == owner.get_xeno_hivenumber())
 		return FALSE
-	xeno_owner.selected_reagent = GLOB.baneling_chem_type_list[rand(1,length(GLOB.baneling_chem_type_list))]
+	xeno_owner.set_selected_reagent(GLOB.baneling_chem_type_list[rand(1,length(GLOB.baneling_chem_type_list))])
 	return TRUE
 
 // ***************************************
@@ -104,7 +107,7 @@
 
 /datum/action/ability/xeno_action/select_reagent/baneling/give_action(mob/living/L)
 	. = ..()
-	xeno_owner.selected_reagent = GLOB.baneling_chem_type_list[1]
+	xeno_owner.set_selected_reagent(GLOB.baneling_chem_type_list[1])
 	update_button_icon() //Update immediately to get our default
 
 /datum/action/ability/xeno_action/select_reagent/baneling/action_activate()
@@ -120,7 +123,7 @@
 		DEFILER_HEMODILE = image('icons/Xeno/actions/defiler.dmi', icon_state = DEFILER_HEMODILE),
 		DEFILER_TRANSVITOX = image('icons/Xeno/actions/defiler.dmi', icon_state = DEFILER_TRANSVITOX),
 		DEFILER_OZELOMELYN = image('icons/Xeno/actions/defiler.dmi', icon_state = DEFILER_OZELOMELYN),
-		DEFILER_APHROTOXIN = image('ntf_modular/icons/xeno/actions.dmi', icon_state = DEFILER_APHROTOXIN),
+		DEFILER_APHROTOXIN = image('ntf_modular/icons/Xeno/actions.dmi', icon_state = DEFILER_APHROTOXIN),
 		BANELING_ACID = image('icons/Xeno/actions/baneling.dmi', icon_state = BANELING_ACID),
 		)
 	var/toxin_choice = show_radial_menu(owner, owner, reagent_images_list, radius = 48)
@@ -129,7 +132,7 @@
 	for(var/toxin in GLOB.baneling_chem_type_list)
 		var/datum/reagent/R = GLOB.chemical_reagents_list[toxin]
 		if(R.name == toxin_choice)
-			xeno_owner.selected_reagent = R.type
+			xeno_owner.set_selected_reagent(R.type)
 			break
 	xeno_owner.balloon_alert(xeno_owner, "[toxin_choice]")
 	update_button_icon()
@@ -152,7 +155,7 @@
 /datum/action/ability/xeno_action/spawn_pod/action_activate()
 	. = ..()
 	var/mob/living/carbon/xenomorph/X = owner
-	the_pod = new /obj/structure/xeno/baneling_pod(get_turf(X.loc), X.hivenumber, X, src)
+	the_pod = new /obj/structure/xeno/baneling_pod(get_turf(X.loc), X.get_xeno_hivenumber(), X, src)
 	RegisterSignal(the_pod, COMSIG_QDELETING, PROC_REF(notify_owner))
 	succeed_activate()
 

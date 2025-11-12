@@ -20,7 +20,7 @@
 	plasma_gain = 24
 
 	// *** Health *** //
-	max_health = 450
+	max_health = 425
 
 	// *** Sunder *** //
 	sunder_multiplier = 0.9
@@ -35,7 +35,7 @@
 	)
 
 	// *** Flags *** //
-	caste_flags = CASTE_EVOLUTION_ALLOWED
+	caste_flags = CASTE_EVOLUTION_ALLOWED|CASTE_MUTATIONS_ALLOWED
 	can_flags = parent_type::can_flags|CASTE_CAN_BE_GIVEN_PLASMA
 	caste_traits = list(TRAIT_STUNIMMUNE)
 
@@ -59,6 +59,14 @@
 		/datum/action/ability/activable/xeno/bull_charge/headbutt,
 		/datum/action/ability/activable/xeno/bull_charge/gore,
 		/datum/action/ability/xeno_action/toggle_long_range/bull,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
+	)
+
+	mutations = list(
+		/datum/mutation_upgrade/shell/unstoppable,
+		/datum/mutation_upgrade/spur/speed_demon,
+		/datum/mutation_upgrade/veil/railgun
 	)
 
 /datum/xeno_caste/bull/normal

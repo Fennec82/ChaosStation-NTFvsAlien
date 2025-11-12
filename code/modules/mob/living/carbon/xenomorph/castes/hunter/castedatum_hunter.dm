@@ -26,7 +26,7 @@
 	plasma_gain = 30
 
 	// *** Health *** //
-	max_health = 310
+	max_health = 300
 
 	// *** Evolution *** //
 	evolution_threshold = 225
@@ -35,7 +35,7 @@
 	deevolves_to = /datum/xeno_caste/runner
 
 	// *** Flags *** //
-	caste_flags = CASTE_EVOLUTION_ALLOWED
+	caste_flags = CASTE_EVOLUTION_ALLOWED|CASTE_MUTATIONS_ALLOWED
 	can_flags = parent_type::can_flags|CASTE_CAN_BE_GIVEN_PLASMA
 	caste_traits = list(TRAIT_CAN_VENTCRAWL)
 
@@ -65,12 +65,26 @@
 		/datum/action/ability/activable/xeno/hunter_mark,
 		/datum/action/ability/xeno_action/psychic_trace,
 		/datum/action/ability/xeno_action/mirage,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
 	)
 
 	// *** Vent Crawl Parameters *** //
 	vent_enter_speed = HUNTER_VENT_CRAWL_TIME
 	vent_exit_speed = HUNTER_VENT_CRAWL_TIME
 	silent_vent_crawl = TRUE
+
+	mutations = list(
+		/datum/mutation_upgrade/shell/fleeting_mirage,
+		/datum/mutation_upgrade/shell/splitting_mirage,
+		/datum/mutation_upgrade/shell/cloaking_mirage,
+		/datum/mutation_upgrade/spur/debilitating_strike,
+		/datum/mutation_upgrade/spur/ambush,
+		/datum/mutation_upgrade/spur/maul,
+		/datum/mutation_upgrade/veil/one_target,
+		/datum/mutation_upgrade/veil/mirage_flood,
+		/datum/mutation_upgrade/veil/faceblind
+	)
 
 /datum/xeno_caste/hunter/normal
 	upgrade = XENO_UPGRADE_NORMAL
@@ -101,6 +115,8 @@
 		/datum/action/ability/activable/xeno/hunter_mark,
 		/datum/action/ability/xeno_action/psychic_trace,
 		/datum/action/ability/xeno_action/mirage,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
 	)
 
 
@@ -126,8 +142,9 @@
 	sunder_recover = 1
 
 	// *** Flags *** //
-	caste_flags = CASTE_INNATE_HEALING|CASTE_INNATE_PLASMA_REGEN|CASTE_HIDE_IN_STATUS|CASTE_EXCLUDE_STRAINS
+	caste_flags = CASTE_INNATE_PLASMA_REGEN|CASTE_HIDE_IN_STATUS|CASTE_EXCLUDE_STRAINS
 	can_flags = parent_type::can_flags|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_HEAL_WITHOUT_QUEEN
+	caste_traits = list(TRAIT_CAN_VENTCRAWL, TRAIT_INNATE_HEALING)
 
 	// *** Defense *** //
 	soft_armor = list(MELEE = 65, BULLET = 40, LASER = 40, ENERGY = 40, BOMB = 20, BIO = 30, FIRE = 50, ACID = 30)
@@ -158,69 +175,6 @@
 		/datum/action/ability/activable/xeno/hunter_mark,
 		/datum/action/ability/xeno_action/psychic_trace,
 		/datum/action/ability/xeno_action/mirage,
-	)
-
-// Assassin strain
-/datum/xeno_caste/hunter/assassin
-	caste_type_path = /mob/living/carbon/xenomorph/hunter/assassin
-	display_name = "Hunter"
-	caste_name = "Assassin Hunter"
-	upgrade_name = ""
-	gib_anim = "Assassin Hunter Gibs"
-	gib_flick = "Assassin Hunter Gibbed"
-	upgrade = XENO_UPGRADE_BASETYPE
-	caste_desc = "A fast, creeping death, light faintly shimmers on it's strange, light-bending carapace."
-
-	// *** Speed *** //
-	speed = -1.6
-
-	// *** Plasma *** //
-	plasma_max = 250
-	plasma_gain = 23
-
-	// *** Health *** //
-	max_health = 300
-
-	stealth_break_threshold = 18
-
-	// *** Defense *** //
-	soft_armor = list(MELEE = 40, BULLET = 15, LASER = 15, ENERGY = 15, BOMB = 0, BIO = 20, FIRE = 30, ACID = 20)
-
-	actions = list(
-		/datum/action/ability/xeno_action/xeno_resting,
-		/datum/action/ability/xeno_action/psychic_whisper,
-		/datum/action/ability/xeno_action/psychic_influence,
-		/datum/action/ability/activable/xeno/impregnate,
-		/datum/action/ability/xeno_action/watch_xeno,
-		/datum/action/ability/activable/xeno/psydrain,
-		/datum/action/ability/activable/xeno/devour,
-		/datum/action/ability/activable/xeno/tail_stab,
-		/datum/action/ability/activable/xeno/pounce/lunge,
-		/datum/action/ability/xeno_action/stealth/phaseout,
-		/datum/action/ability/activable/xeno/hunter_mark/assassin,
-		/datum/action/ability/xeno_action/mirage,
-		/datum/action/ability/xeno_action/displacement,
-	)
-
-/datum/xeno_caste/hunter/assassin/primordial
-	upgrade_name = "Primordial"
-	upgrade = XENO_UPGRADE_PRIMO
-	caste_desc = "A fast, creeping death, light faintly shimmers on it's strange, light-bending carapace. Shadows around seem to distort and cling to it."
-	primordial_message = "They won't see us coming until it's too late. Let the slaughter begin."
-
-	actions = list(
-		/datum/action/ability/xeno_action/xeno_resting,
-		/datum/action/ability/xeno_action/psychic_whisper,
-		/datum/action/ability/xeno_action/psychic_influence,
-		/datum/action/ability/activable/xeno/impregnate,
-		/datum/action/ability/xeno_action/watch_xeno,
-		/datum/action/ability/activable/xeno/psydrain,
-		/datum/action/ability/activable/xeno/devour,
-		/datum/action/ability/activable/xeno/tail_stab,
-		/datum/action/ability/activable/xeno/pounce/lunge,
-		/datum/action/ability/xeno_action/stealth/phaseout,
-		/datum/action/ability/xeno_action/stealth/disguise,
-		/datum/action/ability/activable/xeno/hunter_mark/assassin,
-		/datum/action/ability/xeno_action/mirage,
-		/datum/action/ability/xeno_action/displacement,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
 	)

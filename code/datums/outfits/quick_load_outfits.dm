@@ -10,7 +10,7 @@
 	///Secondary weapon
 	var/secondary_weapon
 
-/datum/outfit/quick/equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+/datum/outfit/quick/equip(mob/living/carbon/human/H, visualsOnly = FALSE, provide_id = TRUE)
 	//Start with uniform,suit,backpack for additional slots. Deletes any existing equipped item to avoid accidentally losing half your loadout. Not suitable for standard gamemodes!
 	if(w_uniform)
 		qdel(H.w_uniform)
@@ -46,13 +46,13 @@
 
 //Base TGMC outfit
 /datum/outfit/quick/tgmc
-	name = "TGMC base"
+	name = "NTF base"
 	desc = "This is the base typepath for all TGMC quick vendor outfits. You shouldn't see this."
 
 //Base TGMC marine outfit
 /datum/outfit/quick/tgmc/marine
-	name = "TGMC Squad Marine"
-	jobtype = "Squad Marine"
+	name = "NTF Squad Marine"
+	jobtype = "Squad Operative"
 
 	ears = /obj/item/radio/headset/mainship/marine
 	w_uniform = /obj/item/clothing/under/marine/black_vest
@@ -234,7 +234,7 @@
 
 /datum/outfit/quick/tgmc/marine/standard_machinegunner
 	name = "MG-60 Machinegunner"
-	desc = "The old reliable workhorse of the TGMC. Equipped with an MG-60 machinegun with bipod, heavy armor and some basic construction supplies. Good for holding ground and providing firesupport, and the cost of some mobility."
+	desc = "The old reliable workhorse of the NTF. Equipped with an MG-60 machinegun with bipod, heavy armor and some basic construction supplies. Good for holding ground and providing firesupport, and the cost of some mobility."
 
 	belt = /obj/item/storage/belt/sparepouch
 	suit_store = /obj/item/weapon/gun/rifle/standard_gpmg/machinegunner
@@ -477,7 +477,7 @@
 
 //Base TGMC engineer outfit
 /datum/outfit/quick/tgmc/engineer
-	name = "TGMC Squad Engineer"
+	name = "NTF Squad Engineer"
 	jobtype = "Squad Engineer"
 
 	ears = /obj/item/radio/headset/mainship/marine
@@ -571,9 +571,9 @@
 	)
 
 
-//Base TGMC corpsman outfit
+//Base NTF corpsman outfit
 /datum/outfit/quick/tgmc/corpsman
-	name = "TGMC Squad Corpsman"
+	name = "NTF Squad Corpsman"
 	jobtype = "Squad Corpsman"
 
 	belt = /obj/item/storage/belt/lifesaver/quick
@@ -729,9 +729,9 @@
 	)
 
 
-//Base TGMC smartgunner outfit
+//Base NTF smartgunner outfit
 /datum/outfit/quick/tgmc/smartgunner
-	name = "TGMC Squad Smartgunner"
+	name = "NTF Squad Smartgunner"
 	jobtype = "Squad Smartgunner"
 
 	belt = /obj/item/belt_harness/marine
@@ -818,7 +818,7 @@
 
 //Base TGMC leader outfit
 /datum/outfit/quick/tgmc/leader
-	name = "TGMC Squad Leader"
+	name = "NTF Squad Leader"
 	jobtype = "Squad Leader"
 
 	ears = /obj/item/radio/headset/mainship/marine
@@ -2268,6 +2268,7 @@
 /datum/outfit/quick/vsd/medic
 	name = "KZ Medic"
 	jobtype = "KZ Medic"
+	w_uniform = /obj/item/clothing/under/vsd
 	belt = /obj/item/storage/belt/lifesaver/full/upp
 	glasses = /obj/item/clothing/glasses/hud/health
 	shoes = /obj/item/clothing/shoes/marine/vsd/full
@@ -2398,16 +2399,12 @@
 	w_uniform = /obj/item/clothing/under/vsd/officer
 	l_pocket = /obj/item/storage/pouch/grenade
 	r_pocket = /obj/item/storage/pouch/medical_injectors/firstaid
-	back = /obj/item/storage/backpack/lightpack/vsd
+	back = /obj/item/ammo_magazine/flamer_tank/backtank/X
 	glasses = /obj/item/clothing/glasses/night/vsd/alt
 	ears = /obj/item/radio/headset/mainship/vsd
 
 /datum/outfit/quick/vsd/spec/flamer/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	. = ..()
-
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/flamer_tank/vsd, SLOT_IN_BACKPACK)
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/flamer_tank/vsd, SLOT_IN_BACKPACK)
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/flamer_tank/vsd, SLOT_IN_BACKPACK)
 
 	H.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/combat_advanced, SLOT_IN_ACCESSORY)
 	H.equip_to_slot_or_del(new /obj/item/tool/extinguisher/mini, SLOT_IN_ACCESSORY)
@@ -2882,8 +2879,8 @@
 /datum/outfit/quick/pmc/sniper/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	. = ..()
 
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/sniper/elite, SLOT_IN_SUIT)
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/sniper/elite, SLOT_IN_SUIT)
+	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/railgun/pmc, SLOT_IN_SUIT)
+	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/railgun/pmc, SLOT_IN_SUIT)
 
 	H.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/combat_advanced, SLOT_IN_HEAD)
 	H.equip_to_slot_or_del(new /obj/item/reagent_containers/food/snacks/enrg_bar, SLOT_IN_HEAD)
@@ -2897,8 +2894,8 @@
 	H.equip_to_slot_or_del(new /obj/item/radio, SLOT_IN_BACKPACK)
 	H.equip_to_slot_or_del(new /obj/item/tool/crowbar/red, SLOT_IN_BACKPACK)
 	H.equip_to_slot_or_del(new /obj/item/storage/box/explosive_mines/pmc, SLOT_IN_BACKPACK)
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/sniper/elite, SLOT_IN_BACKPACK)
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/sniper/elite, SLOT_IN_BACKPACK)
+	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/railgun/pmc, SLOT_IN_BACKPACK)
+	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/railgun/pmc, SLOT_IN_BACKPACK)
 	H.equip_to_slot_or_del(new /obj/item/reagent_containers/food/snacks/sliceable/sandwiches/meatbread, SLOT_IN_BACKPACK)
 
 /datum/outfit/quick/pmc/squad_leader

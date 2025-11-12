@@ -173,6 +173,7 @@
 	terminal.setDir(get_dir(T,src))
 	terminal.master = src
 	machine_stat &= ~BROKEN
+	start_processing()
 
 /obj/machinery/power/smes/disconnect_terminal()
 	if(terminal)
@@ -405,8 +406,8 @@
 	outputting = initial(outputting)
 
 /obj/machinery/power/smes/preset
-	input_level = 180000
-	output_level = 100000
+	input_level = SMESMAXCHARGELEVEL
+	output_level = SMESMAXOUTPUT
 
 /obj/machinery/power/smes/magical
 	name = "magical power storage unit"

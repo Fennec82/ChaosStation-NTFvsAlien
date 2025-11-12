@@ -2,10 +2,11 @@
 	name = "Extended Plus"
 	config_tag = "Extended Plus"
 	silo_scaling = 1
-	round_type_flags = MODE_INFESTATION|MODE_PSY_POINTS|MODE_PSY_POINTS_ADVANCED|MODE_HIJACK_POSSIBLE|MODE_SILO_RESPAWN|MODE_ALLOW_XENO_QUICKBUILD|MODE_NO_GHOSTS
+	round_type_flags = MODE_INFESTATION|MODE_PSY_POINTS|MODE_PSY_POINTS_ADVANCED|MODE_HIJACK_POSSIBLE|MODE_SILO_RESPAWN|MODE_ALLOW_XENO_QUICKBUILD|MODE_XENO_GRAB_DEAD_ALLOWED|MODE_MUTATIONS_OBTAINABLE|MODE_BIOMASS_POINTS
 	shutters_drop_time = 3 MINUTES
 	xeno_abilities_flags = ABILITY_NUCLEARWAR
-	factions = list(FACTION_TERRAGOV, FACTION_SOM, FACTION_ALIEN, FACTION_XENO, FACTION_CLF, FACTION_ICC, FACTION_VSD)
+	factions = list(FACTION_TERRAGOV, FACTION_SOM, FACTION_XENO, FACTION_CLF, FACTION_ICC, FACTION_VSD)
+	human_factions = list(FACTION_TERRAGOV, FACTION_SOM, FACTION_CLF, FACTION_ICC, FACTION_VSD)
 	valid_job_types = list(
 		/datum/job/terragov/command/captain = 1,
 		/datum/job/terragov/command/fieldcommander = 1,
@@ -56,8 +57,8 @@
 		/datum/job/survivor/stripper = -1,
 		/datum/job/survivor/maid = 3,
 		/datum/job/other/prisoner = 4,
-		/datum/job/xenomorph = 8,
-		/datum/job/xenomorph/green = 4,
+		/datum/job/xenomorph = FREE_XENO_AT_START,
+		/datum/job/xenomorph/green = FREE_XENO_AT_START_CORRUPT,
 		/datum/job/xenomorph/queen = 1,
 		/datum/job/som/command/commander = 1,
 		/datum/job/som/command/fieldcommander = 1,
@@ -155,13 +156,44 @@
 	SSpoints.add_tactical_psy_points(XENO_HIVE_NORMAL, 300)
 	SSpoints.add_strategic_psy_points(XENO_HIVE_CORRUPTED, 1400)
 	SSpoints.add_tactical_psy_points(XENO_HIVE_CORRUPTED, 300)
+	SSpoints.add_biomass_points(XENO_HIVE_NORMAL, 0) // Solely to make sure it isn't null.
+	SSpoints.add_biomass_points(XENO_HIVE_CORRUPTED, 0) // Solely to make sure it isn't null.
 
 	for(var/obj/effect/landmark/corpsespawner/corpse AS in GLOB.corpse_landmarks_list)
 		corpse.create_mob()
 
-	for(var/miner in GLOB.miner_list)
-		if(prob(65))
-			qdel(miner)
+//NTF addition start
+	if(length(GLOB.miner_list) > MINIMUM_MINERS)
+		var/list/obj/machinery/miner/platinum_list = list()
+		var/list/obj/machinery/miner/phoron_list = list()
+		for(var/obj/machinery/miner/miner in GLOB.miner_list)
+			if(miner.is_platinum())
+				platinum_list += miner
+			else
+				phoron_list += miner
+		var/miners_kept = 0
+		if(length(platinum_list) < MINIMUM_PLATINUM_MINERS)
+			log_mapping("Only [length(platinum_list)] platinum miners found, less than minimum of [MINIMUM_PLATINUM_MINERS]!")
+			miners_kept = length(platinum_list)
+			platinum_list.Cut()
+		else
+			shuffle_inplace(platinum_list)
+			#if (MINIMUM_PLATINUM_MINERS > 0)
+			while(miners_kept < MINIMUM_PLATINUM_MINERS)
+				miners_kept++
+				platinum_list -= platinum_list[1]
+			#endif
+		var/list/obj/machinery/miner/shuffled_miners = platinum_list + phoron_list
+		shuffle_inplace(shuffled_miners)
+		var/miners_to_keep = miners_kept + rand((MINIMUM_MINERS - miners_kept), length(shuffled_miners))
+		while(miners_kept < miners_to_keep)
+			miners_kept++
+			shuffled_miners -= shuffled_miners[1]
+		QDEL_LIST(shuffled_miners)
+	else
+		if(length(GLOB.miner_list) < MINIMUM_MINERS)
+			log_mapping("Only [length(GLOB.miner_list)] miners found, less than minimum of [MINIMUM_MINERS]!")
+//NTF addition end
 
 	for(var/mob/living/carbon/xenomorph/larva/xeno in GLOB.alive_xeno_list)
 		xeno.evolution_stored = xeno.xeno_caste.evolution_threshold //Immediate roundstart evo for larva.
@@ -179,7 +211,7 @@
 	if(world.time < (SSticker.round_start_time + 5 SECONDS))
 		return FALSE
 
-	var/list/living_player_list = count_humans_and_xenos(count_flags = COUNT_IGNORE_ALIVE_SSD|COUNT_IGNORE_XENO_SPECIAL_AREA)
+	var/list/living_player_list = count_humans_and_xenos(count_flags = COUNT_IGNORE_ALIVE_SSD|COUNT_IGNORE_XENO_SPECIAL_AREA| COUNT_CLF_TOWARDS_XENOS | COUNT_GREENOS_TOWARDS_MARINES )
 	var/num_xenos = living_player_list[2]
 	var/num_humans_ship = living_player_list[3]
 

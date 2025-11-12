@@ -17,9 +17,12 @@
 	///Chat lines when target dies or is destroyed
 	var/list/dead_target_chat = list("Target down.", "Hostile down.", "Scratch one.", "I got one!", "Down for the count.", "Kill confirmed.")
 
+/datum/ai_behavior/human/melee_interact(datum/source, atom/interactee, melee_tool = melee_weapon) //specifies the arg value
+	return ..()
+
 ///Weapon stuff that happens during process
 /datum/ai_behavior/human/proc/weapon_process()
-	if(human_ai_state_flags & HUMAN_AI_NEED_WEAPONS)
+	if((human_ai_state_flags & HUMAN_AI_NEED_WEAPONS) && !(human_ai_state_flags & HUMAN_AI_BUSY_ACTION))
 		equip_weaponry()
 	if(!gun)
 		return
@@ -157,6 +160,7 @@
 
 	SEND_SIGNAL(new_weapon, COMSIG_AI_EQUIPPED_GUN, mob_parent) //todo: make another sig for belt strap to trigger off
 	RegisterSignals(new_weapon, list(COMSIG_QDELETING, COMSIG_MOVABLE_MOVED), PROC_REF(unequip_weapon), TRUE) //One item can be both the gun and melee weapon for a mob
+	RegisterSignal(new_weapon, COMSIG_ITEM_UNWIELD, PROC_REF(on_unwield), TRUE) //we also check for unwielding specifically, as this can happen for a variety of reasons
 	gun = new_weapon
 	return TRUE
 
@@ -175,11 +179,20 @@
 /datum/ai_behavior/human/proc/after_equip_melee(obj/item/weapon/new_weapon)
 	SEND_SIGNAL(new_weapon, COMSIG_AI_EQUIPPED_MELEE, mob_parent)
 	RegisterSignals(new_weapon, list(COMSIG_QDELETING, COMSIG_MOVABLE_MOVED), PROC_REF(unequip_weapon), TRUE)
+	RegisterSignal(new_weapon, COMSIG_ITEM_UNWIELD, PROC_REF(on_unwield), TRUE)
+
+/datum/ai_behavior/human/proc/on_unwield(obj/item/weapon/old_weapon, mob/living/user)
+	SIGNAL_HANDLER
+	UnregisterSignal(old_weapon, COMSIG_ITEM_UNWIELD)
+	unequip_weapon(old_weapon)
 
 ///Unequips a weapon
 /datum/ai_behavior/human/proc/unequip_weapon(obj/item/weapon/old_weapon)
+	SIGNAL_HANDLER
 	UnregisterSignal(old_weapon, list(COMSIG_QDELETING, COMSIG_MOVABLE_MOVED))
 	human_ai_state_flags |= HUMAN_AI_NEED_WEAPONS
+	if(!QDELETED(old_weapon) && isturf(old_weapon.loc))
+		add_atom_of_interest(old_weapon) //we want to pick it up
 	//todo: loosen straps?
 	if(gun == old_weapon)
 		stop_fire()
@@ -214,6 +227,10 @@
 			var/obj/machinery/machinery_target = target
 			if(machinery_target.machine_stat & BROKEN)
 				return AI_FIRE_TARGET_DEAD
+		if(isfacehugger(target))
+			var/obj/item/clothing/mask/facehugger/hugger = target
+			if(hugger.stat == DEAD || !isturf(hugger.loc))
+				return AI_FIRE_TARGET_DEAD //dead or nothing we can do about it
 
 	var/dist = get_dist(target, mob_parent)
 	if(dist > target_distance)

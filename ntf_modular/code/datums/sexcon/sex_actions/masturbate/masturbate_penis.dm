@@ -1,5 +1,6 @@
 /datum/sex_action/masturbate_penis
 	name = "Jerk off"
+	heal_sex = FALSE
 
 /datum/sex_action/masturbate_penis/shows_on_menu(mob/living/carbon/user, mob/living/carbon/target)
 	if(user != target)
@@ -22,11 +23,11 @@
 	var/chosen_verb = pick(list("jerks [user.p_their()] cock", "strokes [user.p_their()] cock", "masturbates", "jerks off"))
 	if(user.sexcon.do_message_signature("[type]"))
 		user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] [chosen_verb]..."))
-	playsound(user, 'ntf_modular/sound/misc/mat/fingering.ogg', 30, TRUE, -2)
+	playsound(user, 'ntf_modular/sound/misc/mat/fingering.ogg', 30, TRUE, 5, ignore_walls = FALSE)
 
 	user.sexcon.perform_sex_action(user, 2, 0, TRUE)
 
-	user.sexcon.handle_passive_ejaculation()
+	user.sexcon.handle_passive_ejaculation(user)
 
 /datum/sex_action/masturbate_penis/on_finish(mob/living/carbon/user, mob/living/carbon/target)
 	..()

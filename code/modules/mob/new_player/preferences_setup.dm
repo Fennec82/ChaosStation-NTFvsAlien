@@ -18,8 +18,10 @@
 	randomize_hair_color("facial")
 	randomize_eyes_color()
 	randomize_species_specific()
+	/*NTF removal
 	underwear = rand(1, length(GLOB.underwear_m))
 	undershirt = rand(1, length(GLOB.undershirt_f))
+	*/
 	backpack = rand(BACK_NOTHING, BACK_SATCHEL)
 	age = rand(AGE_MIN,AGE_MAX)
 	if(H)
@@ -129,10 +131,11 @@
 	// Determine what job is marked as 'High' priority, and dress them up as such.
 	var/datum/job/previewJob
 	var/highest_pref = JOBS_PRIORITY_NEVER
-	for(var/job in job_preferences)
-		if(job_preferences[job] > highest_pref)
-			previewJob = SSjob.GetJob(job)
-			highest_pref = job_preferences[job]
+	if(LAZYLEN(SSjob.occupations))
+		for(var/job in job_preferences)
+			if(job_preferences[job] > highest_pref)
+				previewJob = SSjob.GetJob(job)
+				highest_pref = job_preferences[job]
 
 	if(!previewJob)
 		var/mob/living/carbon/human/dummy/mannequin = generate_or_wait_for_human_dummy(DUMMY_HUMAN_SLOT_PREFERENCES)
@@ -215,8 +218,11 @@
 	character.pitch = tts_pitch
 
 	character.moth_wings = moth_wings
+
+	/*NTF Removal
 	character.underwear = underwear
 	character.undershirt = undershirt
+	*/
 
 	if(character.species.has_genital_selection)
 		character.ass = genitalia_ass

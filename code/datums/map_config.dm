@@ -22,6 +22,7 @@
 	var/list/environment_traits = list()
 	///Which disk sets this map has, key-value = name - weight for choosing.
 	var/list/disk_sets = list()
+	var/parallax_icon = ""
 	var/armor_style = "default"
 	var/quickbuilds = 1000
 	var/list/gamemodes = list()
@@ -101,6 +102,7 @@
 	map_name = json["map_name"]
 	CHECK_EXISTS("map_path")
 	map_path = json["map_path"]
+	parallax_icon = json["parallax_icon"]
 	announce_text = json["announce_text"]
 
 	map_file = json["map_file"]
@@ -134,7 +136,7 @@
 		// traits you want to customize which level is cross-linked
 		// we only set ground if not mainship
 		for (var/level in traits)
-			if (!(ZTRAIT_GROUND in level) && !(ZTRAIT_MARINE_MAIN_SHIP in level))
+			if (!(ZTRAIT_GROUND in level) && !(ZTRAIT_MARINE_MAIN_SHIP in level) && !(ZTRAIT_ANTAG_MAIN_SHIP in level))
 				level[ZTRAIT_GROUND] = TRUE
 	// "traits": null or absent -> default
 	else if (!isnull(traits))
@@ -216,3 +218,5 @@
 		return config_filename == "data/next_map.json" || fcopy(config_filename, "data/next_map.json")
 	else if(maptype == SHIP_MAP)
 		return config_filename == "data/next_ship.json" || fcopy(config_filename, "data/next_ship.json")
+	else if(maptype == ANTAG_MAP)
+		return config_filename == "data/next_antag.json" || fcopy(config_filename, "data/next_antag.json")

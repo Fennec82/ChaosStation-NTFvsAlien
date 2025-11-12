@@ -2,6 +2,8 @@
 #define FACEHUGGER_DEATH 2 MINUTES
 ///Time it takes to impregnate someone
 #define IMPREGNATION_TIME 10 SECONDS
+///List of all living face huggers
+GLOBAL_LIST_EMPTY(alive_hugger_list)
 
 /**
  *Facehuggers
@@ -65,10 +67,16 @@
 	var/about_to_jump = FALSE
 	///Time to become active after moving into the facehugger's space.
 	var/proximity_time = 0.75 SECONDS
-	///chosen hole to use by hugger, just flavor for now
+	/// Should they not die in fire?
+	var/fire_immune = FALSE
+	/// How far can they leap?
+	var/leap_range = 4
+	/// How long in decisecond should it take to manually attach a facehugger to someone?
+	var/hand_attach_time = 1 SECONDS
+	///NTF addition - chosen hole to use by hugger, just flavor for now
 	var/targethole = 1
 
-/obj/item/clothing/mask/facehugger/Initialize(mapload, input_hivenumber, input_source)
+/obj/item/clothing/mask/facehugger/Initialize(mapload, input_hivenumber, input_source, new_fire_immunity)
 	. = ..()
 	if(stat == CONSCIOUS)
 		lifetimer = addtimer(CALLBACK(src, PROC_REF(check_lifecycle)), FACEHUGGER_DEATH, TIMER_STOPPABLE)
@@ -77,15 +85,28 @@
 		hivenumber = input_hivenumber
 	var/datum/hive_status/hive = GLOB.hive_datums[hivenumber]
 	name = "[hive.prefix][name]"
+	if(hive.color)
+		add_filter("hive_color", 10, outline_filter(2, hive.color))
 
 	if(input_source)
 		facehugger_register_source(input_source)
+
+	if(new_fire_immunity)
+		set_fire_immunity(new_fire_immunity)
+
+	if((stat != DEAD) && (!sterile || combat_hugger))
+		GLOB.alive_hugger_list += src
 
 	var/static/list/connections = list(
 		COMSIG_ATOM_ENTERED = PROC_REF(on_cross),
 		COMSIG_ATOM_EXITED = PROC_REF(on_exited),
 	)
 	AddElement(/datum/element/connect_loc, connections)
+
+/obj/item/clothing/mask/facehugger/Moved(atom/old_loc, movement_dir, forced, list/old_locs)
+	. = ..()
+	if(isturf(loc) && !isturf(old_loc) && (stat != DEAD) && (!sterile || combat_hugger))
+		notify_ai_hazard()
 
 ///Registers the source of our facehugger for the purpose of anti-shuffle mechanics
 /obj/item/clothing/mask/facehugger/proc/facehugger_register_source(mob/living/carbon/xenomorph/S)
@@ -95,6 +116,14 @@
 	source = S //set and register new source
 	RegisterSignal(S, COMSIG_QDELETING, PROC_REF(clear_hugger_source))
 
+/// Sets the fire immunity and adds/removes an outline filter if it gained or lost fire immunity.
+/obj/item/clothing/mask/facehugger/proc/set_fire_immunity(new_fire_immunity)
+	if(!fire_immune && new_fire_immunity)
+		add_filter("facehugger_fire_immunity_outline", 2, outline_filter(1, COLOR_TAN_ORANGE))
+	if(fire_immune && !new_fire_immunity)
+		remove_filter("facehugger_fire_immunity_outline")
+	fire_immune = new_fire_immunity
+
 ///Clears the source of our facehugger for the purpose of anti-shuffle mechanics
 /obj/item/clothing/mask/facehugger/proc/clear_hugger_source()
 	SIGNAL_HANDLER
@@ -102,6 +131,7 @@
 	source = null
 
 /obj/item/clothing/mask/facehugger/Destroy()
+	GLOB.alive_hugger_list -= src
 	remove_danger_overlay() //Remove the danger overlay
 	if(source)
 		clear_hugger_source()
@@ -123,7 +153,7 @@
 
 
 //Deal with picking up facehuggers. "attack_alien" is the universal 'xenos click something while unarmed' proc.
-/obj/item/clothing/mask/facehugger/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/item/clothing/mask/facehugger/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage * xeno_attacker.xeno_melee_damage_modifier, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return
 
@@ -171,7 +201,7 @@
 	user.visible_message(span_warning("\ [user] attempts to plant [src] on [M]'s face!"), \
 	span_warning("We attempt to plant [src] on [M]'s face!"))
 	if(M.client && !M.stat) //Delay for conscious cliented mobs, who should be resisting.
-		if(!do_after(user, 1 SECONDS, TRUE, M, BUSY_ICON_DANGER))
+		if(!do_after(user, hand_attach_time, TRUE, M, BUSY_ICON_DANGER))
 			return
 	if(!try_attach(M))
 		go_idle()
@@ -216,7 +246,7 @@
 	if(stat == CONSCIOUS)
 		stat = UNCONSCIOUS
 		update_icon()
-	if(hybernate) //If we're hybernating we're going into stasis; we no longer have a death timer
+	if(hybernate || QDELETED(src)) //If we're hybernating we're going into stasis; we no longer have a death timer
 		stasis = TRUE
 		deltimer(lifetimer)
 	else if(!attached && !(stasis || no_activate))
@@ -290,7 +320,7 @@
 	if(chosen_target)
 		visible_message(span_warning("\The scuttling [src] leaps at [chosen_target]!"), null, null, 4)
 		leaping = TRUE
-		throw_at(chosen_target, 4, 1)
+		throw_at(chosen_target, leap_range, 1)
 		return
 
 	remove_danger_overlay() //Remove the danger overlay
@@ -329,10 +359,10 @@
 		if(E?.insert_new_hugger(src))
 			return FALSE
 		var/obj/structure/xeno/trap/T = locate() in loc
-		if(T && !T.hugger)
+		if(T && (T.hugger_limit > length(T.huggers)))
 			visible_message(span_xenowarning("[src] crawls into [T]!"))
 			forceMove(T)
-			T.hugger = src
+			T.huggers += src
 			T.set_trap_type(TRAP_HUGGER)
 			go_idle(TRUE)
 			return FALSE
@@ -522,13 +552,17 @@
 		X.dropItemToGround(src)
 		X.update_icons()
 
-	if(hugged.in_throw_mode && hugged.dir != dir && !hugged.incapacitated() && !hugged.get_active_held_item())
-		var/catch_chance = 50
+	if(hugged.dir != dir && !hugged.incapacitated())
+		var/catch_chance = 80
 		if(hugged.dir == REVERSE_DIR(dir))
 			catch_chance += 20
-		catch_chance -= hugged.shock_stage * 0.3
+		catch_chance -= max(hugged.shock_stage * 0.3, hugged.getStaminaLoss() * 0.25)
 		if(hugged.get_inactive_held_item())
-			catch_chance  -= 25
+			catch_chance  *= 0.8
+		if(hugged.get_active_held_item())
+			catch_chance *= 0.65
+		if(implanted_embryos)
+			catch_chance = 100 * (catch_chance*3 / (catch_chance*2 + 100))
 
 		if(prob(catch_chance))
 			hugged.visible_message("<span class='notice'>[hugged] snatches [src] out of the air and [pickweight(list("clobbers" = 30, "kills" = 30, "squashes" = 25, "dunks" = 10, "dribbles" = 5))] it!")
@@ -643,7 +677,6 @@
 	else
 		user.emote("scream")
 		user.ParalyzeNoChain(3 SECONDS)
-		user.SetConfused(8 SECONDS)
 	attached = TRUE
 	go_idle(FALSE, TRUE)
 	addtimer(CALLBACK(src, PROC_REF(try_impregnate), user), IMPREGNATION_TIME)
@@ -699,12 +732,16 @@
 
 	if(stat == DEAD)
 		return
+	SEND_SIGNAL(src, COMSIG_FACE_HUGGER_DEATH)
 	stat = DEAD
 
+	GLOB.alive_hugger_list -= src
 	deltimer(jumptimer)
 	deltimer(lifetimer)
 	deltimer(activetimer)
 	remove_danger_overlay() //Remove the danger overlay
+	if(fire_immune)
+		set_fire_immunity(FALSE)
 
 	update_icon()
 	playsound(loc, 'sound/voice/alien/facehugger_dies.ogg', 25, 1)
@@ -749,6 +786,8 @@
 	return TRUE
 
 /obj/item/clothing/mask/facehugger/fire_act(burn_level)
+	if(fire_immune)
+		return
 	kill_hugger()
 
 /obj/item/clothing/mask/facehugger/dropped(mob/user)
@@ -789,6 +828,11 @@
 	sterile = TRUE
 	combat_hugger = TRUE
 	equip_slot_flags = NONE
+	var/filtercolor
+
+/obj/item/clothing/mask/facehugger/combat/Initialize(mapload, ...)
+	. = ..()
+	add_filter("base_color", -10, color_matrix_filter(filtercolor))
 
 /obj/item/clothing/mask/facehugger/combat/chem_injector
 	desc = "This strange creature has a single prominent sharp proboscis."
@@ -816,7 +860,7 @@
 
 /obj/item/clothing/mask/facehugger/combat/chem_injector/neuro
 	name = "neurotoxin hugger"
-	color = COLOR_DARK_ORANGE
+	filtercolor = COLOR_DARK_ORANGE
 	injected_chemical_type = /datum/reagent/toxin/xeno_neurotoxin
 
 /obj/item/clothing/mask/facehugger/combat/chem_injector/neuro/try_attach(mob/living/carbon/M)
@@ -827,17 +871,17 @@
 /obj/item/clothing/mask/facehugger/combat/chem_injector/ozelomelyn
 	name = "ozelomelyn hugger"
 	injected_chemical_type = /datum/reagent/toxin/xeno_ozelomelyn
-	color = COLOR_MAGENTA
+	filtercolor = COLOR_MAGENTA
 
 /obj/item/clothing/mask/facehugger/combat/chem_injector/aphrotoxin
 	name = "aphrotoxin hugger"
 	injected_chemical_type = /datum/reagent/toxin/xeno_aphrotoxin
-	color = COLOR_PINK
+	filtercolor = COLOR_PINK
 
 /obj/item/clothing/mask/facehugger/combat/acid
 	name = "acid hugger"
 	desc = "This repulsive looking thing is bloated with throbbing, putrescent green sacks of flesh."
-	color = COLOR_GREEN
+	filtercolor = COLOR_GREEN
 	impact_time = 1 SECONDS
 	activate_time = 1.5 SECONDS
 	jump_cooldown = 1.5 SECONDS
@@ -851,9 +895,7 @@
 	playsound(loc, 'sound/bullets/acid_impact1.ogg', 50, 1)
 
 	for(var/turf/acid_tile AS in RANGE_TURFS(1, loc))
-		new /obj/effect/temp_visual/acid_splatter(acid_tile) //SFX
-		if(!locate(/obj/effect/xenomorph/spray) in acid_tile.contents)
-			new /obj/effect/xenomorph/spray(acid_tile, 6 SECONDS, 16)
+		xenomorph_spray(acid_tile, 6 SECONDS, 16, null, TRUE)
 
 
 	var/datum/effect_system/smoke_spread/xeno/acid/light/A = new(get_turf(src)) //Spawn acid smoke
@@ -867,7 +909,7 @@
 /obj/item/clothing/mask/facehugger/combat/resin
 	name = "resin hugger"
 	desc = "This truly bizzare, bloated creature drips with purple, viscous resin."
-	color = COLOR_STRONG_VIOLET
+	filtercolor = COLOR_STRONG_VIOLET
 	impact_time = 1 SECONDS
 	activate_time = 1.5 SECONDS
 	jump_cooldown = 1.5 SECONDS
@@ -881,8 +923,8 @@
 	playsound(loc, SFX_ALIEN_RESIN_BUILD, 50, 1)
 
 	for(var/turf/sticky_tile AS in RANGE_TURFS(1, loc))
-		if(!locate(/obj/effect/xenomorph/spray) in sticky_tile.contents)
-			new /obj/alien/resin/sticky/thin(sticky_tile)
+		if(!locate(/obj/alien/resin/sticky/thin) in sticky_tile.contents)
+			new /obj/alien/resin/sticky/thin(sticky_tile, hivenumber) //NTF edit - hivenumbers
 
 	for(var/mob/living/carbon/human/target in range(1, loc))
 		if(isxeno(target)) //Xenos aren't affected by sticky resin
@@ -901,7 +943,7 @@
 /obj/item/clothing/mask/facehugger/combat/slash
 	name = "clawed hugger"
 	desc = "This nasty little creature is a nightmarish scrabble of muscle and sharp, long claws."
-	color = COLOR_RED
+	filtercolor = COLOR_RED
 	impact_time = 0.5 SECONDS
 	activate_time = 1.2 SECONDS
 	jump_cooldown = 1.2 SECONDS
@@ -929,11 +971,19 @@
 		return FALSE
 	if(!isliving(M))
 		return FALSE
-	if(isxeno(M))
-		var/mob/living/carbon/xenomorph/X = M
-		if(hivenumber == X.hive.hivenumber) //No friendly fire
-			return FALSE
+	if(issamexenohive(M)) //No friendly fire
+		return FALSE
 
+	return TRUE
+
+
+/obj/item/clothing/mask/facehugger/combat/harmless
+	name = "harmless hugger"
+	filtercolor = COLOR_BROWN
+
+/obj/item/clothing/mask/facehugger/combat/harmless/try_attach(mob/M, mob/user)
+	if(!combat_hugger_check_target(M))
+		return FALSE
 	return TRUE
 
 #undef FACEHUGGER_DEATH

@@ -35,6 +35,7 @@ GLOBAL_LIST_INIT(sentry_ignore_List, set_sentry_ignore_List())
 	var/iff_signal = NONE
 	///For minimap icon change if sentry is firing
 	var/firing
+	var/hivenumber = FALSE
 
 //------------------------------------------------------------------
 //Setup and Deletion
@@ -48,6 +49,13 @@ GLOBAL_LIST_INIT(sentry_ignore_List, set_sentry_ignore_List())
 		var/mob/living/carbon/human/_deployer = deployer
 		var/obj/item/card/id/id = _deployer.get_idcard(TRUE)
 		iff_signal = id?.iff_signal
+		hivenumber = _deployer.get_xeno_hivenumber()
+	else
+		if(iff_signal & CLF_IFF)
+			hivenumber = XENO_HIVE_NORMAL
+		else
+			if(iff_signal & TGMC_LOYALIST_IFF)
+				hivenumber = XENO_HIVE_CORRUPTED
 	if(deployer)
 		faction = deployer.faction
 
@@ -73,6 +81,7 @@ GLOBAL_LIST_INIT(sentry_ignore_List, set_sentry_ignore_List())
 		camera.c_tag = "[name] ([rand(0, 1000)])"
 
 	GLOB.marine_turrets += src
+	GLOB.sentry_list += src
 	set_on(TRUE)
 
 ///Change minimap icon if its firing or not firing
@@ -109,6 +118,7 @@ GLOBAL_LIST_INIT(sentry_ignore_List, set_sentry_ignore_List())
 		if(internal_sentry)
 			UnregisterSignal(internal_sentry, COMSIG_MOB_GUN_FIRED)
 	GLOB.marine_turrets -= src
+	GLOB.sentry_list -= src
 	return ..()
 
 /obj/machinery/deployable/mounted/sentry/deconstruct(disassembled = TRUE, mob/living/blame_mob)
@@ -388,7 +398,7 @@ GLOBAL_LIST_INIT(sentry_ignore_List, set_sentry_ignore_List())
 	if(!gun)
 		return FALSE
 	for(var/mob/living/carbon/human/nearby_human AS in cheap_get_humans_near(src, range))
-		if(nearby_human.stat == DEAD || CHECK_BITFIELD(nearby_human.status_flags, INCORPOREAL)  || (CHECK_BITFIELD(gun.turret_flags, TURRET_SAFETY) || nearby_human.wear_id?.iff_signal & iff_signal))
+		if(nearby_human.faction != FACTION_ZOMBIE && (nearby_human.stat == DEAD || CHECK_BITFIELD(nearby_human.status_flags, INCORPOREAL)  || (CHECK_BITFIELD(gun.turret_flags, TURRET_SAFETY) || nearby_human.wear_id?.iff_signal & iff_signal)))
 			continue
 		potential_targets += nearby_human
 	for(var/mob/living/carbon/xenomorph/nearby_xeno AS in cheap_get_xenos_near(src, range))
@@ -411,6 +421,25 @@ GLOBAL_LIST_INIT(sentry_ignore_List, set_sentry_ignore_List())
 		if(human_occupant.wear_id?.iff_signal & iff_signal)
 			continue
 		potential_targets += nearby_tank
+	for(var/obj/vehicle/ridden/nearby_ridden AS in cheap_get_ridden_vehicles_near(src, range))
+		var/list/driver_list = nearby_ridden.return_drivers()
+		if(!length(driver_list))
+			continue
+		var/mob/living/carbon/human/human_occupant = driver_list[1]
+		if(human_occupant.wear_id?.iff_signal & iff_signal)
+			continue
+		potential_targets += nearby_ridden
+	for(var/obj/vehicle/unmanned/nearby_unmanned AS in cheap_get_unmanned_vehicles_near(src, range))
+		if(nearby_unmanned.iff_signal & iff_signal)
+			continue
+		potential_targets += nearby_unmanned
+	for(var/obj/machinery/deployable/mounted/sentry/nearby_sentry AS in cheap_get_sentries_near(src, range))
+		if(nearby_sentry.iff_signal & iff_signal)
+			continue
+		var/datum/hive_status/hive = GLOB.hive_datums[nearby_sentry.get_xeno_hivenumber()]
+		if(istype(hive) && (faction in hive.allied_factions))
+			continue
+		potential_targets += nearby_sentry
 	return length(potential_targets)
 
 ///Checks the range and the path of the target currently being shot at to see if it is eligable for being shot at again. If not it will stop the firing.

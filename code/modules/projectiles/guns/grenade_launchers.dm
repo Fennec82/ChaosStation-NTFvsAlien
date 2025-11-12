@@ -33,9 +33,10 @@ The Grenade Launchers
 		/obj/item/explosive/grenade,
 		/obj/item/explosive/grenade/training,
 		/obj/item/explosive/grenade/pmc,
+		/obj/item/explosive/grenade/vsd,
+		/obj/item/explosive/grenade/upp,
 		/obj/item/explosive/grenade/m15,
 		/obj/item/explosive/grenade/stick,
-		/obj/item/explosive/grenade/upp,
 		/obj/item/explosive/grenade/som,
 		/obj/item/explosive/grenade/sectoid,
 		/obj/item/explosive/grenade/creampie,
@@ -56,6 +57,7 @@ The Grenade Launchers
 		/obj/item/explosive/grenade/phosphorus/upp,
 		/obj/item/explosive/grenade/impact,
 		/obj/item/explosive/grenade/sticky,
+		/obj/item/explosive/grenade/sticky/pmc,
 		/obj/item/explosive/grenade/sticky/trailblazer,
 		/obj/item/explosive/grenade/flare,
 		/obj/item/explosive/grenade/flare/cas,
@@ -182,6 +184,7 @@ The Grenade Launchers
 		/obj/item/explosive/grenade,
 		/obj/item/explosive/grenade/training,
 		/obj/item/explosive/grenade/stick,
+		/obj/item/explosive/grenade/vsd,
 		/obj/item/explosive/grenade/upp,
 		/obj/item/explosive/grenade/som,
 		/obj/item/explosive/grenade/incendiary,
@@ -193,6 +196,8 @@ The Grenade Launchers
 		/obj/item/explosive/grenade/smokebomb/drain,
 		/obj/item/explosive/grenade/smokebomb/antigas,
 		/obj/item/explosive/grenade/smokebomb/neuro,
+		/obj/item/explosive/grenade/smokebomb/aphrotoxin,
+		/obj/item/explosive/grenade/smokebomb/sleep,
 		/obj/item/explosive/grenade/smokebomb/acid,
 		/obj/item/explosive/grenade/smokebomb/satrapine,
 		/obj/item/explosive/grenade/phosphorus,
@@ -201,6 +206,7 @@ The Grenade Launchers
 		/obj/item/explosive/grenade/flare/cas,
 		/obj/item/explosive/grenade/impact,
 		/obj/item/explosive/grenade/sticky,
+		/obj/item/explosive/grenade/sticky/pmc,
 		/obj/item/explosive/grenade/flashbang/stun,
 		/obj/item/explosive/grenade/emp,
 	)
@@ -209,6 +215,10 @@ The Grenade Launchers
 
 /obj/item/weapon/gun/grenade_launcher/underslung/invisible
 	attach_features_flags = NONE
+
+/obj/item/weapon/gun/grenade_launcher/underslung/integrated
+	attach_features_flags = NONE
+	icon_state = NONE
 
 /obj/item/weapon/gun/grenade_launcher/underslung/battle_rifle
 	name = "\improper BR-64 underslung grenade launcher"
@@ -257,7 +267,6 @@ The Grenade Launchers
 	desc = "A gun that fires flares. Replace with flares. Simple! Equipped with long range irons."
 	icon_state = "flaregun"
 	worn_icon_state = "gun"
-	fire_sound = 'sound/weapons/guns/fire/flare.ogg'
 	fire_sound = 'sound/weapons/guns/fire/flare.ogg'
 	w_class = WEIGHT_CLASS_SMALL
 	gun_features_flags = NONE

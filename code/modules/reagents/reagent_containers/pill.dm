@@ -21,7 +21,7 @@
 		icon_state = pill_id ? GLOB.randomized_pill_icons[pill_id] : pick(GLOB.randomized_pill_icons)
 
 /obj/item/reagent_containers/pill/attack_self(mob/user as mob)
-	return
+	return attack(user, user)
 
 /obj/item/reagent_containers/pill/attack(mob/M, mob/user, def_zone)
 
@@ -249,4 +249,4 @@
 /obj/item/reagent_containers/pill/aphrotoxin
 	pill_desc = "An Aphrotoxin pill. Produced from xenomorphs. Causes weakness on the legs and intense lust."
 	list_reagents = list(/datum/reagent/toxin/xeno_aphrotoxin = 10)
-	pill_id = 22
+	pill_id = 8

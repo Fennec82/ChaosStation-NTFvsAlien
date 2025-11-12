@@ -203,14 +203,13 @@ WEAPONS
 	contains = list(/obj/item/ammo_magazine/heavy_isg/sabot)
 	cost = 50
 
-/datum/supply_packs/weapons/heayvlaser_emplacement
-	name = "Mounted Heavy Laser"
+/datum/supply_packs/weapons/heavy_laser_emplacement
+	name = "TE-9001 mounted heavy laser"
 	contains = list(/obj/item/weapon/gun/energy/lasgun/lasrifle/heavy_laser/deployable)
-	cost = 800
+	cost = 400
 
-
-/datum/supply_packs/weapons/heayvlaser_ammo
-	name = "Mounted Heavy Laser Ammo (x1)"
+/datum/supply_packs/weapons/heavy_laser_ammo
+	name = "TE-9001 mounted heavy laser cell"
 	contains = list(/obj/item/cell/lasgun/heavy_laser)
 	cost = 15
 
@@ -387,7 +386,7 @@ WEAPONS
 /datum/supply_packs/weapons/thermobaric_wp
 	name = "RL-57 Thermobaric WP rocket array"
 	contains = list(/obj/item/ammo_magazine/rocket/m57a4)
-	cost = 50
+	cost = 70
 	available_against_xeno_only = TRUE
 
 /datum/supply_packs/weapons/specdemo
@@ -417,13 +416,13 @@ WEAPONS
 /datum/supply_packs/weapons/rpg_wp
 	name = "RL-152 SADAR WP rocket"
 	contains = list(/obj/item/ammo_magazine/rocket/sadar/wp)
-	cost = 125
+	cost = 175
 	available_against_xeno_only = TRUE
 
 /datum/supply_packs/weapons/rpg_wp_unguided
 	name = "RL-152 SADAR WP rocket (Unguided)"
 	contains = list(/obj/item/ammo_magazine/rocket/sadar/wp/unguided)
-	cost = 125
+	cost = 175
 	available_against_xeno_only = TRUE
 
 /datum/supply_packs/weapons/zx76

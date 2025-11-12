@@ -15,7 +15,7 @@
 #define VREF_MUTABLE_MAPTEXT "VREF_BIND_TEXT"
 /// A mutable appearance to add a "selected" frame around the edges
 #define VREF_MUTABLE_SELECTED_FRAME "VREF_SELECTED_FRAME"
-/// A misc image holder for stuff thats meant to be added ontop , used by a few actions
+/// A misc image holder for stuff thats meant to be added on top , used by a few actions
 #define VREF_IMAGE_ONTOP "VREF_LAYERED_IMAGE"
 // /datum/action/ability/xeno_action. Additional references
 /// A mutable appearance to add the "empowered" frame around the edges
@@ -52,6 +52,10 @@
 #define VREF_MUTABLE_GAS_MINE_TIMER "VREF_GASMINE_CHARGETIMER"
 // extra reference for how long untill we recharge a new gas mine
 #define VREF_MUTABLE_ACID_MINE_TIMER "VREF_ACIDMINE_CHARGETIMER"
+// The extra reference for Conqueror's Dash ability if it uses the charge cooldown system. Shows how many charges are available.
+#define VREF_MUTABLE_CONQ_DASH_CHARGES "VREF_CONQDASH_CHARGES"
+// The extra reference for Conqueror's Dash ability if it uses the charge cooldown system. Shows how much time is left before a charge is restored.
+#define VREF_MUTABLE_CONQ_DASH_CHARGETIMER "VREF_CONQDASH_CHARGETIMER"
 
 /// Actions that toggle on click/trigger
 #define ACTION_TOGGLE "toggle"

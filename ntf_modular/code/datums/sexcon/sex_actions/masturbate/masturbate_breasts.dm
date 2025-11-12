@@ -1,5 +1,6 @@
 /datum/sex_action/masturbate_breasts
 	name = "Rub breasts"
+	heal_sex = FALSE
 
 /datum/sex_action/masturbate_breasts/shows_on_menu(mob/living/carbon/user, mob/living/carbon/target)
 	if(user != target)
@@ -23,7 +24,7 @@
 		user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] fondles [user.p_their()] breasts..."))
 
 	user.sexcon.perform_sex_action(user, 1, 4, TRUE)
-	user.sexcon.handle_passive_ejaculation()
+	user.sexcon.handle_passive_ejaculation(user)
 
 /datum/sex_action/masturbate_breasts/on_finish(mob/living/carbon/user, mob/living/carbon/target)
 	..()

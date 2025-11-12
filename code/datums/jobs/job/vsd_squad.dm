@@ -17,7 +17,8 @@ Kaizoku is in the council that leads Phantom City, therefore it shares a table w
 	paygrade = "KZ1"
 	comm_title = "JSGT"
 	skills_type = /datum/skills/crafty
-	access = list (ACCESS_VSD_PREP, ACCESS_MARINE_MEDBAY, ACCESS_SOM_MEDICAL, ACCESS_MARINE_CHEMISTRY)
+	access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_CARGO, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
+	minimal_access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_CARGO, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
 	display_order = JOB_DISPLAY_ORDER_SQUAD_MARINE
 	total_positions = -1
 	job_flags = JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_ADDTOMANIFEST|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_CAN_SEE_ORDERS|JOB_FLAG_OVERRIDELATEJOINSPAWN
@@ -31,8 +32,8 @@ Kaizoku is in the council that leads Phantom City, therefore it shares a table w
 	name = "KZ Standard"
 	jobtype = /datum/job/vsd_squad/standard
 
-	id = /obj/item/card/id/dogtag/som
-	ears = /obj/item/radio/headset/mainship/som
+	id = /obj/item/card/id/dogtag
+	ears = /obj/item/radio/headset/mainship/vsd
 
 //VSD Engineer
 /datum/job/vsd_squad/engineer
@@ -40,8 +41,8 @@ Kaizoku is in the council that leads Phantom City, therefore it shares a table w
 	paygrade = "KZ3"
 	comm_title = "SGM"
 	skills_type = /datum/skills/combat_engineer
-	minimal_access = list (ACCESS_VSD_ENGPREP, ACCESS_MARINE_MEDBAY, ACCESS_SOM_MEDICAL, ACCESS_MARINE_CHEMISTRY, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE)
-	access = list (ACCESS_VSD_ENGPREP, ACCESS_MARINE_MEDBAY, ACCESS_SOM_MEDICAL, ACCESS_MARINE_CHEMISTRY, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE)
+	access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_CARGO, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
+	minimal_access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_CARGO, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
 	display_order = JOB_DISPLAY_ORDER_SQUAD_MARINE
 	total_positions = -1
 	job_flags = JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_ADDTOMANIFEST|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_CAN_SEE_ORDERS|JOB_FLAG_OVERRIDELATEJOINSPAWN
@@ -56,8 +57,8 @@ Kaizoku is in the council that leads Phantom City, therefore it shares a table w
 	name = "KZ Engineer"
 	jobtype = /datum/job/vsd_squad/engineer
 
-	id = /obj/item/card/id/dogtag/som/engineer
-	ears = /obj/item/radio/headset/mainship/som
+	id = /obj/item/card/id/dogtag/engineer
+	ears = /obj/item/radio/headset/mainship/vsd
 	glasses = /obj/item/clothing/glasses/meson
 
 //VSD Medic
@@ -66,8 +67,8 @@ Kaizoku is in the council that leads Phantom City, therefore it shares a table w
 	paygrade = "KZ2"
 	comm_title = "SSGT"
 	skills_type = /datum/skills/combat_medic/crafty
-	minimal_access = list (ACCESS_VSD_MEDPREP, ACCESS_MARINE_MEDBAY, ACCESS_SOM_MEDICAL, ACCESS_MARINE_CHEMISTRY, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE)
-	access = list (ACCESS_VSD_MEDPREP, ACCESS_MARINE_MEDBAY, ACCESS_SOM_MEDICAL, ACCESS_MARINE_CHEMISTRY, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE)
+	access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_CARGO, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
+	minimal_access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_CARGO, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
 	display_order = JOB_DISPLAY_ORDER_SQUAD_MARINE
 	total_positions = -1
 	job_flags = JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_ADDTOMANIFEST|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_CAN_SEE_ORDERS|JOB_FLAG_OVERRIDELATEJOINSPAWN
@@ -82,8 +83,8 @@ Kaizoku is in the council that leads Phantom City, therefore it shares a table w
 	name = "KZ Medic"
 	jobtype = /datum/job/vsd/medic
 
-	id = /obj/item/card/id/dogtag/som/medic
-	ears = /obj/item/radio/headset/mainship/som
+	id = /obj/item/card/id/dogtag/corpsman
+	ears = /obj/item/radio/headset/mainship/vsd
 
 //VSD Spec
 /datum/job/vsd_squad/spec
@@ -91,8 +92,8 @@ Kaizoku is in the council that leads Phantom City, therefore it shares a table w
 	paygrade = "KZ4"
 	comm_title = "LT"
 	skills_type = /datum/skills/specialist
-	minimal_access = list (ACCESS_VSD_SPECPREP, ACCESS_MARINE_MEDBAY, ACCESS_SOM_MEDICAL, ACCESS_MARINE_CHEMISTRY, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE)
-	access = list (ACCESS_VSD_SPECPREP, ACCESS_MARINE_MEDBAY, ACCESS_SOM_MEDICAL, ACCESS_MARINE_CHEMISTRY, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE)
+	access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_SPECPREP, ACCESS_VSD_LEADPREP, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
+	minimal_access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_SPECPREP, ACCESS_VSD_LEADPREP, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
 	display_order = JOB_DISPLAY_ORDER_SQUAD_MARINE
 	total_positions = 5
 	job_flags = JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_ADDTOMANIFEST|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_CAN_SEE_ORDERS|JOB_FLAG_OVERRIDELATEJOINSPAWN
@@ -106,8 +107,8 @@ Kaizoku is in the council that leads Phantom City, therefore it shares a table w
 	name = "KZ Specialist"
 	jobtype = /datum/job/vsd_squad/spec
 
-	id = /obj/item/card/id/dogtag/som/veteran
-	ears = /obj/item/radio/headset/mainship/som
+	id = /obj/item/card/id/dogtag/specialist
+	ears = /obj/item/radio/headset/mainship/vsd
 
 //VSD Squad Leader
 /datum/job/vsd_squad/leader
@@ -115,8 +116,8 @@ Kaizoku is in the council that leads Phantom City, therefore it shares a table w
 	paygrade = "KZ5"
 	comm_title = "COLGEN"
 	skills_type = /datum/skills/sl
-	minimal_access = list (ACCESS_VSD_LEADPREP, ACCESS_MARINE_MEDBAY, ACCESS_SOM_MEDICAL, ACCESS_MARINE_CHEMISTRY, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE)
-	access = list (ACCESS_VSD_LEADPREP, ACCESS_MARINE_MEDBAY, ACCESS_SOM_MEDICAL, ACCESS_MARINE_CHEMISTRY, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE)
+	access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_LEADPREP, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
+	minimal_access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_LEADPREP, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
 	display_order = JOB_DISPLAY_ORDER_SQUAD_MARINE
 	total_positions = 5
 	job_flags = JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_ADDTOMANIFEST|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_CAN_SEE_ORDERS|JOB_FLAG_OVERRIDELATEJOINSPAWN
@@ -130,7 +131,7 @@ Kaizoku is in the council that leads Phantom City, therefore it shares a table w
 	name = "KZ Squad Leader"
 	jobtype = /datum/job/vsd_squad/leader
 
-	id = /obj/item/card/id/dogtag/som/leader
-	ears = /obj/item/radio/headset/mainship/som
+	id = /obj/item/card/id/dogtag/leader
+	ears = /obj/item/radio/headset/mainship/vsd
 
 

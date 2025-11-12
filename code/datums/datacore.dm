@@ -3,17 +3,14 @@ GLOBAL_DATUM_INIT(datacore, /datum/datacore, new)
 /datum/data
 	var/name = "data"
 
-
 /datum/data/record
 	name = "record"
 	var/list/fields = list()
-
 
 /datum/datacore
 	var/list/medical = list()
 	var/list/general = list()
 	var/list/security = list()
-
 
 // TODO: cleanup
 /datum/datacore/proc/get_manifest(monochrome, ooc, viewfaction)
@@ -24,8 +21,10 @@ GLOBAL_DATUM_INIT(datacore, /datum/datacore, new)
 	var/list/misc = list()
 	var/list/other = list()
 	var/list/isactive = list()
+	var/list/isactiveooc = list()
 	var/list/squads = list()
 	var/list/support = list()
+	ooc = TRUE
 
 	var/dat = {"
 	<head><style>
@@ -37,7 +36,7 @@ GLOBAL_DATUM_INIT(datacore, /datum/datacore, new)
 		.manifest tr.alt td {[monochrome?"border-top-width: 2px":"background-color: #36373C"]}
 	</style></head>
 	<table class="manifest" width='350px'>
-	<tr class='head'><th>Rank</th><th>Name</th><th>Activity</th></tr>
+	<tr class='head'><th>Rank</th><th>Name</th><th>Activity(IC)</th><th>Activity(OOC)</th></tr>
 	"}
 
 	var/even = 0
@@ -71,10 +70,13 @@ GLOBAL_DATUM_INIT(datacore, /datum/datacore, new)
 				mobfaction = M.job?.faction
 				break
 
-		if(ooc)
+		/*if(ooc)
 			isactive[name] = deceased ? "*Deceased*" : (active ? "Active" : "Inactive")
 		else
 			isactive[name] = t.fields["p_stat"]
+		*/
+		isactiveooc[name] = deceased ? "*Deceased*" : (active ? "Active" : "Inactive")
+		isactive[name] = t.fields["p_stat"]
 
 		var/department = 0
 		if(GLOB.jobs_command[rank])
@@ -108,7 +110,7 @@ GLOBAL_DATUM_INIT(datacore, /datum/datacore, new)
 	if(ooc || viewfaction == FACTION_CLF || viewfaction == FACTION_TERRAGOV)
 		for(var/mob/living/carbon/xenomorph/X in GLOB.xeno_mob_list)
 			if(!ooc)
-				if((viewfaction == FACTION_CLF) == (X.hivenumber == XENO_HIVE_CORRUPTED)) //clf can see everyone but corrupted, NTC can only see corrupted
+				if((viewfaction == FACTION_CLF) == (X.get_xeno_hivenumber() == XENO_HIVE_CORRUPTED)) //clf can see everyone but corrupted, NTC can only see corrupted
 					break
 			var/name = X.real_name
 			var/rank = X.xeno_caste.caste_name
@@ -116,56 +118,63 @@ GLOBAL_DATUM_INIT(datacore, /datum/datacore, new)
 			if(isdead(X))
 				isactive[name] = "*Deceased*"
 			else
+				/*
 				if(ooc && (!X.client || (X.client.inactivity > 10 * 60 * 10)))
 					isactive[name] = "Inactive"
 				else
 					isactive[name] = "Active"
+				*/
+				if((!X.client || (X.client.inactivity > 10 * 60 * 10)))
+					isactiveooc[name] = "Inactive"
+				else
+					isactiveooc[name] = "Active"
+				isactive[name] = "Active"
 			xeno[name] = rank
 
 	if(length(heads) > 0)
-		dat += "<tr><th colspan=3>Command</th></tr>"
+		dat += "<tr><th colspan=4>Command</th></tr>"
 		for(var/name in heads)
-			dat += "<tr[even ? " class='alt'" : ""]><td>[heads[name]]</td><td>[name]</td><td>[isactive[name]]</td></tr>"
+			dat += "<tr[even ? " class='alt'" : ""]><td>[heads[name]]</td><td>[name]</td><td>[isactive[name]]</td><td>[isactiveooc[name]]</td></tr>"
 			even = !even
 	if(length(support) > 0)
 		dat += "<tr><th colspan=3>Auxiliary Support Staff</th></tr>"
 		for(var/name in support)
-			dat += "<tr[even ? " class='alt'" : ""]><td>[support[name]]</td><td>[name]</td><td>[isactive[name]]</td></tr>"
+			dat += "<tr[even ? " class='alt'" : ""]><td>[support[name]]</td><td>[name]</td><td>[isactive[name]]</td><td>[isactiveooc[name]]</td></tr>"
 			even = !even
 	if(non_empty_squad_exists)
-		dat += "<tr><th colspan=3>Marine Personnel</th></tr>"
+		dat += "<tr><th colspan=4>Marine Personnel</th></tr>"
 		for(var/j in squads)
 			if(length(squads[j]))
 				dat += "<tr><th colspan=3>[j]</th></tr>"
 				for(var/name in squads[j])
-					dat += "<tr[even ? " class='alt'" : ""]><td>[squads[j][name]]</td><td>[name]</td><td>[isactive[name]]</td></tr>"
+					dat += "<tr[even ? " class='alt'" : ""]><td>[squads[j][name]]</td><td>[name]</td><td>[isactive[name]]</td><td>[isactiveooc[name]]</td></tr>"
 					even = !even
 	if(length(eng) > 0)
-		dat += "<tr><th colspan=3>Engineering</th></tr>"
+		dat += "<tr><th colspan=4>Engineering</th></tr>"
 		for(var/name in eng)
-			dat += "<tr[even ? " class='alt'" : ""]><td>[eng[name]]</td><td>[name]</td><td>[isactive[name]]</td></tr>"
+			dat += "<tr[even ? " class='alt'" : ""]><td>[eng[name]]</td><td>[name]</td><td>[isactive[name]]</td><td>[isactiveooc[name]]</td></tr>"
 			even = !even
 	if(length(med) > 0)
-		dat += "<tr><th colspan=3>Medical</th></tr>"
+		dat += "<tr><th colspan=4>Medical</th></tr>"
 		for(var/name in med)
-			dat += "<tr[even ? " class='alt'" : ""]><td>[med[name]]</td><td>[name]</td><td>[isactive[name]]</td></tr>"
+			dat += "<tr[even ? " class='alt'" : ""]><td>[med[name]]</td><td>[name]</td><td>[isactive[name]]</td><td>[isactiveooc[name]]</td></tr>"
 			even = !even
 	// misc guys
 	if(length(misc) > 0)
-		dat += "<tr><th colspan=3>Miscellaneous</th></tr>"
+		dat += "<tr><th colspan=4>Miscellaneous</th></tr>"
 		for(var/name in misc)
-			dat += "<tr[even ? " class='alt'" : ""]><td>[misc[name]]</td><td>[name]</td><td>[isactive[name]]</td></tr>"
+			dat += "<tr[even ? " class='alt'" : ""]><td>[misc[name]]</td><td>[name]</td><td>[isactive[name]]</td><td>[isactiveooc[name]]</td></tr>"
 			even = !even
 	if(length(other) > 0)
-		dat += "<tr><th colspan=3>Other</th></tr>"
+		dat += "<tr><th colspan=4>Other</th></tr>"
 		for(var/name in other)
-			dat += "<tr[even ? " class='alt'" : ""]><td>[other[name]]</td><td>[name]</td><td>[isactive[name]]</td></tr>"
+			dat += "<tr[even ? " class='alt'" : ""]><td>[other[name]]</td><td>[name]</td><td>[isactive[name]]</td><td>[isactiveooc[name]]</td></tr>"
 			even = !even
 	// beno bois & gorls
 	if(length(xeno) > 0)
-		dat += "<tr><th colspan=3>Xenomorphs</th></tr>"
+		dat += "<tr><th colspan=4>Xenomorphs</th></tr>"
 		for(var/name in xeno)
-			dat += "<tr[even ? " class='alt'" : ""]><td>[xeno[name]]</td><td>[name]</td><td>[isactive[name]]</td></tr>"
+			dat += "<tr[even ? " class='alt'" : ""]><td>[xeno[name]]</td><td>[name]</td><td>[isactive[name]]</td><td>[isactiveooc[name]]</td></tr>"
 			even = !even
 
 	dat += "</table>"
@@ -293,8 +302,8 @@ GLOBAL_DATUM_INIT(datacore, /datum/datacore, new)
 	M.fields["alg_d"] = "No allergies have been detected in this patient."
 	M.fields["cdi"] = "None"
 	M.fields["cdi_d"] = "No diseases have been diagnosed at the moment."
-	M.fields["last_scan_time"] = null
-	M.fields["last_scan_result"] = "No scan data on record" // body scanner results
+	M.fields["historic_scan"] = null
+	M.fields["historic_scan_time"] = 0
 	M.fields["autodoc_data"] = list()
 	M.fields["autodoc_manual"] = list()
 	if(H.med_record)
@@ -368,9 +377,25 @@ GLOBAL_DATUM_INIT(datacore, /datum/datacore, new)
 	M.fields["alg_d"] = "No allergies have been detected in this patient."
 	M.fields["cdi"] = "None"
 	M.fields["cdi_d"] = "No diseases have been diagnosed at the moment."
-	M.fields["last_scan_time"] = 0
-	M.fields["last_scan_result"] = "No scan data on record"
+	M.fields["historic_scan"] = null
+	M.fields["historic_scan_time"] = 0
 	M.fields["autodoc_data"] = list()
 	M.fields["autodoc_manual"] = list()
 	GLOB.datacore.medical += M
 	return M
+
+/**
+ * Finds and returns the medical record of `human` using their `real_name`.
+ *
+ * Setting `allow_record_creation` to TRUE will allow creating and returning a
+ * fresh record datum if one can't be found. Otherwise, null will be returned
+ * if no record can be found and creation isn't allowed.
+ */
+/proc/find_medical_record(mob/living/carbon/human/human, allow_record_creation = FALSE)
+	var/datum/data/record/final_record
+	for(var/datum/data/record/candidate in GLOB.datacore.medical)
+		if(candidate.fields["name"] == human.real_name)
+			final_record = candidate
+	if(isnull(final_record) && allow_record_creation)
+		final_record = create_medical_record(human)
+	return final_record

@@ -89,13 +89,16 @@
 	if(!client)
 		return FALSE
 
+/// Updates the `health` variable and anything associated with it.
 /mob/living/proc/updatehealth()
+	SEND_SIGNAL(src, COMSIG_LIVING_UPDATE_HEALTH)
 	if(status_flags & GODMODE)
 		health = maxHealth
 		stat = CONSCIOUS
-		return
+		return FALSE
 	health = maxHealth - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss() - getCloneLoss()
 	update_stat()
+	return TRUE
 
 /mob/living/update_stat()
 	. = ..()
@@ -393,7 +396,7 @@
 		if(!(L.status_flags & CANPUSH))
 			return
 
-	if(ismovableatom(A))
+	if(ismovable(A))
 		if(isxeno(src) && ishuman(A))
 			var/mob/living/carbon/human/H = A
 			if(!COOLDOWN_FINISHED(H,  xeno_push_delay))
@@ -963,7 +966,7 @@ below 100 is not dizzy
 			wielded_item.unwield(src) //Get rid of it.
 	hand = !hand
 	SEND_SIGNAL(src, COMSIG_LIVING_SWAPPED_HANDS)
-	if(hud_used.l_hand_hud_object && hud_used.r_hand_hud_object)
+	if(hud_used?.l_hand_hud_object && hud_used?.r_hand_hud_object)
 		hud_used.l_hand_hud_object.update_icon()
 		hud_used.r_hand_hud_object.update_icon()
 	return

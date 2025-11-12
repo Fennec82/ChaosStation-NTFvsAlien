@@ -274,6 +274,27 @@
 	default_ammo = /datum/ammo/bullet/shotgun/flechette
 	caliber = CALIBER_12G
 
+/obj/item/ammo_magazine/handful/rubber_pellet
+	name = "handful of shotgun rubber pellet shells (12g)"
+	icon_state = "shotgun_flechette"
+	current_rounds = 5
+	default_ammo = /datum/ammo/bullet/shotgun/flechette/rubber
+	caliber = CALIBER_12G
+
+/obj/item/ammo_magazine/handful/tracker
+	name = "handful of shotgun tracker shells (12g)"
+	icon_state = "shotgun_flechette"
+	current_rounds = 5
+	default_ammo = /datum/ammo/bullet/shotgun/tracker
+	caliber = CALIBER_12G
+
+/obj/item/ammo_magazine/handful/beanbag
+	name = "handful of beanbag slugs (12g)"
+	icon_state = "beanbag_slug"
+	current_rounds = 5
+	default_ammo = /datum/ammo/bullet/shotgun/beanbag
+	caliber = CALIBER_12G
+
 /obj/item/ammo_magazine/handful/incendiary
 	name = "handful of shotgun incendiary shells (12g)"
 	icon_state = "incendiary_slug"
@@ -297,6 +318,7 @@
 
 /obj/item/ammo_magazine/handful/heavy_flechette
 	name = "handful of shotgun flechette shells (6g)"
+	icon = 'ntf_modular/icons/obj/items/ammo/handful.dmi'
 	icon_state = "heavy_shotgun_flechette"
 	current_rounds = 5
 	default_ammo = /datum/ammo/bullet/shotgun/heavy_flechette
@@ -616,7 +638,6 @@ Turn() or Shift() as there is virtually no overhead. ~N
 
 /obj/item/big_ammo_box/smg
 	name = "big ammo box (10x20mm)"
-	caliber = CALIBER_10X20
 	icon_state = "big_m25"
 	base_icon_state = "big_m25"
 	default_ammo = /datum/ammo/bullet/smg

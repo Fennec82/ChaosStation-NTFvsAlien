@@ -1,5 +1,5 @@
 /datum/outfit/job/npc/tgmc/squad_leader
-	name = "NPC TGMC squad leader"
+	name = "NPC NTF squad leader"
 	jobtype = /datum/job/terragov/squad/leader
 
 	id = /obj/item/card/id/dogtag
@@ -42,7 +42,7 @@
 	)
 
 /datum/outfit/job/npc/tgmc/smartgunner
-	name = "NPC TGMC smartgunner"
+	name = "NPC NTF smartgunner"
 	jobtype = /datum/job/terragov/squad/smartgunner
 
 	id = /obj/item/card/id/dogtag
@@ -91,7 +91,7 @@
 	)
 
 /datum/outfit/job/npc/tgmc/corpsman
-	name = "NPC TGMC Corpsman"
+	name = "NPC NTF Corpsman"
 	jobtype = /datum/job/terragov/squad/corpsman
 
 	id = /obj/item/card/id/dogtag
@@ -105,14 +105,14 @@
 	gloves = /obj/item/clothing/gloves/marine/black
 	l_pocket = /obj/item/storage/pouch/medkit/medic
 	r_pocket = /obj/item/storage/pouch/magazine/large
-	suit_store = /obj/item/weapon/gun/rifle/standard_carbine/npc
+	suit_store = /obj/item/weapon/gun/rifle/tx11/freelancerone
 	ears = /obj/item/radio/headset/mainship/marine
 	shoes = /obj/item/clothing/shoes/marine/full
 
 	backpack_contents = list(
 		/obj/item/storage/box/MRE = 1,
 		/obj/item/defibrillator = 1,
-		/obj/item/ammo_magazine/rifle/standard_carbine = 6,
+		/obj/item/ammo_magazine/rifle/tx11 = 6,
 		/obj/item/reagent_containers/hypospray/autoinjector/combat_advanced = 1,
 	)
 	suit_contents = list(
@@ -139,7 +139,7 @@
 		/obj/item/healthanalyzer = 1,
 	)
 	r_pocket_contents = list(
-		/obj/item/ammo_magazine/rifle/standard_carbine = 3,
+		/obj/item/ammo_magazine/rifle/tx11 = 3,
 	)
 	head_contents = list(
 		/obj/item/reagent_containers/hypospray/autoinjector/combat_advanced = 2,
@@ -153,7 +153,7 @@
 	)
 
 /datum/outfit/job/npc/tgmc/standard
-	name = "NPC TGMC standard"
+	name = "NPC NTF standard"
 	jobtype = /datum/job/terragov/squad/standard
 
 	id = /obj/item/card/id/dogtag
@@ -199,7 +199,7 @@
 	)
 
 /datum/outfit/job/npc/tgmc/standard/shotgunner
-	name = "NPC TGMC standard shotgunner"
+	name = "NPC NTF standard shotgunner"
 	jobtype = /datum/job/terragov/squad/standard
 
 	id = /obj/item/card/id/dogtag
@@ -251,7 +251,7 @@
 
 //
 /datum/outfit/job/npc/tgmc/squad_engineer
-	name = "NPC TGMC squad engineer"
+	name = "NPC NTF squad engineer"
 	jobtype = /datum/job/terragov/squad/engineer
 
 	id = /obj/item/card/id/dogtag
@@ -284,6 +284,6 @@
 	head_contents = list(/obj/item/reagent_containers/hypospray/autoinjector/combat_advanced = 2)
 	webbing_contents = list(
 		/obj/item/explosive/grenade/m15 = 2,
-		/obj/item/explosive/grenade/smokebomb/cloak = 1,
-		/obj/item/explosive/grenade/smokebomb/antigas = 2,
+		/obj/item/explosive/grenade/smokebomb/antigas = 1,
+		/obj/item/cell/high = 2,
 	)

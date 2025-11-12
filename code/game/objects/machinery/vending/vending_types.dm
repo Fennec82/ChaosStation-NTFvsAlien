@@ -175,7 +175,7 @@
 		"Hypospray" = list (
 			/obj/item/reagent_containers/hypospray/autoinjector/dexalinplus = 10,
 			/obj/item/reagent_containers/hypospray/autoinjector/sleeptoxin = 10,
-			/obj/item/reagent_containers/hypospray/advanced = 30,
+			/obj/item/reagent_containers/hypospray/advanced = 5,
 			/obj/item/reagent_containers/hypospray/advanced/bicaridine = 5,
 			/obj/item/reagent_containers/hypospray/advanced/kelotane = 5,
 			/obj/item/reagent_containers/hypospray/advanced/tramadol = 5,
@@ -220,18 +220,16 @@
 			/obj/item/tool/research/excavation_tool = -1,
 			/obj/item/storage/pouch/surgery = -1,
 			/obj/item/armor_module/storage/uniform/surgery_webbing = -1,
+			/obj/item/tweezers = 15,
+			/obj/item/clothing/ears/earmuffs = 5,
 			/obj/item/reagent_containers/spray/surgery = -1,
 			/obj/item/tool/soap = 3,
 			/obj/item/clothing/glasses/hud/health = 6,
 			/obj/item/roller = 6,
+			/obj/item/stack/nanopaste = 15,
 		),
 	)
 	idle_power_usage = 211
-
-/obj/machinery/vending/medical/som
-	name = "Stolen Medicament Vendor"
-	desc = "Medical Pharmaceutical dispenser. 'Provided' by Novamed Pharmaceuticals."
-	req_access = ACCESS_SOM_MEDICAL
 
 /obj/machinery/vending/medical/shipside
 	isshared = TRUE
@@ -300,6 +298,8 @@
 			/obj/item/tool/research/excavation_tool = -1,
 			/obj/item/storage/pouch/surgery = -1,
 			/obj/item/armor_module/storage/uniform/surgery_webbing = -1,
+			/obj/item/tweezers = -1,
+			/obj/item/clothing/ears/earmuffs = -1,
 			/obj/item/reagent_containers/spray/surgery = -1,
 			/obj/item/tool/soap = -1,
 			/obj/item/clothing/glasses/hud/health = -1,
@@ -370,6 +370,7 @@
 		/obj/item/stack/medical/heal_pack/ointment = 2,
 		/obj/item/healthanalyzer = 1,
 		/obj/item/stack/medical/splint = 1,
+		/obj/item/tweezers = 1,
 	)
 	mouse_over_pointer = MOUSE_HAND_POINTER
 
@@ -421,6 +422,7 @@
 			/obj/item/stack/medical/heal_pack/advanced/burn_pack = 5,
 			/obj/item/healthanalyzer = 1,
 			/obj/item/stack/medical/splint = 1,
+			/obj/item/tweezers = 1,
 		),
 	)
 
@@ -450,6 +452,7 @@
 			/obj/item/ammo_magazine/smg/standard_machinepistol = 40,
 			/obj/item/ammo_magazine/smg/standard_heavysmg = 40,
 			/obj/item/ammo_magazine/smg/standard_heavysmg/squashhead = 40,
+			/obj/item/ammo_magazine/smg/standard_heavysmg/rubber = 40,
 		),
 		"Marksman" = list(
 			/obj/item/ammo_magazine/rifle/standard_dmr = 30,
@@ -464,6 +467,8 @@
 			/obj/item/ammo_magazine/shotgun/buckshot = 16,
 			/obj/item/ammo_magazine/shotgun/flechette = 16,
 			/obj/item/ammo_magazine/shotgun/tracker = 16,
+			/obj/item/ammo_magazine/shotgun/beanbag = 16,
+			/obj/item/ammo_magazine/shotgun/rubber_pellet = 16,
 			/obj/item/ammo_magazine/rifle/tx15_flechette = 30,
 			/obj/item/ammo_magazine/rifle/tx15_slug = 30,
 		),
@@ -494,6 +499,7 @@
 			/obj/item/ammo_magazine/revolver/judge/buckshot = 0,
 			/obj/item/ammo_magazine/revolver/upp = 0,
 			/obj/item/ammo_magazine/rifle/mpi_km/plum = 0,
+			/obj/item/ammo_magazine/rifle/mpi_km/rubber = 0,
 			/obj/item/ammo_magazine/rifle/m16 = 0,
 			/obj/item/ammo_magazine/rifle/mkh = 0,
 			/obj/item/ammo_magazine/smg/ppsh = 0,
@@ -524,6 +530,7 @@
 		/obj/item/ammo_magazine/smg/standard_machinepistol = 80,
 		/obj/item/ammo_magazine/smg/standard_heavysmg = 80,
 		/obj/item/ammo_magazine/smg/standard_heavysmg/squashhead = 80,
+		/obj/item/ammo_magazine/smg/standard_heavysmg/rubber = 80,
 		/obj/item/ammo_magazine/rifle/standard_dmr = 60,
 		/obj/item/ammo_magazine/rifle/standard_br = 60,
 		/obj/item/ammo_magazine/rifle/chamberedrifle = 60,
@@ -534,6 +541,8 @@
 		/obj/item/ammo_magazine/shotgun/buckshot = 32,
 		/obj/item/ammo_magazine/shotgun/flechette = 32,
 		/obj/item/ammo_magazine/shotgun/tracker = 32,
+		/obj/item/ammo_magazine/shotgun/beanbag = 32,
+		/obj/item/ammo_magazine/shotgun/rubber_pellet = 32,
 		/obj/item/ammo_magazine/rifle/tx15_flechette = 60,
 		/obj/item/ammo_magazine/rifle/tx15_slug = 60,
 		/obj/item/ammo_magazine/standard_lmg = 60,
@@ -552,6 +561,7 @@
 		/obj/item/ammo_magazine/revolver/standard_magnum = 80,
 		/obj/item/ammo_magazine/revolver/upp = 80,
 		/obj/item/ammo_magazine/rifle/mpi_km/plum = 60,
+		/obj/item/ammo_magazine/rifle/mpi_km/rubber = 60,
 		/obj/item/ammo_magazine/rifle/m16 = 60,
 		/obj/item/ammo_magazine/rifle/mkh = 60,
 		/obj/item/ammo_magazine/smg/ppsh = 80,
@@ -584,7 +594,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/vending/nanoammo, (-26))
 		var/obj/item/storage/box/visual/magazine/ammo_box = I
 		for(var/mag in ammo_box.contents)
 			stock(mag, user, FALSE)
-		user?.balloon_alert(user, "The NanoAmmo organizes the contents of the [ammo_box.name].");
+		user?.balloon_alert(user, "contents organized")
 		return
 
 	else if(istype(I, /obj/item/shotgunbox))
@@ -596,7 +606,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/vending/nanoammo, (-26))
 					if(!stock(shotgun_shell_box, user, show_feedback = FALSE))
 						break
 					big_shotgun_box.current_rounds -= shotgun_shell_box.max_rounds
-				user?.balloon_alert(user, "The NanoAmmo organizes the [big_shotgun_box.ammo_type.name]s.");
+				user?.balloon_alert(user, "shells organized")
 				return
 
 	return ..()
@@ -615,7 +625,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/vending/nanoammo, (-26))
 			break
 		random_product = (random_product % product_records.len) + 1
 
-/obj/machinery/vending/nanoammo/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/machinery/vending/nanoammo/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage * xeno_attacker.xeno_melee_damage_modifier, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
 	. = ..()
 	if (.)	// The parent proc does not allow vending machines to take integrity damage from slashes due to not calling the grandparent proc
 		attack_generic(xeno_attacker, damage_amount, damage_type, armor_type, FALSE, armor_penetration)

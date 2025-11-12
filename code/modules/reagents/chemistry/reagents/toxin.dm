@@ -167,7 +167,7 @@
 	L.jitter(5)
 	if(prob(10) && !L.stat)
 		L.Unconscious(10 SECONDS)
-	L.setDrowsyness(max(L.drowsyness, 30))
+	L.drowsy(30)
 
 //Reagents used for plant fertilizers.
 /datum/reagent/toxin/fertilizer
@@ -236,10 +236,10 @@
 			if(prob(10))
 				L.emote("yawn")
 				L.KnockdownNoChain(10 SECONDS)
-			L.drowsyness = max(L.drowsyness, 20)
+			L.drowsy(20)
 		if(11 to 80)
 			L.Sleeping(30 SECONDS) //previously knockdown, no good for a soporific.
-			L.drowsyness = max(L.drowsyness, 30)
+			L.drowsy(30)
 		if(81 to INFINITY)
 			L.adjustDrowsyness(2)
 	L.reagent_pain_modifier += PAIN_REDUCTION_HEAVY
@@ -466,8 +466,10 @@
 	var/neuro_stun_cd = 0
 
 /datum/reagent/toxin/xeno_neurotoxin/on_mob_life(mob/living/L, metabolism)
-	var/power
-	switch(current_cycle)
+	var/power = 0
+	var/crit_threshold = L.get_crit_threshold()
+	var/healthfactor = (L.health - crit_threshold)/(L.getMaxHealth() - crit_threshold)
+	switch(current_cycle * healthfactor)
 		if(1 to 20)
 			power = (2*effect_str) //While stamina loss is going, stamina regen apparently doesn't happen, so I can keep this smaller.
 			L.reagent_pain_modifier -= PAIN_REDUCTION_LIGHT
@@ -480,10 +482,11 @@
 			L.reagent_pain_modifier -= PAIN_REDUCTION_VERY_HEAVY
 			L.jitter(8) //Shows that things are *really* bad
 
+	power *= healthfactor
 	var/stamina_loss_limit = L.maxHealth * 2
 	var/applied_damage = clamp(power, 0, (stamina_loss_limit - L.getStaminaLoss()))
 	var/damage_overflow = power - applied_damage
-	if(damage_overflow && COOLDOWN_FINISHED(src, neuro_stun_cd))
+	if((damage_overflow > 0) && COOLDOWN_FINISHED(src, neuro_stun_cd))
 		L.adjustStaminaLoss(power)
 		COOLDOWN_START(src, neuro_stun_cd, 5 MINUTES) //only do the hard stun once every five minutes, unless the reagent is cleared completely
 	else
@@ -501,18 +504,22 @@
 	*/
 	L.set_timed_status_effect(2 SECONDS, /datum/status_effect/speech/stutter, only_if_higher = TRUE)
 
-	var/excess_volume = max(0,volume-20)
-	if(excess_volume && (L.incapacitated(TRUE) || HAS_TRAIT(L, TRAIT_FLOORED))) //includes paralyzed, nested, resting
-		custom_metabolism = initial(custom_metabolism) * (1 + (excess_volume/20)) //normal speed below 20 units, double speed at 40 units, triple at 60, etc
+	if(L.incapacitated(TRUE) || HAS_TRAIT(L, TRAIT_FLOORED)) //includes paralyzed, nested, resting
+		custom_metabolism = initial(custom_metabolism) * (1 + (volume/20)) //double speed at 20 units, triple at 40 units, quadruple at 60, etc
 	else
 		custom_metabolism = initial(custom_metabolism)
+
+	if(L.reagents.get_reagent_amount(/datum/reagent/medicine/dylovene) > 1)
+		custom_metabolism += 5
+	if(L.reagents.get_reagent_amount(/datum/reagent/hypervene) > 1)
+		custom_metabolism += 5
 
 	if(current_cycle < 21) //Additional effects at higher cycles
 		return ..()
 
 	L.adjust_drugginess(1.1) //Move this to stage 2 and 3 so it's not so obnoxious
 
-	if(L.eye_blurry < 30) //So we don't have the visual acuity of Mister Magoo forever
+	if(L.get_blurriness() < 30) //So we don't have the visual acuity of Mister Magoo forever
 		L.adjust_blurriness(1.3)
 
 	return ..()
@@ -773,7 +780,7 @@
 	playsound(usr.loc, "sound/effects/splat.ogg", 30)
 	debuff_owner.reagents.remove_reagent(/datum/reagent/toxin/xeno_aphrotoxin, 10)
 	debuff_owner.reagents.remove_reagent(/datum/reagent/consumable/larvajelly, 3)
-	debuff_owner.sexcon.ejaculate()
+	debuff_owner.sexcon.ejaculate(debuff_owner)
 	if(debuff_owner.getStaminaLoss() > 120)
 		if(prob(5))
 			debuff_owner.visible_message(span_warning("[debuff_owner] manages to black out from cumming too hard..."), 4)
@@ -821,6 +828,11 @@
 	overdose_threshold = 20
 	overdose_crit_threshold = 50
 	reagent_ui_priority = REAGENT_UI_IMMEDIATE
+
+/datum/reagent/zombium/on_mob_life(mob/living/L, metabolism)
+	. = ..()
+	if(prob(10))
+		L.emote("cough")
 
 /datum/reagent/zombium/on_overdose_start(mob/living/L, metabolism)
 	RegisterSignal(L, COMSIG_HUMAN_SET_UNDEFIBBABLE, PROC_REF(zombify))
@@ -889,7 +901,7 @@
 		if(prob(min(current_cycle - 5,30)))
 			L.emote("me", 1, "gasps for air!")
 			L.Losebreath(4)
-		if(L.eye_blurry < 30)
+		if(L.get_blurriness() < 30)
 			L.adjust_blurriness(1.3)
 	else
 		L.adjustStaminaLoss(0.5*effect_str)

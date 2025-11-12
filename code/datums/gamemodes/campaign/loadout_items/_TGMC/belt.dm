@@ -28,7 +28,7 @@
 
 /datum/loadout_item/belt/ammo_belt
 	name = "Ammo belt"
-	desc = "The M276 is the standard load-bearing equipment of the TGMC. It consists of a modular belt with various clips. This version is the standard variant designed for bulk ammunition-carrying operations."
+	desc = "The M276 is the standard load-bearing equipment of the NTF. It consists of a modular belt with various clips. This version is the standard variant designed for bulk ammunition-carrying operations."
 	item_typepath = /obj/item/storage/belt/marine
 	jobs_supported = list(SQUAD_MARINE, SQUAD_ENGINEER, SQUAD_SMARTGUNNER, SQUAD_LEADER, FIELD_COMMANDER)
 	loadout_item_flags = LOADOUT_ITEM_ROUNDSTART_OPTION|LOADOUT_ITEM_DEFAULT_CHOICE
@@ -62,10 +62,14 @@
 	desc = "An ammunition belt designed to hold shotgun shells or individual bullets. Loaded full of buckshot and flechette shells."
 	item_typepath = /obj/item/storage/belt/shotgun/mixed
 	jobs_supported = list(SQUAD_MARINE)
+	item_whitelist = list(
+		/obj/item/weapon/gun/shotgun/pump/t35/standard = ITEM_SLOT_SUITSTORE,
+		/obj/item/weapon/gun/shotgun/pump/t35/back_slot = ITEM_SLOT_BACK,
+	)
 
 /datum/loadout_item/belt/smg_holster
 	name = "SMG-25 holster"
-	desc = "The M276 is the standard load-bearing equipment of the TGMC. It consists of a modular belt with various clips. \
+	desc = "The M276 is the standard load-bearing equipment of the NTF. It consists of a modular belt with various clips. \
 	This version is designed for the SMG-25, and features a larger frame to support the gun. Due to its unorthodox design, it isn't a very common sight, and is only specially issued."
 	ui_icon = "m25"
 	req_desc = "Requires a SMG-25 secondary."
@@ -133,7 +137,7 @@
 
 /datum/loadout_item/belt/lifesaver
 	name = "Lifesaver bag"
-	desc = "The M276 is the standard load-bearing equipment of the TGMC. This configuration mounts a duffel bag filled with a range of injectors and light medical supplies and is common among medics."
+	desc = "The M276 is the standard load-bearing equipment of the NTF. This configuration mounts a duffel bag filled with a range of injectors and light medical supplies and is common among medics."
 	ui_icon = "medkit"
 	item_typepath = /obj/item/storage/belt/lifesaver/quick
 	jobs_supported = list(SQUAD_CORPSMAN)

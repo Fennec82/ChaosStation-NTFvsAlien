@@ -19,12 +19,12 @@
 	icon_state = "apc"
 
 
-/obj/item/storage/box/ntc_mre
+/obj/item/storage/box/tgmc_mre
 	name = "\improper NTC meal ready to eat"
 	desc = "<B>Instructions:</B> Extract food using maximum firepower. Eat.\n\nOn the box is a picture of a shouting Squad Leader. \n\"YOU WILL EAT YOUR NUTRIENT GOO AND YOU WILL ENJOY IT, MAGGOT.\""
 	icon_state = "mre1"
 
-/obj/item/storage/box/ntc_mre/Initialize(mapload, ...)
+/obj/item/storage/box/tgmc_mre/Initialize(mapload, ...)
 	. = ..()
 	pixel_y = rand(-3,3)
 	pixel_x = rand(-3,3)
@@ -337,17 +337,21 @@
 	desc = "A small compass that can tell you your coordinates on use."
 	icon_state = "compass"
 	w_class = WEIGHT_CLASS_TINY
+	///last turf found by the compass
+	var/turf/target_turf
 
 /obj/item/compass/attack_self(mob/living/user)
 	. = ..()
-	var/turf/location = get_turf(src)
-	to_chat(user, span_notice("After looking at the [src] you can tell your general coordinates.") + span_bold(" LONGITUDE [location.x]. LATITUDE [location.y]."))
+	target_turf = get_turf(src)
+	to_chat(user, span_notice("After looking at the [src] you can tell your general coordinates.") + span_bold(" LONGITUDE [target_turf.x]. LATITUDE [target_turf.y]."))
 
 /obj/item/compass/afterattack(atom/target, mob/user, has_proximity, click_parameters)
 	. = ..()
 	if(user.do_actions)
 		return
-	var/turf/target_turf = isturf(target)? target : get_turf(target)
+	if(istype(target, /obj/machinery/deployable/mortar))
+		return
 	if(!do_after(user, 1 SECONDS))
 		return
+	target_turf = isturf(target)? target : get_turf(target)
 	to_chat(user, span_notice("Given your current position, target coordinates are:") + span_bold(" LONGITUDE [target_turf.x]. LATITUDE [target_turf.y]."))

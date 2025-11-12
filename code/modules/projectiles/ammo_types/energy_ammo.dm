@@ -38,6 +38,7 @@
 	max_range = 15
 	accurate_range = 10
 	bullet_color = COLOR_VIVID_YELLOW
+	plasma_drain = 3
 
 /datum/ammo/energy/taser/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
 	staggerstun(target_mob, proj, stun = 20 SECONDS)
@@ -107,7 +108,7 @@
 	proj.proj_max_range -= 2
 
 /datum/ammo/energy/bfg/on_hit_turf(turf/target_turf, atom/movable/projectile/proj)
-	proj.proj_max_range -= 2
+	proj.proj_max_range -= 10
 
 /datum/ammo/energy/bfg/drop_nade(turf/T)
 	explosion(T, 0, 0, 4, 0, 0, explosion_cause=src)
@@ -146,8 +147,7 @@
 	damage = 20
 	penetration = 10
 	max_range = 30
-	accuracy_var_low = 3
-	accuracy_var_high = 3
+	accuracy_variation = 3
 	sundering = 2.5
 
 /datum/ammo/energy/lasgun/M43
@@ -178,8 +178,7 @@
 	bonus_projectiles_type = /datum/ammo/energy/lasgun/M43/spread
 	bonus_projectiles_amount = 2
 	bonus_projectiles_scatter = 10
-	accuracy_var_low = 9
-	accuracy_var_high = 9
+	accuracy_variation = 9
 	accurate_range = 5
 	max_range = 5
 	damage = 42
@@ -191,8 +190,7 @@
 	name = "additional laser blast"
 	icon_state = "laser2"
 	shell_speed = 2
-	accuracy_var_low = 9
-	accuracy_var_high = 9
+	accuracy_variation = 9
 	accurate_range = 5
 	max_range = 5
 	damage = 35
@@ -207,6 +205,7 @@
 	penetration = 0
 	damage_type = STAMINA
 	bullet_color = COLOR_DISABLER_BLUE
+	plasma_drain = 12
 
 /datum/ammo/energy/lasgun/M43/disabler/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
 	staggerstun(target_mob, proj, stagger = 1 SECONDS, slowdown = 0.75)
@@ -230,6 +229,7 @@
 	damage_type = STAMINA
 	ammo_behavior_flags = AMMO_ENERGY
 	bullet_color = COLOR_DISABLER_BLUE
+	plasma_drain = 12
 
 /datum/ammo/energy/lasgun/M43/practice/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
 	if(ishuman(target_mob))
@@ -271,15 +271,10 @@
 	hitscan_effect_icon = "blue_beam"
 	bullet_color = COLOR_DISABLER_BLUE
 	///plasma drained per hit
-	var/plasma_drain = 25
+	plasma_drain = 25
 
 /datum/ammo/energy/lasgun/marine/weakening/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
 	staggerstun(target_mob, proj, max_range = 6, slowdown = 1)
-
-	if(!isxeno(target_mob))
-		return
-	var/mob/living/carbon/xenomorph/xeno_victim = target_mob
-	xeno_victim.use_plasma(plasma_drain * xeno_victim.xeno_caste.plasma_regen_limit)
 
 /datum/ammo/energy/lasgun/marine/microwave
 	name = "microwave laser bolt"
@@ -312,8 +307,7 @@
 	bonus_projectiles_type = /datum/ammo/energy/lasgun/marine/blast/spread
 	bonus_projectiles_amount = 2
 	bonus_projectiles_scatter = 10
-	accuracy_var_low = 9
-	accuracy_var_high = 9
+	accuracy_variation = 9
 	accurate_range = 3
 	max_range = 8
 	damage = 35
@@ -501,6 +495,7 @@
 	damage_type = STAMINA
 	hitscan_effect_icon = "beam_stun"
 	bullet_color = LIGHT_COLOR_YELLOW
+	plasma_drain = 18
 
 /datum/ammo/energy/lasgun/marine/pistol/heat
 	name = "microwave heat bolt"
@@ -517,7 +512,7 @@
 /datum/ammo/energy/lasgun/pistol/disabler/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
 	staggerstun(target_mob, proj, stagger = 1 SECONDS, slowdown = 0.75)
 
-/datum/ammo/energy/lasgun/marine/xray
+/datum/ammo/energy/lasgun/marine/incendiary
 	name = "xray heat bolt"
 	hud_state = "laser_heat"
 	icon_state = "u_laser"
@@ -528,7 +523,7 @@
 	max_range = 15
 	hitscan_effect_icon = "u_laser_beam"
 
-/datum/ammo/energy/lasgun/marine/xray/piercing
+/datum/ammo/energy/lasgun/marine/xray
 	name = "xray piercing bolt"
 	hud_state = "laser_xray"
 	icon_state = "xray"
@@ -537,6 +532,16 @@
 	penetration = 100
 	max_range = 10
 	hitscan_effect_icon = "xray_beam"
+	on_pierce_multiplier = 0.9
+
+/datum/ammo/energy/lasgun/marine/xray/on_hit_turf(turf/target_turf, atom/movable/projectile/proj)
+	proj.proj_max_range -= 2
+
+/datum/ammo/energy/lasgun/marine/xray/on_hit_mob(turf/target_turf, atom/movable/projectile/proj)
+	proj.proj_max_range--
+
+/datum/ammo/energy/lasgun/marine/xray/on_hit_obj(obj/target_obj, atom/movable/projectile/proj)
+	proj.proj_max_range--
 
 /datum/ammo/energy/lasgun/marine/heavy_laser
 	ammo_behavior_flags = AMMO_TARGET_TURF|AMMO_BETTER_COVER_RNG|AMMO_ENERGY|AMMO_HITSCAN|AMMO_INCENDIARY
@@ -762,8 +767,7 @@
 	damage = 40
 	penetration = 15
 	max_range = 30
-	accuracy_var_low = 3
-	accuracy_var_high = 3
+	accuracy_variation = 3
 
 /datum/ammo/energy/plasma_pistol
 	name = "ionized plasma bolt"

@@ -111,16 +111,16 @@ EXPLOSIVES
 	cost = 500
 
 /datum/supply_packs/explosives/explosives_sleep
-	name = "NT-1 Knock-out smoke grenades"
-	notes = "Contains 2 grenades"
+	name = "NT-1 Knock-out smoke grenade box"
+	notes = "Contains 25 grenades"
 	contains = list(
 		/obj/item/storage/box/visual/grenade/sleep,
 	)
 	cost = 400
 
 /datum/supply_packs/explosives/explosives_aphrotoxin
-	name = "NT-2 Aphrotoxin gas grenades"
-	notes = "Contains 2 grenades"
+	name = "NT-2 Aphrotoxin gas grenade box"
+	notes = "Contains 25 grenades"
 	contains = list(
 		/obj/item/storage/box/visual/grenade/aphrotoxin,
 	)
@@ -142,6 +142,12 @@ EXPLOSIVES
 	contains = list(/obj/item/explosive/plastique/genghis_charge)
 	cost = 150
 	available_against_xeno_only = TRUE
+
+/datum/supply_packs/explosives/flares_cas
+	name = "M50 CFDP signal flare pack"
+	notes = "Contains 14 flares"
+	contains = list(/obj/item/storage/box/m94/cas)
+	cost = 50
 
 /datum/supply_packs/explosives/detpack
 	name = "detpack explosive"
@@ -173,16 +179,6 @@ EXPLOSIVES
 	name = "T-50S mortar smoke shell (x2)"
 	contains = list(/obj/item/mortal_shell/smoke, /obj/item/mortal_shell/smoke)
 	cost = 5
-
-/datum/supply_packs/explosives/mortar_ammo_satrepine
-	name = "T-50S mortar satrepine smoke shell (x2)"
-	contains = list(/obj/item/mortal_shell/smoke/satrapine, /obj/item/mortal_shell/smoke/satrapine)
-	cost = 15
-
-/datum/supply_packs/explosives/mortar_ammo_sleep
-	name = "T-50S mortar sleep smoke shell (x2)"
-	contains = list(/obj/item/mortal_shell/smoke/sleep, /obj/item/mortal_shell/smoke/sleep)
-	cost = 25
 
 /datum/supply_packs/explosives/mortar_ammo_plasmaloss
 	name = "T-50S mortar tanglefoot shell"

@@ -2,6 +2,8 @@
 #define MINE_VEHICLE_ONLY (1<<1)
 #define MINE_LIVING_OR_VEHICLE MINE_LIVING_ONLY|MINE_VEHICLE_ONLY
 
+#define MINE_ALT_APPEARANCE_KEY "mine_alt_appearance_key"
+
 /**
 Mines
 
@@ -64,11 +66,12 @@ Stepping directly on the mine will also blow it up
 
 /// attack_self is used to arm the mine
 /obj/item/explosive/mine/attack_self(mob/living/user)
-	if(!user.loc || user.loc.density)
+	var/turf/turf_loc = user.loc
+	if(!istype(turf_loc) || turf_loc.density)
 		to_chat(user, span_warning("You can't plant a mine here."))
 		return
 
-	if(locate(/obj/item/explosive/mine) in get_turf(src))
+	if(locate(/obj/item/explosive/mine) in turf_loc)
 		to_chat(user, span_warning("There already is a mine at this position!"))
 		return
 
@@ -99,6 +102,16 @@ Stepping directly on the mine will also blow it up
 	tripwire = new /obj/effect/mine_tripwire(get_step(loc, dir))
 	tripwire.linked_mine = src
 
+	var/image/alt_image = image(icon, src, "[initial(icon_state)]_friendly")
+	alt_image.appearance_flags = RESET_ALPHA|RESET_COLOR
+	var/list/friendly_factions = list()
+	for(var/faction in GLOB.faction_to_iff)
+		if(GLOB.faction_to_iff[faction] != iff_signal)
+			continue
+		friendly_factions += faction
+
+	add_alt_appearance(/datum/atom_hud/alternate_appearance/basic/multi_faction, MINE_ALT_APPEARANCE_KEY, alt_image, friendly_factions)
+
 /// Supports diarming a mine
 /obj/item/explosive/mine/attackby(obj/item/I, mob/user, params)
 	. = ..()
@@ -121,6 +134,7 @@ Stepping directly on the mine will also blow it up
 	anchored = FALSE
 	armed = FALSE
 	update_icon()
+	remove_alt_appearance(MINE_ALT_APPEARANCE_KEY)
 	QDEL_NULL(tripwire)
 
 //Mine can also be triggered if you "cross right in front of it" (same tile)
@@ -170,7 +184,7 @@ Stepping directly on the mine will also blow it up
 	return TRUE
 
 /// Alien attacks trigger the explosive to instantly detonate
-/obj/item/explosive/mine/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/item/explosive/mine/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage * xeno_attacker.xeno_melee_damage_modifier, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return FALSE
 	if(triggered) //Mine is already set to go off

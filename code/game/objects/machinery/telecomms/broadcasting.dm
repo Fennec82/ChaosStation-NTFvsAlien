@@ -134,6 +134,7 @@
 	copy.levels = levels
 	return copy
 
+GLOBAL_VAR_INIT(null_in_hearers_cooldown, 0)
 
 /// This is the meat function for making radios hear vocal transmissions.
 /datum/signal/subspace/vocal/broadcast()
@@ -196,6 +197,7 @@
 	for(var/atom/movable/hearer as anything in receive)
 		if(!hearer)
 			stack_trace("null found in the hearers list returned by the spatial grid. this is bad")
+			COOLDOWN_START(GLOB, null_in_hearers_cooldown, 5 MINUTES)
 			continue
 		hearer.Hear(rendered, virt, language, message, frequency, spans)
 
@@ -214,10 +216,6 @@
 	var/lang_name = data["language"]
 	var/log_text = "\[[get_radio_name(frequency)]\] [spans_part]\"[message]\" (language: [lang_name])"
 
-	var/mob/source_mob = virt.source
-	if(ismob(source_mob))
-		source_mob.log_message(log_text, LOG_TELECOMMS)
-	else
-		log_telecomms("[virt.source] [log_text] [loc_name(get_turf(virt.source))]")
+	virt.source.log_message(log_text, LOG_TELECOMMS)
 
 	QDEL_IN(virt, 50)  // Make extra sure the virtualspeaker gets qdeleted

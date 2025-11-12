@@ -46,22 +46,6 @@ You should not be voluntarily leaving your base under any circumstances. You are
 If you require any help, use <b>Mentorhelp</b> to ask mentors about what you're supposed to do.
 Godspeed, Commander! And remember, you are not above the law."}
 
-/datum/outfit/job/som/command/commander
-	name = SOM_COMMANDER
-	jobtype = /datum/job/som/command/commander
-
-	id = /obj/item/card/id/gold
-	ears = /obj/item/radio/headset/mainship/mcom/som
-	belt = /obj/item/storage/holster/belt/mateba/officer/full
-	w_uniform = /obj/item/clothing/under/som/officer/senior
-	shoes = /obj/item/clothing/shoes/marine/som/knife
-	gloves = /obj/item/clothing/gloves/marine/techofficer/captain
-	r_pocket = /obj/item/storage/pouch/general/large/command
-
-/datum/outfit/job/som/command/commander/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
-	. = ..()
-	H.equip_to_slot_or_del(new /obj/item/binoculars/fire_support/campaign/som, SLOT_IN_R_POUCH)
-
 /datum/job/som/command/commander/after_spawn(mob/living/new_mob, mob/user, latejoin)
 	. = ..()
 	if(!ishuman(new_mob))
@@ -134,34 +118,6 @@ Make the SOM proud!"}
 		if(30001 to INFINITY) // 500 hrs
 			new_human.wear_id.paygrade = "SOM_O7"
 
-/datum/outfit/job/som/command/fieldcommander
-	name = SOM_FIELD_COMMANDER
-	jobtype = /datum/job/som/command/fieldcommander
-
-	id = /obj/item/card/id/dogtag/fc
-	ears = /obj/item/radio/headset/mainship/mcom/som
-	head = /obj/item/clothing/head/modular/som/leader
-	mask = /obj/item/clothing/mask/gas
-	w_uniform = /obj/item/clothing/under/som/officer/senior
-	wear_suit = /obj/item/clothing/suit/modular/som/heavy/leader/officer
-	shoes = /obj/item/clothing/shoes/marine/som/knife
-	r_pocket = /obj/item/storage/pouch/general/large/command
-	gloves = /obj/item/clothing/gloves/marine/officer
-	belt = /obj/item/storage/holster/belt/pistol/m4a3/fieldcommander
-	glasses = /obj/item/clothing/glasses/hud/health
-	l_pocket = /obj/item/storage/pouch/grenade/som/combat_patrol
-	back = /obj/item/storage/backpack/satchel/som
-
-/datum/outfit/job/som/command/fieldcommander/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
-	. = ..()
-	H.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/russian_red, SLOT_IN_HEAD)
-	H.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/combat_advanced, SLOT_IN_HEAD)
-	H.equip_to_slot_or_del(new /obj/item/stack/medical/heal_pack/gauze, SLOT_IN_SUIT)
-	H.equip_to_slot_or_del(new /obj/item/stack/medical/heal_pack/ointment, SLOT_IN_SUIT)
-	H.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/isotonic, SLOT_IN_SUIT)
-	H.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/quickclot, SLOT_IN_SUIT)
-	H.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/dylovene, SLOT_IN_SUIT)
-
 //Staff Officer
 /datum/job/som/command/staffofficer
 	title = SOM_STAFF_OFFICER
@@ -212,24 +168,14 @@ You are in charge of logistics and the overwatch system. You are also in line to
 		if(30001 to INFINITY) // 500 hrs
 			new_human.wear_id.paygrade = "SOM_O4"
 
-/datum/outfit/job/som/command/staffofficer
-	name = SOM_STAFF_OFFICER
-	jobtype = /datum/job/som/command/staffofficer
-
-	id = /obj/item/card/id/silver
-	ears = /obj/item/radio/headset/mainship/mcom/som
-	w_uniform = /obj/item/clothing/under/som/officer
-	shoes = /obj/item/clothing/shoes/marine/som/knife
-	r_pocket = /obj/item/storage/pouch/general/large
-	l_pocket = /obj/item/binoculars/tactical
 //Pilot Officer
 /datum/job/som/command/pilot
 	title = SOM_PILOT_OFFICER
 	paygrade = "SOM_W2"
 	comm_title = "PO"
-	total_positions = 2
-	access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_COMMAND,ACCESS_SOM_ENGINEERING,ACCESS_MARINE_ENGINEERING, ACCESS_SOM_REQUESITIONS, ACCESS_SOM_TADPOLE)
-	minimal_access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_COMMAND,ACCESS_SOM_ENGINEERING,ACCESS_MARINE_ENGINEERING, ACCESS_SOM_REQUESITIONS, ACCESS_SOM_TADPOLE)
+	total_positions = 1
+	access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_COMMAND,ACCESS_SOM_ENGINEERING,ACCESS_MARINE_ENGINEERING, ACCESS_SOM_REQUESITIONS, ACCESS_SOM_TADPOLE, ACCESS_MARINE_PILOT)
+	minimal_access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_COMMAND,ACCESS_SOM_ENGINEERING,ACCESS_MARINE_ENGINEERING, ACCESS_SOM_REQUESITIONS, ACCESS_SOM_TADPOLE, ACCESS_MARINE_PILOT)
 	skills_type = /datum/skills/pilot
 	display_order = JOB_DISPLAY_ORDER_PILOT_OFFICER
 	outfit = /datum/outfit/job/som/command/pilot
@@ -270,22 +216,6 @@ You are in charge of logistics and the overwatch system. You are also in line to
 	. += {"Your job is to support marines with either close air support via the Condor, or mobile dropship support with the Tadpole.\
 While you are in charge of all aerial crafts the Alamo does not require supervision outside of turning automatic mode on or off at crucial times, and you are expected to choose between the Condor and Tadpole.
 Though you are a warrant officer, your authority is limited to the dropship and your chosen aerial craft, where you have authority over the enlisted personnel."}
-
-/datum/outfit/job/som/command/pilot
-	name = SOM_PILOT_OFFICER
-	jobtype = /datum/job/som/command/pilot
-
-	id = /obj/item/card/id/silver
-	belt = /obj/item/storage/holster/belt/pistol/m4a3/vp70
-	ears = /obj/item/radio/headset/mainship/mcom/som
-	w_uniform = /obj/item/clothing/under/marine/officer/pilot
-	wear_suit = /obj/item/clothing/suit/storage/marine/pilot
-	shoes = /obj/item/clothing/shoes/marine/som/knife
-	gloves = /obj/item/clothing/gloves/insulated
-	glasses = /obj/item/clothing/glasses/sunglasses/aviator
-	head = /obj/item/clothing/head/helmet/marine/pilot
-	r_pocket = /obj/item/storage/pouch/general/large
-	l_pocket = /obj/item/hud_tablet/pilot
 
 //Mech pilot
 /datum/job/som/command/mech_pilot
@@ -337,19 +267,56 @@ You can serve your Division in a variety of roles, so choose carefully."}
 		if(30001 to INFINITY) // 500 hrs
 			new_human.wear_id.paygrade = "SOM_W5"
 
-/datum/outfit/job/som/command/mech_pilot
-	name = SOM_MECH_PILOT
-	jobtype = /datum/job/som/command/mech_pilot
+/datum/job/som/command/assault_crewman
+	title = SOM_ASSAULT_CREWMAN
+	req_admin_notify = TRUE
+	paygrade = "SOM_W3"
+	comm_title = "AC"
+	total_positions = 2
+	skills_type = /datum/skills/assault_crewman
+	access = list(ACCESS_SOM_DEFAULT, ACCESS_SOM_ENGINEERING, ACCESS_MARINE_ENGINEERING, ACCESS_SOM_REQUESITIONS, ACCESS_SOM_TADPOLE, ACCESS_SOM_ASSAULT)
+	minimal_access = list(ACCESS_SOM_DEFAULT, ACCESS_SOM_ENGINEERING, ACCESS_MARINE_ENGINEERING, ACCESS_SOM_REQUESITIONS, ACCESS_SOM_TADPOLE, ACCESS_SOM_ASSAULT)
+	display_order = JOB_DISPLAY_ORDER_MECH_PILOT
+	outfit = /datum/outfit/job/som/command/assault_crewman
+	exp_requirements = XP_REQ_EXPERT
+	exp_type = EXP_TYPE_REGULAR_ALL
+	job_flags = JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_ADDTOMANIFEST|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_CAN_SEE_ORDERS|JOB_FLAG_ALWAYS_VISIBLE_ON_MINIMAP
+	jobworth = list(
+		/datum/job/xenomorph = LARVA_POINTS_REGULAR,
+		/datum/job/terragov/squad/smartgunner = SMARTIE_POINTS_REGULAR,
+	)
+	html_description = {"
+		<b>Difficulty</b>:Very Hard<br /><br />
+		<b>You answer to the</b> acting Command Staff<br /><br />
+		<b>Unlock Requirement</b>: Starting Role<br /><br />
+		<b>Gamemode Availability</b>: Nuclear War<br /><br /><br />
+		<b>Duty</b>: Provide heavy fire support
+	"}
+	minimap_icon = "assault_crew"
 
-	id = /obj/item/card/id/dogtag
-	belt = /obj/item/storage/belt/utility/full
-	glasses = /obj/item/clothing/glasses/welding
-	ears = /obj/item/radio/headset/mainship/mcom/som
-	w_uniform = /obj/item/clothing/under/marine/officer/mech
-	wear_suit = /obj/item/clothing/suit/storage/marine/mech_pilot
-	head = /obj/item/clothing/head/helmet/marine/mech_pilot
-	shoes = /obj/item/clothing/shoes/marine/som/knife
-	gloves = /obj/item/clothing/gloves/marine
+/datum/job/som/command/assault_crewman/get_spawn_message_information(mob/M)
+	. = ..()
+	. += separator_hr("[span_role_header("<b>[title] Information</b>")]")
+	. += "You are an Assault Crewman. You operate SOM's armored assault vehicles along with your partner, and in some cases a \"willing\" loader. Make sure that you work as a team to advance the front!"
+
+/datum/job/som/command/assault_crewman/after_spawn(mob/living/carbon/new_mob, mob/user, latejoin = FALSE)
+	. = ..()
+	if(!ishuman(new_mob))
+		return
+	var/mob/living/carbon/human/new_human = new_mob
+	var/playtime_mins = user?.client?.get_exp(title)
+	if(!playtime_mins || playtime_mins < 1 )
+		return
+	switch(playtime_mins)
+		if(0 to 1500) // starting
+			new_human.wear_id.paygrade = "SOM_W3"
+		if(1501 to 6000) // 25 hrs
+			new_human.wear_id.paygrade = "SOM_W4"
+		if(6001 to 18000) // 100 hrs
+			new_human.wear_id.paygrade = "SOM_W5"
+		if(18001 to INFINITY) // 300 hrs
+			new_human.wear_id.paygrade = "SOM_W6"
+	new_human.wear_id.update_label()
 
 /datum/job/som/engineering
 	job_category = JOB_CAT_ENGINEERINGSOM
@@ -408,29 +375,6 @@ You can serve your Division in a variety of roles, so choose carefully."}
 If you have no idea how to set up the engine, or it's your first time, <b>Mentorhelp</b> so that a Mentor can assist you.
 You are also next in the chain of command, should the bridge crew fall in the line of duty."}
 
-/datum/outfit/job/som/engineering/chief
-	name = SOM_CHIEF_ENGINEER
-	jobtype = /datum/job/som/engineering/chief
-
-	id = /obj/item/card/id/silver
-	belt = /obj/item/storage/belt/utility/full
-	ears = /obj/item/radio/headset/mainship/mcom/som
-	w_uniform = /obj/item/clothing/under/marine/officer/ce
-	wear_suit = /obj/item/clothing/suit/storage/marine/officer/req
-	shoes = /obj/item/clothing/shoes/marine/som/knife
-	glasses = /obj/item/clothing/glasses/welding/superior
-	gloves = /obj/item/clothing/gloves/insulated
-	head = /obj/item/clothing/head/beret/marine/techofficer
-	r_pocket = /obj/item/storage/pouch/construction
-	back = /obj/item/storage/backpack/marine/engineerpack
-
-/datum/outfit/job/som/engineering/chief/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
-	. = ..()
-	H.equip_to_slot_or_del(new /obj/item/stack/sheet/metal/large_stack, SLOT_IN_R_POUCH)
-	H.equip_to_slot_or_del(new /obj/item/stack/sheet/plasteel/large_stack, SLOT_IN_R_POUCH)
-	H.equip_to_slot_or_del(new /obj/item/stack/sandbags/large_stack, SLOT_IN_R_POUCH)
-	H.equip_to_slot_or_del(new /obj/item/stack/barbed_wire/full, SLOT_IN_R_POUCH)
-
 //Ship Engineer
 /datum/job/som/engineering/tech
 	title = SOM_TECH
@@ -477,27 +421,11 @@ You are also next in the chain of command, should the bridge crew fall in the li
 	. += separator_hr("[span_role_header("<b>[title] Information</b>")]")
 	. += "Your job is to make sure the base is operational, you should firstly focus on manning the requisitions line and later on to be ready to send supplies for marines who are groundside."
 
-/datum/outfit/job/som/engineering/tech
-	name = SOM_TECH
-	jobtype = /datum/job/som/engineering/tech
-	id = /obj/item/card/id/silver
-	belt = /obj/item/storage/belt/utility/full
-	ears = /obj/item/radio/headset/mainship/st
-	w_uniform = /obj/item/clothing/under/marine/officer/engi
-	wear_suit = /obj/item/clothing/suit/storage/marine/ship_tech
-	shoes = /obj/item/clothing/shoes/marine/som/knife
-	gloves = /obj/item/clothing/gloves/insulated
-	glasses = /obj/item/clothing/glasses/welding/flipped
-	head = /obj/item/clothing/head/tgmccap/req
-	r_pocket = /obj/item/storage/pouch/general/medium
-	back = /obj/item/storage/backpack/marine/engineerpack
-
 /datum/job/som/requisitions
 	job_category = JOB_CAT_REQUISITIONSSOM
 	selection_color = "#BAAFD9"
 	supervisors = "the acting commander"
 	exp_type_department = EXP_TYPE_REQUISITIONS
-
 
 //Requisitions Officer
 /datum/job/som/requisitions/officer
@@ -550,22 +478,6 @@ You are also next in the chain of command, should the bridge crew fall in the li
 	. += {"Your job is to dispense supplies to the SOM.
 While you may request paperwork for supplies, do not go out of your way to screw with marines, unless you want to get deposed.
 A happy base is a well-functioning base."}
-
-
-/datum/outfit/job/som/requisitions/officer
-	name = SOM_REQUISITIONS_OFFICER
-	jobtype = /datum/job/som/requisitions/officer
-
-	id = /obj/item/card/id/silver
-	belt = /obj/item/storage/holster/belt/m44/full
-	ears = /obj/item/radio/headset/mainship/mcom/som
-	w_uniform = /obj/item/clothing/under/marine/officer/ro_suit
-	wear_suit = /obj/item/clothing/suit/storage/marine/officer/req
-	suit_store = /obj/item/weapon/gun/energy/taser
-	shoes = /obj/item/clothing/shoes/marine/som/knife
-	gloves = /obj/item/clothing/gloves/insulated
-	head = /obj/item/clothing/head/tgmccap/req
-	r_pocket = /obj/item/storage/pouch/general/large
 
 /datum/job/som/medical
 	job_category = JOB_CAT_MEDICALSOM
@@ -621,28 +533,6 @@ Make sure that the doctors and nurses are doing their jobs and keeping the SOM h
 		if(3001 to INFINITY) // 50 hrs
 			new_human.wear_id.paygrade = "CMO"
 
-/datum/outfit/job/som/medical/professor
-	name = SOM_CHIEF_MEDICAL_OFFICER
-	jobtype = /datum/job/som/medical/professor
-
-	id = /obj/item/card/id
-	belt = /obj/item/storage/belt/rig/medical
-	ears = /obj/item/radio/headset/mainship/mcom/som
-	w_uniform = /obj/item/clothing/under/rank/medical/blue
-	wear_suit = /obj/item/clothing/suit/storage/labcoat/cmo
-	shoes = /obj/item/clothing/shoes/white
-	gloves = /obj/item/clothing/gloves/latex
-	glasses = /obj/item/clothing/glasses/hud/health
-	mask = /obj/item/clothing/mask/surgical
-	head = /obj/item/clothing/head/cmo
-	r_pocket = /obj/item/storage/pouch/medkit/doctor
-	l_pocket = /obj/item/storage/pouch/surgery
-
-/datum/outfit/job/som/medical/professor/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
-	. = ..()
-	H.equip_to_slot_or_del(new /obj/item/tweezers_advanced, SLOT_IN_L_POUCH)
-	H.equip_to_slot_or_del(new /obj/item/reagent_containers/glass/bottle/lemoline/doctor, SLOT_S_STORE)
-
 //Medical Officer
 /datum/job/som/medical/medicalofficer
 	title = SOM_MEDICAL_DOCTOR
@@ -685,30 +575,6 @@ Make sure that the doctors and nurses are doing their jobs and keeping the SOM h
 	. += {"You are a SOM medical doctor stationed behind the frontlines.
 You are tasked with keeping the SOM healthy and strong, usually in the form of surgery.
 You are also an expert when it comes to medication and treatment. If you do not know what you are doing, <b>mentorhelp</b> so a mentor can assist you."}
-
-
-/datum/outfit/job/som/medical/medicalofficer
-	name = SOM_MEDICAL_DOCTOR
-	jobtype = /datum/job/som/medical/medicalofficer
-
-	id = /obj/item/card/id
-	belt = /obj/item/storage/belt/rig/medical
-	ears = /obj/item/radio/headset/mainship/doc
-	w_uniform = /obj/item/clothing/under/rank/medical/purple
-	wear_suit = /obj/item/clothing/suit/storage/labcoat
-	shoes = /obj/item/clothing/shoes/white
-	gloves = /obj/item/clothing/gloves/latex
-	glasses = /obj/item/clothing/glasses/hud/health
-	mask = /obj/item/clothing/mask/surgical
-	head = /obj/item/clothing/head/surgery/purple
-	r_pocket = /obj/item/storage/pouch/surgery
-	l_pocket = /obj/item/storage/pouch/medkit/doctor
-
-/datum/outfit/job/som/medical/medicalofficer/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
-	. = ..()
-	H.equip_to_slot_or_del(new /obj/item/tweezers_advanced, SLOT_IN_R_POUCH)
-	H.equip_to_slot_or_del(new /obj/item/reagent_containers/glass/bottle/lemoline/doctor, SLOT_S_STORE)
-
 
 /datum/job/som/civilian
 	job_category = JOB_CAT_CIVILIAN
@@ -754,27 +620,6 @@ You are also an expert when it comes to medication and treatment. If you do not 
 	. += {"You are a chef stationed behind the frontlines.
 You are tasked with keeping the SOM well fed and happy, usually in the form of delicious food.
 You are also an expert when it comes to botany and hydroponics. If you do not know what you are doing, <b>mentorhelp</b> so a mentor can assist you."}
-
-
-/datum/outfit/job/som/civilian/chef
-	name = SOM_CHEF
-	jobtype = /datum/job/som/civilian/chef
-
-	id = /obj/item/card/id
-	belt = /obj/item/storage/belt/rig/medical
-	ears = /obj/item/radio/headset/mainship/doc
-	w_uniform = /obj/item/clothing/under/rank/medical/purple
-	wear_suit = /obj/item/clothing/suit/storage/labcoat
-	shoes = /obj/item/clothing/shoes/white
-	gloves = /obj/item/clothing/gloves/latex
-	glasses = /obj/item/clothing/glasses/hud/health
-	mask = /obj/item/clothing/mask/surgical
-	head = /obj/item/clothing/head/surgery/purple
-
-/datum/outfit/job/som/civilian/chef/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
-	. = ..()
-	H.equip_to_slot_or_del(new /obj/item/tweezers_advanced, SLOT_IN_BACKPACK)
-	H.equip_to_slot_or_del(new /obj/item/reagent_containers/glass/bottle/lemoline/doctor, SLOT_IN_BACKPACK)
 
 /datum/job/som/silicon
 	job_category = JOB_CAT_SILICON
@@ -848,17 +693,3 @@ You are also an expert when it comes to botany and hydroponics. If you do not kn
 	. += separator_hr("[span_role_header("<b>[title] Information</b>")]")
 	. += {"Your primary job is to support and assist all SOM departments and personnel on-board.
 In addition, being a Synthetic gives you knowledge in every field and specialization possible on-board the ship."}
-
-
-/datum/outfit/job/civilian/synthetic/som
-	name = SYNTHETIC
-	jobtype = /datum/job/som/silicon/synthetic
-
-	id = /obj/item/card/id/gold
-	belt = /obj/item/storage/belt/utility/full
-	ears = /obj/item/radio/headset/mainship/mcom/som
-	w_uniform = /obj/item/clothing/under/rank/synthetic
-	shoes = /obj/item/clothing/shoes/white
-	gloves = /obj/item/clothing/gloves/insulated
-	r_pocket = /obj/item/storage/pouch/general/medium
-	l_pocket = /obj/item/storage/pouch/general/medium

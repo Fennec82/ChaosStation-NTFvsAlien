@@ -53,7 +53,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/generator/greyscale
 	name = "phoron engine"
-	desc = "An advanced Nanotrasen phoron engine core prototype designed for TGMC advanced mech exosuits. Optimimized for energy storage."
+	desc = "An advanced Ninetails phoron engine core prototype designed for NTF advanced mech exosuits. Optimimized for energy storage."
 	icon_state = "phoron_engine"
 	mech_flags = EXOSUIT_MODULE_GREYSCALE|EXOSUIT_MODULE_VENDABLE
 	rechargerate = 0
@@ -188,3 +188,11 @@
 	icon_state = "overboost"
 	mech_flags = EXOSUIT_MODULE_GREYSCALE|EXOSUIT_MODULE_VENDABLE
 	ability_to_grant = /datum/action/vehicle/sealed/mecha/overboost
+
+/obj/item/mecha_parts/mecha_equipment/ability/pulsearmor
+	name = "pulse armor module"
+	desc = "A mech module that when activated, creates a shield that slowly decays. Costs energy to activate."
+	weight = 70
+	icon_state = "pulsearmor"
+	mech_flags = EXOSUIT_MODULE_GREYSCALE|EXOSUIT_MODULE_VENDABLE
+	ability_to_grant = /datum/action/vehicle/sealed/mecha/pulsearmor

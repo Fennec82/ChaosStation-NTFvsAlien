@@ -491,8 +491,8 @@
 	READ_FILE(S["job_preferences"], job_preferences)
 	READ_FILE(S["quick_equip"], quick_equip)
 	READ_FILE(S["gear"], gear)
-	READ_FILE(S["underwear"], underwear)
-	READ_FILE(S["undershirt"], undershirt)
+	//READ_FILE(S["underwear"], underwear)
+	//READ_FILE(S["undershirt"], undershirt)
 	READ_FILE(S["backpack"], backpack)
 
 	READ_FILE(S["h_style"], h_style)
@@ -527,6 +527,7 @@
 	READ_FILE(S["gen_record"], gen_record)
 	READ_FILE(S["exploit_record"], exploit_record)
 	READ_FILE(S["flavor_text"], flavor_text)
+
 	READ_FILE(S["xeno_desc"], xeno_desc)
 	READ_FILE(S["profile_pic"], profile_pic)
 	READ_FILE(S["nsfwprofile_pic"], nsfwprofile_pic)
@@ -535,8 +536,14 @@
 	READ_FILE(S["genitalia_ass"], genitalia_ass)
 	READ_FILE(S["genitalia_boobs"], genitalia_boobs)
 	READ_FILE(S["genitalia_cock"], genitalia_cock)
-	READ_FILE(S["harmful_sex_allowed"], harmful_sex_allowed)
+	READ_FILE(S["harmful_sex_allowed"], harmful_sex_flags)
 	READ_FILE(S["burst_screams_enabled"], burst_screams_enabled)
+	READ_FILE(S["xeno_edible_jelly_name"], xeno_edible_jelly_name)
+	READ_FILE(S["r_jelly"], r_jelly)
+	READ_FILE(S["g_jelly"], g_jelly)
+	READ_FILE(S["b_jelly"], b_jelly)
+	READ_FILE(S["xeno_edible_jelly_desc"], xeno_edible_jelly_desc)
+	READ_FILE(S["xeno_edible_jelly_flavors"], xeno_edible_jelly_flavors)
 
 	READ_FILE(S["metadata"], metadata)
 	READ_FILE(S["metadata_likes"], metadata_likes)
@@ -551,6 +558,7 @@
 	synthetic_type = sanitize_inlist(synthetic_type, SYNTH_TYPES, initial(synthetic_type))
 	robot_type = sanitize_inlist(robot_type, ROBOT_TYPES, initial(robot_type))
 	xeno_name = reject_bad_name(xeno_name)
+	xeno_edible_jelly_name = reject_bad_name(xeno_edible_jelly_name)
 	ai_name = reject_bad_name(ai_name, TRUE)
 
 	real_name = reject_bad_name(real_name, TRUE)
@@ -577,8 +585,10 @@
 	//else
 	//	underwear = sanitize_integer(underwear, 1, length(GLOB.underwear_f), initial(underwear))
 	//	undershirt = sanitize_integer(undershirt, 1, length(GLOB.undershirt_f), initial(undershirt))
+	/* removed since we have a different underwear system now
 	underwear = initial(underwear)
 	undershirt = initial(undershirt)
+	*/
 	// NTF EDIT END
 	backpack = sanitize_integer(backpack, 1, length(GLOB.backpacklist), initial(backpack))
 
@@ -622,7 +632,7 @@
 	genitalia_ass = sanitize_text(genitalia_ass, initial(genitalia_ass))
 	genitalia_boobs = sanitize_text(genitalia_boobs, initial(genitalia_boobs))
 	genitalia_cock = sanitize_text(genitalia_cock, initial(genitalia_cock))
-	harmful_sex_allowed = sanitize_text(harmful_sex_allowed, initial(harmful_sex_allowed))
+	harmful_sex_flags = sanitize_text(harmful_sex_flags, initial(harmful_sex_flags))
 	burst_screams_enabled = sanitize_text(burst_screams_enabled, initial(burst_screams_enabled))
 
 	metadata = sanitize_text(metadata, initial(metadata))
@@ -638,6 +648,12 @@
 		parent.mob.ooc_notes_maybes = metadata_maybes
 		parent.mob.ooc_notes_favs = metadata_favs
 		parent.mob.ooc_notes_style = metadata_ooc_style
+	xeno_edible_jelly_name = sanitize_text (xeno_edible_jelly_name, initial(xeno_edible_jelly_name))
+	xeno_edible_jelly_desc = sanitize_text (xeno_edible_jelly_desc, initial(xeno_edible_jelly_desc))
+	xeno_edible_jelly_flavors = sanitize_text (xeno_edible_jelly_flavors, initial(xeno_edible_jelly_flavors))
+	r_jelly = sanitize_integer(r_jelly, 0, 255, initial(r_jelly))
+	g_jelly = sanitize_integer(g_jelly, 0, 255, initial(g_jelly))
+	b_jelly = sanitize_integer(b_jelly, 0, 255, initial(b_jelly))
 
 	if(!synthetic_name)
 		synthetic_name = "David"
@@ -689,6 +705,7 @@
 	for(var/quick_equip_slots in quick_equip)
 		quick_equip_slots = sanitize_inlist(quick_equip_slots, SLOT_DRAW_ORDER[quick_equip], quick_equip_slots)
 	slot_draw_order_pref = sanitize_islist(slot_draw_order_pref, SLOT_DRAW_ORDER, length(SLOT_DRAW_ORDER), TRUE, SLOT_DRAW_ORDER)
+	/*NTF removal
 	var/physique_to_check = get_physique()
 	if(physique_to_check == MALE)
 		underwear = sanitize_integer(underwear, 1, length(GLOB.underwear_m), initial(underwear))
@@ -696,6 +713,7 @@
 	else
 		underwear = sanitize_integer(underwear, 1, length(GLOB.underwear_f), initial(underwear))
 	undershirt = sanitize_integer(undershirt, 1, length(GLOB.undershirt_f), initial(undershirt))
+	*/
 	backpack = sanitize_integer(backpack, 1, length(GLOB.backpacklist), initial(backpack))
 
 	h_style = sanitize_inlist(h_style, GLOB.hair_styles_list, initial(h_style))
@@ -738,7 +756,7 @@
 	genitalia_ass = sanitize_text(genitalia_ass, initial(genitalia_ass))
 	genitalia_boobs = sanitize_text(genitalia_boobs, initial(genitalia_boobs))
 	genitalia_cock = sanitize_text(genitalia_cock, initial(genitalia_cock))
-	harmful_sex_allowed = sanitize_text(harmful_sex_allowed, initial(harmful_sex_allowed))
+	harmful_sex_flags = sanitize_text(harmful_sex_flags, initial(harmful_sex_flags))
 	burst_screams_enabled = sanitize_text(burst_screams_enabled, initial(burst_screams_enabled))
 
 	metadata = sanitize_text(metadata, initial(metadata))
@@ -770,8 +788,8 @@
 	WRITE_FILE(S["job_preferences"], job_preferences)
 	WRITE_FILE(S["quick_equip"], quick_equip)
 	WRITE_FILE(S["gear"], gear)
-	WRITE_FILE(S["underwear"], underwear)
-	WRITE_FILE(S["undershirt"], undershirt)
+	//WRITE_FILE(S["underwear"], underwear)
+	//WRITE_FILE(S["undershirt"], undershirt)
 	WRITE_FILE(S["backpack"], backpack)
 
 	WRITE_FILE(S["h_style"], h_style)
@@ -806,6 +824,7 @@
 	WRITE_FILE(S["gen_record"], gen_record)
 	WRITE_FILE(S["exploit_record"], exploit_record)
 	WRITE_FILE(S["flavor_text"], flavor_text)
+
 	WRITE_FILE(S["xeno_desc"], xeno_desc)
 	WRITE_FILE(S["profile_pic"], profile_pic)
 	WRITE_FILE(S["nsfwprofile_pic"], nsfwprofile_pic)
@@ -814,7 +833,7 @@
 	WRITE_FILE(S["genitalia_ass"], genitalia_ass)
 	WRITE_FILE(S["genitalia_boobs"], genitalia_boobs)
 	WRITE_FILE(S["genitalia_cock"], genitalia_cock)
-	WRITE_FILE(S["harmful_sex_allowed"], harmful_sex_allowed)
+	WRITE_FILE(S["harmful_sex_allowed"], harmful_sex_flags)
 	WRITE_FILE(S["burst_screams_enabled"], burst_screams_enabled)
 
 	WRITE_FILE(S["metadata"], metadata)
@@ -823,6 +842,12 @@
 	WRITE_FILE(S["metadata_maybes"], metadata_maybes)
 	WRITE_FILE(S["metadata_favs"], metadata_favs)
 	WRITE_FILE(S["metadata_ooc_style"], metadata_ooc_style)
+	WRITE_FILE(S["xeno_edible_jelly_name"], xeno_edible_jelly_name)
+	WRITE_FILE(S["r_jelly"], r_jelly)
+	WRITE_FILE(S["g_jelly"], g_jelly)
+	WRITE_FILE(S["b_jelly"], b_jelly)
+	WRITE_FILE(S["xeno_edible_jelly_desc"], xeno_edible_jelly_desc)
+	WRITE_FILE(S["xeno_edible_jelly_flavors"], xeno_edible_jelly_flavors)
 
 	return TRUE
 

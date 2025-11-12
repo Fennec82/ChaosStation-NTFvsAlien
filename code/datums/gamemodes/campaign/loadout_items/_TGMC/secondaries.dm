@@ -29,7 +29,7 @@
 
 /datum/loadout_item/secondary/gun/marine/so_pistol
 	name = "RT-3 pistol"
-	desc = "TAn RT-3 target pistol, a common sight throughout the bubble and the standard sidearm for noncombat roles in the TGMC. Uses 9mm caseless ammunition."
+	desc = "TAn RT-3 target pistol, a common sight throughout the bubble and the standard sidearm for noncombat roles in the NTF. Uses 9mm caseless ammunition."
 	ui_icon = "rt3"
 	item_typepath = /obj/item/weapon/gun/pistol/rt3
 	loadout_item_flags = LOADOUT_ITEM_ROUNDSTART_OPTION|LOADOUT_ITEM_DEFAULT_CHOICE
@@ -76,7 +76,7 @@
 
 /datum/loadout_item/secondary/gun/marine/laser_pistol
 	name = "TE-P"
-	desc = "A TerraGov standard issue laser pistol abbreviated as TE-P. It has an integrated charge selector for normal, heat and taser settings. \
+	desc = "A Ninetails standard issue laser pistol abbreviated as TE-P. It has an integrated charge selector for normal, heat and taser settings. \
 	Uses standard Terra Experimental (abbreviated as TE) power cells. \
 	As with all TE Laser weapons, they use a lightweight alloy combined without the need for bullets any longer decreases their weight and aiming speed quite some vs their ballistic counterparts."
 	ui_icon = "default"
@@ -134,7 +134,7 @@
 
 /datum/loadout_item/secondary/gun/marine/db_shotgun
 	name = "SH-34 shotgun"
-	desc = "A double barreled shotgun of archaic, but sturdy design used by the TGMC, loaded with buckshot. Uncommonly seen as a powerful secondary weapon when serious stopping power is required."
+	desc = "A double barreled shotgun of archaic, but sturdy design used by the NTF, loaded with buckshot. Uncommonly seen as a powerful secondary weapon when serious stopping power is required."
 	ui_icon = "tx34"
 	item_typepath = /obj/item/weapon/gun/shotgun/double/marine
 	item_whitelist = list(/obj/item/storage/holster/belt/ts34 = ITEM_SLOT_BELT)
@@ -144,11 +144,12 @@
 /datum/loadout_item/secondary/gun/marine/db_shotgun/post_equip(mob/living/carbon/human/wearer, datum/outfit/quick/loadout, datum/outfit_holder/holder)
 	wearer.equip_to_slot_or_del(new /obj/item/ammo_magazine/shotgun/buckshot, SLOT_IN_HOLSTER)
 	wearer.equip_to_slot_or_del(new item_typepath(wearer), SLOT_IN_HOLSTER)
+	default_load(wearer, loadout, holder)
 
 //non-standard
 /datum/loadout_item/secondary/machete
 	name = "Machete"
-	desc = "Latest issue of the TGMC Machete. Great for clearing out jungle or brush on outlying colonies, or cutting open heads. Found commonly in the hands of scouts and trackers, but difficult to carry with the usual kit."
+	desc = "Latest issue of the NTF Machete. Great for clearing out jungle or brush on outlying colonies, or cutting open heads. Found commonly in the hands of scouts and trackers, but difficult to carry with the usual kit."
 	ui_icon = "machete"
 	jobs_supported = list(SQUAD_MARINE, SQUAD_LEADER, SQUAD_SMARTGUNNER)
 	item_typepath = /obj/item/weapon/sword/machete
@@ -279,13 +280,14 @@
 
 /datum/loadout_item/secondary/kit/tgmc_engineer/razorburn
 	name = "Razorburn"
-	desc = "Three razorburn cannisters, able to make huge fields of razorwire quickly. 'Everyone laughs at razorwire, until they're trying to get through it while being shot to pieces.' Unknown"
+	desc = "Three razorburn cannisters, able to make large fields of razorwire quickly. 'Everyone laughs at razorwire, until they're trying to get through it while being shot to pieces.' Unknown"
 	ui_icon = "default"
+	purchase_cost = 15
 
 /datum/loadout_item/secondary/kit/tgmc_engineer/razorburn/post_equip(mob/living/carbon/human/wearer, datum/outfit/quick/loadout, datum/outfit_holder/holder)
 	wearer.equip_to_slot_or_del(new /obj/item/explosive/grenade/chem_grenade/razorburn_large, SLOT_IN_BACKPACK)
-	wearer.equip_to_slot_or_del(new /obj/item/explosive/grenade/chem_grenade/razorburn_large, SLOT_IN_BACKPACK)
-	wearer.equip_to_slot_or_del(new /obj/item/explosive/grenade/chem_grenade/razorburn_large, SLOT_IN_BACKPACK)
+	wearer.equip_to_slot_or_del(new /obj/item/explosive/grenade/chem_grenade/razorburn_small, SLOT_IN_BACKPACK)
+	wearer.equip_to_slot_or_del(new /obj/item/explosive/grenade/chem_grenade/razorburn_small, SLOT_IN_BACKPACK)
 	wearer.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/combat_advanced, SLOT_IN_BACKPACK)
 
 /datum/loadout_item/secondary/kit/tgmc_engineer/iguana
@@ -299,6 +301,19 @@
 	wearer.equip_to_slot_or_del(new /obj/item/deployable_vehicle, SLOT_IN_BACKPACK)
 	wearer.equip_to_slot_or_del(new /obj/item/uav_turret, SLOT_IN_BACKPACK)
 	wearer.equip_to_slot_or_del(new /obj/item/unmanned_vehicle_remote, SLOT_IN_BACKPACK)
+
+/datum/loadout_item/secondary/kit/tgmc_engineer/skink
+	name = "Skink"
+	desc = "A deployable Skink remote control vehicle. While lacking any weaponry, this speedy vehicle is perfect for slipping past enemy forces and gathering information. Comes with a spare and remote. \
+	WARNING: exceedingly fragile. Keep away from open flames or explosives."
+	ui_icon = "default"
+	purchase_cost = 15
+
+/datum/loadout_item/secondary/kit/tgmc_engineer/skink/post_equip(mob/living/carbon/human/wearer, datum/outfit/quick/loadout, datum/outfit_holder/holder)
+	wearer.equip_to_slot_or_del(new /obj/item/deployable_vehicle/tiny, SLOT_IN_BACKPACK)
+	wearer.equip_to_slot_or_del(new /obj/item/deployable_vehicle/tiny, SLOT_IN_BACKPACK)
+	wearer.equip_to_slot_or_del(new /obj/item/unmanned_vehicle_remote, SLOT_IN_BACKPACK)
+	wearer.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/combat_advanced, SLOT_IN_BACKPACK)
 
 /datum/loadout_item/secondary/kit/tgmc_corpsman
 	jobs_supported = list(SQUAD_CORPSMAN)

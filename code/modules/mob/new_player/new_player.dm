@@ -146,7 +146,7 @@
 			if(!SSticker)
 				return
 			if(!GLOB.enter_allowed)
-				to_chat(usr, span_warning("Spawning currently disabled, please observe."))
+				to_chat(usr, span_warning("Spawning currently disabled."))
 				return
 			var/datum/job/job_datum = locate(href_list["job_selected"])
 			if(!isxenosjob(job_datum) && (SSmonitor.gamestate == SHUTTERS_CLOSED || (SSmonitor.gamestate == GROUNDSIDE && SSmonitor.current_state <= XENOS_LOSING)))
@@ -154,6 +154,18 @@
 				if((xeno_job.total_positions-xeno_job.current_positions) > length(GLOB.alive_xeno_list_hive[XENO_HIVE_NORMAL]) * TOO_MUCH_BURROWED_PROPORTION)
 					if(tgui_alert(src, "There is a lack of xeno players on this round, unbalanced rounds are unfun for everyone. Are you sure you want to play as a marine? ", "Warning : the game is unbalanced", list("Yes", "No")) != "Yes")
 						return
+			if(isxenosjob(job_datum))
+				if(XENODEATHTIME_CHECK(usr))
+					if(check_other_rights(usr.client, R_ADMIN, FALSE))
+						if(tgui_alert(usr, "Your xeno respawn timer is not finished, though as an admin you can bypass it. Do you want to continue?", "Join Game", list("Yes", "No")) != "Yes")
+							XENODEATHTIME_MESSAGE(usr)
+							return
+			else
+				if(DEATHTIME_CHECK(usr))
+					if(check_other_rights(usr.client, R_ADMIN, FALSE))
+						if(tgui_alert(usr, "Your respawn timer is not finished, though as an admin you can bypass it. Do you want to continue?", "Join Game", list("Yes", "No")) != "Yes")
+							DEATHTIME_MESSAGE(usr)
+							return
 			if(!SSticker.mode.CanLateSpawn(src, job_datum)) // Try to assigns job to new player
 				return
 			SSticker.mode.LateSpawn(src)
@@ -450,6 +462,9 @@
 	mind.transfer_to(observer, TRUE)
 	message_admins("[key_name_admin(observer)] joined as a ghost.")
 	observer.client?.init_verbs()
+	if(observer.client && check_rights_for(observer.client, R_ADMIN)) // no getting to know what you shouldn't unless you are an admin.
+		observer.set_sight(SEE_TURFS|SEE_MOBS|SEE_OBJS)
+		observer.set_invis_see(SEE_INVISIBLE_OBSERVER)
 	qdel(src)
 
 ///Toggles the new players ready state
@@ -501,24 +516,20 @@
 
 
 /mob/new_player/proc/take_ssd_mob()
-	var/mob/dead/observer/dead_src = src
-
-	if(!GLOB.ssd_posses_allowed)
-		to_chat(src, span_warning("Taking over SSD mobs is currently disabled."))
-		return
-
-	if(GLOB.key_to_time_of_death[src.key] + TIME_BEFORE_TAKING_BODY > world.time && !dead_src.started_as_observer)
+	if((src.key in GLOB.key_to_time_of_death) && (GLOB.key_to_time_of_death[src.key] + TIME_BEFORE_TAKING_BODY > world.time))
 		to_chat(src, span_warning("You died too recently to be able to take a new mob."))
 		return
 
-	var/list/mob/living/free_ssd_mobs = list()
-	for(var/mob/living/ssd_mob AS in GLOB.ssd_living_mobs)
-		if(is_centcom_level(ssd_mob.z) || ishuman(ssd_mob) || ssd_mob.afk_status == MOB_RECENTLY_DISCONNECTED)
-			continue
-		free_ssd_mobs += ssd_mob
+
+	var/list/mob/living/free_ssd_mobs = GLOB.offered_mob_list
+	if(GLOB.ssd_posses_allowed)
+		for(var/mob/living/ssd_mob AS in GLOB.ssd_living_mobs)
+			if(is_centcom_level(ssd_mob.z) || ishuman(ssd_mob) || ssd_mob.afk_status == MOB_RECENTLY_DISCONNECTED)
+				continue
+			free_ssd_mobs += ssd_mob
 
 	if(!length(free_ssd_mobs))
-		to_chat(src, span_warning("There aren't any SSD mobs."))
+		to_chat(src, span_warning("There aren't any available mobs."))
 		return FALSE
 
 	var/mob/living/new_mob = tgui_input_list(src, "Pick a mob", "Available Mobs", free_ssd_mobs)
@@ -528,7 +539,7 @@
 	if(new_mob.stat == DEAD)
 		to_chat(src, span_warning("You cannot join if the mob is dead."))
 		return FALSE
-	if(tgui_alert(src, "Are you sure you want to take " + new_mob.real_name +" ("+new_mob.job.title+")?", "Take SSD mob", list("Yes", "No",)) != "Yes")
+	if(tgui_alert(src, "Are you sure you want to take " + new_mob.real_name +" ("+new_mob.job.title+")?", "Take SSD/offered mob", list("Yes", "No",)) != "Yes")
 		return
 	if(isxeno(new_mob))
 		var/mob/living/carbon/xenomorph/ssd_xeno = new_mob
@@ -552,6 +563,11 @@
 		to_chat(src, span_warning("You are jobbaned from the [new_mob?.job.title] role."))
 		return
 
+	if(new_mob in GLOB.offered_mob_list)
+		close_spawn_windows()
+		new_mob.take_over(src)
+		return
+
 	if(!ishuman(new_mob))
 		message_admins(span_adminnotice("[src.key] took control of [new_mob.name] as [new_mob.p_they()] was ssd."))
 		log_admin("[src.key] took control of [new_mob.name] as [new_mob.p_they()] was ssd.")
@@ -562,6 +578,7 @@
 		return
 	message_admins(span_adminnotice("[src.key] took control of [new_mob.name] as [new_mob.p_they()] was ssd."))
 	log_admin("[src.key] took control of [new_mob.name] as [new_mob.p_they()] was ssd.")
+	close_spawn_windows()
 	new_mob.transfer_mob(src)
 	var/mob/living/carbon/human/H = new_mob
 	var/datum/job/j = H.job

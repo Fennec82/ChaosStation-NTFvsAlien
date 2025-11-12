@@ -19,6 +19,7 @@
 	load_method = SINGLE_CASING|SPEEDLOADER //codex
 	gun_features_flags = GUN_CAN_POINTBLANK|GUN_AMMO_COUNTER|GUN_NO_PITCH_SHIFT_NEAR_EMPTY|GUN_SMOKE_PARTICLES
 	actions_types = list(/datum/action/item_action/aim_mode)
+	aim_time = 1 SECONDS
 	aim_speed_modifier = 0.75
 	aim_fire_delay = 0.25 SECONDS
 	wield_delay = 0.4 SECONDS
@@ -189,8 +190,6 @@
 	desc = "The Mateba is a powerful, fast-firing revolver that uses its own recoil to rotate the cylinders. This one appears to have had more love and care put into it. Uses .454 rounds."
 	icon_state = "mateba"
 	worn_icon_state = "mateba"
-
-/obj/item/weapon/gun/revolver/mateba/custom/officer
 
 //-------------------------------------------------------
 //MARSHALS REVOLVER

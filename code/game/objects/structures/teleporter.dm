@@ -9,10 +9,15 @@
 		/obj/structure/closet,
 		/mob/living,
 		/obj/machinery,
+		/obj/structure/largecrate,
+	)
+	var/static/list/teleportable_while_anchored_types = list(
+		/obj/vehicle,
 	)
 	///List of banned teleportable types
 	var/static/list/blacklisted_types = list(
-		/obj/machinery/nuclearbomb
+		/obj/machinery/nuclearbomb,
+		/obj/vehicle/sealed/armored/multitile,
 	)
 
 /obj/machinery/deployable/teleporter/examine(mob/user)
@@ -21,7 +26,10 @@
 	if(!kit?.cell)
 		. += "It is currently lacking a power cell."
 	if(kit?.linked_teleporter)
-		. += "It is currently linked to Teleporter #[kit.linked_teleporter.self_tele_tag] at [get_area(kit.linked_teleporter)]"
+		if(isobserver(user))
+			. += "It is currently linked to Teleporter #[kit.linked_teleporter.self_tele_tag][FOLLOW_LINK(user, kit.linked_teleporter)] at [get_area(kit.linked_teleporter)]"
+		else
+			. += "It is currently linked to Teleporter #[kit.linked_teleporter.self_tele_tag] at [get_area(kit.linked_teleporter)]"
 	else
 		. += "It is not linked to any other teleporter."
 
@@ -32,7 +40,7 @@
 		ownerflag = MINIMAP_FLAG_MARINE
 	SSminimaps.add_marker(src, ownerflag, image('icons/UI_icons/map_blips.dmi', null, "teleporter", MINIMAP_BLIPS_LAYER))
 	var/obj/item/teleporter_kit/kit = get_internal_item()
-	log_combat(deployer,src,"deployed",addition=" in [loc_name(src)], linked teleporter is \[[kit?.linked_teleporter ? kit?.linked_teleporter : "*null*"]\] in [loc_name(kit?.linked_teleporter)]")
+	log_combat(deployer,src,"deployed",addition=" linked teleporter is \[[logdetails(kit?.linked_teleporter)]\]")
 
 /obj/machinery/deployable/teleporter/attack_hand(mob/living/user)
 	. = ..()
@@ -67,6 +75,9 @@
 	var/list/atom/movable/teleporting = list()
 	for(var/atom/movable/thing in loc)
 		if(is_type_in_list(thing, blacklisted_types))
+			continue
+		if(is_type_in_list(thing, teleportable_while_anchored_types))
+			teleporting += thing
 			continue
 		if(is_type_in_list(thing, teleportable_types) && !thing.anchored)
 			teleporting += thing
@@ -112,7 +123,7 @@
 		return FALSE
 	playsound(loc, 'sound/items/crowbar.ogg', 25, 1)
 	to_chat(user , span_notice("You remove [kit.cell] from \the [src]."))
-	log_combat(user,src,"removed a cell from",addition=" in [loc_name(src)], linked teleporter is \[[kit?.linked_teleporter ? kit?.linked_teleporter : "*null*"]\] in [loc_name(kit?.linked_teleporter)]")
+	log_combat(user,src,"removed a cell from",addition=" linked teleporter is \[[logdetails(kit?.linked_teleporter)]\]")
 	user.put_in_hands(kit.cell)
 	kit.cell = null
 	update_icon()
@@ -131,7 +142,7 @@
 	user.temporarilyRemoveItemFromInventory(I)
 	I.forceMove(kit)
 	kit.cell = I
-	log_combat(user,src,"added a cell to",addition=" in [loc_name(src)], linked teleporter is \[[kit?.linked_teleporter ? kit?.linked_teleporter : "*null*"]\] in [loc_name(kit?.linked_teleporter)]")
+	log_combat(user,src,"added a cell to",addition=" linked teleporter is \[[logdetails(kit?.linked_teleporter)]\]")
 	playsound(loc, 'sound/items/deconstruct.ogg', 25, 1)
 	update_icon()
 
@@ -145,23 +156,23 @@
 
 /obj/machinery/deployable/teleporter/disassemble(mob/user)
 	var/obj/item/teleporter_kit/kit = get_internal_item()
-	log_combat(user, src, "deconstructed", addition=" in [loc_name(src)], linked teleporter is \[[kit?.linked_teleporter ? kit?.linked_teleporter : "*null*"]\] in [loc_name(kit?.linked_teleporter)]")
+	log_combat(user, src, "deconstructed", addition=" linked teleporter is \[[logdetails(kit?.linked_teleporter)]\]")
 	. = ..()
 
 /obj/machinery/deployable/teleporter/hitby(atom/movable/AM, speed = 5)
 	var/obj/item/teleporter_kit/kit = get_internal_item()
 	. = ..()
-	log_combat(AM.thrower, src, "thrown at", AM, " in [loc_name(src)], linked teleporter is \[[kit?.linked_teleporter ? kit?.linked_teleporter : "*null*"]\] in [loc_name(kit?.linked_teleporter)]")
+	log_combat(AM.thrower, src, "thrown at", AM, " linked teleporter is \[[logdetails(kit?.linked_teleporter)]\]")
 
 /obj/machinery/deployable/teleporter/attack_generic(mob/user, damage_amount = 0, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = 0)
 	var/obj/item/teleporter_kit/kit = get_internal_item()
 	. = ..()
-	log_combat(user, src, "attacked", "(DAMTYPE: [uppertext(damage_type)]) (RAW DMG: [damage_amount]) in [loc_name(src)], linked teleporter is \[[kit?.linked_teleporter ? kit?.linked_teleporter : "*null*"]\] in [loc_name(kit?.linked_teleporter)]")
+	log_combat(user, src, "attacked", "(DAMTYPE: [uppertext(damage_type)]) (RAW DMG: [damage_amount]), linked teleporter is \[[logdetails(kit?.linked_teleporter)]\]")
 
 /obj/machinery/deployable/teleporter/bullet_act(atom/movable/projectile/proj)
 	var/obj/item/teleporter_kit/kit = get_internal_item()
 	. = ..()
-	log_combat(proj.firer, src, "shot", proj, " in [loc_name(src)], linked teleporter is \[[kit?.linked_teleporter ? kit?.linked_teleporter : "*null*"]\] in [loc_name(kit?.linked_teleporter)]")
+	log_combat(proj.firer, src, "shot", proj, " linked teleporter is \[[logdetails(kit?.linked_teleporter)]\]")
 
 
 /obj/item/teleporter_kit
@@ -196,12 +207,24 @@
 
 
 /obj/item/teleporter_kit/Destroy()
-	log_combat(usr, src, "destroyed", addition=" in [loc_name(src)], linked teleporter is \[[linked_teleporter ? linked_teleporter : "*null*"]\] in [loc_name(linked_teleporter)]")
+	log_combat(usr, src, "destroyed", addition=" linked teleporter is \[[logdetails(linked_teleporter)]\]")
 	if(linked_teleporter)
 		linked_teleporter.linked_teleporter = null
 		linked_teleporter = null
 	QDEL_NULL(cell)
 	return ..()
+
+/obj/item/teleporter_kit/examine(mob/user)
+	. = ..()
+	if(!cell)
+		. += "It is currently lacking a power cell."
+	if(linked_teleporter)
+		if(isobserver(user))
+			. += "It is currently linked to Teleporter #[linked_teleporter.self_tele_tag][FOLLOW_LINK(user, linked_teleporter)] at [get_area(linked_teleporter)]"
+		else
+			. += "It is currently linked to Teleporter #[linked_teleporter.self_tele_tag] at [get_area(linked_teleporter)]"
+	else
+		. += "It is not linked to any other teleporter."
 
 ///Link the two teleporters
 /obj/item/teleporter_kit/proc/set_linked_teleporter(obj/item/teleporter_kit/link_teleport)
@@ -219,17 +242,17 @@
 
 	var/obj/item/teleporter_kit/gadget = I
 	if(linked_teleporter)
-		balloon_alert(user, "The teleporter is already linked with another!")
+		balloon_alert(user, "already linked!")
 		return
 	if(linked_teleporter == src)
-		balloon_alert(user, "You can't link the teleporter with itself!")
+		balloon_alert(user, "can't link this to itself!")
 		return
 	linked_teleporter = linked_teleporter
-	balloon_alert(user, "You link both teleporters to each others.")
+	balloon_alert(user, "linked")
 
 	set_linked_teleporter(gadget)
 	gadget.set_linked_teleporter(src)
-	log_combat(user,src,"linked",object=gadget,addition=" in [loc_name(src)]")
+	log_combat(user,src,"linked",object=gadget)
 	return
 
 /obj/item/teleporter_kit/attack_self(mob/user)
@@ -242,17 +265,17 @@
 
 /obj/item/teleporter_kit/hitby(atom/movable/AM, speed = 5)
 	. = ..()
-	log_combat(AM.thrower, src, "thrown at", AM, " in [loc_name(src)], linked teleporter is \[[linked_teleporter ? linked_teleporter : "*null*"]\] in [loc_name(linked_teleporter)]")
+	log_combat(AM.thrower, src, "thrown at", AM, " linked teleporter is \[logdetails(linked_teleporter)]\]")
 
 
 /obj/item/teleporter_kit/attack_generic(mob/user, damage_amount = 0, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = 0)
 	. = ..()
-	log_combat(user, src, "attacked", "(DAMTYPE: [uppertext(damage_type)]) (RAW DMG: [damage_amount]) in [loc_name(src)], linked teleporter is \[[linked_teleporter ? linked_teleporter : "*null*"]\] in [loc_name(linked_teleporter)]")
+	log_combat(user, src, "attacked", "(DAMTYPE: [uppertext(damage_type)]) (RAW DMG: [damage_amount]) in linked teleporter is \[[logdetails(linked_teleporter)]\]")
 
 
 /obj/item/teleporter_kit/bullet_act(atom/movable/projectile/proj)
 	. = ..()
-	log_combat(proj.firer, src, "shot", proj, " in [loc_name(src)], linked teleporter is \[[linked_teleporter ? linked_teleporter : "*null*"]\] in [loc_name(linked_teleporter)]")
+	log_combat(proj.firer, src, "shot", proj, " linked teleporter is \[[logdetails(linked_teleporter)]\]")
 
 
 /obj/effect/teleporter_linker
@@ -265,5 +288,5 @@
 	var/obj/item/teleporter_kit/teleporter_b = new(loc)
 	teleporter_a.set_linked_teleporter(teleporter_b)
 	teleporter_b.set_linked_teleporter(teleporter_a)
-	log_combat(src,teleporter_a,"linked",object=teleporter_b,addition=" in [loc_name(src)]")
+	log_combat(src,teleporter_a,"linked",object=teleporter_b)
 	qdel(src)

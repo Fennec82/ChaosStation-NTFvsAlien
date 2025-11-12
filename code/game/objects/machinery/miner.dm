@@ -61,6 +61,9 @@
 	else
 		owner_marker?.moveToNullspace()
 
+/obj/machinery/miner/proc/is_platinum()
+	return (mineral_value >= PLATINUM_CRATE_SELL_AMOUNT)
+
 /obj/machinery/miner/damaged	//mapping and all that shebang
 	miner_status = MINER_DESTROYED
 	icon_state = "mining_drill_error"
@@ -98,7 +101,7 @@
 		var/owner_flag = GLOB.faction_to_minimap_flag[faction]
 		if(owner_flag)
 			var/owner_marker_icon = "miner_[mineral_value >= PLATINUM_CRATE_SELL_AMOUNT ? "platinum" : "phoron"]_owned"
-			SSminimaps.add_marker(owner_marker, owner_flag, image('ntf_modular/icons/UI_icons/map_blips.dmi', null, owner_marker_icon, MINIMAP_BLIPS_LAYER))
+			SSminimaps.add_marker(owner_marker, owner_flag, image('ntf_modular/icons/UI_icons/map_blips.dmi', null, owner_marker_icon, MINIMAP_BLIPS_LAYER_HIGH))
 	SSminimaps.add_marker(src, MINIMAP_FLAG_ALL, image('ntf_modular/icons/UI_icons/map_blips.dmi', null, marker_icon, MINIMAP_BLIPS_LAYER))
 
 /obj/machinery/miner/update_icon_state()
@@ -164,6 +167,10 @@
 			to_chat(user, span_info("[src]'s module sockets seem bolted down."))
 			return FALSE
 		attempt_upgrade(upgrade,user)
+	if((user.a_intent != INTENT_HARM) || (I.item_flags & NOBLUDGEON) || !(I.force))
+		return FALSE
+	. = TRUE
+	sabotage(user, I)
 
 /obj/machinery/miner/welder_act(mob/living/user, obj/item/I)
 	. = ..()
@@ -262,6 +269,7 @@
 	playsound(loc, 'sound/items/ratchet.ogg', 25, TRUE)
 	miner_integrity = max_miner_integrity
 	faction = user.faction
+	log_combat(user, src, "claimed", addition = "for [faction]")
 	set_miner_status()
 	user.visible_message(span_notice("[user] repairs [src]'s tubing and plating."),
 	span_notice("You repair [src]'s tubing and plating."))
@@ -319,6 +327,7 @@
 		SSminimaps.add_marker(src, MINIMAP_FLAG_ALL, image('ntf_modular/icons/UI_icons/map_blips.dmi', null, marker_icon, MINIMAP_BLIPS_LAYER))
 		return
 	if(add_tick >= required_ticks)
+		set_miner_status() // shouldn't be necessary but should fix the markers breaking
 		if(miner_upgrade_type == MINER_AUTOMATED)
 			for(var/direction in GLOB.cardinals)
 				if(!isopenturf(get_step(loc, direction))) //Must be open on one side to operate
@@ -333,6 +342,9 @@
 				return
 			playsound(loc,'sound/machines/buzz-two.ogg', 35, FALSE)
 			add_tick = 0
+			miner_integrity = 0.66 * max_miner_integrity
+			src.log_message("was disabled due to lack of empty space", LOG_ATTACK)
+			set_miner_status()
 			return
 		stored_mineral += 1
 		add_tick = 0
@@ -343,7 +355,7 @@
 	else
 		add_tick += 1
 
-/obj/machinery/miner/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/machinery/miner/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage * xeno_attacker.xeno_melee_damage_modifier, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL) //Incorporeal xenos cannot attack physically.
 		return
 	if(miner_upgrade_type == MINER_RESISTANT && !HAS_TRAIT(xeno_attacker, TRAIT_CAN_DISABLE_MINER))
@@ -352,7 +364,7 @@
 		return
 	while(miner_status != MINER_DESTROYED)
 		if(xeno_attacker.do_actions)
-			return balloon_alert(xeno_attacker, "busy")
+			return balloon_alert(xeno_attacker, "busy!")
 		if(!do_after(xeno_attacker, 1.5 SECONDS, NONE, src, BUSY_ICON_DANGER, BUSY_ICON_HOSTILE))
 			return
 		xeno_attacker.do_attack_animation(src, ATTACK_EFFECT_CLAW)
@@ -360,6 +372,7 @@
 		span_danger("We slash \the [src]!"), null, 5)
 		playsound(loc, SFX_ALIEN_CLAW_METAL, 25, TRUE)
 		miner_integrity -= 25
+		log_combat(xeno_attacker, src, "damaged")
 		set_miner_status()
 		if(miner_status == MINER_DESTROYED && xeno_attacker.client)
 			var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[xeno_attacker.ckey]
@@ -367,6 +380,9 @@
 
 /obj/machinery/miner/screwdriver_act(mob/living/user, obj/item/I)
 	. = ..()
+	sabotage(user, I)
+
+/obj/machinery/miner/proc/sabotage(mob/living/user, obj/item/I)
 	if(faction == user.faction)
 		user.visible_message(span_notice("This miner belongs to your faction already."))
 		return
@@ -386,10 +402,12 @@
 		span_danger("You sabotage \the [src]!"), null, 5)
 		playsound(loc, "alien_claw_metal", 25, TRUE)
 		miner_integrity -= 25
+		log_combat(user, src, "damaged")
 		set_miner_status()
 
 /obj/machinery/miner/proc/set_miner_status()
 	var/health_percent = round((miner_integrity / max_miner_integrity) * 100)
+	SSminimaps.remove_marker(owner_marker)
 	switch(health_percent)
 		if(-INFINITY to 0)
 			miner_status = MINER_DESTROYED
@@ -406,11 +424,10 @@
 			var/marker_icon = "miner_[mineral_value >= PLATINUM_CRATE_SELL_AMOUNT ? "platinum" : "phoron"]_on"
 			SSminimaps.add_marker(src, MINIMAP_FLAG_ALL, image('ntf_modular/icons/UI_icons/map_blips.dmi', null, marker_icon, MINIMAP_BLIPS_LAYER))
 			miner_status = MINER_RUNNING
-			SSminimaps.remove_marker(owner_marker)
 			var/owner_flag = GLOB.faction_to_minimap_flag[faction]
 			if(owner_flag)
 				var/owner_marker_icon = "miner_[mineral_value >= PLATINUM_CRATE_SELL_AMOUNT ? "platinum" : "phoron"]_owned"
-				SSminimaps.add_marker(owner_marker, owner_flag, image('ntf_modular/icons/UI_icons/map_blips.dmi', null, owner_marker_icon, MINIMAP_BLIPS_LAYER))
+				SSminimaps.add_marker(owner_marker, owner_flag, image('ntf_modular/icons/UI_icons/map_blips.dmi', null, owner_marker_icon, MINIMAP_BLIPS_LAYER_HIGH))
 	update_icon()
 
 ///Called via global signal to prevent perpetual mining

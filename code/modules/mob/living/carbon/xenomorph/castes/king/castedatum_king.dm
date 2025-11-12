@@ -21,7 +21,7 @@
 	plasma_gain = 90
 
 	// *** Health *** //
-	max_health = 700
+	max_health = 630
 
 	// *** Sunder *** //
 	sunder_multiplier = 0.8
@@ -29,11 +29,19 @@
 	// *** Evolution *** //
 	upgrade_threshold = TIER_THREE_THRESHOLD
 	maximum_active_caste = 1
+/* NTF EDIT - No minimum for evolution
+	evolve_min_xenos = 8
+	evolve_population_lock = 40 // Mech
+*/
+	deevolves_to = /mob/living/carbon/xenomorph/drone //NTF Edit - allow evolution/regression
 	death_evolution_delay = 7 MINUTES
-	deevolves_to = /mob/living/carbon/xenomorph/drone
 
 	// *** Flags *** //
-	caste_flags = CASTE_IS_INTELLIGENT|CASTE_STAGGER_RESISTANT|CASTE_LEADER_TYPE|CASTE_INSTANT_EVOLUTION|CASTE_HAS_WOUND_MASK|CASTE_EVOLUTION_ALLOWED
+/* NTF Edit - allow evolution/regression, building
+	caste_flags = CASTE_IS_INTELLIGENT|CASTE_STAGGER_RESISTANT|CASTE_LEADER_TYPE|CASTE_INSTANT_EVOLUTION|CASTE_HAS_WOUND_MASK|CASTE_MUTATIONS_ALLOWED
+*/
+	caste_flags = CASTE_IS_INTELLIGENT|CASTE_STAGGER_RESISTANT|CASTE_LEADER_TYPE|CASTE_INSTANT_EVOLUTION|CASTE_HAS_WOUND_MASK|CASTE_MUTATIONS_ALLOWED|CASTE_EVOLUTION_ALLOWED|CASTE_IS_BUILDER
+	caste_traits = list(TRAIT_STOPS_TANK_COLLISION, TRAIT_CAN_TEAR_HOLE, TRAIT_CAN_DISABLE_MINER)
 	can_flags = parent_type::can_flags|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_CORRUPT_GENERATOR|CASTE_CAN_BE_RULER
 
 	// *** Defense *** //
@@ -51,12 +59,14 @@
 		/datum/action/ability/xeno_action/xeno_resting,
 		/datum/action/ability/xeno_action/psychic_whisper,
 		/datum/action/ability/xeno_action/psychic_influence,
+		/datum/action/ability/xeno_action/psychic_radiance,
 		/datum/action/ability/activable/xeno/impregnate,
 		/datum/action/ability/xeno_action/watch_xeno,
 		/datum/action/ability/activable/xeno/psydrain,
 		/datum/action/ability/activable/xeno/devour,
 		/datum/action/ability/activable/xeno/cocoon,
 		/datum/action/ability/activable/xeno/plant_weeds,
+		/datum/action/ability/activable/xeno/secrete_resin,
 		/datum/action/ability/xeno_action/call_of_the_burrowed,
 		/datum/action/ability/activable/xeno/corrosive_acid/strong,
 		/datum/action/ability/activable/xeno/tail_stab,
@@ -74,9 +84,18 @@
 		/datum/action/ability/xeno_action/rally_minion,
 		/datum/action/ability/xeno_action/blessing_menu,
 		/datum/action/ability/activable/psionic_interact,
-		/datum/action/ability/activable/xeno/impregnatequeen
+		/datum/action/ability/activable/xeno/impregnatequeen,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
+		/datum/action/ability/activable/xeno/place_pattern,
 	)
 
+	mutations = list(
+		/datum/mutation_upgrade/shell/stone_armor,
+		/datum/mutation_upgrade/spur/minion_king,
+		/datum/mutation_upgrade/veil/widefall,
+		/datum/mutation_upgrade/veil/flarefall
+	)
 
 /datum/xeno_caste/king/normal
 	upgrade = XENO_UPGRADE_NORMAL
@@ -91,12 +110,14 @@
 		/datum/action/ability/xeno_action/xeno_resting,
 		/datum/action/ability/xeno_action/psychic_whisper,
 		/datum/action/ability/xeno_action/psychic_influence,
+		/datum/action/ability/xeno_action/psychic_radiance,
 		/datum/action/ability/activable/xeno/impregnate,
 		/datum/action/ability/xeno_action/watch_xeno,
 		/datum/action/ability/activable/xeno/psydrain,
 		/datum/action/ability/activable/xeno/devour,
 		/datum/action/ability/activable/xeno/cocoon,
 		/datum/action/ability/activable/xeno/plant_weeds,
+		/datum/action/ability/activable/xeno/secrete_resin,
 		/datum/action/ability/xeno_action/call_of_the_burrowed,
 		/datum/action/ability/activable/xeno/corrosive_acid/strong,
 		/datum/action/ability/activable/xeno/tail_stab,
@@ -114,6 +135,9 @@
 		/datum/action/ability/xeno_action/rally_hive,
 		/datum/action/ability/xeno_action/rally_minion,
 		/datum/action/ability/xeno_action/blessing_menu,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
+		/datum/action/ability/activable/xeno/place_pattern,
 	)
 
 // ***************************************
@@ -140,7 +164,7 @@
 	plasma_gain = 60
 
 	// *** Health *** //
-	max_health = 800
+	max_health = 585
 
 	// *** Sunder *** //
 	sunder_multiplier = 1.0
@@ -149,6 +173,10 @@
 	evolve_min_xenos = 0
 
 	// *** Flags *** //
+/*NTF Edit - allow evolution/regression, building
+	caste_flags = CASTE_IS_INTELLIGENT|CASTE_LEADER_TYPE|CASTE_INSTANT_EVOLUTION|CASTE_MUTATIONS_ALLOWED
+*/
+	caste_flags = CASTE_IS_INTELLIGENT|CASTE_LEADER_TYPE|CASTE_INSTANT_EVOLUTION|CASTE_MUTATIONS_ALLOWED|CASTE_EVOLUTION_ALLOWED|CASTE_IS_BUILDER
 	caste_traits = list(TRAIT_STAGGERIMMUNE, TRAIT_STOPS_TANK_COLLISION, TRAIT_CAN_TEAR_HOLE, TRAIT_CAN_DISABLE_MINER)
 
 	// *** Defense *** //
@@ -161,11 +189,13 @@
 		/datum/action/ability/xeno_action/xeno_resting,
 		/datum/action/ability/xeno_action/psychic_whisper,
 		/datum/action/ability/xeno_action/psychic_influence,
+		/datum/action/ability/xeno_action/psychic_radiance,
 		/datum/action/ability/activable/xeno/impregnate,
 		/datum/action/ability/xeno_action/watch_xeno,
 		/datum/action/ability/activable/xeno/psydrain,
 		/datum/action/ability/activable/xeno/devour,
 		/datum/action/ability/activable/xeno/plant_weeds,
+		/datum/action/ability/activable/xeno/secrete_resin,
 		/datum/action/ability/activable/xeno/corrosive_acid/strong,
 		/datum/action/ability/xeno_action/hive_message,
 		/datum/action/ability/xeno_action/rally_hive,
@@ -181,6 +211,15 @@
 		/datum/action/ability/activable/xeno/conqueror_domination,
 		/datum/action/ability/activable/psionic_interact,
 		/datum/action/ability/activable/xeno/impregnatequeen,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
+		/datum/action/ability/activable/xeno/place_pattern,
+	)
+
+	mutations = list(
+		/datum/mutation_upgrade/shell/healing_jab,
+		/datum/mutation_upgrade/spur/telefrag,
+		/datum/mutation_upgrade/veil/dasher
 	)
 
 /datum/xeno_caste/king/conqueror/normal
@@ -196,11 +235,13 @@
 		/datum/action/ability/xeno_action/xeno_resting,
 		/datum/action/ability/xeno_action/psychic_whisper,
 		/datum/action/ability/xeno_action/psychic_influence,
+		/datum/action/ability/xeno_action/psychic_radiance,
 		/datum/action/ability/activable/xeno/impregnate,
 		/datum/action/ability/xeno_action/watch_xeno,
 		/datum/action/ability/activable/xeno/psydrain,
 		/datum/action/ability/activable/xeno/devour,
 		/datum/action/ability/activable/xeno/plant_weeds,
+		/datum/action/ability/activable/xeno/secrete_resin,
 		/datum/action/ability/activable/xeno/corrosive_acid/strong,
 		/datum/action/ability/xeno_action/hive_message,
 		/datum/action/ability/xeno_action/rally_hive,
@@ -215,20 +256,9 @@
 		/datum/action/ability/xeno_action/conqueror_endurance,
 		/datum/action/ability/activable/xeno/conqueror_domination,
 		/datum/action/ability/xeno_action/conqueror_obliteration,
-		/datum/action/ability/activable/xeno/plant_weeds,
-		/datum/action/ability/activable/xeno/corrosive_acid/strong,
-		/datum/action/ability/xeno_action/hive_message,
-		/datum/action/ability/xeno_action/rally_hive,
-		/datum/action/ability/xeno_action/rally_minion,
-		/datum/action/ability/xeno_action/blessing_menu,
-		/datum/action/ability/xeno_action/pheromones,
-		/datum/action/ability/xeno_action/pheromones/emit_recovery,
-		/datum/action/ability/xeno_action/pheromones/emit_warding,
-		/datum/action/ability/xeno_action/pheromones/emit_frenzy,
-		/datum/action/ability/xeno_action/conqueror_dash,
-		/datum/action/ability/activable/xeno/conqueror_will,
-		/datum/action/ability/xeno_action/conqueror_endurance,
-		/datum/action/ability/activable/xeno/conqueror_domination,
 		/datum/action/ability/activable/psionic_interact,
 		/datum/action/ability/activable/xeno/impregnatequeen,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
+		/datum/action/ability/activable/xeno/place_pattern,
 	)

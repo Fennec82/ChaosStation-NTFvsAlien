@@ -219,7 +219,7 @@
 	qdel(src)
 	return TRUE
 
-/obj/machinery/light/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/machinery/light/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage * xeno_attacker.xeno_melee_damage_modifier, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return
 	if(status == LIGHT_BROKEN)
@@ -563,6 +563,7 @@
 	icon_state = "floortube_empty"
 	base_icon_state = "floortube"
 	layer = MAP_SWITCH(ABOVE_OPEN_TURF_LAYER, LOW_OBJ_LAYER)
+	plane = FLOOR_PLANE
 	fitting = "large tube"
 	light_type = /obj/item/light_bulb/tube/large
 	brightness = 12
@@ -576,6 +577,7 @@
 	anchored = TRUE
 	density = FALSE
 	layer = BELOW_TABLE_LAYER
+	plane = FLOOR_PLANE
 	use_power = ACTIVE_POWER_USE
 	idle_power_usage = 2
 	active_power_usage = 20
@@ -627,42 +629,29 @@
 	light_power = 6
 	light_range = 4
 
-/obj/machinery/floor_warn_light/toggleable
+/obj/machinery/floor_warn_light/self_destruct
+	name = "self destruct alarm light"
 	icon_state = "rotating_alarm_off"
 	light_power = 0
 	light_range = 0
 
+
+
+/obj/machinery/floor_warn_light/self_destruct/Initialize(mapload)
+	. = ..()
+	SSevacuation.alarm_lights += src
+
+
+/obj/machinery/floor_warn_light/self_destruct/Destroy()
+	. = ..()
+	SSevacuation.alarm_lights -= src
+
 ///Enables the alarm lights and makes them start flashing
-/obj/machinery/floor_warn_light/toggleable/proc/enable()
+/obj/machinery/floor_warn_light/self_destruct/proc/enable()
 	icon_state = "rotating_alarm"
 	set_light(4,6)
 
 ///Disables the alarm lights and makes them stop flashing
-/obj/machinery/floor_warn_light/toggleable/proc/disable()
+/obj/machinery/floor_warn_light/self_destruct/proc/disable()
 	icon_state = initial(icon_state)
 	set_light(0,0)
-
-/obj/machinery/floor_warn_light/toggleable/self_destruct
-	name = "self destruct alarm light"
-
-/obj/machinery/floor_warn_light/toggleable/self_destruct/Initialize(mapload)
-	. = ..()
-	SSevacuation.alarm_lights += src
-
-/obj/machinery/floor_warn_light/toggleable/self_destruct/Destroy()
-	. = ..()
-	SSevacuation.alarm_lights -= src
-
-//A list of all generator lights so that they can be turned on when the generator enters meltdown
-GLOBAL_LIST_EMPTY_TYPED(generator_alarm_lights, /obj/machinery/floor_warn_light/toggleable)
-
-/obj/machinery/floor_warn_light/toggleable/generator
-	name = "generator meltdown alarm light"
-
-/obj/machinery/floor_warn_light/toggleable/generator/Initialize(mapload)
-	. = ..()
-	GLOB.generator_alarm_lights += src
-
-/obj/machinery/floor_warn_light/toggleable/generator/Destroy()
-	. = ..()
-	GLOB.generator_alarm_lights -= src

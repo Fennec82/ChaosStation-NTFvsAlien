@@ -1,6 +1,7 @@
 /datum/sex_action/rub_body
 	name = "Rub their body"
 	check_same_tile = FALSE
+	heal_sex = FALSE
 
 /datum/sex_action/rub_body/shows_on_menu(mob/living/carbon/user, mob/living/carbon/target)
 	if(user == target)
@@ -22,7 +23,7 @@
 	user.make_sucking_noise()
 
 	user.sexcon.perform_sex_action(target, 0.5, 0, TRUE)
-	target.sexcon.handle_passive_ejaculation()
+	target.sexcon.handle_passive_ejaculation(user)
 
 /datum/sex_action/rub_body/on_finish(mob/living/carbon/user, mob/living/carbon/target)
 	..()

@@ -11,6 +11,7 @@
 	climbable = TRUE
 	resistance_flags = XENO_DAMAGEABLE
 	coverage = 20
+	allow_pass_flags = PASS_LOW_STRUCTURE|PASSABLE|PASS_WALKOVER
 	interaction_flags = INTERACT_OBJ_DEFAULT|INTERACT_POWERLOADER_PICKUP_ALLOWED_BYPASS_ANCHOR
 	///Time before the ammo impacts
 	var/travelling_time = 10 SECONDS
@@ -78,6 +79,14 @@
 		attached_clamp.update_icon()
 		qdel(SA)
 
+/obj/structure/ship_ammo/Initialize(mapload)
+	. = ..()
+	var/static/list/connections = list(
+		COMSIG_OBJ_TRY_ALLOW_THROUGH = PROC_REF(can_climb_over),
+		COMSIG_FIND_FOOTSTEP_SOUND = TYPE_PROC_REF(/atom/movable, footstep_override),
+		COMSIG_TURF_CHECK_COVERED = TYPE_PROC_REF(/atom/movable, turf_cover_check),
+	)
+	AddElement(/datum/element/connect_loc, connections)
 
 //what to show to the user that examines the weapon we're loaded on.
 /obj/structure/ship_ammo/proc/show_loaded_desc(mob/user)
@@ -326,7 +335,6 @@
 	travelling_time = 1 SECONDS
 	ammo_count = 100
 	max_ammo_count = 100
-	ammo_used_per_firing = 40
 	equipment_type = /obj/structure/dropship_equipment/cas/weapon/laser_beam_gun
 	ammo_name = "charge"
 	transferable_ammo = TRUE
@@ -482,7 +490,7 @@
 //The fatty is well.. Fat.
 /obj/structure/ship_ammo/cas/rocket/fatty
 	name = "\improper PHGM-17 'Fatty'"
-	desc = "The PHGM-17 'Fatty' is the most devestating rocket in NTC arsenal, only second after its big cluster brother in Orbital Cannon. These rocket are also known for highest number of Friendly-on-Friendly incidents due to secondary cluster explosions as well as range of these explosions, TGMC recommends pilots to encourage usage of signal flares or laser for 'Fatty' support. Moving this will require some sort of lifter."
+	desc = "The PHGM-17 'Fatty' is the most devestating rocket in NTC arsenal, only second after its big cluster brother in Orbital Cannon. These rocket are also known for highest number of Friendly-on-Friendly incidents due to secondary cluster explosions as well as range of these explosions, NTF recommends pilots to encourage usage of signal flares or laser for 'Fatty' support. Moving this will require some sort of lifter."
 	icon_state = "fatty"
 	ammo_id = "f"
 	point_cost = 300
@@ -620,7 +628,7 @@
 	name = "Tanglefoot mini rocket stack"
 	desc = "A pack of laser guided mini rockets loaded with plasma-draining Tanglefoot gas. Moving this will require some sort of lifter."
 	icon_state = "minirocket_tfoot"
-	point_cost = 200
+	point_cost = 400
 	devastating_explosion_range = 0
 	travelling_time = 4 SECONDS
 	heavy_explosion_range = 0

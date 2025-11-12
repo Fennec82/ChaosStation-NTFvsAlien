@@ -2,6 +2,7 @@
 	name = "Force them against armpit"
 	require_grab = TRUE
 	stamina_cost = 1.0
+	heal_sex = FALSE
 
 
 /datum/sex_action/force_armpit_nuzzle/shows_on_menu(mob/living/carbon/user, mob/living/carbon/target)
@@ -24,7 +25,7 @@
 	do_thrust_animate(target, user)
 
 	user.sexcon.perform_sex_action(user, 0.5, 0, TRUE)
-	target.sexcon.handle_passive_ejaculation()
+	target.sexcon.handle_passive_ejaculation(user)
 
 /datum/sex_action/force_armpit_nuzzle/on_finish(mob/living/carbon/user, mob/living/carbon/target)
 	..()

@@ -10,14 +10,11 @@
 	var/maturity_time = 0
 	///Number of the last maturity stage before bursting
 	var/stage_ready_to_burst = 0
-	///Which hive it belongs to
-	var/hivenumber = XENO_HIVE_NORMAL
 	///How far will targets trigger the burst
 	var/trigger_size = 0
 
-/obj/alien/egg/Initialize(mapload, hivenumber)
+/obj/alien/egg/Initialize(mapload, _hivenumber)
 	. = ..()
-	src.hivenumber = hivenumber
 	advance_maturity(maturity_stage)
 
 /obj/alien/egg/update_icon_state()
@@ -63,7 +60,7 @@
 	burst()
 
 /obj/alien/egg/proc/should_proc_burst(mob/living/carbon/carbon_mover)
-	if(issamexenohive(carbon_mover) || carbon_mover.faction == FACTION_CLF)
+	if(issamexenohive(carbon_mover))
 		return FALSE
 	if(carbon_mover.stat == DEAD)
 		return FALSE
@@ -87,17 +84,21 @@
 	trigger_size = 2
 	///What type of hugger are produced here
 	var/hugger_type = /obj/item/clothing/mask/facehugger
+	/// The amount to multiply the hugger's hand attach time, if any, by.
+	var/hand_attach_time_multiplier = 1
+
+/obj/alien/egg/hugger/Initialize(mapload, hivenumber, new_hugger_type, new_hand_attach_time_multiplier)
+	. = ..()
+	if(new_hugger_type)
+		hugger_type = new_hugger_type
+	if(new_hand_attach_time_multiplier)
+		hand_attach_time_multiplier = new_hand_attach_time_multiplier
 
 /obj/alien/egg/hugger/update_icon_state()
 	. = ..()
 	overlays.Cut()
 	if(on_fire)
 		overlays += "alienegg_fire"
-	if(hivenumber != XENO_HIVE_NORMAL && GLOB.hive_datums[hivenumber])
-		var/datum/hive_status/hive = GLOB.hive_datums[hivenumber]
-		color = hive.color
-		return
-	color = null
 
 /obj/alien/egg/hugger/burst(via_damage)
 	. = ..()
@@ -110,12 +111,13 @@
 		return
 	playsound(src.loc, 'sound/effects/alien/egg_move.ogg', 25)
 	flick("egg opening", src)
-	var/obj/item/clothing/mask/facehugger/hugger = new hugger_type(get_turf(src), hivenumber)
+	var/obj/item/clothing/mask/facehugger/hugger = new hugger_type(null, hivenumber)
+	hugger.hand_attach_time = initial(hugger.hand_attach_time) * hand_attach_time_multiplier
 	hugger_type = null
 	addtimer(CALLBACK(hugger, TYPE_PROC_REF(/atom/movable, forceMove), loc), 1 SECONDS)
 	hugger.go_active()
 
-/obj/alien/egg/hugger/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/alien/egg/hugger/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage * xeno_attacker.xeno_melee_damage_modifier, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return FALSE
 
@@ -139,9 +141,9 @@
 			span_xenonotice("We clear the hatched egg."))
 			playsound(loc, SFX_ALIEN_RESIN_BREAK, 25)
 			qdel(src)
-			
+
 /obj/alien/egg/hugger/attack_hand(mob/living/user)
-	if(!issamexenohive(user) && !user.faction == FACTION_CLF)
+	if(!issamexenohive(user))
 		return ..()
 	switch(maturity_stage)
 		if(1)
@@ -214,7 +216,7 @@
 	NS.set_up(spread, get_turf(src))
 	NS.start()
 
-/obj/alien/egg/gas/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/alien/egg/gas/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage * xeno_attacker.xeno_melee_damage_modifier, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
 	if(maturity_stage > stage_ready_to_burst)
 		xeno_attacker.visible_message(span_xenonotice("\The [xeno_attacker] clears the hatched egg."), \
 		span_xenonotice("We clear the broken egg."))

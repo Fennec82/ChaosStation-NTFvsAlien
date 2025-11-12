@@ -59,7 +59,7 @@
 
 #define RADIO_CHANNEL_COLONIST "Colonist"
 #define RADIO_CHANNEL_PMC "NT PMC"
-#define RADIO_CHANNEL_RETIRED "Terragov Retirees"
+#define RADIO_CHANNEL_RETIRED "NTF Retirees"
 #define RADIO_CHANNEL_USL "USL"
 #define RADIO_CHANNEL_DEATHSQUAD "Deathsquad"
 #define RADIO_CHANNEL_IMPERIAL "Imperial"
@@ -71,6 +71,9 @@
 #define RADIO_CHANNEL_DS1 "Alamo"
 #define RADIO_CHANNEL_DS2 "Normandy"
 #define RADIO_CHANNEL_CIV_GENERAL "Civilian"
+
+#define RADIO_KEY_CIV_GENERAL "g"
+#define RADIO_TOKEN_CIV_GENERAL ":g"
 
 #define MIN_FREE_FREQ 1201 // -------------------------------------------------
 // Frequencies are always odd numbers and range from 1201 to 1599.

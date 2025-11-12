@@ -51,7 +51,7 @@ Make your way to the cafeteria for some post-cryosleep chow, and then get equipp
 		<b>You answer to the</b> acting Squad Leader<br /><br />
 		<b>Unlock Requirement</b>: Starting Role<br /><br />
 		<b>Gamemode Availability</b>: Crash, Nuclear War<br /><br /><br />
-		TerraGov’s Squad Operatives make up the bread and butter of Terra's fighting forces. They are fitted with the standard arsenal that the NTC offers, and they can take up a variety of roles, being a sniper, a pyrotechnician, a machinegunner, rifleman and more. They’re often high in numbers and divided into squads, but they’re the lowest ranking individuals, with a low degree of skill, not adapt to engineering or medical roles. Still, they are not limited to the arsenal they can take on the field to deal whatever threat that lurks against Terra.
+		Ninetails' Squad Operatives make up the bread and butter of Ninetails' fighting forces. They are fitted with the standard arsenal that the NTC offers, and they can take up a variety of roles, being a sniper, a pyrotechnician, a machinegunner, rifleman and more. They’re often high in numbers and divided into squads, but they’re the lowest ranking individuals, with a low degree of skill, not adapt to engineering or medical roles. Still, they are not limited to the arsenal they can take on the field to deal whatever threat that lurks against Terra.
 		<br /><br />
 		<b>Duty</b>: Carry out orders made by your acting Squad Leader, deal with any threats that oppose the NTC.
 	"}
@@ -84,13 +84,12 @@ Make your way to the cafeteria for some post-cryosleep chow, and then get equipp
 	. += separator_hr("[span_role_header("<b>[title] Information</b>")]")
 	. += "You are a rank-and-file operative of the NTC, and that is your strength. What you lack alone, you gain standing shoulder to shoulder with the men and women of the Nine Tailed Fox PMC. Ooh-rah!"
 
-
-/datum/outfit/job/marine/standard
-	name = SQUAD_MARINE
-	jobtype = /datum/job/terragov/squad/standard
-
-	id = /obj/item/card/id/dogtag
-
+/datum/job/terragov/squad/standard/npc
+	multiple_outfits = TRUE
+	outfits = list(
+		/datum/outfit/job/npc/tgmc/standard,
+		/datum/outfit/job/npc/tgmc/standard/shotgunner,
+	)
 //Squad Slut
 /datum/job/terragov/squad/slut
 	title = SQUAD_SLUT
@@ -116,7 +115,7 @@ Make your way to the cafeteria for some post-cryosleep chow, and then get equipp
 		<b>You answer to the</b> acting Squad Leader<br /><br />
 		<b>Unlock Requirement</b>: Starting Role<br /><br />
 		<b>Gamemode Availability</b>: Crash, Nuclear War<br /><br /><br />
-		TerraGov’s Squad Operatives make up the bread and butter of Terra's fighting forces. They are fitted with the standard arsenal that the NTC offers, and they can take up a variety of roles, being a sniper, a pyrotechnician, a machinegunner, rifleman and more. They’re often high in numbers and divided into squads, but they’re the lowest ranking individuals, with a low degree of skill, not adapt to engineering or medical roles. Still, they are not limited to the arsenal they can take on the field to deal whatever threat that lurks against Terra.
+		Ninetails' Squad Operatives make up the bread and butter of Ninetails' fighting forces. They are fitted with the standard arsenal that the NTC offers, and they can take up a variety of roles, being a sniper, a pyrotechnician, a machinegunner, rifleman and more. They’re often high in numbers and divided into squads, but they’re the lowest ranking individuals, with a low degree of skill, not adapt to engineering or medical roles. Still, they are not limited to the arsenal they can take on the field to deal whatever threat that lurks against Terra.
 		<br /><br />
 		<b>Duty</b>: Carry out orders made by your acting Squad Leader, deal with any threats that oppose the NTC.
 	"}
@@ -147,12 +146,6 @@ Make your way to the cafeteria for some post-cryosleep chow, and then get equipp
 	. += separator_hr("[span_role_header("<b>[title] Information</b>")]")
 	. += {"\nYou are a rank-and-file marine of the NTC with a twist, your job is to be a marine yet also a 'trench-wive' or well, if you are a male 'trench-husband'?
 You can use some non lethal ammunition to 'tactically' do things to people, Spread those legs! Ooh-rah!"}
-
-/datum/outfit/job/marine/slut
-	name = SQUAD_SLUT
-	jobtype = /datum/job/terragov/squad/slut
-
-	id = /obj/item/card/id/dogtag
 
 //Squad Engineer
 /datum/job/terragov/squad/engineer
@@ -189,13 +182,6 @@ You can use some non lethal ammunition to 'tactically' do things to people, Spre
 	. += separator_hr("[span_role_header("<b>[title] Information</b>")]")
 	. += "You have the equipment and skill to build fortifications, reroute power lines, and bunker down. Your squaddies will look to you when it comes to construction in the field of battle."
 
-
-/datum/outfit/job/marine/engineer
-	name = SQUAD_ENGINEER
-	jobtype = /datum/job/terragov/squad/engineer
-
-	id = /obj/item/card/id/dogtag/engineer
-
 /datum/job/terragov/squad/engineer/after_spawn(mob/living/carbon/new_mob, mob/user, latejoin = FALSE)
 	. = ..()
 	if(!ishuman(new_mob))
@@ -216,6 +202,9 @@ You can use some non lethal ammunition to 'tactically' do things to people, Spre
 		if(60001 to INFINITY) // 1000 hrs
 			new_human.wear_id.paygrade = "E9A" //If you play way too much TGMC. 1000 hours.
 	new_human.wear_id.update_label()
+
+/datum/job/terragov/squad/engineer/npc
+	outfit = /datum/outfit/job/npc/tgmc/squad_engineer
 
 //Squad Corpsman
 /datum/job/terragov/squad/corpsman
@@ -252,12 +241,6 @@ You can use some non lethal ammunition to 'tactically' do things to people, Spre
 	. += separator_hr("[span_role_header("<b>[title] Information</b>")]")
 	. += "You must tend the wounds of your squad mates and make sure they are healthy and active. You may not be a fully-fledged doctor, but you stand between life and death when it matters."
 
-/datum/outfit/job/marine/corpsman
-	name = SQUAD_CORPSMAN
-	jobtype = /datum/job/terragov/squad/corpsman
-
-	id = /obj/item/card/id/dogtag/corpsman
-
 /datum/job/terragov/squad/corpsman/after_spawn(mob/living/carbon/new_mob, mob/user, latejoin = FALSE)
 	. = ..()
 	if(!ishuman(new_mob))
@@ -278,6 +261,9 @@ You can use some non lethal ammunition to 'tactically' do things to people, Spre
 		if(60001 to INFINITY) // 1000 hrs
 			new_human.wear_id.paygrade = "E9A" //If you play way too much TGMC. 1000 hours.
 	new_human.wear_id.update_label()
+
+/datum/job/terragov/squad/corpsman/npc
+	outfit = /datum/outfit/job/npc/tgmc/corpsman
 
 //Squad Smartgunner
 /datum/job/terragov/squad/smartgunner
@@ -333,11 +319,8 @@ You can use some non lethal ammunition to 'tactically' do things to people, Spre
 			new_human.wear_id.paygrade = "E9A" //If you play way too much TGMC. 1000 hours.
 	new_human.wear_id.update_label()
 
-/datum/outfit/job/marine/smartgunner
-	name = SQUAD_SMARTGUNNER
-	jobtype = /datum/job/terragov/squad/smartgunner
-
-	id = /obj/item/card/id/dogtag/smartgun
+/datum/job/terragov/squad/smartgunner/npc
+	outfit = /datum/outfit/job/npc/tgmc/smartgunner
 
 //Squad Specialist
 /datum/job/terragov/squad/specialist
@@ -363,12 +346,6 @@ You can use some non lethal ammunition to 'tactically' do things to people, Spre
 	. = ..()
 	. += separator_hr("[span_role_header("<b>[title] Information</b>")]")
 	. += "You are one of the few chosen, extensively trained operatives that are usually sent out on solo stealth missions. Trained to use special equipment and perform masterful CQC. You are somewhat versatile and can serve a variety of roles."
-
-/datum/outfit/job/marine/specialist
-	name = SQUAD_SPECIALIST
-	jobtype = /datum/job/terragov/squad/specialist
-
-	id = /obj/item/card/id/dogtag/specialist
 
 /datum/job/terragov/squad/specialist/after_spawn(mob/living/carbon/C, mob/user, latejoin = FALSE)
 	. = ..()
@@ -398,8 +375,8 @@ You can use some non lethal ammunition to 'tactically' do things to people, Spre
 	comm_title = JOB_COMM_TITLE_SQUAD_LEADER
 	total_positions = 4
 	supervisors = "the acting field commander"
-	access = list(ACCESS_MARINE_PREP, ACCESS_MARINE_LEADER, ACCESS_MARINE_DROPSHIP, ACCESS_MARINE_ENGINEERING, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_CIVILIAN_ENGINEERING, ACCESS_MARINE_REMOTEBUILD, ACCESS_MARINE_CARGO)
-	minimal_access = list(ACCESS_MARINE_PREP, ACCESS_MARINE_LEADER, ACCESS_MARINE_DROPSHIP, ACCESS_MARINE_ENGINEERING, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_CIVILIAN_ENGINEERING, ACCESS_MARINE_REMOTEBUILD, ACCESS_MARINE_CARGO)
+	access = list(ACCESS_MARINE_PREP, ACCESS_MARINE_LEADER, ACCESS_MARINE_DROPSHIP, ACCESS_MARINE_TADPOLE, ACCESS_MARINE_ENGINEERING, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_CIVILIAN_ENGINEERING, ACCESS_MARINE_REMOTEBUILD, ACCESS_MARINE_CARGO)
+	minimal_access = list(ACCESS_MARINE_PREP, ACCESS_MARINE_LEADER, ACCESS_MARINE_DROPSHIP, ACCESS_MARINE_TADPOLE, ACCESS_MARINE_ENGINEERING, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_CIVILIAN_ENGINEERING, ACCESS_MARINE_REMOTEBUILD, ACCESS_MARINE_CARGO)
 	skills_type = /datum/skills/sl
 	display_order = JOB_DISPLAY_ORDER_SQUAD_LEADER
 	outfit = /datum/outfit/job/marine/leader
@@ -417,7 +394,7 @@ You can use some non lethal ammunition to 'tactically' do things to people, Spre
 	html_description = {"
 		<b>Difficulty</b>: Hard<br /><br />
 		<b>You answer to the</b> acting Command Staff<br /><br />
-		<b>Unlock Requirement</b>: Starting Role<br /><br />
+		<b>Unlock Requirement</b>: 3 hours playtime (any role)<br /><br />
 		<b>Gamemode Availability</b>: Crash, Nuclear War<br /><br /><br />
 		Squad Leaders are basically the boss of any able-bodied squad. Though while they are not trained compared to engineers, corpsmen and smartgunners, they are (usually) capable of leading the squad. They have access to command assets such as a ship railgun, orbital bombardment as examples.
 		<br /><br />
@@ -429,12 +406,6 @@ You can use some non lethal ammunition to 'tactically' do things to people, Spre
 	. = ..()
 	. += separator_hr("[span_role_header("<b>[title] Information</b>")]")
 	. += "You are responsible for the men and women of your squad. Make sure they are on task, working together, and communicating. You are also in charge of communicating with command and letting them know about the situation first hand. Keep out of harm's way."
-
-/datum/outfit/job/marine/leader
-	name = SQUAD_LEADER
-	jobtype = /datum/job/terragov/squad/leader
-
-	id = /obj/item/card/id/dogtag/leader
 
 /datum/job/terragov/squad/leader/after_spawn(mob/living/carbon/C, mob/user, latejoin = FALSE)
 	. = ..()
@@ -463,6 +434,10 @@ You can use some non lethal ammunition to 'tactically' do things to people, Spre
 	if(!ismarineleaderjob(new_human.assigned_squad?.squad_leader?.job)) //If there's no proper SL already in the squad, promote to leader
 		new_human.assigned_squad.promote_leader(new_human)
 
+/datum/job/terragov/squad/leader/npc
+	outfit = /datum/outfit/job/npc/tgmc/squad_leader
+
+
 /datum/job/terragov/squad/vatgrown
 	title = SQUAD_MARINE
 	paygrade = "VM"
@@ -482,11 +457,6 @@ You can use some non lethal ammunition to 'tactically' do things to people, Spre
 
 /datum/job/terragov/squad/vatgrown/return_spawn_type(datum/preferences/prefs)
 	return /mob/living/carbon/human/species/vatgrown
-
-/datum/outfit/job/marine/vatgrown
-	name = SQUAD_VATGROWN
-	jobtype = /datum/job/terragov/squad/vatgrown
-	id = /obj/item/card/id/dogtag
 
 //security officer
 /datum/job/terragov/security/security_officer
@@ -540,17 +510,3 @@ You can use some non lethal ammunition to 'tactically' do things to people, Spre
 		if(60001 to INFINITY)
 			new_human.wear_id.paygrade = "E8E"
 
-/datum/outfit/job/security_officer
-	name = SECURITY_OFFICER
-	jobtype = /datum/job/terragov/security/security_officer
-
-	id = /obj/item/card/id/dogtag
-	back = /obj/item/storage/backpack/security
-	glasses = /obj/item/clothing/glasses/hud/security
-	belt = /obj/item/storage/belt/security
-	head = /obj/item/clothing/head/beret/sec
-	ears = /obj/item/radio/headset/mainship/marine/generic/sec
-	w_uniform = /obj/item/clothing/under/rank/security/corp
-	wear_suit = /obj/item/clothing/suit/modular/xenonauten/bulletresistant
-	shoes = /obj/item/clothing/shoes/swat
-	gloves = /obj/item/clothing/gloves/marine/fingerless

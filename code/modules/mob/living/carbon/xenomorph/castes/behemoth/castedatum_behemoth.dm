@@ -21,7 +21,7 @@
 	plasma_gain = 30
 
 	// *** Health *** //
-	max_health = 700
+	max_health = 630
 
 	// *** Sunder *** //
 	sunder_multiplier = 0.8
@@ -32,7 +32,7 @@
 	deevolves_to = /datum/xeno_caste/bull
 
 	// *** Flags *** //
-	caste_flags = CASTE_EVOLUTION_ALLOWED|CASTE_STAGGER_RESISTANT
+	caste_flags = CASTE_EVOLUTION_ALLOWED|CASTE_STAGGER_RESISTANT|CASTE_MUTATIONS_ALLOWED
 	can_flags = parent_type::can_flags|CASTE_CAN_BE_GIVEN_PLASMA
 	caste_traits = list(TRAIT_CAN_TEAR_HOLE, TRAIT_CAN_DISABLE_MINER)
 
@@ -56,7 +56,15 @@
 		/datum/action/ability/xeno_action/ready_charge/behemoth_roll,
 		/datum/action/ability/activable/xeno/landslide,
 		/datum/action/ability/activable/xeno/earth_riser,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
 		/datum/action/ability/xeno_action/seismic_fracture,
+	)
+
+	mutations = list(
+		/datum/mutation_upgrade/shell/rocky_layers,
+		/datum/mutation_upgrade/spur/refined_palate,
+		/datum/mutation_upgrade/veil/avalanche
 	)
 
 /datum/xeno_caste/behemoth/normal
@@ -85,6 +93,8 @@
 		/datum/action/ability/activable/xeno/earth_riser,
 		/datum/action/ability/xeno_action/seismic_fracture,
 		/datum/action/ability/xeno_action/primal_wrath,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
 	)
 
 /datum/xeno_caste/behemoth/on_caste_applied(mob/xenomorph)

@@ -39,7 +39,7 @@
 	var/list/affecting = list()
 
 /obj/effect/step_trigger/thrower/Trigger(atom/A)
-	if(!A || !ismovableatom(A))
+	if(!A || !ismovable(A))
 		return
 
 	if(!istype(A,/obj) && !istype(A,/mob)) //mobs and objects only.
@@ -155,7 +155,3 @@
 	else if(isliving(A)) //Hacked it up so it just deletes it
 		to_chat(A, span_danger("You get lost into the depths of space, never to be seen again."))
 		qdel(A)
-
-/obj/effect/step_trigger/teleporter/random/Initialize(mapload)
-	. = ..()
-	icon_state = ""

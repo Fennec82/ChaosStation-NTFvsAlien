@@ -32,7 +32,8 @@
 	deevolves_to = /datum/xeno_caste/hunter
 
 	// *** Flags *** //
-	caste_flags = CASTE_INNATE_PLASMA_REGEN|CASTE_PLASMADRAIN_IMMUNE|CASTE_EVOLUTION_ALLOWED
+	caste_flags = CASTE_INNATE_PLASMA_REGEN|CASTE_PLASMADRAIN_IMMUNE|CASTE_EVOLUTION_ALLOWED|CASTE_MUTATIONS_ALLOWED
+	caste_traits = list(TRAIT_CAN_TEAR_HOLE, TRAIT_CAN_DISABLE_MINER)
 
 	// *** Defense *** //
 	soft_armor = list(MELEE = 50, BULLET = 55, LASER = 50, ENERGY = 50, BOMB = 10, BIO = 40, FIRE = 70, ACID = 40)
@@ -54,11 +55,25 @@
 		/datum/action/ability/activable/xeno/ravage,
 		/datum/action/ability/xeno_action/endure,
 		/datum/action/ability/xeno_action/rage,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
 	)
 	///multiplier on plasma amount vs damage that is recieved on attack
 	var/plasma_damage_dealt_mult = 1.5
 	///multiplier on plasma amount vs damage that is recieved on being attacked
 	var/plasma_damage_recieved_mult = 0.5
+
+	mutations = list(
+		/datum/mutation_upgrade/shell/little_more,
+		/datum/mutation_upgrade/shell/keep_going,
+		/datum/mutation_upgrade/shell/inward_focus,
+		/datum/mutation_upgrade/spur/deep_slash,
+		/datum/mutation_upgrade/spur/super_cut,
+		/datum/mutation_upgrade/spur/onslaught,
+		/datum/mutation_upgrade/veil/recurring_rage,
+		/datum/mutation_upgrade/veil/fight_in_flames,
+		/datum/mutation_upgrade/veil/bloody_endure
+	)
 
 /datum/xeno_caste/ravager/on_caste_applied(mob/xenomorph)
 	. = ..()
@@ -94,6 +109,8 @@
 		/datum/action/ability/xeno_action/endure,
 		/datum/action/ability/xeno_action/rage,
 		/datum/action/ability/xeno_action/vampirism,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
 	)
 
 
@@ -109,12 +126,8 @@
 
 	// *** Plasma *** //
 	plasma_max = 500
-	plasma_gain = 0
+	plasma_regen_limit = 0
 	plasma_icon_state = "fury"
-
-	// *** Flags *** //
-	caste_flags = CASTE_INNATE_PLASMA_REGEN|CASTE_PLASMADRAIN_IMMUNE|CASTE_EVOLUTION_ALLOWED
-	caste_traits = list(TRAIT_CAN_TEAR_HOLE, TRAIT_CAN_DISABLE_MINER)
 
 	// *** Abilities *** //
 	actions = list(
@@ -130,9 +143,17 @@
 		/datum/action/ability/xeno_action/endure,
 		/datum/action/ability/xeno_action/rage,
 		/datum/action/ability/xeno_action/bloodthirst,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
 	)
 	plasma_damage_dealt_mult = 2
 	plasma_damage_recieved_mult = 0.75
+
+	mutations = list(
+		/datum/mutation_upgrade/shell/no_end,
+		/datum/mutation_upgrade/spur/early_rage,
+		/datum/mutation_upgrade/veil/safety_trap
+	)
 
 /datum/xeno_caste/ravager/bloodthirster/normal
 	upgrade = XENO_UPGRADE_NORMAL
@@ -158,4 +179,6 @@
 		/datum/action/ability/xeno_action/rage,
 		/datum/action/ability/xeno_action/bloodthirst,
 		/datum/action/ability/xeno_action/deathmark,
+		/datum/action/ability/xeno_action/create_edible_jelly,
+		/datum/action/ability/xeno_action/place_stew_pod,
 	)

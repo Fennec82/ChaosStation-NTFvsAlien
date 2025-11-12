@@ -54,7 +54,11 @@
 		/obj/item/mortal_shell/flare,
 		/obj/item/mortal_shell/plasmaloss,
 		/obj/item/mortal_shell/smoke/satrapine,
+		/obj/item/mortal_shell/smoke/aphrotox,
+		/obj/item/mortal_shell/smoke/neuro,
 		/obj/item/mortal_shell/smoke/sleep,
+		/obj/item/mortal_shell/razorburn,
+		/obj/item/mortal_shell/metalfoam,
 	)
 
 	use_power = NO_POWER_USE
@@ -79,7 +83,9 @@
 	for (var/obj/item/binoculars/tactical/binoc in mortar?.linked_item_binoculars)
 		binoc.set_mortar(src)
 	impact_cam = new
-	impact_cam.forceMove(src)
+	if(impact_cam.status)
+		impact_cam.toggle_cam()
+	impact_cam.moveToNullspace()
 	impact_cam.c_tag = "[strip_improper(name)] #[++id_by_type[type]]"
 
 /obj/machinery/deployable/mortar/Destroy()
@@ -194,22 +200,22 @@
 		return
 
 	if(firing)
-		user.balloon_alert(user, "The barrel is steaming hot. Wait till it cools off")
+		user.balloon_alert(user, "barrel too hot—wait a while!")
 		return
 
 	if(istype(I, /obj/item/mortal_shell))
 		var/obj/item/mortal_shell/mortar_shell = I
 
 		if(length(chamber_items) >= max_rounds)
-			user.balloon_alert(user, "You cannot fit more")
+			user.balloon_alert(user, "you cannot fit more!")
 			return
 
 		if(!(I.type in allowed_shells))
-			user.balloon_alert(user, "This shell doesn't fit")
+			user.balloon_alert(user, "this shell doesn't fit!")
 			return
 
 		if(busy)
-			user.balloon_alert(user, "Someone else is using this")
+			user.balloon_alert(user, "someone else is using this!")
 			return
 
 		user.visible_message(span_notice("[user] starts loading \a [mortar_shell.name] into [src]."),
@@ -225,7 +231,7 @@
 		user.visible_message(span_notice("[user] loads \a [mortar_shell.name] into [src]."),
 		span_notice("You load \a [mortar_shell.name] into [src]."))
 		chamber_items += mortar_shell
-		user.balloon_alert(user, "Right click to fire")
+		user.balloon_alert(user, "right click to fire!")
 		mortar_shell.forceMove(src)
 		user.temporarilyRemoveItemFromInventory(mortar_shell)
 
@@ -244,6 +250,14 @@
 		playsound(loc, 'sound/items/ratchet.ogg', 25, 1)
 		ai_targeter = I
 
+	if(istype(I, /obj/item/compass))
+		var/obj/item/compass/compass = I
+		coords["targ_x"] = compass.target_turf.x
+		coords["targ_y"] = compass.target_turf.y
+		say("Targeting set by [user]. COORDINATES: X:[coords["targ_x"]] Y:[coords["targ_y"]] OFFSET: X:[coords["dial_x"]] Y:[coords["dial_y"]]")
+		playsound(loc, 'sound/items/ratchet.ogg', 25, 1)
+		return TRUE
+
 	if(!istype(I, /obj/item/binoculars/tactical))
 		return
 	var/obj/item/binoculars/tactical/binocs = I
@@ -254,7 +268,7 @@
 	balloon_alert(user, "unlinked")
 
 ///Start firing the gun on target and increase tally
-/obj/machinery/deployable/mortar/proc/begin_fire(atom/target, obj/item/mortal_shell/arty_shell)
+/obj/machinery/deployable/mortar/proc/begin_fire(atom/target, obj/item/mortal_shell/arty_shell, mob/user)
 	firing = TRUE
 	for(var/mob/M in GLOB.player_list)
 		if(get_dist(M , src) <= 7)
@@ -275,7 +289,7 @@
 	var/datum/ammo/ammo = GLOB.ammo_list[arty_shell.ammo_type]
 	shell.generate_bullet(ammo)
 	var/shell_range = min(get_dist_euclidean(src, target), ammo.max_range)
-	shell.fire_at(target, null, src, shell_range, ammo.shell_speed)
+	shell.fire_at(target, user, src, shell_range, ammo.shell_speed)
 
 	perform_firing_visuals()
 
@@ -283,10 +297,14 @@
 	//prevent runtime
 	if(fall_time < 0.5 SECONDS)
 		fall_time = 0.5 SECONDS
+	if(impact_cam.status)
+		impact_cam.toggle_cam()
 	impact_cam.forceMove(get_turf(target))
+	if(!impact_cam.status)
+		impact_cam.toggle_cam()
 	current_shots++
 	addtimer(CALLBACK(src, PROC_REF(falling), target, shell), fall_time)
-	addtimer(CALLBACK(src, PROC_REF(return_cam)), fall_time + 5 SECONDS)
+	addtimer(CALLBACK(src, PROC_REF(return_cam)), fall_time + 185 SECONDS)
 	addtimer(VARSET_CALLBACK(src, firing, FALSE), cool_off_time)
 
 ///Proc called by tactical binoculars to send targeting information.
@@ -305,7 +323,9 @@
 /obj/machinery/deployable/mortar/proc/return_cam()
 	current_shots--
 	if(current_shots <= 0)
-		impact_cam.forceMove(src)
+		if(impact_cam.status)
+			impact_cam.toggle_cam()
+		impact_cam.moveToNullspace()
 
 ///Begins fall animation for projectile and plays fall sound
 /obj/machinery/deployable/mortar/proc/falling(turf/T, atom/movable/projectile/shell)
@@ -338,43 +358,42 @@
 		return
 
 	if(issynth(user) && !CONFIG_GET(flag/allow_synthetic_gun_use))
-		user.balloon_alert(user, "Your programming restricts operating this")
+		user.balloon_alert(user, "you can't operate this!")
 		return
 
 	if(firing)
-		user.balloon_alert(user, "The gun is still firing.")
+		user.balloon_alert(user, "the gun is still firing!")
 		return
 
 	if(length(chamber_items) <= 0)
-		user.balloon_alert(user, "There is nothing loaded.")
+		user.balloon_alert(user, "there is nothing loaded!")
 		return
 
 	if(!is_ground_level(z))
-		user.balloon_alert(user, "You can't fire the gun here.")
+		user.balloon_alert(user, "you can't fire the gun here!")
 		return
 
 	if(coords["targ_x"] == 0 && coords["targ_y"] == 0) //Mortar wasn't set
-		user.balloon_alert(user, "The gun needs to be aimed first.")
+		user.balloon_alert(user, "the gun needs to be aimed first!")
 		return
 
 	var/turf/target = locate(coords["targ_x"] + coords["dial_x"], coords["targ_y"]  + coords["dial_y"], z)
 	if(get_dist(loc, target) < minimum_range)
-		user.balloon_alert(user, "The target is too close to the gun.")
+		user.balloon_alert(user, "the target is too close to the gun!")
 		return
 	if(!isturf(target))
-		user.balloon_alert(user, "You cannot fire the gun to this target.")
+		user.balloon_alert(user, "you can't fire the gun at this target!")
 		return
 	setDir(get_cardinal_dir(src, target))
 
 	var/area/A = get_area(target)
 	if(istype(A) && A.ceiling >= CEILING_UNDERGROUND)
-		user.balloon_alert(user, "The target is underground.")
+		user.balloon_alert(user, "the target is underground!")
 		return
 
 	visible_message("[icon2html(src, viewers(src))] [span_danger("The [name] fires!")]")
 	var/turf/location = get_turf(src)
 	location.ceiling_debris_check(2)
-	log_game("[key_name(user)] has fired the [src] at [AREACOORD(target)]")
 
 	var/max_offset = round(abs((get_dist_euclidean(src,target)))/offset_per_turfs)
 	var/firing_spread = max_offset + spread
@@ -394,7 +413,8 @@
 	for(var/i = 1 to amount_to_fire)
 		var/turf/impact_turf = pick(turf_list)
 		in_chamber = chamber_items[next_chamber_position]
-		addtimer(CALLBACK(src, PROC_REF(begin_fire), impact_turf, in_chamber), fire_delay * i)
+		addtimer(CALLBACK(src, PROC_REF(begin_fire), impact_turf, in_chamber, user), fire_delay * i)
+		log_combat(user, src, "fired" , in_chamber," aiming at [AREACOORD(target)], will land at [AREACOORD(impact_turf)]")
 		next_chamber_position--
 		chamber_items -= in_chamber
 		if(istype(in_chamber, /obj/item/mortal_shell/howitzer/white_phos || /obj/item/mortal_shell/rocket/mlrs/gas))
@@ -452,7 +472,7 @@
 
 /obj/item/mortar_kit/double
 	name = "\improper TA-55DB mortar"
-	desc = "A manual, crew-operated mortar system intended to rain down 80mm goodness on anything it's aimed at. Needs to be set down first to fire. This one is a double barreled mortar that can hold 4 rounds usually fitted in TAV's."
+	desc = "A manual, crew-operated mortar system intended to rain down 80mm goodness on anything it's aimed at. Needs to be set down first to fire. This one is a double barreled mortar that can hold 2 rounds, and is usually fitted in TAVs."
 	icon_state = "mortar_db"
 	max_integrity = 400
 	item_flags = IS_DEPLOYABLE|TWOHANDED|DEPLOYED_NO_PICKUP|DEPLOY_ON_INITIALIZE
@@ -466,4 +486,3 @@
 	max_rounds = 2
 	fire_delay = 0.5 SECONDS
 	cool_off_time = 6 SECONDS
-	spread = 2

@@ -193,7 +193,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 		var/atom/movable/AM = locate(href_list["observefollow"])
 		var/client/C = usr.client
 
-		if(!ismovableatom(AM))
+		if(!ismovable(AM))
 			return
 
 		if(isnewplayer(C.mob) || isnewplayer(AM))
@@ -748,15 +748,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 		log_admin("[key_name(usr)] has sent [key_name(M)] back to the lobby.")
 		message_admins("[ADMIN_TPMONTY(usr)] has sent [key_name_admin(M)] back to the lobby.")
 
-		var/mob/new_player/NP = new()
-		M.client?.screen.Cut()
-		NP.name = M.key
-		NP.key = M.key
-		if(isobserver(M))
-			qdel(M)
-		else
-			M.ghostize()
-
+		M.ghostize(FALSE, FALSE, TRUE)
 
 	else if(href_list["cryo"])
 		if(!check_rights(R_ADMIN))
@@ -764,6 +756,8 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 
 		var/mob/living/L = locate(href_list["cryo"])
 		if(!istype(L))
+			if(isobserver(L))
+				L.ghostize(FALSE, FALSE, TRUE)
 			return
 
 		if(alert("Cryo [key_name(L)]?", "Cryosleep", "Yes", "No") != "Yes")
@@ -772,6 +766,8 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 		var/client/C = L.client
 		if(C && alert("They have a client attached, are you sure?", "Cryosleep", "Yes", "No") != "Yes")
 			return
+		else
+			L.ghostize(FALSE, FALSE, TRUE)
 
 		var/old_name = L.real_name
 		L.despawn()
@@ -779,13 +775,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 		var/lobby
 		if(C?.mob?.mind && alert("Do you also want to send them to the lobby?", "Cryosleep", "Yes", "No") == "Yes")
 			lobby = TRUE
-			var/mob/new_player/NP = new()
-			var/mob/N = C.mob
-			NP.name = C.mob.name
-			C.screen.Cut()
-			C.mob.mind.transfer_to(NP, TRUE)
-			if(isobserver(N))
-				qdel(N)
+			C.mob.ghostize(FALSE, FALSE, TRUE)
 
 		log_admin("[key_name(usr)] has cryo'd [C ? key_name(C) : old_name][lobby ? " sending them to the lobby" : ""].")
 		message_admins("[ADMIN_TPMONTY(usr)] has cryo'd [C ? key_name_admin(C) : old_name] [lobby ? " sending them to the lobby" : ""].")
@@ -2077,7 +2067,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 
 		switch(href_list["xeno"])
 			if("hive")
-				previous = X.hivenumber
+				previous = X.get_xeno_hivenumber()
 
 				var/newhive = input("Select a hive.", "Xeno Panel") as null|anything in GLOB.hive_datums
 				if(!newhive)
@@ -2089,7 +2079,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				if(previous == change)
 					return
 
-				if(!istype(X) || X.hivenumber != previous)
+				if(!istype(X) || X.get_xeno_hivenumber() != previous)
 					to_chat(usr, span_warning("Target is no longer valid."))
 					return
 
@@ -2230,12 +2220,35 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 			return
 		return usr.client?.mark_datum(datum_to_mark)
 
+	else if(href_list["kick_all_from_lobby"])
+		if(!check_rights(R_ADMIN))
+			return
+		if(!SSticker.IsRoundInProgress())
+			to_chat(usr, "You may only use this when the game is running.", confidential = TRUE)
+			return
+		var/afkonly = text2num(href_list["afkonly"])
+		if(tgui_alert(usr,"Are you sure you want to kick all [afkonly ? "AFK" : ""] clients from the lobby?", "Message", list("Yes", "No")) != "Yes")
+			to_chat(usr, "Kick clients from lobby aborted", confidential = TRUE)
+			return
+		var/list/listkicked = kick_clients_in_lobby(span_danger("You were kicked from the lobby by [usr.client.holder.fakekey ? "an Administrator" : "[usr.client.key]"]."), afkonly)
+
+		var/strkicked = ""
+		for(var/name in listkicked)
+			strkicked += "[name], "
+		message_admins("[key_name_admin(usr)] has kicked [afkonly ? "all AFK" : "all"] clients from the lobby. [length(listkicked)] clients kicked: [strkicked ? strkicked : "--"]")
+		log_admin("[key_name(usr)] has kicked [afkonly ? "all AFK" : "all"] clients from the lobby. [length(listkicked)] clients kicked: [strkicked ? strkicked : "--"]")
+
 	else if(href_list["play_internet"])
 		if(!check_rights(R_SOUND))
 			return
 
+		var/credit = href_list["credit"]
 		var/link_url = href_list["play_internet"]
 		if(!link_url)
 			return
+		web_sound(usr, link_url, credit)
+	else if(href_list["playerpanelextended"])
+		if(!check_rights(R_ADMIN))
+			return
 
-		web_sound(usr, link_url)
+		SSadmin_verbs.dynamic_invoke_verb(usr, /datum/admin_verb/player_panel_extended)

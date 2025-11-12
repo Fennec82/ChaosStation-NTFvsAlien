@@ -10,7 +10,6 @@
 #define COMSIG_GLOB_NEW_Z "!new_z"
 #define COMSIG_GLOB_DEPLOY_TIMELOCK_ENDED "!deploy_timelock_ended"
 #define COMSIG_GLOB_OPEN_TIMED_SHUTTERS_LATE "!open_timed_shutters_late"
-#define COMSIG_GLOB_OPEN_TIMED_SHUTTERS_XENO_HIVEMIND "!open_timed_shutters_xeno_hivemind"
 #define COMSIG_GLOB_OPEN_TIMED_SHUTTERS_CRASH "!open_timed_shutters_crash"
 #define COMSIG_GLOB_OPEN_SHUTTERS_EARLY "!open_shutters_early"
 ///Marine ship in Crash gamemode has landed
@@ -67,6 +66,9 @@
 #define COMSIG_GLOB_AI_MINION_RALLY "!ai_minion_rally"
 #define COMSIG_GLOB_HIVE_TARGET_DRAINED "!hive_target_drained"
 
+///from proc/global_rally_zombies()
+#define COMSIG_GLOB_AI_ZOMBIE_RALLY "!ai_zombie_rally"
+
 /// Sent when a marine dropship enters transit level
 #define COMSIG_GLOB_DROPSHIP_TRANSIT "!dropship_transit"
 ///Sent when xenos launch a hijacked dropship
@@ -90,6 +92,7 @@
 
 //Signals for shuttle
 #define COMSIG_GLOB_SHUTTLE_TAKEOFF "!shuttle_take_off"
+#define COMSIG_GLOB_TADPOLE_SHUTTER "!shutter_toggle"
 
 /// sent after world.maxx and/or world.maxy are expanded: (has_exapnded_world_maxx, has_expanded_world_maxy)
 #define COMSIG_GLOB_EXPANDED_WORLD_BOUNDS "!expanded_world_bounds"
@@ -100,9 +103,6 @@
 ///called when an AI is requested by a holopad
 #define COMSIG_GLOB_HOLOPAD_AI_CALLED "!holopad_calling"
 
-///called whenever a groundside thermal bluespace generator turns on/off
-#define COMSIG_GLOB_BLUESPACE_GEN_ACTIVATED "!bluespace_gen_activated"
-#define COMSIG_GLOB_ALL_BLUESPACE_GEN_DEACTIVATED "!all_bluespace_gen_deactivated"
 
 ///Sent when mob is deployed via a patrol point
 #define COMSIG_GLOB_HVH_DEPLOY_POINT_ACTIVATED "!hvh_deploy_point_activated"
@@ -158,6 +158,11 @@
 
 ///from /obj/effect/build_designator/Initialize()
 #define COMSIG_GLOB_HOLO_BUILD_INITIALIZED "!holo_build_initialized"
+///from /datum/action/ability/activable/build_designator/indicate_target()
+#define COMSIG_GLOB_DESIGNATED_TARGET_SET "!designated_target_set"
+
+#define COMSIG_GLOB_ZOMBIE_TUNNEL_DESTROYED "!ZOMBIE_TUNNEL_DESTROYED"
+
 //////////////////////////////////////////////////////////////////
 
 // /datum signals
@@ -174,6 +179,9 @@
 ///from /datum/element/jump when a jump has started and ended
 #define COMSIG_ELEMENT_JUMP_STARTED "element_jump_started"
 #define COMSIG_ELEMENT_JUMP_ENDED "element_jump_ended"
+
+///From /datum/component/throw_parry/parry_check() when a parry is successful
+#define COMSIG_ELEMENT_PARRY_TRIGGERED "element_parry_triggered"
 
 // /datum/limb signals
 #define COMSIG_LIMB_DESTROYED "limb_destroyed"
@@ -357,6 +365,10 @@
 #define COMSIG_ATOM_SET_LIGHT_FLAGS "atom_set_light_flags"
 ///From base of atom/get_self_acid
 #define COMSIG_ATOM_GET_SELF_ACID "atom_get_self_acid"
+///From base of atom/can_plastique()
+#define COMSIG_ATOM_TRY_PLASTIQUE "atom_try_plastique"
+	///Do not allow planting
+	#define COMSIG_ATOM_CANCEL_PLASTIQUE	(1<<0)
 
 // /atom/movable signals
 #define COMSIG_MOVABLE_PRE_MOVE "movable_pre_move"				//from base of atom/movable/Move(): (/atom, new_loc, direction)
@@ -369,6 +381,10 @@
 #define COMSIG_MOVABLE_LOCATION_CHANGE "location_changed"
 #define COMSIG_MOVABLE_BUMP "movable_bump"						//from base of atom/movable/Bump(): (/atom)
 	#define COMPONENT_BUMP_RESOLVED (1<<0)
+/// Sent before a thrown /atom impacts an /atom.  From [/atom/movable/proc/throw_impact]: (/atom/movable)
+#define COMSIG_PRE_MOVABLE_IMPACT "movable_pre_movable_impact"
+	/// Causes the thrown /atom to fail to impact the /mob/living, thus continuing the throw.
+	#define COMPONENT_PRE_MOVABLE_IMPACT_DODGED (1<<0)
 #define COMSIG_MOVABLE_IMPACT "movable_impact"					//from base of atom/movable/throw_impact(): (/atom/hit_atom)
 ///from /atom/movable/proc/buckle_mob(): (mob/living/M, force, check_loc, buckle_mob_flags)
 #define COMSIG_MOVABLE_PREBUCKLE "prebuckle" // this is the last chance to interrupt and block a buckle before it finishes
@@ -389,8 +405,6 @@
 	#define COMPONENT_DRIVER_BLOCK_MOVE (1<<0)
 #define COMSIG_MOVABLE_PRE_THROW "movable_pre_throw"			//from base of atom/movable/throw_at()
 	#define COMPONENT_MOVABLE_BLOCK_PRE_THROW (1<<0)
-#define COMSIG_LIVING_PRE_THROW_IMPACT "movable_living_throw_impact_check" //sent before an item impacts a living mob
-	#define COMPONENT_PRE_THROW_IMPACT_HIT (1<<0)
 #define COMSIG_MOVABLE_POST_THROW "movable_post_throw"			//called on tail of atom/movable/throw_at()
 #define COMSIG_MOVABLE_DISPOSING "movable_disposing"			//called when the movable is added to a disposal holder object for disposal movement: (obj/structure/disposalholder/holder, obj/machinery/disposal/source)
 #define COMSIG_MOVABLE_HEAR "movable_hear"						//from base of atom/movable/Hear(): (message, atom/movable/speaker, message_language, raw_message, radio_freq, list/spans, message_mode)
@@ -434,6 +448,8 @@
 #define COMSIG_TURF_MULTIZ_NEW "turf_multiz_new"
 ///called when an elevator enters this turf
 #define COMSIG_TURF_INDUSTRIAL_LIFT_ENTER "turf_industrial_life_enter"
+/// Sent by the turf before its contents, if any, are crushed by a shuttle. [/turf/proc/toShuttleMove]: ()
+#define COMSIG_TURF_PRE_SHUTTLE_CRUSH "turf_pre_shuttle_crush"
 
 // /obj signals
 #define COMSIG_OBJ_SETANCHORED "obj_setanchored"				//called in /obj/structure/setAnchored(): (value)
@@ -503,6 +519,9 @@
 
 #define COMSIG_ITEM_VARIANT_CHANGE "item_variant_change"			// called in color_item : (mob/user, variant)
 
+#define COMSIG_ITEM_STICKY_STICK_TO "sticky_item_stick_to"
+#define COMSIG_ITEM_STICKY_CLEAN_REFS "sticky_item_clean_refs"
+
 #define COMSIG_CLOTHING_MECHANICS_INFO "clothing_mechanics_info"	//from base of /obj/item/clothing/get_mechanics_info()
 	#define COMPONENT_CLOTHING_MECHANICS_TINTED (1<<0)
 	#define COMPONENT_CLOTHING_BLUR_PROTECTION (1<<1)
@@ -541,6 +560,9 @@
 
 // /obj/item/cell
 #define COMSIG_CELL_SELF_RECHARGE "cell_self_recharge"
+
+///SG goggles toggled on
+#define COMSIG_KTLD_ACTIVATED "ktld_activated"
 
 // /obj/item/weapon/gun signals
 #define COMSIG_GUN_FIRE "gun_fire"
@@ -621,10 +643,10 @@
 #define COMSIG_MOB_ITEM_ATTACK_ALTERNATE "mob_item_attack_alt"	//from base of /obj/item/attack_alternate(): (mob/target, /obj/item/attacking_item)
 	#define COMPONENT_ITEM_NO_ATTACK (1<<0)						//return this if you dont want attacka and altattacks to run
 
-///Called when an object is grilled ontop of a griddle
+///Called when an object is grilled on top of a griddle
 #define COMSIG_ITEM_GRILLED "item_griddled"
 	#define COMPONENT_HANDLED_GRILLING (1<<0)
-///Called when an object is turned into another item through grilling ontop of a griddle
+///Called when an object is turned into another item through grilling on top of a griddle
 #define COMSIG_GRILL_COMPLETED "item_grill_completed"
 
 #define COMSIG_MOB_ITEM_AFTERATTACK "mob_item_afterattack"		//from base of obj/item/afterattack(): (atom/target, mob/user, has_proximity, click_parameters)
@@ -654,7 +676,7 @@
 #define COMSIG_MOB_SHOCK_STAGE_CHANGED "mob_shock_stage_changed"
 /// from mob/get_status_tab_items(): (list/items)
 #define COMSIG_MOB_GET_STATUS_TAB_ITEMS "mob_get_status_tab_items"
-/// from mob/proc/dropItemToGround()
+/// from mob/proc/dropItemToGround(): (obj/item/dropped_item)
 #define COMSIG_MOB_DROPPING_ITEM "mob_dropping_item"
 ///From mob/do_after_coefficent()
 #define MOB_GET_DO_AFTER_COEFFICIENT "mob_get_do_after_coefficient"
@@ -741,8 +763,11 @@
 	#define ZIMPACT_NO_MESSAGE (1<<1)
 	/// Do not do the spin animation when landing
 	#define ZIMPACT_NO_SPIN (1<<2)
+// From [/mob/living/updatehealth()]
+#define COMSIG_LIVING_UPDATE_HEALTH "living_update_health"
 
-
+// Sent when a /living is dealing with being on fire & is still on fire. From [/mob/living/proc/handle_fire]: ()
+#define COMSIG_LIVING_HANDLE_FIRE "living_handle_fire"
 
 //mob/living/carbon signals
 #define COMSIG_CARBON_SETAFKSTATUS "carbon_setafkstatus"		//from base of /mob/living/set_afk_status(): (new_status, afk_timer)
@@ -751,6 +776,8 @@
 #define COMSIG_HUMAN_MELEE_UNARMED_ATTACK "human_melee_unarmed_attack"	//from mob/living/carbon/human/UnarmedAttack(): (atom/target)
 #define COMSIG_HUMAN_MELEE_UNARMED_ATTACK_ALTERNATE "human_melee_unarmed_attack_alternate"	//same as above, but right click
 #define COMSIG_HUMAN_DAMAGE_TAKEN "human_damage_taken"					//from human damage receiving procs: (mob/living/carbon/human/wearer, damage)
+#define COMSIG_HUMAN_BRUTE_DAMAGE "human_brute_damage" // from [/mob/living/carbon/human/adjustBruteLoss] (amount, amount_mod)
+#define COMSIG_HUMAN_BURN_DAMAGE "human_burn_damage" // from [/mob/living/carbon/human/adjustFireLoss] (amount, amount_mod)
 #define COMSIG_HUMAN_LIMB_FRACTURED "human_limb_fractured"				//from [datum/limb/proc/fracture]: (mob/living/carbon/human/wearer, datum/limb/limb)
 ///from [/mob/living/carbon/human/proc/apply_overlay]: (cache_index, list/overlays_to_apply)
 #define COMSIG_HUMAN_APPLY_OVERLAY "human_overlay_applied"
@@ -767,7 +794,6 @@
 #define COMSIG_DROPSHIP_EQUIPMENT_UNEQUIPPED "shuttle_equipment_unequipped"
 
 // xeno stuff
-#define COMSIG_HIVE_BECOME_RULER "hive_become_ruler"
 #define COMSIG_HIVE_XENO_DEATH "hive_xeno_death"
 #define COMSIG_HIVE_XENO_MOTHER_PRE_CHECK "hive_xeno_mother_pre_check"		//from datum/hive_status/normal/proc/attempt_to_spawn_larva()
 #define COMSIG_HIVE_XENO_MOTHER_CHECK "hive_xeno_mother_check"				//from /datum/hive_status/normal/proc/spawn_larva()
@@ -824,6 +850,7 @@
 
 #define COMSIG_XENOMORPH_BRUTE_DAMAGE "xenomorph_brute_damage" // (amount, amount_mod, passive)
 #define COMSIG_XENOMORPH_BURN_DAMAGE "xenomorph_burn_damage" // (amount, amount_mod, passive)
+#define COMSIG_XENOMORPH_SUNDER_CHANGE "xenomorph_sunder_change" // (old, new)
 
 #define COMSIG_XENOMORPH_EVOLVED "xenomorph_evolved"
 #define COMSIG_XENOMORPH_DEEVOLVED "xenomorph_deevolved"
@@ -850,8 +877,17 @@
 
 #define COMSIG_XENOMORPH_LEAP_BUMP "xenomorph_leap_bump" //from /mob/living/carbon/xenomorph/bump
 
+#define COMSIG_XENO_SELECTED_REAGENT_CHANGED "xenomorph_selected_reagent_changed" // from [/mob/living/carbon/xenomorph/set_selected_reagent]: (/datum/reagent/old_reagent_typepath, /datum/reagent/new_reagent_typepath)
+
 #define COMSIG_XENO_DRAIN_HIT "xeno_drain_hit"
 #define COMSIG_XENO_CARNAGE_HIT "xeno_carnage_hit"
+
+#define COMSIG_FACE_HUGGER_DEATH "face_hugger_death"
+
+// Mutations:
+#define COMSIG_GLOB_MUTATION_CHAMBER_SHELL "!mutation_chamber_shell" // From: [/obj/structure/xeno/mutation_chamber/shell] (previous_amount, new_amount)
+#define COMSIG_GLOB_MUTATION_CHAMBER_SPUR "!mutation_chamber_spur" // From: [/obj/structure/xeno/mutation_chamber/shell] (previous_amount, new_amount)
+#define COMSIG_GLOB_MUTATION_CHAMBER_VEIL "!mutation_chamber_veil" // From: [/obj/structure/xeno/mutation_chamber/shell] (previous_amount, new_amount)
 
 //human signals
 #define COMSIG_CLICK_QUICKEQUIP "click_quickequip"
@@ -868,10 +904,6 @@
 #define COMSIG_ABILITY_STASIS "ability_stasis"
 #define COMSIG_ABILITY_TELEKINESIS "ability_telekinesis"
 #define COMSIG_ABILITY_REANIMATE "ability_reanimate"
-
-// throw parry signals
-#define COMSIG_THROW_PARRY_CHECK "throw_parry_check"
-#define COMSIG_PARRY_TRIGGER "parry_trigger"
 
 // xeno iff tag signals
 #define COMSIG_XENO_IFF_CHECK "xeno_iff_check" //! Signal used by certain IFF checking things to see if a xeno carries an IFF tag of the faction.
@@ -890,6 +922,12 @@
 	#define COMSIG_MAINTAIN_POSITION (1<<0)
 #define COMSIG_OBSTRUCTED_MOVE "unable_to_step_towards_thing" //Tried to step in a direction and there was a obstruction
 	#define COMSIG_OBSTACLE_DEALT_WITH (1<<0)
+
+///from /datum/action/ability/activable/build_designator/call_interaction()
+#define COMSIG_MOB_INTERACTION_DESIGNATED "mob_interaction_designated"
+
+///From /atom/add_slaved_npc()
+#define COMSIG_COMPONENT_ADD_NEW_SLAVE_NPC "component_add_new_slave_npc"
 
 // /datum/song signals
 
@@ -962,6 +1000,7 @@
 #define COMSIG_SPIDERLING_RETURN "spiderling_return"
 #define COMSIG_SPIDERLING_GUARD "spiderling_guard"
 #define COMSIG_SPIDERLING_UNGUARD "spiderling_unguard"
+#define COMSIG_SPIDERLING_MOTHER_DEATH "spiderling_mother_death"
 
 //puppet
 #define COMSIG_PUPPET_CHANGE_ORDER "puppetchangeorder"
@@ -980,3 +1019,6 @@
 /// From [/datum/controller/subsystem/security_level/proc/set_level]
 /// `/datum/security_level/next_level`, `/datum/security_level/previous_level`
 #define COMSIG_SECURITY_LEVEL_CHANGED "security_level_changed"
+
+/// From [/datum/health_scan/proc/ui_data]: `mob/living/carbon/human/patient`, `list/data`
+#define COMSIG_HEALTH_SCAN_DATA "health_scan_data"

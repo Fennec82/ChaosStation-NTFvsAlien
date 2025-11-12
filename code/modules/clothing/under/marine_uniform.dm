@@ -194,12 +194,13 @@
 
 /obj/item/clothing/under/marine/spec_operative/equipped(mob/user, i_clothing)
 	. = ..()
-	RegisterSignal(user, COMSIG_LIVING_ADD_VENTCRAWL)
+	//Not sure what this was trying to do but all it was doing was causing runtime errors.
+	//RegisterSignal(user, COMSIG_LIVING_ADD_VENTCRAWL)
 	ADD_TRAIT(user, TRAIT_CAN_VENTCRAWL, ARMOR_TRAIT)
 
 /obj/item/clothing/under/marine/spec_operative/unequipped(mob/unequipper, i_clothing)
 	. = ..()
-	UnregisterSignal(unequipper, COMSIG_LIVING_ADD_VENTCRAWL)
+	//UnregisterSignal(unequipper, COMSIG_LIVING_ADD_VENTCRAWL)
 	REMOVE_TRAIT(unequipper, TRAIT_CAN_VENTCRAWL, ARMOR_TRAIT)
 
 /obj/item/clothing/under/marine/mp
@@ -350,7 +351,7 @@
 
 /obj/item/clothing/under/marine/officer/ce
 	name = "chief ship engineer uniform"
-	desc = "An engine-friendly, kevlar-weaved, hazmat-tested, EMF-augmented ship engineer uniform. You suspect it's not as robust-proof as advertised."
+	desc = "An engine-friendly, kevlar-weaved, hazmat-tested, EMF-augmented chief ship engineer uniform. You suspect it's not as robust-proof as advertised."
 	icon_state = "EC_jumpsuit"
 	adjustment_variants = list(
 		"Half" = "_h",
@@ -358,7 +359,7 @@
 
 /obj/item/clothing/under/marine/officer/engi
 	name = "engineer uniform"
-	desc = "An engine-friendly, kevlar-weaved, hazmat-tested, EMF-augmented chief ship engineer uniform. You suspect it's not as robust-proof as advertised."
+	desc = "An engine-friendly, kevlar-weaved, hazmat-tested, EMF-augmented ship engineer uniform. You suspect it's not as robust-proof as advertised."
 	icon_state = "E_jumpsuit"
 	adjustment_variants = list(
 		"Half" = "_h",
@@ -462,14 +463,17 @@
 
 /obj/item/clothing/under/marine/veteran/freelancer
 	name = "freelancer fatigues"
-	desc = "A set of loose fitting fatigues, perfect for an informal mercenary. Smells like gunpowder, apple pie, and covered in grease and sake stains."
+	desc = "A set of loose fitting fatigues, perfect for an informal mercenary. Smells like gunpowder, corn syrup, and covered in grease and sake stains."
 	icon_state = "freelancer_uniform"
 	min_cold_protection_temperature = ICE_PLANET_MIN_COLD_PROTECTION_TEMPERATURE
 	has_sensor = 0
-	starting_attachments = list(/obj/item/armor_module/storage/uniform/holster/freelancer)
+	starting_attachments = list(/obj/item/armor_module/storage/uniform/brown_vest)
 
-/obj/item/clothing/under/marine/veteran/freelancer/veteran
-	starting_attachments = list(/obj/item/armor_module/storage/uniform/holster/vp)
+/obj/item/clothing/under/marine/veteran/freelancer/medic
+	name = "freelancer corpsman fatigues"
+	desc = "A set of loose fitting fatigues, perfect for an informal mercenary. Has much better state than regular fatigues, and don't smell that bad."
+	icon_state = "freelancer_uniform_medic"
+	starting_attachments = list(/obj/item/armor_module/storage/uniform/white_vest)
 
 /*===========================HELGHAST - MERCENARY================================*/
 
@@ -631,7 +635,9 @@
 		slot_r_hand_str = 'icons/mob/inhands/items/items_right.dmi',
 	)
 	worn_icon_state = "icc"
-	has_sensor = FALSE
+
+/obj/item/clothing/under/icc/som
+	name = "\improper stolen Modelle/30 uniform"
 
 /obj/item/clothing/under/icc/webbing
 	starting_attachments = list(/obj/item/armor_module/storage/uniform/brown_vest)
@@ -710,6 +716,7 @@
 	starting_attachments = list(/obj/item/armor_module/storage/uniform/white_vest)
 
 /obj/item/clothing/under/vsd/alt
+	name = "\improper KZ seasoned jumpsuit"
 	icon_state = "vsd_uniform_alt"
 	worn_icon_state = "vsd_uniform_alt"
 
@@ -737,7 +744,7 @@
 	starting_attachments = list(/obj/item/armor_module/storage/uniform/black_vest)
 
 /obj/item/clothing/under/vsd/upp
-	name = "KZ 'USL' jumpsuit"
+	name = "KZ military jumpsuit"
 	desc = "A standard uniform for a division in the Kaizoku Corporation, it's colors feel reminiscent."
 	icon_state = "upp_retired"
 	worn_icon_state = "upp_retired"
@@ -749,6 +756,7 @@
 	starting_attachments = list(/obj/item/armor_module/storage/uniform/white_vest)
 
 /obj/item/clothing/under/vsd/upp/alt
+	name = "KZ military seasoned jumpsuit"
 	icon_state = "upp_secondary"
 	worn_icon_state = "upp_secondary"
 
@@ -759,7 +767,7 @@
 	starting_attachments = list(/obj/item/armor_module/storage/uniform/white_vest)
 
 /obj/item/clothing/under/vsd/upp/officer
-	name = "KZ 'USL' officer jumpsuit"
+	name = "KZ military officer jumpsuit"
 	desc = "A standard uniform for a officer in a division of the Kaizoku Corporation, it's colors feel reminiscent."
 	icon_state = "upp_retired_officer"
 	worn_icon_state = "upp_retired_officer"
@@ -781,7 +789,7 @@
 	worn_icon_state = "vsd_shirt_sleeveless"
 
 /obj/item/clothing/under/vsd/juggernaut
-	name = "KZ overalls"
+	name = "KZ military overalls"
 	icon_state = "vsd_alt_juggernaut"
 	worn_icon_state = "vsd_alt_juggernaut"
 

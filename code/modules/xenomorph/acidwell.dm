@@ -9,6 +9,8 @@
 	opacity = FALSE
 	anchored = TRUE
 	max_integrity = 5
+	plane = FLOOR_PLANE
+	layer = ABOVE_WEEDS_LAYER
 
 	hit_sound = SFX_ALIEN_RESIN_MOVE
 	destroy_sound = SFX_ALIEN_RESIN_MOVE
@@ -19,15 +21,16 @@
 	///What xeno created this well
 	var/mob/living/carbon/xenomorph/creator = null
 
-/obj/structure/xeno/acidwell/Initialize(mapload, _creator)
+/obj/structure/xeno/acidwell/Initialize(mapload, _hivenumber, _creator)
 	. = ..()
 	creator = _creator
 	RegisterSignal(creator, COMSIG_QDELETING, PROC_REF(clear_creator))
 	update_icon()
-	var/static/list/connections = list(
+	var/static/list/listen_connections = list(
 		COMSIG_ATOM_ENTERED = PROC_REF(on_cross),
+		COMSIG_TURF_PRE_SHUTTLE_CRUSH = PROC_REF(pre_shuttle_crush)
 	)
-	AddElement(/datum/element/connect_loc, connections)
+	AddElement(/datum/element/connect_loc, listen_connections)
 
 /obj/structure/xeno/acidwell/Destroy()
 	creator = null
@@ -38,11 +41,10 @@
 	SIGNAL_HANDLER
 	creator = null
 
-///Ensures that no acid gas will be released when the well is crushed by a shuttle
-/obj/structure/xeno/acidwell/proc/shuttle_crush()
+/// Deletes this first before it can get crushed by a shuttle.
+/obj/structure/xeno/acidwell/proc/pre_shuttle_crush(datum/source)
 	SIGNAL_HANDLER
 	qdel(src)
-
 
 /obj/structure/xeno/acidwell/obj_destruction(damage_amount, damage_type, damage_flag, mob/living/blame_mob)
 	if(!QDELETED(creator) && creator.stat == CONSCIOUS && creator.z == z)
@@ -101,8 +103,10 @@
 		return ..()
 	attack_alien(user)
 
-/obj/structure/xeno/acidwell/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
-	if(xeno_attacker.a_intent == INTENT_HARM && (CHECK_BITFIELD(xeno_attacker.xeno_caste.caste_flags, CASTE_IS_BUILDER) || xeno_attacker == creator) ) //If we're a builder caste or the creator and we're on harm intent, deconstruct it.
+/obj/structure/xeno/acidwell/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage * xeno_attacker.xeno_melee_damage_modifier, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+	if(!issamexenohive(xeno_attacker))
+		return ..()
+	if(xeno_attacker.a_intent == INTENT_HARM && (xeno_attacker.xeno_flags & XENO_DESTROY_OWN_STRUCTURES)) //If we're on harm and have the toggle active, destroy the structure.
 		balloon_alert(xeno_attacker, "Removing...")
 		if(!do_after(xeno_attacker, XENO_ACID_WELL_FILL_TIME, IGNORE_HELD_ITEM, src, BUSY_ICON_HOSTILE))
 			balloon_alert(xeno_attacker, "Stopped removing")
@@ -163,19 +167,19 @@
 	for(var/obj/item/explosive/grenade/sticky/sticky_bomb in stepper.contents)
 		if(charges_used >= charges)
 			break
-		if(sticky_bomb.stuck_to == stepper)
-			sticky_bomb.clean_refs()
+		if(sticky_bomb.active)
+			sticky_bomb.unstick_from(src)
 			sticky_bomb.forceMove(loc)
-			charges_used ++
+			charges_used++
 
 	if(stepper.on_fire && (charges_used < charges))
 		stepper.ExtinguishMob()
-		charges_used ++
+		charges_used++
 
-	if(!isxeno(stepper))
+	if(!issamexenohive(stepper))
 		stepper.next_move_slowdown += charges * 2 //Acid spray has slow down so this should too; scales with charges, Min 2 slowdown, Max 10
-		stepper.apply_damage(charges * 10, BURN, BODY_ZONE_PRECISE_L_FOOT, ACID,  penetration = 33)
-		stepper.apply_damage(charges * 10, BURN, BODY_ZONE_PRECISE_R_FOOT, ACID,  penetration = 33)
+		stepper.apply_damage(charges * 10, BURN, BODY_ZONE_PRECISE_L_FOOT, ACID, penetration = 33)
+		stepper.apply_damage(charges * 10, BURN, BODY_ZONE_PRECISE_R_FOOT, ACID, penetration = 33)
 		stepper.visible_message(span_danger("[stepper] is immersed in [src]'s acid!") , \
 		span_danger("We are immersed in [src]'s acid!") , null, 5)
 		playsound(stepper, "sound/bullets/acid_impact1.ogg", 10 * charges)

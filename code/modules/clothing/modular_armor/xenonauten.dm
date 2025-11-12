@@ -9,6 +9,7 @@
 	icon = null
 	worn_icon_list = list(slot_wear_suit_str = 'icons/mob/modular/modular_armor.dmi')
 	slowdown = SLOWDOWN_ARMOR_MEDIUM
+	shows_bottom_genital = TRUE
 
 	attachments_allowed = list(
 		/obj/item/armor_module/module/better_shoulder_lamp,
@@ -16,19 +17,18 @@
 		/obj/item/armor_module/module/fire_proof,
 		/obj/item/armor_module/module/tyr_extra_armor,
 		/obj/item/armor_module/module/tyr_extra_armor/mark1,
-		/obj/item/armor_module/module/tyr_extra_armor/old,
 		/obj/item/armor_module/module/mimir_environment_protection,
 		/obj/item/armor_module/module/mimir_environment_protection/mark1,
-		/obj/item/armor_module/module/mimir_environment_protection/old,
 		/obj/item/armor_module/module/hlin_explosive_armor,
 		/obj/item/armor_module/module/ballistic_armor,
 		/obj/item/armor_module/module/chemsystem,
 		/obj/item/armor_module/module/knight,
 		/obj/item/armor_module/module/eshield,
+		/obj/item/armor_module/module/eshield/absorbant/energy,
+		/obj/item/armor_module/module/eshield/absorbant/ballistic,
 		/obj/item/armor_module/module/eshield/overclocked,
 		/obj/item/armor_module/module/mirage,
 		/obj/item/armor_module/module/armorlock,
-		/obj/item/armor_module/module/eshield/old,
 
 		/obj/item/armor_module/storage/general,
 		/obj/item/armor_module/storage/ammo_mag,
@@ -282,16 +282,103 @@
 	greyscale_config = /datum/greyscale_config/xenonaut/bikini
 	slowdown = SLOWDOWN_ARMOR_VERY_LIGHT
 	soft_armor = list(MELEE = 35, BULLET = 50, LASER = 50, ENERGY = 50, BOMB = 40, BIO = 40, FIRE = 50, ACID = 40)
+	shows_bottom_genital = TRUE
+
+/obj/item/clothing/suit/modular/xenonauten/light/bikini/som
+	name = "\improper SOM M-69 Bikini-pattern light armor"
+	desc = "An unusal armor made by the " + FACTION_SOM + ", apparently based on an NTC design. Extra-light bikini armor with modular attachments made to work in many enviroments. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
+	attachments_allowed = list(
+		/obj/item/armor_module/module/better_shoulder_lamp,
+		/obj/item/armor_module/module/valkyrie_autodoc/som,
+		/obj/item/armor_module/module/fire_proof/som,
+		/obj/item/armor_module/module/tyr_extra_armor/som,
+		/obj/item/armor_module/module/knight/som,
+		/obj/item/armor_module/module/mimir_environment_protection/som,
+		/obj/item/armor_module/module/hlin_explosive_armor,
+		/obj/item/armor_module/module/chemsystem,
+		/obj/item/armor_module/module/eshield/som,
+		/obj/item/armor_module/module/eshield/som/overclocked,
+		/obj/item/armor_module/storage/general,
+		/obj/item/armor_module/storage/ammo_mag,
+		/obj/item/armor_module/storage/engineering,
+		/obj/item/armor_module/storage/medical,
+		/obj/item/armor_module/storage/general/som,
+		/obj/item/armor_module/storage/engineering/som,
+		/obj/item/armor_module/storage/medical/som,
+		/obj/item/armor_module/storage/injector,
+		/obj/item/armor_module/storage/grenade,
+		/obj/item/armor_module/storage/integrated,
+		/obj/item/armor_module/armor/badge,
+	)
+
+/obj/item/clothing/suit/modular/xenonauten/light/bikini/neutral
+	attachments_allowed = list(
+		/obj/item/armor_module/module/better_shoulder_lamp,
+		/obj/item/armor_module/module/valkyrie_autodoc,
+		/obj/item/armor_module/module/fire_proof,
+		/obj/item/armor_module/module/tyr_extra_armor,
+		/obj/item/armor_module/module/tyr_extra_armor/mark1,
+		/obj/item/armor_module/module/mimir_environment_protection,
+		/obj/item/armor_module/module/mimir_environment_protection/mark1,
+		/obj/item/armor_module/module/hlin_explosive_armor,
+		/obj/item/armor_module/module/ballistic_armor,
+		/obj/item/armor_module/module/chemsystem,
+		/obj/item/armor_module/module/knight,
+		/obj/item/armor_module/module/eshield,
+		/obj/item/armor_module/module/eshield/absorbant/energy,
+		/obj/item/armor_module/module/eshield/absorbant/ballistic,
+		/obj/item/armor_module/module/eshield/overclocked,
+		/obj/item/armor_module/module/mirage,
+		/obj/item/armor_module/module/armorlock,
+
+		/obj/item/armor_module/storage/general,
+		/obj/item/armor_module/storage/ammo_mag,
+		/obj/item/armor_module/storage/engineering,
+		/obj/item/armor_module/storage/medical,
+		/obj/item/armor_module/storage/general/som,
+		/obj/item/armor_module/storage/engineering/som,
+		/obj/item/armor_module/storage/medical/som,
+		/obj/item/armor_module/storage/injector,
+		/obj/item/armor_module/storage/grenade,
+		/obj/item/armor_module/storage/integrated,
+		/obj/item/armor_module/armor/badge,
+
+		/obj/item/armor_module/module/valkyrie_autodoc/som,
+		/obj/item/armor_module/module/fire_proof/som,
+		/obj/item/armor_module/module/tyr_extra_armor/som,
+		/obj/item/armor_module/module/knight/som,
+		/obj/item/armor_module/module/mimir_environment_protection/som,
+		/obj/item/armor_module/module/eshield/som,
+		/obj/item/armor_module/module/eshield/som/overclocked,
+	)
+
+/obj/item/clothing/suit/modular/xenonauten/light/bikini/neutral/vsd
+	name = "\improper Crasher MT-B/69 bikini armor"
+	desc = "An unusal armor made by the " + FACTION_VSD + ", apparently based on an NTC design. Extra-light bikini armor with modular attachments made to work in many enviroments. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
+
+/obj/item/clothing/suit/modular/xenonauten/light/bikini/neutral/icc
+	name = "\improper Modelle/69 'Bikini' combat armor"
+	desc = "An unusal armor made by the " + FACTION_ICC + ", apparently based on an NTC design. Extra-light bikini armor with modular attachments made to work in many enviroments. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
 
 /obj/item/clothing/suit/modular/xenonauten/bulletresistant
 	name = "\improper NTC bullet-resistant armor"
-	desc = "A set of armor that excels in protecting the wearer against high-velocity solid projectiles. This one has bullet resistant padding on the limbs aswell."
+	desc = "A lightweight set of armor that excels in protecting the wearer against high-velocity solid projectiles. This one has bullet resistant padding on the limbs aswell."
 	blood_overlay_type = "armor"
 	soft_armor = list(MELEE = 35, BULLET = 55, LASER = 35, ENERGY = 30, BOMB = 45, BIO = 45, FIRE = 45, ACID = 45)
 	hard_armor = list(MELEE = 0, BULLET = 20, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, FIRE = 0, ACID = 5)
 	slowdown = 0
 
 	greyscale_config = /datum/greyscale_config/xenonaut/bulletproof
+
+/obj/item/clothing/suit/modular/xenonauten/ablative
+	name = "\improper NTC ablative armor"
+	desc = "A lightweight set of armor that excels in protecting the wearer against laser and energy attacks thanks to it's reflective plating."
+	blood_overlay_type = "armor"
+	soft_armor = list(MELEE = 35, BULLET = 35, LASER = 55, ENERGY = 50, BOMB = 45, BIO = 45, FIRE = 45, ACID = 45)
+	hard_armor = list(MELEE = 0, BULLET = 0, LASER = 15, ENERGY = 10, BOMB = 0, BIO = 0, FIRE = 0, ACID = 5)
+	slowdown = 0
+
+	greyscale_config = /datum/greyscale_config/xenonaut/ablative
 
 /obj/item/clothing/suit/storage/marine/ballistic
 	name = "\improper Crasher multi-threat ballistic armor"
@@ -434,12 +521,10 @@
 	soft_armor = MARINE_ARMOR_HEAVY
 	attachments_allowed = list(
 		/obj/item/armor_module/module/tyr_head,
-		/obj/item/armor_module/module/tyr_head/old,
 		/obj/item/armor_module/module/fire_proof_helmet,
 		/obj/item/armor_module/module/hod_head,
 		/obj/item/armor_module/module/mimir_environment_protection/mimir_helmet,
 		/obj/item/armor_module/module/mimir_environment_protection/mimir_helmet/mark1,
-		/obj/item/armor_module/module/mimir_environment_protection/mimir_helmet/old,
 		/obj/item/armor_module/module/welding,
 		/obj/item/armor_module/module/welding/superior,
 		/obj/item/armor_module/module/binoculars,
@@ -490,12 +575,10 @@
 	starting_attachments = list(/obj/item/armor_module/armor/visor/marine/xenonaut, /obj/item/armor_module/storage/helmet)
 	attachments_allowed = list(
 		/obj/item/armor_module/module/tyr_head,
-		/obj/item/armor_module/module/tyr_head/old,
 		/obj/item/armor_module/module/fire_proof_helmet,
 		/obj/item/armor_module/module/hod_head,
 		/obj/item/armor_module/module/mimir_environment_protection/mimir_helmet,
 		/obj/item/armor_module/module/mimir_environment_protection/mimir_helmet/mark1,
-		/obj/item/armor_module/module/mimir_environment_protection/mimir_helmet/old,
 		/obj/item/armor_module/module/welding,
 		/obj/item/armor_module/module/welding/superior,
 		/obj/item/armor_module/module/binoculars,

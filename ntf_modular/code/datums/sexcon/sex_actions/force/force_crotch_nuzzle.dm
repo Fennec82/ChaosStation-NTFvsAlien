@@ -2,6 +2,7 @@
 	name = "Force them to nuzzle"
 	require_grab = TRUE
 	stamina_cost = 1.0
+	heal_sex = FALSE
 
 
 /datum/sex_action/force_crotch_nuzzle/shows_on_menu(mob/living/carbon/user, mob/living/carbon/target)
@@ -23,7 +24,7 @@
 		user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] forces [target] to nuzzle [user.p_their()] crotch."))
 
 	user.sexcon.perform_sex_action(user, 0.5, 0, TRUE)
-	target.sexcon.handle_passive_ejaculation()
+	user.sexcon.handle_passive_ejaculation(target)
 
 /datum/sex_action/force_crotch_nuzzle/on_finish(mob/living/carbon/user, mob/living/carbon/target)
 	..()

@@ -386,7 +386,7 @@
 	fill_number = 3
 
 /obj/item/storage/pouch/magazine/large/pmc_sniper
-	fill_type = /obj/item/ammo_magazine/sniper/elite
+	fill_type = /obj/item/ammo_magazine/railgun/pmc
 	fill_number = 3
 
 /obj/item/storage/pouch/magazine/large/pmc_rifle
@@ -617,6 +617,24 @@
 	. = ..()
 	storage_datum.sprite_slots = null
 
+/obj/item/storage/pouch/medkit/freelancer/PopulateContents()
+	new /obj/item/storage/pill_bottle/bicaridine(src)
+	new /obj/item/storage/pill_bottle/kelotane(src)
+	new /obj/item/storage/pill_bottle/tramadol(src)
+	new /obj/item/storage/pill_bottle/tricordrazine(src)
+	new /obj/item/stack/medical/splint(src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/inaprovaline(src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/inaprovaline(src)
+
+/obj/item/storage/pouch/medkit/freelancer/leader/PopulateContents()
+	new /obj/item/storage/pill_bottle/bicaridine(src)
+	new /obj/item/storage/pill_bottle/kelotane(src)
+	new /obj/item/storage/pill_bottle/tramadol(src)
+	new /obj/item/storage/pill_bottle/tricordrazine(src)
+	new /obj/item/storage/pill_bottle/dylovene(src)
+	new /obj/item/storage/pill_bottle/isotonic(src)
+	new /obj/item/reagent_containers/hypospray/advanced/inaprovaline(src)
+
 /obj/item/storage/pouch/medical_injectors
 	name = "medical injector pouch"
 	desc = "A specialized medical pouch that can only hold auto-injectors."
@@ -789,6 +807,7 @@
 	storage_datum.set_holdable(can_hold_list = list(
 		/obj/item/paper,
 		/obj/item/clipboard,
+		/obj/item/paper_map,
 	))
 
 /obj/item/storage/pouch/field_pouch
@@ -822,6 +841,7 @@
 		/obj/item/toy/deck,
 		/obj/item/paper,
 		/obj/item/clipboard,
+		/obj/item/paper_map,
 	))
 
 /obj/item/storage/pouch/field_pouch/full/PopulateContents()
