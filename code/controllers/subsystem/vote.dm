@@ -36,6 +36,8 @@ SUBSYSTEM_DEF(vote)
 	var/shuffle_choices = FALSE
 	/// Shuffle vote choices per ckey cache
 	var/list/shuffle_cache = list()
+	/// Vote weights by choice
+	var/list/voteweights_by_choice = list()
 
 // Called by master_controller
 /datum/controller/subsystem/vote/fire()
@@ -61,9 +63,9 @@ SUBSYSTEM_DEF(vote)
 	vote_happening = FALSE
 	shuffle_choices = FALSE
 	shuffle_cache.Cut()
+	voteweights_by_choice.Cut()
 
 	remove_action_buttons()
-
 
 /// Tally the results and give the winner
 /datum/controller/subsystem/vote/proc/get_result()
@@ -71,7 +73,7 @@ SUBSYSTEM_DEF(vote)
 	var/greatest_votes = 0
 	var/total_votes = 0
 	for(var/option in choices)
-		var/votes = choices[option]
+		var/votes = choices[option] * (voteweights_by_choice[option] || 1)
 		total_votes += votes
 		if(votes > greatest_votes)
 			greatest_votes = votes
@@ -79,39 +81,66 @@ SUBSYSTEM_DEF(vote)
 	. = list()
 	if(greatest_votes)
 		for(var/option in choices)
-			if(choices[option] == greatest_votes)
+			if((choices[option] * (voteweights_by_choice[option] || 1)) == greatest_votes)
 				. += option
-
 
 /// Announce the votes tally to everyone
 /datum/controller/subsystem/vote/proc/announce_result()
 	var/list/winners = get_result()
 	var/text
-	if(length(winners) > 0)
-		if(question)
-			text += "<big><b><i>[question]</i></b></big>"
-		else
-			text += "<b>[capitalize(mode)] Vote</b>"
-		for(var/i = 1 to length(choices))
-			var/votes = choices[choices[i]]
-			if(!votes)
-				votes = 0
-			text += "\n<b>[choices[i]]:</b> [votes]"
-		if(mode != "custom")
-			if(length(winners) > 1)
-				text = "<hr><b>Vote Tied Between:</b>"
-				for(var/option in winners)
-					text += "\n\t[option]"
-			. = pick(winners)
-			text += "<hr><b>Vote Result: [.]</b>"
-		else
-			text += "<hr><b>Did not vote:</b> [length(GLOB.clients) - length(voted)]"
+	var/discord_text = ""
+
+	if(!length(winners))
+		if(mode != "shipmap" && mode != "groundmap")
+			text += "<b>Vote Result: Inconclusive - No Votes!</b>"
+			discord_text += "**Vote Result: Inconclusive - No Votes!**\n"
+			cleanup_vote(text, discord_text)
+			return
+		//We randomly choose a valid map to avoid restarting with invalid maps for the gamemode, bricking the round and requiring a restart
+		var/random_map = pick(choices)
+		winners += random_map
+		text += "<b>Vote Result: Inconclusive - No Votes! Random valid map selected: [random_map]</b>"
+		discord_text += "**Vote Result: Inconclusive - No Votes! Random valid map selected: [random_map]**\n"
+		. = random_map
+		cleanup_vote(text,discord_text)
+		return
+
+	if(question)
+		text += "<big><b><i>[question]</i></b></big>"
+		discord_text += "# **[question]**\n"
 	else
-		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
-	log_vote(text)
+		text += "<b>[capitalize(mode)] Vote</b>"
+		discord_text += "## **[capitalize(mode)] Vote**\n"
+	for(var/i = 1 to length(choices))
+		var/votes = choices[choices[i]] * (voteweights_by_choice[choices[i]] || 1)
+		if(!votes)
+			votes = 0
+		text += "\n<b>[choices[i]]:</b> [votes]"
+		discord_text += "**[choices[i]]:** [votes]\n"
+	if(mode != "custom")
+		if(length(winners) > 1)
+			text += "<hr><b>Vote Tied Between:</b>"
+			discord_text += "---\n**Vote Tied Between:**\n"
+			for(var/option in winners)
+				text += "\n\t[option]"
+				discord_text += "---[option]\n"
+		. = pick(winners)
+		text += "<hr><b>Vote Result: [.]</b>"
+		discord_text += "---\n**Vote Result: [.]**\n"
+	else
+		text += "<hr><b>Did not vote:</b> [length(GLOB.whitelisted_clients) - length(voted)]"
+		discord_text += "---\n**Did not vote:** [length(GLOB.whitelisted_clients) - length(voted)]\n"
+	cleanup_vote(text, discord_text)
+
+///Cleans up after a vote is successfully concluded
+/datum/controller/subsystem/vote/proc/cleanup_vote(result_text, discord_text)
 	vote_happening = FALSE
 	remove_action_buttons()
-	to_chat(world, custom_boxed_message("purple_box", text))
+	if(!result_text)
+		return
+	log_vote(result_text)
+	to_chat(world, span_voting(custom_boxed_message("purple_box", result_text)))
+	status_update_vote_ended(discord_text)
 
 /// Apply the result of the vote if it's possible
 /datum/controller/subsystem/vote/proc/result(default_result)
@@ -122,6 +151,7 @@ SUBSYSTEM_DEF(vote)
 		return
 	var/restart = FALSE
 	var/endround = FALSE
+	var/datum/map_config/VM
 	switch(mode)
 		if("restart")
 			if(. == "Restart Round")
@@ -146,7 +176,7 @@ SUBSYSTEM_DEF(vote)
 				else
 					var/list/mapnames = list()
 					for(var/map in config.maplist[ANTAG_MAP])
-						var/datum/map_config/VM = config.maplist[ANTAG_MAP][map]
+						VM = config.maplist[ANTAG_MAP][map]
 						if(new_gamemode.whitelist_antag_maps)
 							if(!(VM.map_name in new_gamemode.whitelist_antag_maps))
 								continue
@@ -163,39 +193,48 @@ SUBSYSTEM_DEF(vote)
 						var/datum/map_config/next_antag = pick(maps)
 						log_game("changing antag map to [next_antag.map_name]")
 						SSmapping.changemap(next_antag, ANTAG_MAP)
+			if(timeleft(shipmap_timer_id))
+				status_update_next_gamemode(.)
 			if(GLOB.master_mode == .)
 				return
-			if(SSticker.HasRoundStarted())
-				restart = TRUE
+			if(SSticker.current_state == GAME_STATE_PLAYING)
+				//If round is ongoing, we keep playing the round - vote for restart manually
+				return
+			if(timeleft(shipmap_timer_id))
+				//the votes are already queued, skip this
+				return
+			var/ship_change_required
+			var/ground_change_required
+			GLOB.master_mode = . //changes the current gamemode
+			//we check the gamemode's whitelists and blacklists to see if a map change and restart is required
+			if(new_gamemode.whitelist_ship_maps ? !(SSmapping.configs[SHIP_MAP].map_name in new_gamemode.whitelist_ship_maps) : (new_gamemode.blacklist_ship_maps && (SSmapping.configs[SHIP_MAP].map_name in new_gamemode.blacklist_ship_maps)))
+				ship_change_required = TRUE
+			if(new_gamemode.whitelist_ground_maps ? !(SSmapping.configs[GROUND_MAP].map_name in new_gamemode.whitelist_ground_maps) : (new_gamemode.blacklist_ground_maps && (SSmapping.configs[GROUND_MAP].map_name in new_gamemode.blacklist_ground_maps)))
+				ground_change_required = TRUE
+			//we queue up the required votes and restarts
+			if(ship_change_required && ground_change_required)
+				addtimer(CALLBACK(src, PROC_REF(initiate_vote), "shipmap", null, TRUE), 5 SECONDS)
+				addtimer(CALLBACK(src, PROC_REF(initiate_vote), "groundmap", null, TRUE), CONFIG_GET(number/vote_period) + 5 SECONDS)
+				SSticker.Reboot("Restarting server when valid ship and ground map selected", (CONFIG_GET(number/vote_period) * 2) + 15 SECONDS)
+				return
+			else if(ship_change_required)
+				addtimer(CALLBACK(src, PROC_REF(initiate_vote), "shipmap", null, TRUE), 5 SECONDS)
+				SSticker.Reboot("Restarting server when valid ship map selected", CONFIG_GET(number/vote_period) + 15 SECONDS)
+			else if(ground_change_required)
+				addtimer(CALLBACK(src, PROC_REF(initiate_vote), "groundmap", null, TRUE), 5 SECONDS)
+				SSticker.Reboot("Restarting server when valid ground map selected", CONFIG_GET(number/vote_period) + 15 SECONDS)
+			else if(antag_change_required)
+				SSticker.Reboot("Restarting server to switch antag map", 15 SECONDS)
 			else
-				var/ship_change_required
-				var/ground_change_required
-				GLOB.master_mode = . //changes the current gamemode
-				//we check the gamemode's whitelists and blacklists to see if a map change and restart is required
-				if(new_gamemode.whitelist_ship_maps ? (!(SSmapping.configs[SHIP_MAP].map_name in new_gamemode.whitelist_ship_maps)) : (new_gamemode.blacklist_ship_maps && (SSmapping.configs[SHIP_MAP].map_name in new_gamemode.blacklist_ship_maps)))
-					ship_change_required = TRUE
-				if(new_gamemode.whitelist_ground_maps ? (!(SSmapping.configs[GROUND_MAP].map_name in new_gamemode.whitelist_ground_maps)) : (new_gamemode.blacklist_ground_maps && (SSmapping.configs[GROUND_MAP].map_name in new_gamemode.blacklist_ground_maps)))
-					ground_change_required = TRUE
-				//we queue up the required votes and restarts
-				if(ship_change_required && ground_change_required)
-					addtimer(CALLBACK(src, PROC_REF(initiate_vote), "shipmap", null, TRUE), 5 SECONDS)
-					addtimer(CALLBACK(src, PROC_REF(initiate_vote), "groundmap", null, TRUE), CONFIG_GET(number/vote_period) + 5 SECONDS)
-					SSticker.Reboot("Restarting server when valid ship and ground map selected", (CONFIG_GET(number/vote_period) * 2) + 15 SECONDS)
-					return
-				else if(ship_change_required)
-					addtimer(CALLBACK(src, PROC_REF(initiate_vote), "shipmap", null, TRUE), 5 SECONDS)
-					SSticker.Reboot("Restarting server when valid ship map selected", CONFIG_GET(number/vote_period) + 15 SECONDS)
-				else if(ground_change_required)
-					addtimer(CALLBACK(src, PROC_REF(initiate_vote), "groundmap", null, TRUE), 5 SECONDS)
-					SSticker.Reboot("Restarting server when valid ground map selected", CONFIG_GET(number/vote_period) + 15 SECONDS)
-				else if(antag_change_required)
-					SSticker.Reboot("Restarting server to switch antag map", 15 SECONDS)
+				if(SSticker.current_state < GAME_STATE_PLAYING)
+					//if the game is in preround, we can play the newly voted mode immediately
+					GLOB.master_mode = .
 			return
 		if("groundmap")
-			var/datum/map_config/VM = config.maplist[GROUND_MAP][.]
+			VM = config.maplist[GROUND_MAP][.]
 			SSmapping.changemap(VM, GROUND_MAP)
 		if("shipmap")
-			var/datum/map_config/VM = config.maplist[SHIP_MAP][.]
+			VM = config.maplist[SHIP_MAP][.]
 			SSmapping.changemap(VM, SHIP_MAP)
 	if(restart)
 		var/active_admins = FALSE
@@ -207,7 +246,7 @@ SUBSYSTEM_DEF(vote)
 			// No delay in case the restart is due to lag
 			SSticker.Reboot("Restart vote successful.", 1)
 		else
-			to_chat(world, "<span style='boltnotice'>Notice:Restart vote will not restart the server automatically because there are active admins on.</span>")
+			to_chat(world, "<span style='boldnotice'>Notice:Restart vote will not restart the server automatically because there are active admins on.</span>")
 			message_admins("A restart vote has passed, but there are active admins on with +SERVER, so it has been canceled. If you wish, you may restart the server.", sound('sound/effects/adminhelp.ogg', channel = CHANNEL_ADMIN), TRUE)
 	if(endround)
 		var/active_admins = FALSE
@@ -219,7 +258,7 @@ SUBSYSTEM_DEF(vote)
 			SSticker.force_ending = TRUE
 			SSticker.mode.round_finished = "Democracy"
 		else
-			to_chat(world, "<span style='boltnotice'>Notice:End round vote will not restart the server automatically because there are active admins on.</span>")
+			to_chat(world, "<span style='boldnotice'>Notice:End round vote will not restart the server automatically because there are active admins on.</span>")
 			message_admins("An end round vote has passed, but there are active admins on with +SERVER, so it has been canceled. If you wish, you may restart the server.", sound('sound/effects/adminhelp.ogg', channel = CHANNEL_ADMIN), TRUE)
 			if(!("Democracy" in SSticker.mode.round_end_states))
 				SSticker.mode.round_end_states.Insert(1, "Democracy")
@@ -278,22 +317,38 @@ SUBSYSTEM_DEF(vote)
 				return FALSE
 
 		reset()
+		var/datum/game_mode/next_gamemode = config.pick_mode(GLOB.next_gamemode)
+		var/list/maps = list()
+		var/list/voteweights_by_map_name = list()
 		switch(vote_type)
 			if("restart")
 				choices.Add("Restart Round", "Continue Playing")
+				if((world.time - SSticker.round_start_time) < 3 HOURS)
+					to_chat(world, "Voteweight for \"Restart Round\" reduced to 0.5 because round duration is less than 3 hours.")
+					voteweights_by_choice["Restart Round"] = 0.5
 			if("endround")
 				choices.Add("End Round and Restart", "Continue Playing")
+				if((world.time - SSticker.round_start_time) < 3 HOURS)
+					to_chat(world, "Voteweight for \"End Round and Restart\" reduced to 0.5 because round duration is less than 3 hours.")
+					voteweights_by_choice["End Round and Restart"] = 0.5
 			if("gamemode")
 				multiple_vote = TRUE
 				for(var/datum/game_mode/mode AS in config.votable_modes)
-					var/players = length(GLOB.clients)
-					if(mode.time_between_round && (world.realtime - SSpersistence.last_modes_round_date[mode.name]) < mode.time_between_round)
-						continue
-					if(mode.time_between_round_group && (world.realtime - SSpersistence.last_modes_round_date[mode.time_between_round_group_name]) < mode.time_between_round_group)
+					var/players = length(GLOB.whitelisted_clients)
+					var/timeleft = 0
+					timeleft = max(timeleft, mode.time_between_round - (world.realtime - SSpersistence.last_modes_round_date[mode.name]))
+					timeleft = max(timeleft, mode.time_between_round_group - (world.realtime - SSpersistence.last_modes_round_date[mode.time_between_round_group_name]))
+					if(timeleft)
+						to_chat(world, "[mode.name] unavailable for another [DisplayTimeText(timeleft)].")
+						log_game("[mode.name] unavailable for another [DisplayTimeText(timeleft)].")
 						continue
 					if(players > mode.maximum_players)
+						to_chat(world, "[mode.name] unavailable - requires at most [mode.maximum_players] online, currently [players] online.")
+						log_game("[mode.name] unavailable - requires at most [mode.maximum_players] online, currently [players] online.")
 						continue
 					if(players < mode.required_players)
+						to_chat(world, "[mode.name] unavailable - requires at least [mode.required_players] online, currently [players] online.")
+						log_game("[mode.name] unavailable - requires at least [mode.required_players] online, currently [players] online.")
 						continue
 					choices.Add(mode.config_tag)
 			if("groundmap")
@@ -301,8 +356,6 @@ SUBSYSTEM_DEF(vote)
 				if(!lower_admin && SSmapping.groundmap_voted)
 					to_chat(usr, span_warning("The next ground map has already been selected."))
 					return FALSE
-				var/datum/game_mode/next_gamemode = config.pick_mode(trim(file2text("data/mode.txt")))
-				var/list/maps = list()
 				if(!config.maplist)
 					return
 				for(var/map in config.maplist[GROUND_MAP])
@@ -318,22 +371,22 @@ SUBSYSTEM_DEF(vote)
 						if(VM.map_name in next_gamemode.blacklist_ground_maps)
 							continue
 					if(VM.config_max_users || VM.config_min_users)
-						var/players = length(GLOB.clients)
+						var/players = length(GLOB.whitelisted_clients)
 						if(VM.config_max_users && players > VM.config_max_users)
 							continue
 						if(VM.config_min_users && players < VM.config_min_users)
 							continue
 					maps += VM.map_name
+					voteweights_by_map_name[VM.map_name] = VM.voteweight
 					shuffle_choices = TRUE
 				for(var/valid_map in maps)
 					choices.Add(valid_map)
+					voteweights_by_choice[valid_map] = voteweights_by_map_name[valid_map]
 			if("shipmap")
 				multiple_vote = TRUE
 				if(!lower_admin && SSmapping.shipmap_voted)
 					to_chat(usr, span_warning("The next ship map has already been selected."))
 					return FALSE
-				var/datum/game_mode/next_gamemode = config.pick_mode(trim(file2text("data/mode.txt")))
-				var/list/maps = list()
 				if(!config.maplist)
 					return
 				for(var/map in config.maplist[SHIP_MAP])
@@ -347,15 +400,17 @@ SUBSYSTEM_DEF(vote)
 						if(VM.map_name in next_gamemode.blacklist_ship_maps)
 							continue
 					if(VM.config_max_users || VM.config_min_users)
-						var/players = length(GLOB.clients)
+						var/players = length(GLOB.whitelisted_clients)
 						if(VM.config_max_users && players > VM.config_max_users)
 							continue
 						if(VM.config_min_users && players < VM.config_min_users)
 							continue
 					maps += VM.map_name
+					voteweights_by_map_name[VM.map_name] = VM.voteweight
 					shuffle_choices = TRUE
 				for(var/valid_map in maps)
 					choices.Add(valid_map)
+					voteweights_by_choice[valid_map] = voteweights_by_map_name[valid_map]
 			if("custom")
 				question = stripped_input(usr, "What is the vote for?")
 				if(!question)
@@ -388,11 +443,13 @@ SUBSYSTEM_DEF(vote)
 		log_vote(text)
 		var/vp = CONFIG_GET(number/vote_period)
 		SEND_SOUND(world, sound('sound/ambience/votestart.ogg', channel = CHANNEL_NOTIFY, volume = 50))
-		to_chat(world, custom_boxed_message("purple_box", "<big><b>[text]</b></big><hr>Type <b>vote</b> in the command bar or click on vote action (top left) to place your votes.<hr>You have [DisplayTimeText(vp)] to vote.</font>"))
+		to_chat(world, span_voting(custom_boxed_message("purple_box", "<big><b>[text]</b></big><hr>Type <b>vote</b> in the command bar or click on vote action (top left) to place your votes.<hr>You have [DisplayTimeText(vp)] to vote.</font>")))
 		time_remaining = round(vp/10)
 		vote_happening = TRUE
-		for(var/c in GLOB.clients)
+		for(var/c in GLOB.whitelisted_clients)
 			var/client/C = c
+			if(is_banned_from(C.ckey, "Voting"))
+				continue
 			var/datum/action/innate/vote/V = new
 			if(question)
 				V.name = "Vote: [question]"
@@ -400,12 +457,15 @@ SUBSYSTEM_DEF(vote)
 			V.give_action(C.mob)
 			if(forced_popup)
 				SSvote.ui_interact(C.mob)
+		status_update_vote_started(initiator ? (lower_admin ? "admin" : "user") : "server")
 		return TRUE
 	return FALSE
 
 /mob/verb/vote()
 	set category = "OOC"
 	set name = "Vote"
+	if(ckey && is_banned_from(ckey, "Voting"))
+		to_chat(src, "You are banned from voting.")
 	SSvote.ui_interact(usr)
 
 ///Starts the automatic map vote at the end of each round
@@ -416,7 +476,7 @@ SUBSYSTEM_DEF(vote)
 	addtimer(CALLBACK(src, PROC_REF(initiate_vote), "groundmap", null, TRUE, TRUE), CONFIG_GET(number/vote_period) * 2 + 6 SECONDS)
 
 /datum/controller/subsystem/vote/ui_state()
-	return GLOB.always_state
+	return GLOB.voting_state
 
 /datum/controller/subsystem/vote/ui_interact(mob/user, datum/tgui/ui)
 	// Tracks who is voting
@@ -431,6 +491,7 @@ SUBSYSTEM_DEF(vote)
 	var/list/data = list(
 		"choices" = list(),
 		"vote_counts" = list(),
+		"vote_weights" = list(),
 		"lower_admin" = !!user.client?.holder,
 		"mode" = mode,
 		"question" = question,
@@ -456,6 +517,7 @@ SUBSYSTEM_DEF(vote)
 			"num_index" = choice_num++
 		))
 		data["vote_counts"] += choices[key] || 0
+		data["vote_weights"] += voteweights_by_choice[key] || 1
 
 	if(shuffle_choices)
 		// if useLocalState can be made to work with Vote.js this could be pure clientside
@@ -533,6 +595,8 @@ SUBSYSTEM_DEF(vote)
 	action_icon_state = "vote"
 
 /datum/action/innate/vote/give_action(mob/M)
+	if(is_banned_from(M.ckey, "Voting"))
+		return
 	. = ..()
 	RegisterSignal(SSdcs, COMSIG_GLOB_REMOVE_VOTE_BUTTON, PROC_REF(remove_vote_action))
 

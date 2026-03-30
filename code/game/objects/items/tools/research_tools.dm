@@ -12,60 +12,68 @@
 	icon_state = "beacon"
 	var/on = FALSE
 	var/knowsxenolang = FALSE
+	var/mob/current_user
+
+/obj/item/tool/research/xeno_analyzer/proc/remove_current_user()
+	if(!current_user)
+		return
+	if(!knowsxenolang)
+		current_user.remove_language(/datum/language/xenocommon)
+	current_user = null
+	knowsxenolang = FALSE
+
+/obj/item/tool/research/xeno_analyzer/proc/try_set_user(mob/user)
+	if(user == current_user)
+		return
+	remove_current_user()
+	if(!istype(user))
+		INVOKE_NEXT_TICK_UNIQUE(src,PROC_REF(turn_off_if_no_user))
+		return
+	current_user = user
+	if(user.has_language(/datum/language/xenocommon))
+		knowsxenolang = TRUE
+	else
+		knowsxenolang = FALSE
+		if(on)
+			user.grant_language(/datum/language/xenocommon)
+
+/obj/item/tool/research/xeno_analyzer/proc/turn_off_if_no_user()
+	if(istype(current_user))
+		return
+	remove_filter("translator_on")
+	if(on)
+		on = FALSE
+		balloon_alert_to_viewers("turns off")
 
 /obj/item/tool/research/xeno_analyzer/attack_self(mob/user)
 	. = ..()
-	on = !on
 	if(on)
-		add_filter("translator_on", 4, outline_filter(1, COLOR_CYAN))
-		to_chat(user, span_notice("I turn on the translator, translating xeno language straight to my neural implant."))
-		balloon_alert(user, "turns on")
-		if(ishuman(user) && !ismarinecommandjob(user) && on)
-			if(user.has_language(/datum/language/xenocommon))//failsafe
-				knowsxenolang = TRUE
-				return
-			else
-				knowsxenolang = FALSE
-			user.grant_language(/datum/language/xenocommon)
-	else
+		on = FALSE
+		if(current_user && !knowsxenolang)
+			current_user.remove_language(/datum/language/xenocommon)
 		remove_filter("translator_on")
 		balloon_alert(user, "turns off")
-		if(ishuman(user) && !ismarinecommandjob(user) && on)
-			if(knowsxenolang)
-				return
-			user.remove_language(/datum/language/xenocommon)
 		to_chat(user, span_notice("I turn off the translator."))
-
-/obj/item/tool/research/xeno_analyzer/equipped(mob/living/carbon/human/user, slot)
-	. = ..()
-	if(ishuman(user) && !ismarinecommandjob(user) && on)
-		if(user.has_language(/datum/language/xenocommon))//failsafe
-			knowsxenolang = TRUE
-			return
-		else
-			knowsxenolang = FALSE
+		return
+	on = TRUE
+	add_filter("translator_on", 4, outline_filter(1, COLOR_CYAN))
+	to_chat(user, span_notice("I turn on the translator, translating xeno language straight to my neural implant."))
+	balloon_alert(user, "turns on")
+	if(user.has_language(/datum/language/xenocommon))
+		knowsxenolang = TRUE
+	else
+		knowsxenolang = FALSE
 		user.grant_language(/datum/language/xenocommon)
 
-/obj/item/tool/research/xeno_analyzer/unequipped(mob/unequipper, slot)
+/obj/item/tool/research/xeno_analyzer/Moved(atom/old_loc, movement_dir, forced, list/old_locs)
 	. = ..()
-	if(ishuman(unequipper) && !ismarinecommandjob(unequipper) && on)
-		if(knowsxenolang)
+	var/atom/movable/usercandidate = loc
+	while(ismovable(usercandidate))
+		if(ismob(usercandidate))
+			try_set_user(usercandidate)
 			return
-		unequipper.remove_language(/datum/language/xenocommon)
-
-/obj/item/tool/research/xeno_analyzer/removed_from_inventory(mob/unequipper)
-	. = ..()
-	if(ishuman(unequipper) && !ismarinecommandjob(unequipper) && on)
-		if(knowsxenolang)
-			return
-		unequipper.remove_language(/datum/language/xenocommon)
-
-/obj/item/tool/research/xeno_analyzer/dropped(mob/unequipper)
-	. = ..()
-	if(ishuman(unequipper) && !ismarinecommandjob(unequipper) && on)
-		if(knowsxenolang)
-			return
-		unequipper.remove_language(/datum/language/xenocommon)
+		usercandidate = usercandidate.loc
+	try_set_user(null)
 
 /obj/item/tool/research/xeno_analyzer/Hear(message, atom/movable/speaker, message_language, raw_message, radio_freq, list/spans, message_mode)
 	. = ..()

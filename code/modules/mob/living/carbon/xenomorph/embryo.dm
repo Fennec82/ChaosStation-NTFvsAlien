@@ -16,20 +16,22 @@
 	var/boost_timer = 0
 	var/hivenumber = XENO_HIVE_NORMAL
 	var/admin = FALSE
-	var/emerge_target = 1
-	var/emerge_target_flavor = null
+	var/target_hole = HOLE_MOUTH
 	var/mob/living/carbon/xenomorph/larva/new_xeno = null
 	var/psypoint_reward = 0
 	var/biomass_reward = 0
 	var/hive_target_bonus = FALSE
+	var/first_reward_claimed = FALSE
 
 
 /obj/item/alien_embryo/Initialize(mapload)
 	. = ..()
 	if(!isliving(loc))
 		return
-	if(istype(loc, /mob/living/carbon/xenomorph/puppet))
-		return INITIALIZE_HINT_QDEL //letting puppets be larva farms makes it too easy to get larva.
+	if(isxeno(loc))
+		var/mob/living/carbon/xenomorph/xeno_loc = loc
+		if(xeno_loc.xeno_caste.tier == XENO_TIER_MINION || xeno_loc.xeno_caste.caste_type_path == /datum/xeno_caste/larva || xeno_loc.xeno_caste.caste_type_path == /datum/xeno_caste/puppet || xeno_loc.xeno_caste.caste_type_path == /datum/xeno_caste/spiderling)
+			return INITIALIZE_HINT_QDEL //letting these be larva farms makes it too easy to get larva.
 	affected_mob = loc
 	affected_mob.status_flags |= XENO_HOST
 	log_combat(affected_mob, null, "been infected with an embryo")
@@ -65,7 +67,7 @@
 		qdel(src)
 		return PROCESS_KILL
 
-	if(affected_mob.stat == DEAD) //No more corpsefucking for infinite larva, thanks
+	if(affected_mob.stat == DEAD && stage < 3) //No more corpsefucking for infinite larva, thanks
 		return FALSE
 
 	if(loc != affected_mob)
@@ -86,12 +88,6 @@
 		affected_mob = null
 		return PROCESS_KILL
 
-	if(affected_mob.stat == DEAD) //Runs after the first proc, which should entirely null the need for the check in initiate_burst, but to be safe...
-		for(var/mob/living/carbon/xenomorph/larva/L in affected_mob.contents)
-			L?.initiate_burst(affected_mob, src)
-			if(!L)
-				return PROCESS_KILL
-
 	if(HAS_TRAIT(affected_mob, TRAIT_STASIS))
 		return //If they are in cryo, bag or cell, the embryo won't grow.
 
@@ -105,8 +101,12 @@
 	*/
 
 /obj/item/alien_embryo/proc/process_growth()
-	if(affected_mob.stat == DEAD) //No more corpsefucking for infinite larva, thanks
+	if(affected_mob.stat == DEAD && stage < 3) //No more corpsefucking for infinite larva, thanks
 		return FALSE
+
+	if(ishuman(affected_mob) && !(SSticker.mode.round_type_flags2 & MODE_2_CHILL_RULES))
+		if(affected_mob.getCloneLoss() >= 30 || HAS_TRAIT(affected_mob, TRAIT_PSY_DRAINED)) //I guess they remain dormant
+			return FALSE
 
 	hive_target_bonus = hive_target_bonus || HAS_TRAIT(affected_mob, TRAIT_HIVE_TARGET)
 
@@ -117,18 +117,39 @@
 	for(var/obj/item/alien_embryo/embryo in affected_mob.contents)
 		if(embryo.affected_mob == affected_mob)
 			embryos_in_host++
-	if(affected_mob.client && (affected_mob.client.inactivity < 10 MINUTES))
-		psypoint_reward += psych_points_output * 5 / embryos_in_host
-		biomass_reward += MUTATION_BIOMASS_PER_EMBRYO_TICK * 5 / embryos_in_host
+	var/current_psypoint_reward = psych_points_output * EMBRYO_REWARD_IMMEDIATE_FRACTION / embryos_in_host
+	var/current_biomass_reward =  MUTATION_BIOMASS_PER_EMBRYO_TICK * EMBRYO_REWARD_IMMEDIATE_FRACTION / embryos_in_host
+	if(!affected_mob.client || (affected_mob.client.inactivity > AFK_TIMER))
+		current_psypoint_reward *= 0.1
+		current_biomass_reward *= 0.1
+	if(isnestedhost(affected_mob))
+		current_psypoint_reward *= 5
+		current_biomass_reward *= 5
+
+	GLOB.round_statistics.strategic_psypoints_from_embryos += current_psypoint_reward
+	GLOB.round_statistics.biomass_from_embryos += current_biomass_reward
+	if(hive_target_bonus)
+		GLOB.round_statistics.strategic_psypoints_from_hive_target_rewards += current_psypoint_reward
+		GLOB.round_statistics.biomass_from_hive_target_rewards += current_biomass_reward
+		SSpoints.add_strategic_psy_points(hivenumber, current_psypoint_reward*2)
+		SSpoints.add_tactical_psy_points(hivenumber, current_psypoint_reward*0.5)
+		SSpoints.add_biomass_points(hivenumber, current_biomass_reward*2)
 	else
-		psypoint_reward += psych_points_output / embryos_in_host
-		biomass_reward += MUTATION_BIOMASS_PER_EMBRYO_TICK / embryos_in_host
+		SSpoints.add_strategic_psy_points(hivenumber, current_psypoint_reward)
+		SSpoints.add_tactical_psy_points(hivenumber, current_psypoint_reward*0.25)
+		SSpoints.add_biomass_points(hivenumber, current_biomass_reward)
+
+	psypoint_reward += current_psypoint_reward * EMBRYO_REWARD_DELAYED_MULTIPLIER
+	biomass_reward += current_psypoint_reward * EMBRYO_REWARD_DELAYED_MULTIPLIER
+	if(!first_reward_claimed)
+		first_reward_claimed = TRUE
+		GLOB.round_statistics.total_embryos_rewarding++
 
 	if(stage <= 4)
 		counter += 2.5 //Free burst time in ~7/8 min.
 
 	if(affected_mob.reagents.get_reagent_amount(/datum/reagent/consumable/larvajelly))
-		counter += 5 //Accelerates larval growth massively. Voluntarily drinking larval jelly while infected is straight-up suicide. Larva hits Stage 5 in exactly ONE minute.
+		counter += 2.5 //Doubles larval growth progress. Burst time in ~4 min
 
 	if(affected_mob.reagents.get_reagent_amount(/datum/reagent/medicine/larvaway))
 		counter -= 1 //Halves larval growth progress, for some tradeoffs. Larval toxin purges this
@@ -148,12 +169,12 @@
 	switch(stage)
 		if(2)
 			if(prob(2))
-				to_chat(affected_mob, span_warning("[pick("You feel something in your belly.", "You feel something in your stomach.")]."))
+				to_chat(affected_mob, span_warning("[pick("You feel something in your [target_hole].", "You feel something in your [target_hole].")]."))
 		if(3)
 			if(prob(2))
-				to_chat(affected_mob, span_warning("[pick("You feel something move inside your belly.", "You feel something move in your stomach.")]."))
+				to_chat(affected_mob, span_warning("[pick("You feel something move inside your [target_hole].", "You feel something move in your [target_hole].")]."))
 			else if(prob(1))
-				to_chat(affected_mob, span_warning("Your belly aches a little."))
+				to_chat(affected_mob, span_warning("Your [target_hole] aches a little."))
 		if(4)
 			if(prob(1))
 				if(!affected_mob.IsParalyzed())
@@ -161,9 +182,9 @@
 												span_danger("You start shaking uncontrollably!"))
 					affected_mob.jitter(105)
 			if(prob(2))
-				to_chat(affected_mob, span_warning("[pick("You feel something squirming inside you!.", "It becomes a bit difficult to breathe.")]."))
+				to_chat(affected_mob, span_warning("[pick("You feel something squirming inside your [target_hole]!.", "It becomes a bit difficult to breathe.")]."))
 		if(5)
-			var/mob/living/carbon/xenomorph/larva/waiting_larva = locate() in src
+			var/mob/living/carbon/xenomorph/larva/waiting_larva = locate() in affected_mob
 			if(!waiting_larva)
 				become_larva()
 		if(6)
@@ -217,13 +238,13 @@
 		return
 
 	to_chat(src, span_danger("We start slithering out of [victim]!"))
-	if(!embryo || embryo.emerge_target == 1)
+	if(!embryo || embryo.target_hole == HOLE_MOUTH)
 		playsound(victim, 'modular_skyrat/sound/weapons/gagging.ogg', 15, TRUE)
 	else
 		victim.emote_burstscream()
 	victim.Paralyze(15 SECONDS)
 	victim.visible_message("<span class='danger'>\The [victim] starts shaking uncontrollably!</span>", \
-								"<span class='danger'>You feel something wiggling in your [embryo?.emerge_target_flavor]!</span>")
+								"<span class='danger'>You feel something wiggling in your [embryo?.target_hole]!</span>")
 	victim.jitter(150)
 
 	burst_timer = addtimer(CALLBACK(src, PROC_REF(burst), victim, embryo), 3 SECONDS, TIMER_STOPPABLE)
@@ -241,12 +262,12 @@
 	else
 		forceMove(get_turf(victim)) //moved to the turf directly so we don't get stuck inside a cryopod or another mob container.
 	playsound(src, pick('sound/voice/alien/chestburst.ogg','sound/voice/alien/chestburst2.ogg'), 10)
-	victim.visible_message("<span class='danger'>The Larva forces its way out of [victim]'s [embryo?.emerge_target_flavor]!</span>")
+	victim.visible_message("<span class='danger'>The Larva forces its way out of [victim]'s [embryo?.target_hole]!</span>")
 	GLOB.round_statistics.total_larva_burst++
 	SSblackbox.record_feedback("tally", "round_statistics", 1, "total_larva_burst")
 	if(istype(embryo))
-		GLOB.round_statistics.strategic_psypoints_from_embryos += embryo.psypoint_reward
-		GLOB.round_statistics.biomass_from_embryos += embryo.biomass_reward
+		GLOB.round_statistics.strategic_psypoints_from_births += embryo.psypoint_reward
+		GLOB.round_statistics.biomass_from_births += embryo.biomass_reward
 		if(embryo.hive_target_bonus)
 			GLOB.round_statistics.strategic_psypoints_from_hive_target_rewards += embryo.psypoint_reward
 			GLOB.round_statistics.biomass_from_hive_target_rewards += embryo.biomass_reward
@@ -276,12 +297,23 @@
 	log_combat(src, null, "was born as a larva.")
 	log_game("[key_name(src)] was born as a larva at [AREACOORD(src)].")
 	if(ismonkey(victim))
-		if(rand(1,3) != 1)
-			var/mob/living/carbon/human/monkey = victim
+		var/mob/living/carbon/human/monkey = victim
+		if(prob(66)) //1/3 chance
 			monkey.death()
+			log_game("Marking [logdetails(monkey)] as undefibbable because it is giving birth as a monkey.")
 			monkey.set_undefibbable()
-		victim.take_overall_damage(80, BRUTE, MELEE)
-		victim.take_overall_damage(80, BURN, MELEE)
+			monkey.take_overall_damage(100, CLONE, MELEE)
+			monkey.take_overall_damage(40, BRUTE, MELEE)
+		else
+			monkey.take_overall_damage(140, BRUTE, MELEE)
+		monkey.take_overall_damage(20, BURN, MELEE)
+	if(ishuman(victim) && !(SSticker.mode.round_type_flags2 & MODE_2_CHILL_RULES))
+		if(victim.getCloneLoss() < 30)
+			victim.adjustCloneLoss(45)
+			if(!(CHECK_BITFIELD(victim.restrained_flags, RESTRAINED_XENO_NEST)))
+				victim.death(FALSE)
+			victim.visible_message(span_warning("[victim]'s body and hole are devastated by the birth."))
+
 	if(((locate(/obj/structure/bed/nest) in loc) || loc_weeds_type) && !mind)
 		var/suitablesilo = FALSE
 		for(var/obj/silo in GLOB.xeno_resin_silos_by_hive[hivenumber])

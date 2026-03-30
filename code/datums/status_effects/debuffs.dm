@@ -55,6 +55,7 @@
 	. = ..()
 	if(!.)
 		return
+	owner.drop_all_held_items()
 	ADD_TRAIT(owner, TRAIT_INCAPACITATED, TRAIT_STATUS_EFFECT(id))
 	ADD_TRAIT(owner, TRAIT_FLOORED, TRAIT_STATUS_EFFECT(id))
 
@@ -85,6 +86,7 @@
 	. = ..()
 	if(!.)
 		return
+	owner.drop_all_held_items()
 	ADD_TRAIT(owner, TRAIT_INCAPACITATED, TRAIT_STATUS_EFFECT(id))
 	ADD_TRAIT(owner, TRAIT_IMMOBILE, TRAIT_STATUS_EFFECT(id))
 	ADD_TRAIT(owner, TRAIT_FLOORED, TRAIT_STATUS_EFFECT(id))
@@ -154,8 +156,8 @@
 		healing += BASE_HEAL_RATE
 	if(locate(/obj/item/bedsheet) in owner.loc)
 		healing += BASE_HEAL_RATE
-		if((locate(/obj/item/toy/plush) in owner.loc)) // plushie bonus in bed with a blanket
-			healing += 0.75 * BASE_HEAL_RATE // plushie bonus in bed with a blanket
+	if((locate(/obj/item/toy/plush) in owner.loc)) // plushie bonus in bed
+		healing += BASE_HEAL_RATE
 	if(health_ratio > -0.5)
 		owner.adjustBruteLoss(healing)
 		owner.adjustFireLoss(healing)
@@ -175,7 +177,7 @@
 	id = "repairing"
 	tick_interval = 1 SECONDS
 	///How much brute or burn per second
-	var/healing_per_tick = 4
+	var/healing_per_tick = 8 //Robots can now bleedout
 	///Whether the last tick made a sound effect or not
 	var/last_sound
 
@@ -775,6 +777,8 @@
 /datum/status_effect/stacking/melting/can_gain_stacks()
 	if(owner.status_flags & GODMODE || owner.stat == DEAD)
 		return FALSE
+	if(owner.has_status_effect(STATUS_EFFECT_RESIN_JELLY_COATING))
+		return
 	return ..()
 
 /datum/status_effect/stacking/melting/on_creation(mob/living/new_owner, stacks_to_apply)
@@ -996,11 +1000,20 @@
 // ***************************************
 /datum/status_effect/nohealthregen
 	id = "nohealthregen"
+	alert_type = /atom/movable/screen/alert/status_effect/nohealthregen
 	status_type = STATUS_EFFECT_REPLACE
+
+/atom/movable/screen/alert/status_effect/nohealthregen
+	name = "Health Regeneration Stopped"
+	desc = "Your health regeneration was temporarily lost because of enemy xeno toxin!"
 
 /datum/status_effect/nohealthregen/on_creation(mob/living/new_owner, set_duration)
 	if(isxeno(new_owner))
-		owner = new_owner
+		var/mob/living/carbon/xenomorph/xeno = new_owner
+		if(xeno.no_health_regen_grace_period)
+			qdel(src)
+			return
+		owner = xeno
 		duration = set_duration
 		return ..()
 	else

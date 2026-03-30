@@ -22,6 +22,8 @@
 	var/screen_overlay
 	///The destroyed computer sprite. Defaults based on the icon_state if not specified
 	var/broken_icon
+	///If true has a chance to break from any bullet
+	var/fragile = TRUE
 
 /obj/machinery/computer/Initialize(mapload)
 	. = ..()
@@ -89,6 +91,8 @@
 
 
 /obj/machinery/computer/bullet_act(atom/movable/projectile/proj)
+	if(!fragile)
+		return ..()
 	if(CHECK_BITFIELD(resistance_flags, INDESTRUCTIBLE))
 		visible_message("[proj] ricochets off [src]!")
 		return 0
@@ -183,7 +187,7 @@
 	if(.)
 		return
 
-	if(isscrewdriver(I) && circuit)
+	if(isscrewdriver(I) && circuit && !(atom_flags & NODECONSTRUCT))
 		if(user.skills.getRating(SKILL_ENGINEER) < SKILL_ENGINEER_EXPERT)
 			user.visible_message(span_notice("[user] fumbles around figuring out how to deconstruct [src]."),
 			span_notice("You fumble around figuring out how to deconstruct [src]."))
@@ -235,6 +239,8 @@
 ///So Xenos can smash computers out of the way without actually breaking them
 /obj/machinery/computer/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage * xeno_attacker.xeno_melee_damage_modifier, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
+		return FALSE
+	if(xeno_attacker.handcuffed)
 		return FALSE
 
 	if(resistance_flags & INDESTRUCTIBLE)

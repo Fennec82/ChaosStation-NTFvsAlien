@@ -12,7 +12,7 @@
 	load_method = MAGAZINE //codex
 	force = 8
 	w_class = WEIGHT_CLASS_BULKY
-	wield_delay = 0.6 SECONDS
+	wield_delay = 0.3 SECONDS
 	attachable_allowed = list(
 		/obj/item/attachable/suppressor,
 		/obj/item/attachable/reddot,
@@ -105,7 +105,7 @@
 	caliber = CALIBER_10X20_CASELESS //codex
 	max_shells = 80 //codex
 	equip_slot_flags = ITEM_SLOT_BACK
-	wield_delay = 0.7 SECONDS
+	wield_delay = 0.5 SECONDS
 	force = 20
 	type_of_casings = null
 	default_ammo_type = /obj/item/ammo_magazine/smg/standard_smg
@@ -192,6 +192,7 @@
 		/obj/item/attachable/burstfire_assembly,
 		/obj/item/weapon/gun/pistol/plasma_pistol,
 		/obj/item/weapon/gun/shotgun/combat/masterkey,
+		/obj/item/weapon/gun/pistol/g22/tranq,
 		/obj/item/weapon/gun/flamer/mini_flamer,
 		/obj/item/weapon/gun/grenade_launcher/underslung,
 		/obj/item/attachable/gyro,
@@ -236,22 +237,31 @@
 	)
 	attachable_allowed = list(
 		/obj/item/attachable/suppressor,
+		/obj/item/attachable/bayonet/converted,
+		/obj/item/attachable/bayonet,
+		/obj/item/attachable/bayonet/som,
+		/obj/item/attachable/compensator,
 		/obj/item/attachable/reddot,
 		/obj/item/attachable/verticalgrip,
-		/obj/item/attachable/compensator,
+		/obj/item/attachable/angledgrip,
 		/obj/item/attachable/lasersight,
+		/obj/item/attachable/gyro,
 		/obj/item/attachable/flashlight,
 		/obj/item/attachable/flashlight/under,
-		/obj/item/attachable/extended_barrel,
-		/obj/item/attachable/heavy_barrel,
-		/obj/item/attachable/scope/mini,
-		/obj/item/attachable/magnetic_harness,
+		/obj/item/attachable/foldable/bipod,
 		/obj/item/attachable/burstfire_assembly,
+		/obj/item/attachable/magnetic_harness,
+		/obj/item/attachable/scope,
+		/obj/item/attachable/scope/mini,
 		/obj/item/weapon/gun/pistol/plasma_pistol,
 		/obj/item/weapon/gun/shotgun/combat/masterkey,
+		/obj/item/weapon/gun/pistol/g22/tranq,
 		/obj/item/weapon/gun/flamer/mini_flamer,
 		/obj/item/weapon/gun/grenade_launcher/underslung,
-		/obj/item/attachable/gyro,
+		/obj/item/attachable/buildasentry,
+		/obj/item/weapon/gun/rifle/pepperball/pepperball_mini,
+		/obj/item/weapon/gun/flamer/hydro_cannon,
+		/obj/item/attachable/shoulder_mount,
 	)
 
 	attachable_offset = list("muzzle_x" = 33, "muzzle_y" = 17,"rail_x" = 9, "rail_y" = 20, "under_x" = 24, "under_y" = 14, "stock_x" = 24, "stock_y" = 16)
@@ -287,16 +297,31 @@
 	default_ammo_type = /obj/item/ammo_magazine/smg/m25/ap
 	attachable_allowed = list(
 		/obj/item/attachable/suppressor,
+		/obj/item/attachable/bayonet/converted,
+		/obj/item/attachable/bayonet,
+		/obj/item/attachable/bayonet/som,
+		/obj/item/attachable/compensator,
 		/obj/item/attachable/reddot,
 		/obj/item/attachable/verticalgrip,
-		/obj/item/attachable/compensator,
+		/obj/item/attachable/angledgrip,
 		/obj/item/attachable/lasersight,
+		/obj/item/attachable/gyro,
 		/obj/item/attachable/flashlight,
 		/obj/item/attachable/flashlight/under,
-		/obj/item/attachable/scope/mini,
+		/obj/item/attachable/foldable/bipod,
 		/obj/item/attachable/burstfire_assembly,
 		/obj/item/attachable/magnetic_harness,
-		/obj/item/attachable/gyro,
+		/obj/item/attachable/scope,
+		/obj/item/attachable/scope/mini,
+		/obj/item/weapon/gun/pistol/plasma_pistol,
+		/obj/item/weapon/gun/shotgun/combat/masterkey,
+		/obj/item/weapon/gun/pistol/g22/tranq,
+		/obj/item/weapon/gun/flamer/mini_flamer,
+		/obj/item/weapon/gun/grenade_launcher/underslung,
+		/obj/item/attachable/buildasentry,
+		/obj/item/weapon/gun/rifle/pepperball/pepperball_mini,
+		/obj/item/weapon/gun/flamer/hydro_cannon,
+		/obj/item/attachable/shoulder_mount,
 	)
 
 	item_map_variant_flags = NONE
@@ -339,15 +364,36 @@
 	allowed_ammo_types = list(/obj/item/ammo_magazine/smg/mp7)
 	attachable_allowed = list(
 		/obj/item/attachable/suppressor,
+		/obj/item/attachable/bayonet/converted,
+		/obj/item/attachable/bayonet,
+		/obj/item/attachable/bayonet/som,
+		/obj/item/attachable/compensator,
 		/obj/item/attachable/reddot,
+		/obj/item/attachable/verticalgrip,
+		/obj/item/attachable/angledgrip,
+		/obj/item/attachable/lasersight,
+		/obj/item/attachable/gyro,
 		/obj/item/attachable/flashlight,
+		/obj/item/attachable/flashlight/under,
+		/obj/item/attachable/foldable/bipod,
+		/obj/item/attachable/burstfire_assembly,
 		/obj/item/attachable/magnetic_harness,
 		/obj/item/attachable/scope,
+		/obj/item/attachable/scope/mini,
+		/obj/item/weapon/gun/pistol/plasma_pistol,
+		/obj/item/weapon/gun/shotgun/combat/masterkey,
+		/obj/item/weapon/gun/pistol/g22/tranq,
+		/obj/item/weapon/gun/flamer/mini_flamer,
+		/obj/item/weapon/gun/grenade_launcher/underslung,
+		/obj/item/attachable/buildasentry,
+		/obj/item/weapon/gun/rifle/pepperball/pepperball_mini,
+		/obj/item/weapon/gun/flamer/hydro_cannon,
+		/obj/item/attachable/shoulder_mount,
 	)
 
 	attachable_offset = list("muzzle_x" = 33, "muzzle_y" = 18,"rail_x" = 12, "rail_y" = 21, "under_x" = 28, "under_y" = 17, "stock_x" = 28, "stock_y" = 17)
 
-	fire_delay = 0.3 SECONDS
+	fire_delay = 0.1 SECONDS
 	burst_delay = 0.2 SECONDS
 	burst_amount = 4
 	accuracy_mult_unwielded = 0.9
@@ -375,11 +421,32 @@
 	default_ammo_type = /obj/item/ammo_magazine/smg/skorpion
 	allowed_ammo_types = list(/obj/item/ammo_magazine/smg/skorpion)
 	attachable_allowed = list(
-		/obj/item/attachable/foldable/skorpion_stock,
 		/obj/item/attachable/suppressor,
+		/obj/item/attachable/bayonet/converted,
+		/obj/item/attachable/bayonet,
+		/obj/item/attachable/bayonet/som,
+		/obj/item/attachable/compensator,
 		/obj/item/attachable/reddot,
+		/obj/item/attachable/verticalgrip,
+		/obj/item/attachable/angledgrip,
+		/obj/item/attachable/lasersight,
+		/obj/item/attachable/gyro,
 		/obj/item/attachable/flashlight,
+		/obj/item/attachable/flashlight/under,
+		/obj/item/attachable/foldable/bipod,
+		/obj/item/attachable/burstfire_assembly,
 		/obj/item/attachable/magnetic_harness,
+		/obj/item/attachable/scope/mini,
+		/obj/item/weapon/gun/pistol/plasma_pistol,
+		/obj/item/weapon/gun/shotgun/combat/masterkey,
+		/obj/item/weapon/gun/pistol/g22/tranq,
+		/obj/item/weapon/gun/flamer/mini_flamer,
+		/obj/item/weapon/gun/grenade_launcher/underslung,
+		/obj/item/attachable/buildasentry,
+		/obj/item/weapon/gun/rifle/pepperball/pepperball_mini,
+		/obj/item/weapon/gun/flamer/hydro_cannon,
+		/obj/item/attachable/shoulder_mount,
+		/obj/item/attachable/foldable/skorpion_stock,
 	)
 	starting_attachment_types = list(/obj/item/attachable/foldable/skorpion_stock)
 	attachable_offset = list("muzzle_x" = 29, "muzzle_y" = 21,"rail_x" = 10, "rail_y" = 24, "under_x" = 23, "under_y" = 15, "stock_x" = -21, "stock_y" = -1)
@@ -391,7 +458,7 @@
 	scatter_unwielded = 6
 	fire_delay = 0.1 SECONDS
 	aim_slowdown = 0.3
-	wield_delay = 0.5 SECONDS
+	wield_delay = 0.3 SECONDS
 
 /obj/item/weapon/gun/smg/skorpion/mag_harness
 	starting_attachment_types = list(/obj/item/attachable/foldable/skorpion_stock, /obj/item/attachable/magnetic_harness)
@@ -469,6 +536,7 @@
 	worn_icon_state = "uzi"
 	caliber = CALIBER_9X19 //codex
 	max_shells = 32 //codex
+	w_class = WEIGHT_CLASS_NORMAL
 	fire_sound = 'sound/weapons/guns/fire/uzi.ogg'
 	unload_sound = 'sound/weapons/guns/interact/uzi_unload.ogg'
 	reload_sound = 'sound/weapons/guns/interact/uzi_reload.ogg'
@@ -483,7 +551,7 @@
 	scatter = 0
 	scatter_unwielded = 4
 	aim_slowdown = 0.15
-	wield_delay = 0.4 SECONDS
+	wield_delay = 0.2 SECONDS
 
 /obj/item/weapon/gun/smg/uzi/mag_harness
 	default_ammo_type = /obj/item/ammo_magazine/smg/uzi/extended
@@ -533,7 +601,7 @@
 
 	fire_delay = 0.15 SECONDS
 	aim_slowdown = 0.15
-	wield_delay = 0.6 SECONDS
+	wield_delay = 0.4 SECONDS
 
 	accuracy_mult = 1.05
 	accuracy_mult_unwielded = 0.9
@@ -647,7 +715,7 @@
 	scatter = 2
 	scatter_unwielded = 5
 	aim_slowdown = 0.2
-	wield_delay = 0.55 SECONDS
+	wield_delay = 0.35 SECONDS
 
 /obj/item/weapon/gun/smg/icc_machinepistol/medic
 	starting_attachment_types = list(/obj/item/attachable/foldable/icc_machinepistol, /obj/item/attachable/magnetic_harness, /obj/item/attachable/verticalgrip, /obj/item/attachable/extended_barrel)
@@ -693,6 +761,7 @@
 		/obj/item/attachable/motiondetector,
 		/obj/item/weapon/gun/pistol/plasma_pistol,
 		/obj/item/weapon/gun/shotgun/combat/masterkey,
+		/obj/item/weapon/gun/pistol/g22/tranq,
 		/obj/item/weapon/gun/flamer/mini_flamer,
 		/obj/item/weapon/gun/grenade_launcher/underslung/mpi/removeable,
 		/obj/item/weapon/gun/rifle/pepperball/pepperball_mini,
@@ -707,7 +776,7 @@
 	burst_amount = 1
 	fire_delay = 0.15 SECONDS
 	aim_slowdown = 0.25
-	wield_delay = 0.6 SECONDS
+	wield_delay = 0.4 SECONDS
 
 	accuracy_mult = 1.05
 	accuracy_mult_unwielded = 0.9
@@ -758,6 +827,7 @@
 		/obj/item/attachable/burstfire_assembly,
 		/obj/item/weapon/gun/pistol/plasma_pistol,
 		/obj/item/weapon/gun/shotgun/combat/masterkey,
+		/obj/item/weapon/gun/pistol/g22/tranq,
 		/obj/item/weapon/gun/flamer/mini_flamer,
 		/obj/item/weapon/gun/grenade_launcher/underslung,
 		/obj/item/attachable/gyro,
@@ -770,8 +840,8 @@
 	aim_slowdown = 0.25
 	accuracy_mult = 0.55
 	accuracy_mult_unwielded = 0.85
-	fire_delay = 0.25 SECONDS
-	burst_delay =  0.2 SECONDS
+	fire_delay = 0.1 SECONDS
+	burst_delay =  0.1 SECONDS
 	burst_amount = 4
 	scatter = 3
 	scatter_unwielded = 11
@@ -815,6 +885,7 @@
 		/obj/item/attachable/magnetic_harness,
 		/obj/item/attachable/burstfire_assembly,
 		/obj/item/weapon/gun/shotgun/combat/masterkey,
+		/obj/item/weapon/gun/pistol/g22/tranq,
 		/obj/item/weapon/gun/flamer/mini_flamer,
 		/obj/item/weapon/gun/grenade_launcher/underslung,
 		/obj/item/attachable/gyro,

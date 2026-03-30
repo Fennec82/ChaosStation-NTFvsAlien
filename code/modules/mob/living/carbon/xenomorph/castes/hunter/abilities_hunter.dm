@@ -25,6 +25,7 @@
 		KEYBINDING_NORMAL = COMSIG_XENOABILITY_TOGGLE_STEALTH,
 	)
 	cooldown_duration = HUNTER_STEALTH_COOLDOWN
+	use_state_flags = ABILITY_USE_LYING
 	///last stealthed time.
 	var/last_stealth = null
 	///if stealthed.
@@ -59,6 +60,12 @@
 	var/bonus_maximum_stealth_ap = 0
 	/// How much does a successful sneak attack blind for?
 	var/blinding_stacks = 0
+	///stealth duration for siblings, ntf addition
+	var/stealth_duration = -1
+
+/datum/action/ability/xeno_action/stealth/New(Target)
+	. = ..()
+	desc = "Become harder to see, even harder to see when stalking, and almost invisible if you stand still. While invisible you sneak attack for a [sneak_attack_stun_duration / (1 SECONDS)] second stun. Uses plasma to move and lowers plasma gain."
 
 /datum/action/ability/xeno_action/stealth/remove_action(mob/living/L)
 	if(stealth)
@@ -99,7 +106,7 @@
 	RegisterSignal(owner, COMSIG_XENOMORPH_POUNCE_END, PROC_REF(sneak_attack_pounce))
 	RegisterSignal(owner, COMSIG_XENO_LIVING_THROW_HIT, PROC_REF(mob_hit))
 	RegisterSignal(owner, COMSIG_XENOMORPH_ATTACK_LIVING, PROC_REF(sneak_attack_slash))
-	RegisterSignal(owner, COMSIG_XENOMORPH_DISARM_HUMAN, PROC_REF(sneak_attack_slash))
+	RegisterSignal(owner, COMSIG_XENOMORPH_DISARM_LIVING, PROC_REF(sneak_attack_slash))
 	RegisterSignal(owner, COMSIG_XENOMORPH_ZONE_SELECT, PROC_REF(sneak_attack_zone))
 	RegisterSignal(owner, COMSIG_XENOMORPH_PLASMA_REGEN, PROC_REF(plasma_regen))
 
@@ -137,7 +144,7 @@
 		COMSIG_XENOMORPH_POUNCE_END,
 		COMSIG_XENO_LIVING_THROW_HIT,
 		COMSIG_XENOMORPH_ATTACK_LIVING,
-		COMSIG_XENOMORPH_DISARM_HUMAN,
+		COMSIG_XENOMORPH_DISARM_LIVING,
 		COMSIG_XENOMORPH_LEAP_BUMP,
 		COMSIG_XENOMORPH_ATTACK_OBJ,
 		COMSIG_LIVING_IGNITED,
@@ -172,17 +179,20 @@
 ///Handles moving while in stealth
 /datum/action/ability/xeno_action/stealth/proc/handle_stealth_move()
 	SIGNAL_HANDLER
+	var/plasma_to_use
 	if(owner.m_intent == MOVE_INTENT_WALK)
-		xeno_owner.use_plasma(HUNTER_STEALTH_WALK_PLASMADRAIN * movement_cost_multiplier)
+		plasma_to_use = (HUNTER_STEALTH_WALK_PLASMADRAIN * movement_cost_multiplier)
 
 		xeno_owner.set_alpha_source(ALPHA_SOURCE_HUNTER_STEALTH, HUNTER_STEALTH_WALK_ALPHA)
 	else
-		xeno_owner.use_plasma(HUNTER_STEALTH_RUN_PLASMADRAIN * movement_cost_multiplier)
+		plasma_to_use = (HUNTER_STEALTH_RUN_PLASMADRAIN * movement_cost_multiplier)
 		xeno_owner.set_alpha_source(ALPHA_SOURCE_HUNTER_STEALTH, HUNTER_STEALTH_RUN_ALPHA)
 	//If we have 0 plasma after expending stealth's upkeep plasma, end stealth.
-	if(!xeno_owner.plasma_stored)
+	if(xeno_owner.plasma_stored < plasma_to_use)
 		to_chat(xeno_owner, span_xenodanger("We lack sufficient plasma to remain camouflaged."))
 		cancel_stealth()
+	else
+		xeno_owner.use_plasma(plasma_to_use)
 
 ///Updates or cancels stealth
 /datum/action/ability/xeno_action/stealth/proc/handle_stealth()
@@ -219,10 +229,10 @@
 		if(mark?.marked_target == M)
 			to_chat(owner, span_xenodanger("We strike our death mark with a calculated pounce."))
 			M.adjust_stagger(6 SECONDS)
-			M.add_slowdown(2)
+			M.add_slowdown(3)
 		else
 			M.adjust_stagger(3 SECONDS)
-			M.add_slowdown(1)
+			M.add_slowdown(2)
 		to_chat(owner, span_xenodanger("Pouncing from the shadows, we stagger our victim."))
 	if(stealth_flags & DIS_POUNCE_SLASH)
 		cancel_stealth()
@@ -238,7 +248,7 @@
 		return
 
 	var/staggerslow_stacks = 2
-	var/paralyzesecs = 1 SECONDS
+	var/paralyzesecs = sneak_attack_stun_duration
 	var/flavour
 
 	if(stealth_flags & WALK_ONLY_AP && owner.m_intent == MOVE_INTENT_RUN && ( owner.last_move_intent > (world.time - HUNTER_SNEAK_ATTACK_RUN_DELAY) ) ) //Allows us to slash while running... but only if we've been stationary for awhile
@@ -246,7 +256,7 @@
 	else
 		armor_mod += sneak_attack_armor_pen
 		flavour = "deadly"
-	if(bonus_maximum_stealth_ap && xeno_owner.alpha_sources[ALPHA_SOURCE_HUNTER_STEALTH] == HUNTER_STEALTH_STILL_ALPHA)
+	if(bonus_maximum_stealth_ap && xeno_owner.alpha_sources[ALPHA_SOURCE_HUNTER_STEALTH] == HUNTER_STEALTH_WALK_ALPHA)
 		armor_mod += bonus_maximum_stealth_ap
 	if(bonus_stealth_damage_multiplier)
 		damage_mod += xeno_owner.xeno_caste.melee_damage * xeno_owner.xeno_melee_damage_modifier * bonus_stealth_damage_multiplier
@@ -263,8 +273,8 @@
 	target.add_slowdown(staggerslow_stacks)
 	if(blinding_stacks)
 		target.blind_eyes(blinding_stacks)
-	if(sneak_attack_stun_duration)
-		target.ParalyzeNoChain(sneak_attack_stun_duration)
+	if(paralyzesecs)
+		target.ParalyzeNoChain(paralyzesecs)
 	GLOB.round_statistics.hunter_cloak_victims++
 	SSblackbox.record_feedback("tally", "round_statistics", 1, "hunter_cloak_victims")
 
@@ -301,7 +311,7 @@
 	name = "Disguise"
 	action_icon_state = "xenohide"
 	action_icon = 'icons/Xeno/actions/general.dmi'
-	desc = "Disguise yourself as the enemy. Uses plasma to move. Select your disguise with Hunter's Mark."
+	desc = "Disguise yourself as a mob or an object. Uses plasma to move. Select your disguise with Hunter's Mark."
 	keybinding_signals = list(
 		KEYBINDING_NORMAL = COMSIG_XENOABILITY_TOGGLE_DISGUISE,
 	)
@@ -371,6 +381,12 @@
 	var/attack_on_pounce = FALSE
 	/// Pass_flags given when leaping.
 	var/leap_pass_flags = PASS_LOW_STRUCTURE|PASS_FIRE|PASS_XENO
+	///sound to be played when xeno lands on a target.
+	var/pounce_sound = 'sound/voice/alien/pounce.ogg'
+
+/datum/action/ability/activable/xeno/pounce/New(Target)
+	. = ..()
+	desc = "Leap at your target up to [HUNTER_POUNCE_RANGE] tiles away, stunning them for [XENO_POUNCE_STUN_DURATION / (1 SECONDS)] seconds."
 
 /datum/action/ability/activable/xeno/pounce/on_cooldown_finish()
 	owner.balloon_alert(owner, "[lowertext("[src]")] ready")
@@ -393,7 +409,8 @@
 	RegisterSignal(owner, COMSIG_MOVABLE_MOVED, PROC_REF(movement_fx))
 	RegisterSignal(owner, COMSIG_XENO_OBJ_THROW_HIT, PROC_REF(object_hit))
 	RegisterSignal(owner, COMSIG_XENOMORPH_LEAP_BUMP, PROC_REF(mob_hit))
-	RegisterSignal(owner, COMSIG_MOVABLE_POST_THROW, PROC_REF(pounce_complete))
+	// RegisterSignal(owner, COMSIG_MOVABLE_POST_THROW, PROC_REF(pounce_complete))
+	RegisterSignal(owner, COMSIG_MOVABLE_POST_THROW, PROC_REF(laying_check))
 	SEND_SIGNAL(owner, COMSIG_XENOMORPH_POUNCE)
 	xeno_owner.xeno_flags |= XENO_LEAPING
 	xeno_owner.add_pass_flags(leap_pass_flags, type)
@@ -413,31 +430,42 @@
 /datum/action/ability/activable/xeno/pounce/proc/mob_hit(datum/source, mob/living/living_target)
 	SIGNAL_HANDLER
 	. = TRUE
-	if(living_target.stat || isxeno(living_target)) //we leap past xenos
+	if(living_target.stat == DEAD|| isxeno(living_target)) //we leap past xenos
+		pounce_complete()
 		return
 
 	if(ishuman(living_target) && (angle_to_dir(Get_Angle(xeno_owner.throw_source, living_target)) in reverse_nearby_direction(living_target.dir)))
 		var/mob/living/carbon/human/human_target = living_target
-		if(!human_target.check_shields(COMBAT_TOUCH_ATTACK, 30, "melee"))
+		if(!human_target.check_shields(COMBAT_TOUCH_ATTACK, 30, "melee", shield_flags = SHIELD_FLAG_XENOMORPH))
 			xeno_owner.Paralyze(XENO_POUNCE_SHIELD_STUN_DURATION)
 			xeno_owner.set_throwing(FALSE)
+			playsound(xeno_owner, 'ntf_modular/sound/machines/bonk.ogg', 50, FALSE)
 			return
 	trigger_pounce_effect(living_target)
 	pounce_complete()
 
 ///Triggers the effect of a successful pounce on the target.
 /datum/action/ability/activable/xeno/pounce/proc/trigger_pounce_effect(mob/living/living_target)
-	playsound(get_turf(living_target), 'sound/voice/alien/pounce.ogg', 25, TRUE)
+	if(pounce_sound)
+		playsound(get_turf(living_target), pounce_sound, 25, TRUE)
 	xeno_owner.Immobilize(self_immobilize_duration)
 	xeno_owner.forceMove(get_turf(living_target))
-	living_target.Knockdown(stun_duration)
+	living_target.Paralyze(stun_duration)
 	if(attack_on_pounce)
 		living_target.attack_alien_harm(xeno_owner)
 	GLOB.round_statistics.runner_pounce_victims++
 	SSblackbox.record_feedback("tally", "round_statistics", 1, "runner_pounce_victims")
 
-/datum/action/ability/activable/xeno/pounce/proc/pounce_complete()
+//lets us hit laying mobs if we jump on them.
+/datum/action/ability/activable/xeno/pounce/proc/laying_check()
 	SIGNAL_HANDLER
+	var/mob/living/victim = locate() in xeno_owner.loc.contents
+	if(victim && victim.lying_angle)
+		mob_hit(xeno_owner, victim)
+	else
+		pounce_complete()
+
+/datum/action/ability/activable/xeno/pounce/proc/pounce_complete()
 	UnregisterSignal(owner, list(COMSIG_MOVABLE_MOVED, COMSIG_XENO_OBJ_THROW_HIT, COMSIG_XENOMORPH_LEAP_BUMP, COMSIG_MOVABLE_POST_THROW))
 	SEND_SIGNAL(owner, COMSIG_XENOMORPH_POUNCE_END)
 	xeno_owner.xeno_flags &= ~XENO_LEAPING
@@ -632,6 +660,10 @@
 	var/mob/illusion/xeno/prioritized_illusion
 	/// The timer ID of the timer that clear all illusions.
 	var/timer_id
+
+/datum/action/ability/xeno_action/mirage/New(Target)
+	. = ..()
+	desc = "Create [illusion_count] mirror images of ourselves. Reactivate to swap with an illusion."
 
 /datum/action/ability/xeno_action/mirage/remove_action()
 	clean_illusions(FALSE) // No need to manually delete the illusions as the illusions will delete themselves once their life time expires.

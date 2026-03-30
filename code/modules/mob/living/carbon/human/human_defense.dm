@@ -80,7 +80,7 @@ Contains most of the procs that are called when a mob is attacked by something
 	if(!.)
 		return
 	if((S.smoke_traits & SMOKE_CAMO) && !(S.smoke_traits & SMOKE_XENO))
-		smokecloak_on()
+		smokecloak_on(S.smokecloak_alpha)
 
 /mob/living/carbon/human/inhale_smoke(obj/effect/particle_effect/smoke/S)
 	. = ..()
@@ -178,7 +178,7 @@ Contains most of the procs that are called when a mob is attacked by something
 
 		switch(hit_area)
 			if("head")//Harder to score a stun but if you do it lasts a bit longer
-				if(prob(applied_damage - 15) && stat == CONSCIOUS)
+				if(prob(applied_damage - 15) && stat == CONSCIOUS && !(HAS_TRAIT(user, TRAIT_NO_STUN_ATTACK)))
 					ParalyzeNoChain(modify_by_armor(10 SECONDS, MELEE, def_zone = target_zone) * 100 / maxHealth)
 					visible_message(span_danger("[src] has been knocked unconscious!"),
 									span_danger("You have been knocked unconscious!"), null, 5)
@@ -196,7 +196,7 @@ Contains most of the procs that are called when a mob is attacked by something
 						update_inv_glasses(0)
 
 			if("chest")//Easier to score a stun but lasts less time
-				if(prob((applied_damage - 5)) && stat == CONSCIOUS)
+				if(prob((applied_damage - 5)) && stat == CONSCIOUS && !(HAS_TRAIT(user, TRAIT_NO_STUN_ATTACK)))
 					ParalyzeNoChain(modify_by_armor(6 SECONDS, MELEE, def_zone = target_zone) * 100 / maxHealth)
 					visible_message(span_danger("[src] has been knocked down!"),
 									span_danger("You have been knocked down!"), null, 5)
@@ -398,6 +398,9 @@ Contains most of the procs that are called when a mob is attacked by something
 /mob/living/carbon/human/attackby(obj/item/I, mob/living/user, params)
 	if(stat != DEAD || I.sharp < IS_SHARP_ITEM_ACCURATE || user.a_intent != INTENT_HARM)
 		return ..()
+	if(issamexenohive(user) || (!hivenumber && (faction == user.faction)))
+		to_chat(user, span_warning("You shouldn't rip out an allied zombie's heart."))
+		return
 	if(!get_organ_slot(ORGAN_SLOT_HEART))
 		to_chat(user, span_notice("[src] no longer has a heart."))
 		return
@@ -448,9 +451,9 @@ Contains most of the procs that are called when a mob is attacked by something
 	if(!I.tool_use_check(user, 2))
 		return TRUE
 
-	var/repair_time = 1 SECONDS
-	if(src == user)
-		repair_time *= 3
+	var/repair_time = 1.5 SECONDS // Robots now bleed out, so this is necessary
+/*	if(src == user)
+		repair_time *= 1*/
 
 
 	user.visible_message(span_notice("[user] starts to fix some of the dents on [src]'s [affecting.display_name]."),\

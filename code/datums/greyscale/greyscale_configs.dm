@@ -134,11 +134,19 @@
 
 /datum/greyscale_config/vsd_hardsuit/alt
 	prefix = "superheavy_alt_"
+	json_config = 'ntf_modular/code/datums/greyscale/json_configs/vsd_hardsuit_alt.json'
 
 /datum/greyscale_config/vsd_hardsuit/alt_two
 	prefix = "superheavy_alt_two_"
+	json_config = 'ntf_modular/code/datums/greyscale/json_configs/vsd_hardsuit_alt.json'
 
 /datum/greyscale_config/vsd_hardsuit/exoskeleton
+
+/datum/greyscale_config/vsd_hardsuit/exoskeleton/nt
+
+/datum/greyscale_config/vsd_hardsuit/bikini
+	prefix = "superheavy_bikini_"
+	json_config = 'ntf_modular/code/datums/greyscale/json_configs/vsd_hardsuit_bikini.json'
 
 //Mark 2
 
@@ -195,15 +203,6 @@
 
 /datum/greyscale_config/xenonaut/pilot
 	prefix = "pilot_"
-
-/datum/greyscale_config/xenonaut/bulletproof
-	prefix = "bulletproof_"
-
-/datum/greyscale_config/xenonaut/ablative
-	prefix = "ablative_"
-
-/datum/greyscale_config/xenonaut/bikini
-	prefix = "bikini_"
 
 /datum/greyscale_config/xenonaut/helm
 	json_config = 'code/datums/greyscale/json_configs/xenonaut_helm.json'

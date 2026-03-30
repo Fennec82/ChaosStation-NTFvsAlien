@@ -53,7 +53,7 @@
 
 	action_icon_state = "psy_shield"
 	action_icon = 'icons/Xeno/actions/warlock.dmi'
-	desc = "Channel a psychic shield at your current location that can reflect most projectiles. Activate again while the shield is active to detonate the shield forcibly, producing knockback. Must remain static to use."
+	desc = "Channel a psychic shield at your current location that can reflect most projectiles, the shield can only hold so much though... Activate again while active to detonate the shield forcibly, producing knockback. Must remain stationary to use."
 	cooldown_duration = 10 SECONDS
 	ability_cost = 200
 	keybinding_signals = list(
@@ -629,7 +629,7 @@
 			desc = "Launch a blast of psychic energy that deals light burn damage and staggers in an area. Direct hits deal additional light brute damage."
 		if(/datum/ammo/energy/xeno/psy_blast/psy_lance)
 			name = "Psychic Lance ([ability_cost])"
-			desc = "Launch a blast of psychic energy that deals high brute damage with high armor penetration. This can hit multiple mobs and goes through structures."
+			desc = "Launch a blast of psychic energy that deals high burn damage with high armor penetration. This can hit multiple mobs and goes through structures."
 		if(/datum/ammo/energy/xeno/psy_blast/psy_drain)
 			name = "Psychic Drain ([ability_cost])"
 			desc = "Launch a blast of psychic energy that deals light stamina damage, staggers, and knockbacks in a smaller area. Direct hits deal additional light stamina damage and briefly knockdowns."

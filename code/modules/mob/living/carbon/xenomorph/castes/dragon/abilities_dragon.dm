@@ -223,7 +223,7 @@
 	RegisterSignal(xeno_owner, COMSIG_MOVABLE_PRE_MOVE, PROC_REF(on_move_attempt))
 	COOLDOWN_RESET(src, animation_cooldown)
 	animate(xeno_owner, pixel_x = 0, pixel_y = 0, time = 0)
-	xeno_owner.status_flags = GODMODE|INCORPOREAL
+	xeno_owner.status_flags = INCORPOREAL
 	xeno_owner.resistance_flags = RESIST_ALL
 	xeno_owner.add_pass_flags(PASS_LOW_STRUCTURE|PASS_DEFENSIVE_STRUCTURE|PASS_FIRE, DRAGON_ABILITY_TRAIT)
 	xeno_owner.density = FALSE
@@ -335,10 +335,10 @@
 	. = COMPONENT_MOVABLE_BLOCK_PRE_MOVE
 	if(isclosedturf(newloc) && !istype(newloc, /turf/closed/wall/resin))
 		return
+	if(isclosedturf(newloc) && istype(newloc, /turf/closed/wall/resin) && !xeno_owner.issamexenohive(newloc))
+		return
 	for(var/atom/atom_on_turf AS in newloc.contents)
 		if(istype(atom_on_turf, /obj/structure/mineral_door/resin) && xeno_owner.issamexenohive(atom_on_turf))
-			continue
-		if(istype(atom_on_turf, /turf/closed/wall/resin) && xeno_owner.issamexenohive(atom_on_turf))
 			continue
 		if(atom_on_turf.CanPass(xeno_owner, newloc))
 			continue
@@ -459,7 +459,7 @@
 	return TRUE
 
 /datum/action/ability/activable/xeno/backhand/dragon_breath/handle_regular_ability(atom/target, list/turf/affected_turfs)
-	xeno_owner.add_movespeed_modifier(MOVESPEED_ID_DRAGON_BREATH, TRUE, 0, NONE, TRUE, 8)
+	xeno_owner.add_movespeed_modifier(MOVESPEED_ID_DRAGON_BREATH, TRUE, 0, NONE, TRUE, 2)
 	xeno_owner.move_resist = MOVE_FORCE_OVERPOWERING
 	xeno_owner.soft_armor = xeno_owner.soft_armor.modifyAllRatings(15)
 	ADD_TRAIT(xeno_owner, TRAIT_HANDS_BLOCKED, DRAGON_ABILITY_TRAIT)
@@ -643,7 +643,7 @@
 			if(ishitbox(impacted_obj))
 				impacted_obj.take_damage(damage * 1/3, BRUTE, MELEE, blame_mob = xeno_owner) // Adjusted for 3x3 multitile vehicles.
 				continue
-			if(!isvehicle(impacted_obj))
+			if(isvehicle(impacted_obj))
 				impacted_obj.take_damage(damage, BRUTE, MELEE, blame_mob = xeno_owner)
 				continue
 			if(ismecha(impacted_obj))
@@ -765,6 +765,7 @@
 	damage_taken_so_far = 0
 
 	ADD_TRAIT(grabbed_human, TRAIT_IMMOBILE, DRAGON_ABILITY_TRAIT)
+	xeno_owner.add_movespeed_modifier("movespeed_id_dragon_grab", TRUE, 0, NONE, TRUE, 6)
 	RegisterSignal(grabbing_item, COMSIG_QDELETING, PROC_REF(end_grabbing))
 	RegisterSignal(grabbed_human, COMSIG_MOB_STAT_CHANGED, PROC_REF(human_stat_changed))
 	RegisterSignal(grabbed_human, COMSIG_LIVING_DO_MOVE_RESIST, PROC_REF(on_resist_attempt))
@@ -777,6 +778,7 @@
 /datum/action/ability/activable/xeno/grab/proc/failed_to_grab()
 	if(grabbed_human)
 		REMOVE_TRAIT(grabbed_human, TRAIT_IMMOBILE, DRAGON_ABILITY_TRAIT)
+	xeno_owner.remove_movespeed_modifier("movespeed_id_dragon_grab")
 	grabbed_human = null
 	succeed_activate()
 	add_cooldown()
@@ -791,6 +793,7 @@
 		UnregisterSignal(xeno_owner, list(COMSIG_XENOMORPH_BRUTE_DAMAGE, COMSIG_XENOMORPH_BURN_DAMAGE))
 		if(grabbed_human)
 			UnregisterSignal(grabbed_human, list(COMSIG_MOB_STAT_CHANGED, COMSIG_LIVING_DO_MOVE_RESIST))
+	xeno_owner.remove_movespeed_modifier("movespeed_id_dragon_grab")
 	grabbed_human = null
 	grabbing_item = null
 	if(no_cooldown)

@@ -38,7 +38,7 @@
 				icon_state = "[xeno_caste.caste_name][is_a_rouny ? " rouny" : ""] Walking"
 	update_fire() //the fire overlay depends on the xeno's stance, so we must update it.
 	update_wounds()
-	update_xeno_gender()
+	INVOKE_ASYNC(src, PROC_REF(update_xeno_gender))
 	update_snowflake_overlays()
 
 	hud_set_sunder()
@@ -106,6 +106,8 @@
 /mob/living/carbon/xenomorph/proc/update_wounds()
 	if(QDELETED(src) || !wound_overlay)
 		return
+	if(status_flags & GODMODE)
+		return //we'll incorrectly lose any wound overlays due to how godmode sets your 'health'
 
 	remove_overlay(WOUND_LAYER)
 	remove_filter("wounded_filter")

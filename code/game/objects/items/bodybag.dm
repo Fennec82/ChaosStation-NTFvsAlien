@@ -209,6 +209,8 @@
 /obj/structure/closet/bodybag/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage * xeno_attacker.xeno_melee_damage_modifier, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return FALSE
+	if(xeno_attacker.handcuffed)
+		return FALSE
 	if(opened)
 		return FALSE // stop xeno closing things
 	xeno_attacker.do_attack_animation(src, ATTACK_EFFECT_CLAW)
@@ -339,8 +341,8 @@
 	if(occupant.stat != DEAD)
 		return
 	var/timer = 0 // variable for DNR timer check
-	timer = (TIME_BEFORE_DNR-(occupant.dead_ticks))*2 //Time to DNR left in seconds
-	if(!occupant.mind && !occupant.get_ghost(TRUE) || occupant.dead_ticks > TIME_BEFORE_DNR || occupant.suiciding) //We couldn't find a suitable ghost or patient has passed their DNR timer or suicided, this means the person is not returning
+	timer = (GLOB.time_before_dnr-(occupant.dead_ticks))*2 //Time to DNR left in seconds
+	if(!occupant.mind && !occupant.get_ghost(TRUE) || occupant.dead_ticks > GLOB.time_before_dnr || occupant.suiciding) //We couldn't find a suitable ghost or patient has passed their DNR timer or suicided, this means the person is not returning
 		. += span_scanner("Patient is DNR")
 	else if(!occupant.mind && occupant.get_ghost(TRUE)) // Ghost is available but outside of the body
 		. += span_scanner("Defib patient to check departed status")

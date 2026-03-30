@@ -72,8 +72,9 @@
 	icon_state = "lighttower"
 	bound_width = 32
 	bound_height = 32
-	obj_integrity = 200
-	max_integrity = 200
+	obj_integrity = 75
+	max_integrity = 75
+	obj_flags = CAN_BE_HIT|PROJ_IGNORE_DENSITY
 
 /obj/structure/xeno/lighttower/Initialize(mapload)
 	. = ..()
@@ -92,6 +93,10 @@
 			take_damage(100, BRUTE, BOMB)
 
 /obj/structure/xeno/lighttower/attack_alien(mob/living/carbon/xenomorph/X, damage_amount = X.xeno_caste.melee_damage * X.xeno_melee_damage_modifier, damage_type = BRUTE, damage_flag = "", effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
+	if(X.status_flags & INCORPOREAL)
+		return
+	if(X.handcuffed)
+		return
 	if(!(issamexenohive(X)))
 		return ..()
 	if(X.a_intent == INTENT_HARM && (X.xeno_flags & XENO_DESTROY_OWN_STRUCTURES)) // If we're on harm intend and have the toggle on, destroy it.

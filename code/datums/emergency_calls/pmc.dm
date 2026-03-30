@@ -1,5 +1,5 @@
 /datum/emergency_call/pmc
-	name = "NT Private Military Contractor Squad"
+	name = "ArcherCorp Asset Protection Squad"
 	base_probability = 11
 	alignement_factor = -2
 	shuttle_id = SHUTTLE_DISTRESS_PMC
@@ -56,6 +56,7 @@
 		var/datum/job/J = SSjob.GetJobType(/datum/job/pmc/sniper)
 		H.apply_assigned_role_to_spawn(J)
 		to_chat(H, "<p style='font-size:1.5em'>[span_notice("You are a PMC heavy sniper assigned to this team to respond to the NTC distress signal sent out nearby. Support your squad with long ranged firepower!")]</p>")
+		snipers++
 		return
 
 	if(prob(30))

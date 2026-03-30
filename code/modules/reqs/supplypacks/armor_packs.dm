@@ -16,7 +16,7 @@ ARMOR
 		/obj/item/clothing/suit/storage/marine/riot,
 		/obj/item/clothing/head/helmet/marine/riot,
 	)
-	cost = 120
+	cost = 360
 	available_against_xeno_only = TRUE
 
 /datum/supply_packs/armor/marine_shield
@@ -45,11 +45,6 @@ ARMOR
 		/obj/item/clothing/head/helmet/marine/grenadier,
 	)
 	cost = B17_PRICE
-
-/datum/supply_packs/armor/scout_cloak
-	name = "NT-Cyberghost"
-	contains = list(/obj/item/storage/backpack/marine/satchel/scout_cloak)
-	cost = 500
 
 /datum/supply_packs/armor/sniper_cloak
 	name = "Sniper Cloak"

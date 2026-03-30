@@ -10,10 +10,12 @@
 #define MINER_RESISTANT "reinforced components"
 #define MINER_OVERCLOCKED "high-efficiency drill"
 
-#define PHORON_CRATE_SELL_AMOUNT 25
-#define PLATINUM_CRATE_SELL_AMOUNT 75
-#define PHORON_DROPSHIP_BONUS_AMOUNT 15
-#define PLATINUM_DROPSHIP_BONUS_AMOUNT 25
+#define MAX_PHORON_MINERS_PER_FACTION 40 // this is in %
+#define MAX_PLATINUM_MINERS_PER_FACTION 40 // this is in %
+#define PHORON_CRATE_SELL_AMOUNT 20
+#define PLATINUM_CRATE_SELL_AMOUNT 80
+#define PHORON_DROPSHIP_BONUS_AMOUNT 20
+#define PLATINUM_DROPSHIP_BONUS_AMOUNT 80
 ///Resource generator that produces a certain material that can be repaired by marines and attacked by xenos, Intended as an objective for marines to play towards to get more req gear
 /obj/machinery/miner
 	name = "\improper Ninetails phoron Mining Well"
@@ -33,7 +35,7 @@
 	///Tracks how many ticks have passed since we last added a sheet of material
 	var/add_tick = 0
 	///How many times we neeed to tick for a resource to be created, in this case this is 2* the specified amount
-	var/required_ticks = 70  //make one crate every 140 seconds
+	var/required_ticks = 75  //make one crate every 150 seconds
 	///The mineral type that's produced
 	var/mineral_value = PHORON_CRATE_SELL_AMOUNT
 	///Applies the actual bonus points for the dropship for each sale
@@ -140,7 +142,7 @@
 			max_miner_integrity = 300
 			miner_integrity = 300
 		if(MINER_OVERCLOCKED)
-			required_ticks = 60
+			required_ticks = 35
 		if(MINER_AUTOMATED)
 			if(stored_mineral)
 				SSpoints.add_supply_points(faction, mineral_value * stored_mineral) //NTF edit. Forcibly caps req points.
@@ -250,7 +252,38 @@
 	record_miner_repair(user)
 	return TRUE
 
+/obj/machinery/miner/proc/can_capture(var/mob/user)
+	var/phoron_total = 0
+	var/phoron_faction = 0
+	var/platinum_total = 0
+	var/platinum_faction = 0
+
+	for(var/obj/machinery/miner/M in GLOB.miner_list)
+		if(M.type == /obj/machinery/miner/damaged/platinum)
+			platinum_total++
+			if(M.faction == user.faction && M.miner_status == MINER_RUNNING)
+				platinum_faction++
+		else
+			phoron_total++
+			if(M.faction == user.faction && M.miner_status == MINER_RUNNING)
+				phoron_faction++
+
+	if(src.type == /obj/machinery/miner/damaged/platinum && platinum_total > 0)
+		if((platinum_faction / platinum_total) * 100 >= MAX_PLATINUM_MINERS_PER_FACTION)
+			return FALSE
+	else if((src.type == /obj/machinery/miner/damaged) && phoron_total > 0)
+		if((phoron_faction / phoron_total) * 100 >= MAX_PHORON_MINERS_PER_FACTION)
+			return FALSE
+	return TRUE
+
 /obj/machinery/miner/wrench_act(mob/living/user, obj/item/I)
+	var/area/cavezone = get_area(src)
+	if(user.faction == FACTION_CLF && ((cavezone && cavezone.ceiling > CEILING_UNDERGROUND) || is_platinum()))
+		user.visible_message(span_warning("Repairing this would go against your masters' wishes and wellbeing."))
+		return FALSE
+	if ((SSticker.mode.round_type_flags2 & MODE_2_CHILL_RULES) && (user.faction != FACTION_CLF) && !can_capture(user))
+		user.visible_message(span_warning("Under the current truce, your faction is forbidden from seizing additional miners of this type. Only when war is declared may this restriction be lifted."))
+		return FALSE
 	if(miner_status != MINER_SMALL_DAMAGE)
 		return
 	if(user.skills.getRating(SKILL_ENGINEER) < SKILL_ENGINEER_ENGI)
@@ -297,6 +330,13 @@
 			. += span_info("It's lightly damaged, and you can see some dents and loose piping.</span>\n<span class='info'>Use a wrench to repair it.")
 		if(MINER_RUNNING)
 			. += span_info("[src]'s storage module displays [stored_mineral] crates are ready to be exported.")
+	. += span_info("Each crate it produces is worth [mineral_value] supply points and [dropship_bonus] dropship points.")
+	if(miner_upgrade_type == MINER_OVERCLOCKED)
+		. += span_info("Due to its upgrade, it produces one crate each [required_ticks*2] seconds, or [mineral_value*((1 HOURS / (2 SECONDS))/required_ticks)] supply points per hour.")
+		. += span_info("Without its upgrade, it would produce one crate each [initial(required_ticks)*2] seconds, or [mineral_value*((1 HOURS / (2 SECONDS))/initial(required_ticks))] supply points per hour.")
+	else
+		. += span_info("It produces one crate each [required_ticks*2] seconds, or [mineral_value*((1 HOURS / (2 SECONDS))/required_ticks)] supply points per hour.")
+
 
 /obj/machinery/miner/attack_hand(mob/living/user)
 	if(miner_status != MINER_RUNNING)
@@ -315,6 +355,10 @@
 	do_sparks(5, TRUE, src)
 	playsound(loc,'sound/effects/phasein.ogg', 50, FALSE)
 	say("Ore shipment has been sold for [mineral_value * stored_mineral] points.")
+	var/datum/game_mode/infestation/secret_of_life/gaymode = SSticker.mode
+	if(gaymode)
+		var/datum/individual_stats/the_stats = gaymode.stat_list[user.faction].get_player_stats(user)
+		the_stats.give_funds(round((dropship_bonus * stored_mineral)/2))
 	stored_mineral = 0
 	start_processing()
 
@@ -357,6 +401,8 @@
 
 /obj/machinery/miner/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage * xeno_attacker.xeno_melee_damage_modifier, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL) //Incorporeal xenos cannot attack physically.
+		return
+	if(xeno_attacker.handcuffed)
 		return
 	if(miner_upgrade_type == MINER_RESISTANT && !HAS_TRAIT(xeno_attacker, TRAIT_CAN_DISABLE_MINER))
 		xeno_attacker.visible_message(span_notice("[xeno_attacker]'s claws bounce off of [src]'s reinforced plating."),

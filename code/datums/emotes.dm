@@ -71,8 +71,8 @@
 				continue
 			var/T1 = get_turf(user)
 			var/T2 = get_turf(M)
-			if((!(M.client.prefs.toggles_chat & CHAT_GHOSTSIGHT) && (get_dist(T1, T2) > range)))
-				if(!check_other_rights(M.client, R_ADMIN, FALSE))
+			if((get_dist(T1, T2) > range))
+				if(!(M.client.prefs.toggles_chat & CHAT_GHOSTSIGHT) || !check_other_rights(M.client, R_ADMIN, FALSE))
 					continue
 			if((M.faction != FACTION_NEUTRAL && user.faction != FACTION_NEUTRAL ) && M.faction != user.faction && !check_other_rights(M.client, R_ADMIN, FALSE) && !GLOB.observer_freedom)
 				user.balloon_alert(M, "does something you cannot see.")
@@ -104,6 +104,8 @@
 /datum/emote/proc/check_cooldown(mob/user, intentional)
 	if(!intentional)
 		return TRUE
+	if(!cooldown)
+		return TRUE
 	if(TIMER_COOLDOWN_RUNNING(user, "emote[key]"))
 		return FALSE
 	TIMER_COOLDOWN_START(user, "emote[key]", cooldown)
@@ -129,7 +131,7 @@
 		return "makes a [pick("strong ", "weak ", "")]noise."
 	if(isxeno(user) && message_alien)
 		. = message_alien
-	else if(isxenolarva(user) && message_larva)
+	else if((isxenolarva(user) || isxenofacehugger(user)) && message_larva)
 		. = message_larva
 	else if(isAI(user) && message_AI)
 		. = message_AI
@@ -165,7 +167,7 @@
 				user.balloon_alert(user, "used an audible emote too recently!")
 				return FALSE
 			else
-				TIMER_COOLDOWN_START(user, COOLDOWN_EMOTE, 8 SECONDS)
+				TIMER_COOLDOWN_START(user, COOLDOWN_EMOTE, 0.5 SECONDS)
 
 		if(user.client)
 			if(user.client.prefs.muted & MUTE_IC)

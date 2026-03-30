@@ -47,6 +47,8 @@ GLOBAL_DATUM(droppod_reservation, /datum/turf_reservation/transit/droppod)
 	///after the pod finishes it's travelhow long it spends falling
 	var/falltime = 0.6 SECONDS
 	var/respawns = FALSE
+	///was this pod intercepted and damaged
+	var/explosive_entry = FALSE
 
 /obj/structure/droppod/Initialize(mapload)
 	. = ..()
@@ -54,8 +56,13 @@ GLOBAL_DATUM(droppod_reservation, /datum/turf_reservation/transit/droppod)
 	interaction_actions += new /datum/action/innate/set_drop_target(src)
 	interaction_actions += new /datum/action/innate/launch_droppod(src)
 	RegisterSignals(SSdcs, list(COMSIG_GLOB_DROPSHIP_HIJACKED, COMSIG_GLOB_CAMPAIGN_MISSION_ENDED, COMSIG_GLOB_CAMPAIGN_DISABLE_DROPPODS), PROC_REF(disable_launching))
-	RegisterSignals(SSdcs, list(COMSIG_GLOB_OPEN_TIMED_SHUTTERS_LATE, COMSIG_GLOB_OPEN_SHUTTERS_EARLY, COMSIG_GLOB_TADPOLE_LAUNCHED, COMSIG_GLOB_CAMPAIGN_ENABLE_DROPPODS), PROC_REF(allow_drop))
+	RegisterSignal(SSdcs, COMSIG_GLOB_GAMESTATE_GROUNDSIDE, PROC_REF(allow_drop))
 	RegisterSignal(SSdcs, COMSIG_GLOB_CAMPAIGN_MISSION_LOADED, PROC_REF(change_targeted_z))
+	//testing only
+	/* NTF edit
+	if(SSticker.mode && istype(SSticker.mode, /datum/game_mode/infestation/sovl_war) && SSmonitor.gamestate != SHUTTERS_CLOSED)
+		disable_sovl_launching()
+	*/
 	GLOB.droppod_list += src
 	update_icon()
 	if((!locate(/obj/structure/drop_pod_launcher) in get_turf(src)) && mapload)
@@ -85,19 +92,29 @@ GLOBAL_DATUM(droppod_reservation, /datum/turf_reservation/transit/droppod)
 	return TRUE
 
 ///Disables launching
-/obj/structure/droppod/proc/disable_launching()
+/obj/structure/droppod/proc/disable_launching(datum/source)
 	SIGNAL_HANDLER
 	launch_allowed = FALSE
 	update_icon()
 	UnregisterSignal(SSdcs, COMSIG_GLOB_DROPSHIP_HIJACKED)
 
 ///Allow this droppod to ignore dropdelay or otherwise reenable its use
-/obj/structure/droppod/proc/allow_drop()
+/obj/structure/droppod/proc/allow_drop(datum/source)
 	SIGNAL_HANDLER
 	operation_started = TRUE
 	launch_allowed = TRUE
 	update_icon()
-	UnregisterSignal(SSdcs, list(COMSIG_GLOB_OPEN_TIMED_SHUTTERS_LATE, COMSIG_GLOB_OPEN_SHUTTERS_EARLY, COMSIG_GLOB_TADPOLE_LAUNCHED))
+	UnregisterSignal(SSdcs, COMSIG_GLOB_GAMESTATE_GROUNDSIDE)
+
+//testing only
+/obj/structure/droppod/proc/allow_sovl_drop()
+	allow_drop()
+	RegisterSignal(SSdcs, COMSIG_GLOB_GAMESTATE_GROUNDSIDE, PROC_REF(disable_sovl_launching))
+
+/obj/structure/droppod/proc/disable_sovl_launching()
+	launch_allowed = FALSE
+	update_icon()
+	UnregisterSignal(SSdcs, COMSIG_GLOB_GAMESTATE_GROUNDSIDE, COMSIG_GLOB_DROPSHIP_HIJACKED)
 
 /obj/structure/droppod/update_icon()
 	. = ..()
@@ -251,8 +268,8 @@ GLOBAL_DATUM(droppod_reservation, /datum/turf_reservation/transit/droppod)
 	addtimer(CALLBACK(src, PROC_REF(launch_pod), user), 2.5 SECONDS)
 
 ///Find a new suitable target turf around the pods initial target
-/obj/structure/droppod/proc/find_new_target(mob/user)
-	var/scatter_radius = DROPPOD_BASE_DISPERSION + GLOB.current_orbit
+/obj/structure/droppod/proc/find_new_target(mob/user, extra_scatter = 0)
+	var/scatter_radius = DROPPOD_BASE_DISPERSION + GLOB.current_orbit + 0
 	var/turf/T0 = locate(target_x + scatter_radius, target_y + scatter_radius, target_z)
 	var/turf/T1 = locate(target_x - scatter_radius, target_y - scatter_radius, target_z)
 	var/list/block = block(T0,T1)
@@ -301,6 +318,14 @@ GLOBAL_DATUM(droppod_reservation, /datum/turf_reservation/transit/droppod)
 /obj/structure/droppod/proc/finish_drop(mob/user, turf/reservedturf)
 	GLOB.droppod_reservation.taken_turfs -= reservedturf
 	var/turf/targetturf = locate(target_x, target_y, target_z)
+	for(var/obj/machinery/deployable/mounted/sentry/ads_system/ads in range(GLOB.ads_intercept_range,reservedturf))
+		if(!COOLDOWN_FINISHED(ads, intercept_cooldown))
+			continue
+		if(ads.try_intercept(reservedturf, src, 1, 10))
+			to_chat(user, span_warning("[icon2html(src, user)] WARNING! DROP POD UNDER FIRE!"))
+			balloon_alert(user, "BRACE FOR IMPACT")
+			reservedturf = find_new_target(user, 15)
+			explosive_entry = TRUE
 	for(var/atom/target AS in targetturf.contents)
 		if(!target.density)
 			continue
@@ -322,12 +347,26 @@ GLOBAL_DATUM(droppod_reservation, /datum/turf_reservation/transit/droppod)
 	explosion(targetturf, light_impact_range = 2, explosion_cause=user)
 	playsound(targetturf, 'sound/effects/droppod_impact.ogg', 100)
 	addtimer(CALLBACK(src, PROC_REF(completedrop), user), 7) //dramatic effect
+	if(explosive_entry)
+		explosion(targetturf, 0, 2, 3, 4, protect_epicenter = TRUE, smoke = TRUE, explosion_cause = "damaged pod")
 
 ///completes landing a little delayed for a dramatic effect
 /obj/structure/droppod/proc/completedrop(mob/user)
 	drop_state = DROPPOD_LANDED
 	for(var/atom/movable/deployed AS in contents)
 		deployed.forceMove(loc)
+		if(explosive_entry)
+			take_damage(70, BRUTE)
+			if(isliving(deployed))
+				var/mob/living/livinguser = deployed
+				to_chat(livinguser, span_warning("You are shredded with bullets and broken metal from the violent impact due to your explosive entry."))
+				livinguser.apply_damage(rand(75,150), BRUTE, BODY_ZONE_CHEST, BOMB)
+				livinguser.Unconscious(5 SECONDS)
+				livinguser.Knockdown(8 SECONDS)
+				livinguser.blur_eyes(6)
+			else if(isobj(deployed))
+				var/obj/deployedobj = deployed
+				deployedobj.take_damage(rand(100,150), BRUTE, BOMB)
 	update_icon()
 
 

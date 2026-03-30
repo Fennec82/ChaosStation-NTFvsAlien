@@ -31,7 +31,7 @@
 /obj/item/storage/backpack/equipped(mob/user, slot)
 	if(slot == SLOT_BACK)
 		mouse_opacity = 2 //so it's easier to click when properly equipped.
-		if(storage_datum.use_sound)
+		if(storage_datum?.use_sound)
 			playsound(loc, storage_datum.use_sound, 15, 1, 6)
 	return ..()
 
@@ -199,7 +199,7 @@
 	icon_state = "satchel-cap"
 
 /obj/item/storage/backpack/satchel/pmc
-	name = "PMC chestrig"
+	name = "AC chestrig"
 	desc = "A heavy-duty chestrig used by Ninetails PMC contractors."
 	icon_state = "pmc_chestrig"
 
@@ -335,7 +335,7 @@
 
 /obj/item/storage/backpack/marine/tech
 	name = "\improper NTC technician backpack"
-	desc = "The standard-issue backpack worn by NTF technicians. Specially equipped to hold sentry gun and HSG-102 emplacement parts."
+	desc = "The standard-issue backpack worn by NTF technicians. Specially equipped to hold some bulky equipment such as sentry guns and teleporter pads and the HSG-102."
 	icon_state = "marinepackt"
 	worn_icon_state = "marinepackt"
 	storage_type = /datum/storage/backpack/tech
@@ -576,10 +576,10 @@
 
 GLOBAL_LIST_INIT(stealth_greyscale_matrix,\
 	list(0.269,0.119,0.119,0,
-		 0.105,0.255,0.105,0,
-		 0.126,0.126,0.276,0,
-		     0,    0,    0,1,
-		  0.25, 0.25, 0.25,0))
+		0.1050,0.255,0.105,0,
+		0.1260,0.126,0.276,0,
+			00,    0,    0,1,
+		0.1000, 0.10, 0.10,0))
 
 ///Activates the cloak
 /obj/item/storage/backpack/marine/satchel/scout_cloak/proc/camouflage()
@@ -794,7 +794,7 @@ GLOBAL_LIST_INIT(stealth_greyscale_matrix,\
 		wearer.alpha = max(wearer.alpha, shimmer_alpha) //50% invisible
 	//Stationary stealth
 	else if( wearer.last_move_intent < stealth_delay ) //If we're standing still and haven't shimmed in the past 2 seconds we become almost completely invisible
-		wearer.alpha = SCOUT_CLOAK_STILL_ALPHA //95% invisible
+		wearer.alpha = SCOUT_CLOAK_STILL_ALPHA/2
 		camo_adjust_energy(wearer, SCOUT_CLOAK_ACTIVE_RECOVERY)
 
 // Welder Backpacks //
@@ -804,90 +804,13 @@ GLOBAL_LIST_INIT(stealth_greyscale_matrix,\
 	desc = "A specialized backpack worn by NTC technicians. It carries a fueltank for quick welder refueling."
 	icon_state = "engineerpack"
 	worn_icon_state = "engineerpack"
-	var/max_fuel = 260
 	storage_type = /datum/storage/backpack/satchel
+	///how much fuel we can hold
+	var/max_fuel = 260
 
 /obj/item/storage/backpack/marine/engineerpack/Initialize(mapload, ...)
 	. = ..()
-	var/datum/reagents/R = new/datum/reagents(max_fuel) //Lotsa refills
-	reagents = R
-	R.my_atom = WEAKREF(src)
-	R.add_reagent(/datum/reagent/fuel, max_fuel)
-
-
-/obj/item/storage/backpack/marine/engineerpack/attackby(obj/item/I, mob/user, params)
-	if(iswelder(I))
-		var/obj/item/tool/weldingtool/T = I
-		if(T.welding)
-			to_chat(user, span_warning("That was close! However you realized you had the welder on and prevented disaster."))
-			return
-		if(T.get_fuel() == T.max_fuel || !reagents.total_volume)
-			return ..()
-
-		reagents.trans_to(I, T.max_fuel)
-		to_chat(user, span_notice("Welder refilled!"))
-		playsound(loc, 'sound/effects/refill.ogg', 25, 1, 3)
-
-	else if(istype(I, /obj/item/ammo_magazine/flamer_tank))
-		var/obj/item/ammo_magazine/flamer_tank/FT = I
-		if(FT.default_ammo != /datum/ammo/flamethrower)
-			to_chat(user, span_warning("Not the right kind of fuel!"))
-			return ..()
-		if(FT.current_rounds == FT.max_rounds || !reagents.total_volume)
-			return ..()
-
-		//Reworked and much simpler equation; fuel capacity minus the current amount, with a check for insufficient fuel
-		var/fuel_transfer_amount = min(reagents.total_volume, (FT.max_rounds - FT.current_rounds))
-		reagents.remove_reagent(/datum/reagent/fuel, fuel_transfer_amount)
-		FT.current_rounds += fuel_transfer_amount
-		playsound(loc, 'sound/effects/refill.ogg', 25, 1, 3)
-		FT.caliber = CALIBER_FUEL
-		to_chat(user, span_notice("You refill [FT] with [lowertext(FT.caliber)]."))
-		FT.update_icon()
-
-	else if(istype(I, /obj/item/weapon/twohanded/rocketsledge))
-		var/obj/item/weapon/twohanded/rocketsledge/RS = I
-		if(RS.reagents.get_reagent_amount(/datum/reagent/fuel) == RS.max_fuel || !reagents.total_volume)
-			return ..()
-
-		var/fuel_transfer_amount = min(reagents.total_volume, (RS.max_fuel - RS.reagents.get_reagent_amount(/datum/reagent/fuel)))
-		reagents.remove_reagent(/datum/reagent/fuel, fuel_transfer_amount)
-		RS.reagents.add_reagent(/datum/reagent/fuel, fuel_transfer_amount)
-		playsound(loc, 'sound/effects/refill.ogg', 25, 1, 3)
-		to_chat(user, span_notice("You refill [RS] with fuel."))
-		RS.update_icon()
-
-	else if(istype(I, /obj/item/weapon/twohanded/chainsaw))
-		var/obj/item/weapon/twohanded/chainsaw/saw = I
-		if(saw.reagents.get_reagent_amount(/datum/reagent/fuel) == saw.max_fuel || !reagents.total_volume)
-			return ..()
-
-		var/fuel_transfer_amount = min(reagents.total_volume, (saw.max_fuel - saw.reagents.get_reagent_amount(/datum/reagent/fuel)))
-		reagents.remove_reagent(/datum/reagent/fuel, fuel_transfer_amount)
-		saw.reagents.add_reagent(/datum/reagent/fuel, fuel_transfer_amount)
-		playsound(loc, 'sound/effects/refill.ogg', 25, 1, 3)
-		to_chat(user, span_notice("You refill [saw] with fuel."))
-		saw.update_icon()
-
-	else
-		return ..()
-
-/obj/item/storage/backpack/marine/engineerpack/afterattack(obj/O as obj, mob/user as mob, proximity)
-	if(!proximity) // this replaces and improves the get_dist(src,O) <= 1 checks used previously
-		return
-	if (istype(O, /obj/structure/reagent_dispensers/fueltank) && src.reagents.total_volume < max_fuel)
-		O.reagents.trans_to(src, max_fuel)
-		to_chat(user, span_notice("You crack the cap off the top of the pack and fill it back up again from the tank."))
-		playsound(src.loc, 'sound/effects/refill.ogg', 25, 1, 3)
-		return
-	else if (istype(O, /obj/structure/reagent_dispensers/fueltank) && src.reagents.total_volume == max_fuel)
-		to_chat(user, span_notice("The pack is already full!"))
-		return
-	..()
-
-/obj/item/storage/backpack/marine/engineerpack/examine(mob/user)
-	. = ..()
-	. += "[reagents.total_volume] units of fuel left!"
+	AddComponent(/datum/component/fuel_storage, max_fuel)
 
 /obj/item/storage/backpack/marine/engineerpack/som
 	name = "\improper SOM technician welderpack"
@@ -915,7 +838,7 @@ GLOBAL_LIST_INIT(stealth_greyscale_matrix,\
 	storage_type = /datum/storage/backpack/captain
 
 /obj/item/storage/backpack/lightpack/pmc
-	name = "PMC bag"
+	name = "AC bag"
 	desc = "A heavy-duty bag used by Ninetails PMC contractors."
 	icon_state = "pmc_bag"
 

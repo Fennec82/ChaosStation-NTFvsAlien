@@ -1,6 +1,5 @@
 SUBSYSTEM_DEF(job)
 	name = "Jobs"
-	init_order = INIT_ORDER_JOBS
 	flags = SS_NO_FIRE
 	var/ssjob_flags = NONE
 
@@ -33,12 +32,13 @@ SUBSYSTEM_DEF(job)
 
 ///Clears jobs and resets all occupations
 /datum/controller/subsystem/job/proc/SetupOccupations()
-	QDEL_LIST(occupations)
 	joinable_occupations.Cut()
+	joinable_occupations_by_category.Cut()
 	GLOB.jobs_command.Cut()
 	squads.Cut()
 	type_occupations.Cut()
 	name_occupations.Cut()
+	QDEL_LIST(occupations)
 	var/list/all_jobs = subtypesof(/datum/job)
 	var/list/all_squads = subtypesof(/datum/squad)
 	if(!length(all_jobs))
@@ -104,6 +104,10 @@ SUBSYSTEM_DEF(job)
 	if(!job.player_old_enough(player.client))
 		JobDebug("AR player not old enough, Player: [player], Job:[job.title]")
 		return FALSE
+	if(!WHITELIST_CHECK(player.client))
+		WHITELIST_MESSAGE(player.client)
+		JobDebug("AR player not whitelisted for the server, Player: [player], Job:[job.title]")
+		return FALSE
 	if(ismarinejob(job) || issommarinejob(job))
 		if(!handle_initial_squad(player, job, latejoin, job.faction))
 			JobDebug("Failed to assign marine role to a squad. Player: [player.key] Job: [job.title]")
@@ -113,6 +117,7 @@ SUBSYSTEM_DEF(job)
 		unassigned -= player
 	if(job.job_category != JOB_CAT_XENO && !GLOB.joined_player_list.Find(player.ckey))
 		SSpoints.add_supply_points(job.faction, SUPPLY_POINT_MARINE_SPAWN)
+	log_game("Occupying 1 [job.title] slot due to it being assigned to [player.ckey], respawn = [GLOB.joined_player_list.Find(player.ckey) ? "TRUE" : "FALSE"].")
 	job.occupy_job_positions(1, GLOB.joined_player_list.Find(player.ckey))
 	player.mind?.assigned_role = job
 	player.assigned_role = job
@@ -136,7 +141,6 @@ SUBSYSTEM_DEF(job)
 		var/mob/new_player/player = p
 		player.assigned_role = null
 		player.assigned_squad = null
-	SetupOccupations()
 	unassigned.Cut()
 
 

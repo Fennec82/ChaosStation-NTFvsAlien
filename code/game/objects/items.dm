@@ -20,9 +20,9 @@
 	///The icon state used to represent this image in icon_mini. Used in /obj/item/storage/box/visual to display tiny items in the box.
 	var/icon_state_mini = "item"
 	///Byond tick delay between left click attacks
-	var/attack_speed = 11
+	var/attack_speed = CLICK_CD_MELEE_WEAPON_DEFAULT
 	///Byond tick delay between right click alternate attacks
-	var/attack_speed_alternate = 11
+	var/attack_speed_alternate = CLICK_CD_MELEE_WEAPON_DEFAULT
 	///Used in attackby() to say how something was attacked "[x] [z.attack_verb] [y] with their [z]!" Should be in simple present tense!
 	var/list/attack_verb
 
@@ -159,6 +159,8 @@
 	var/list/icon_state_variants = list()
 	///Current variant selected.
 	var/current_variant
+	/// Should [/datum/component/autobalance_monitor] be given? If so, what value should it use?
+	var/autobalance_monitor_value
 
 /obj/item/Initialize(mapload)
 	if(species_exception)
@@ -188,6 +190,9 @@
 
 	if(current_variant)
 		update_icon()
+
+	if(autobalance_monitor_value)
+		AddComponent(/datum/component/autobalance_monitor, autobalance_monitor_value)
 
 /obj/item/Destroy()
 	if(ismob(loc))
@@ -316,8 +321,7 @@
 
 	pickup(user)
 	if(!user.put_in_active_hand(src))
-		user.dropItemToGround(src)
-		dropped(user)
+		return
 
 
 /obj/item/update_icon_state()
@@ -1059,6 +1063,8 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 //This proc is here to prevent Xenomorphs from picking up objects (default attack_hand behaviour)
 //Note that this is overriden by every proc concerning a child of obj unless inherited
 /obj/item/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage * xeno_attacker.xeno_melee_damage_modifier, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+	if(xeno_attacker.handcuffed)
+		return FALSE
 	if(xeno_attacker.a_intent != INTENT_HARM)
 		attack_hand(xeno_attacker)
 	return FALSE
@@ -1250,6 +1256,7 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	else
 		active = !active
 	SEND_SIGNAL(src, COMSIG_ITEM_TOGGLE_ACTIVE, active)
+	return TRUE
 
 ///Generates worn icon for sprites on-mob.
 /obj/item/proc/make_worn_icon(species_type, slot_name, inhands, default_icon, default_layer)
@@ -1387,7 +1394,7 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	else
 		user.visible_message(span_info("<b>[user]</b> fumbles with [src] like a huge idiot!"))
 
-	TIMER_COOLDOWN_START(user, COOLDOWN_ITEM_TRICK, 6)
+	TIMER_COOLDOWN_START(user, COOLDOWN_ITEM_TRICK, 3)
 
 	return TRUE
 

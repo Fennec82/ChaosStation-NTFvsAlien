@@ -49,7 +49,6 @@
 
 	actions = list(
 		/datum/action/ability/xeno_action/xeno_resting,
-		/datum/action/ability/xeno_action/psychic_whisper,
 		/datum/action/ability/xeno_action/psychic_influence,
 		/datum/action/ability/activable/xeno/impregnate,
 		/datum/action/ability/xeno_action/watch_xeno,
@@ -70,6 +69,7 @@
 		/datum/action/ability/xeno_action/pheromones/emit_frenzy,
 		/datum/action/ability/xeno_action/carrier_panic,
 		/datum/action/ability/xeno_action/choose_hugger_type,
+		/datum/action/ability/xeno_action/set_hugger_reserve,
 		/datum/action/ability/xeno_action/create_edible_jelly,
 		/datum/action/ability/xeno_action/place_stew_pod,
 	)
@@ -93,11 +93,10 @@
 	upgrade_name = "Primordial"
 	caste_desc = "It's literally crawling with 11 huggers."
 	upgrade = XENO_UPGRADE_PRIMO
-	primordial_message = "Not one tall will be left uninfected."
+	primordial_message = "Not one human will be left uninfected."
 
 	actions = list(
 		/datum/action/ability/xeno_action/xeno_resting,
-		/datum/action/ability/xeno_action/psychic_whisper,
 		/datum/action/ability/xeno_action/psychic_influence,
 		/datum/action/ability/activable/xeno/impregnate,
 		/datum/action/ability/xeno_action/watch_xeno,
@@ -118,6 +117,7 @@
 		/datum/action/ability/xeno_action/pheromones/emit_frenzy,
 		/datum/action/ability/xeno_action/carrier_panic,
 		/datum/action/ability/xeno_action/choose_hugger_type,
+		/datum/action/ability/xeno_action/set_hugger_reserve,
 		/datum/action/ability/xeno_action/build_hugger_turret,
 		/datum/action/ability/xeno_action/create_edible_jelly,
 		/datum/action/ability/xeno_action/place_stew_pod,

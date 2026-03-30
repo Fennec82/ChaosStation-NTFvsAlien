@@ -4,13 +4,15 @@
 
 	id = /obj/item/card/id/gold
 	ears = /obj/item/radio/headset/mainship/mcom/som
-	belt = /obj/item/storage/holster/belt/mateba/officer/full
+	belt = /obj/item/storage/holster/belt/pistol/m4a3/som/fancy/fieldcommander
 	w_uniform = /obj/item/clothing/under/som/officer/senior
 	shoes = /obj/item/clothing/shoes/marine/som/knife
 	gloves = /obj/item/clothing/gloves/marine/techofficer/captain
 	r_pocket = /obj/item/storage/pouch/general/large/command
 
-	r_hand = /obj/item/binoculars/fire_support/campaign/som
+/datum/outfit/job/som/command/commander/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+	. = ..()
+	H.equip_to_slot_or_hand(new /obj/item/binoculars/fire_support/extended/som, SLOT_IN_R_POUCH)
 
 
 /datum/outfit/job/som/command/fieldcommander
@@ -26,7 +28,7 @@
 	shoes = /obj/item/clothing/shoes/marine/som/knife
 	r_pocket = /obj/item/storage/pouch/general/large/command
 	gloves = /obj/item/clothing/gloves/marine/officer
-	belt = /obj/item/storage/holster/belt/pistol/m4a3/fieldcommander
+	belt = /obj/item/storage/holster/belt/pistol/m4a3/som/fancy/fieldcommander
 	glasses = /obj/item/clothing/glasses/hud/health
 	l_pocket = /obj/item/storage/pouch/grenade/som/combat_patrol
 	back = /obj/item/storage/backpack/satchel/som
@@ -40,6 +42,9 @@
 	H.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/isotonic, SLOT_IN_SUIT)
 	H.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/quickclot, SLOT_IN_SUIT)
 	H.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/dylovene, SLOT_IN_SUIT)
+	H.equip_to_slot_or_hand(new /obj/item/binoculars/fire_support/extended/som, SLOT_IN_R_POUCH)
+	H.equip_to_slot_or_hand(new /obj/item/generic_skillbook/somfcskill, SLOT_IN_BACKPACK)
+
 
 /datum/outfit/job/som/command/staffofficer
 	name = SOM_STAFF_OFFICER
@@ -52,21 +57,26 @@
 	r_pocket = /obj/item/storage/pouch/general/large
 	l_pocket = /obj/item/binoculars/tactical
 
+/datum/outfit/job/som/command/staffofficer/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+	. = ..()
+	H.equip_to_slot_or_hand(new /obj/item/binoculars/fire_support/extended/som/sl, SLOT_IN_R_POUCH)
+
 /datum/outfit/job/som/command/pilot
 	name = SOM_PILOT_OFFICER
 	jobtype = /datum/job/som/command/pilot
 
 	id = /obj/item/card/id/silver
-	belt = /obj/item/storage/holster/belt/pistol/m4a3/vp70
+	belt = /obj/item/storage/holster/belt/pistol/m4a3/som/serpenta
 	ears = /obj/item/radio/headset/mainship/mcom/som
-	w_uniform = /obj/item/clothing/under/marine/officer/pilot
-	wear_suit = /obj/item/clothing/suit/storage/marine/pilot
+	head = /obj/item/clothing/head/helmet/marine/som/pilot
+	mask = /obj/item/clothing/mask/rebreather/som
+	w_uniform = /obj/item/clothing/under/som/officer/pilot
+	wear_suit = /obj/item/clothing/suit/storage/marine/som/pilot
 	shoes = /obj/item/clothing/shoes/marine/som/knife
-	gloves = /obj/item/clothing/gloves/insulated
+	gloves = /obj/item/clothing/gloves/marine/som/insulated
 	glasses = /obj/item/clothing/glasses/sunglasses/aviator
-	head = /obj/item/clothing/head/helmet/marine/pilot
-	r_pocket = /obj/item/storage/pouch/general/large
-	l_pocket = /obj/item/hud_tablet/pilot
+	r_pocket = /obj/item/storage/pouch/firstaid/som/combat_patrol_leader
+	l_pocket = /obj/item/minimap_tablet
 
 /datum/outfit/job/som/command/mech_pilot
 	name = SOM_MECH_PILOT

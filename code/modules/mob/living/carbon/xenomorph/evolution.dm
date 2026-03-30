@@ -148,7 +148,7 @@
 
 ///Actually changes the xenomorph to another caste
 /mob/living/carbon/xenomorph/proc/finish_evolve(new_mob_type)
-	var/mob/living/carbon/xenomorph/new_xeno = new new_mob_type(get_turf(src), TRUE)
+	var/mob/living/carbon/xenomorph/new_xeno = new new_mob_type(get_turf(src), TRUE, hivenumber)
 
 	if(!istype(new_xeno))
 		//Something went horribly wrong!
@@ -174,11 +174,12 @@
 
 	//Pass on the unique nicknumber, then regenerate the new mob's name on Login()
 	new_xeno.nicknumber = nicknumber
-	new_xeno.transfer_to_hive(hivenumber)
 	new_xeno.generate_name() // This is specifically for numbered xenos who want to keep their previous number instead of a random new one.
 	if(new_xeno.hive)
-		INVOKE_NEXT_TICK(new_xeno.hive, TYPE_PROC_REF(/datum/hive_status, update_ruler)) // Since ruler wasn't set during initialization, update ruler now.
+		INVOKE_NEXT_TICK_UNIQUE(new_xeno.hive, TYPE_PROC_REF(/datum/hive_status, update_ruler)) // Since ruler wasn't set during initialization, update ruler now.
 	transfer_observers_to(new_xeno)
+
+	new_xeno.sunder = sunder
 
 	if(new_xeno.health - getBruteLoss(src) - getFireLoss(src) > 0) //Cmon, don't kill the new one! Shouldnt be possible though
 		new_xeno.bruteloss = bruteloss //Transfers the damage over.
@@ -194,7 +195,7 @@
 		new_xeno.toggle_nightvision(lighting_cutoff)
 
 	new_xeno.update_spits() //Update spits to new/better ones
-	new_xeno.update_xeno_gender(new_xeno)
+	INVOKE_ASYNC(new_xeno, PROC_REF(update_xeno_gender), new_xeno)
 	new_xeno.visible_message(span_xenodanger("A [new_xeno.xeno_caste.caste_name] emerges from the husk of \the [src]."), \
 	span_xenodanger("We emerge in a greater form from the husk of our old body. For the hive!"))
 
@@ -213,15 +214,6 @@
 			new_xeno.handle_xeno_leader_pheromones(hive.living_xeno_ruler)
 
 		new_xeno.update_leader_icon(TRUE)
-
-	if(upgrade == XENO_UPGRADE_PRIMO)
-		switch(tier)
-			if(XENO_TIER_TWO)
-				SSmonitor.stats.primo_T2--
-			if(XENO_TIER_THREE)
-				SSmonitor.stats.primo_T3--
-			if(XENO_TIER_FOUR)
-				SSmonitor.stats.primo_T4--
 
 	new_xeno.upgrade_stored = max(upgrade_stored, new_xeno.upgrade_stored)
 	while(new_xeno.upgrade_possible() && new_xeno.upgrade_stored >= new_xeno.xeno_caste.upgrade_threshold)

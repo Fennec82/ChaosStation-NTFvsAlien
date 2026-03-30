@@ -38,7 +38,6 @@
 	starting_attachments = list(
 		/obj/item/armor_module/storage/helmet,
 	)
-	soft_armor = list(MELEE = 50, BULLET = 70, LASER = 70, ENERGY = 60, BOMB = 55, BIO = 55, FIRE = 55, ACID = 60)
 
 /obj/item/clothing/head/rabbitears
 	name = "rabbit ears"
@@ -50,3 +49,61 @@
 		slot_l_hand_str = 'icons/mob/inhands/clothing/hats_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/clothing/hats_right.dmi',
 	)
+
+/obj/item/clothing/head/helmet/marine/som/pilot
+	name = "\improper S36 combat pilot helmet"
+	desc = "The S18 combat pilot helmet has a specialized visor displaying pilot tactical data. Its origins come from modifications to the M30 Tactical Helmet."
+	icon_state = "som_helmet_pilot"
+	worn_icon_state = "som_helmet_pilot"
+	icon = 'ntf_modular/icons/obj/clothing/headwear/ert_headwear.dmi'
+	worn_icon_list = list(
+		slot_head_str = 'ntf_modular/icons/mob/clothing/headwear/ert_headwear.dmi',
+		slot_l_hand_str = 'icons/mob/inhands/items/items_left.dmi',
+		slot_r_hand_str = 'icons/mob/inhands/items/items_right.dmi',
+	)
+	soft_armor = list(MELEE = 50, BULLET = 70, LASER = 50, ENERGY = 50, BOMB = 50, BIO = 40, FIRE = 50, ACID = 40)
+	min_cold_protection_temperature = ICE_PLANET_MIN_COLD_PROTECTION_TEMPERATURE
+	inventory_flags = BLOCKSHARPOBJ
+	inv_hide_flags = HIDEEARS|HIDETOPHAIR
+
+//black bag
+/obj/item/clothing/head/head_sack
+	name = "head sack"
+	desc = "Legendary kidnapping equipment, Covers the head, preventing sight."
+	icon = 'ntf_modular/icons/obj/clothing/headwear/head.dmi'
+	worn_icon_list = list(
+		slot_head_str = 'ntf_modular/icons/mob/clothing/headwear/head.dmi',
+		slot_l_hand_str = 'icons/mob/inhands/items/items_left.dmi',
+		slot_r_hand_str = 'icons/mob/inhands/items/items_right.dmi',
+	)
+	icon_state = "blackbag"
+	worn_icon_state = "blackbag"
+	eye_protection = 2
+	inv_hide_flags = HIDETOPHAIR|HIDEEARS|HIDEEYES|HIDEFACE
+	var/tint_value = TINT_BLIND
+
+/obj/item/clothing/head/head_sack/Initialize(mapload)
+	. = ..()
+	AddComponent(/datum/component/clothing_tint, tint_value)
+
+/obj/item/clothing/head/head_sack/light
+	name = "light head sack"
+	desc = "Epic kidnapping equipment, Covers the head, preventing sight... Mostly. (allows seeing emotes but lets more sight.)"
+	tint_value = TINT_6
+
+/obj/item/clothing/head/kitty
+	name = "kitty ears"
+	desc = "A pair of kitty ears. Meow!"
+	icon_state = "kitty"
+	color = "#999999"
+	icon = 'ntf_modular/icons/obj/clothing/headwear/head.dmi'
+	worn_icon_list = list(
+		slot_head_str = 'ntf_modular/icons/mob/clothing/headwear/head.dmi',
+		slot_l_hand_str = 'icons/mob/inhands/items/items_left.dmi',
+		slot_r_hand_str = 'icons/mob/inhands/items/items_right.dmi',
+	)
+
+/obj/item/clothing/head/kitty/equipped(mob/living/carbon/human/user, slot)
+	. = ..()
+	if(slot == SLOT_HEAD && ishuman(user))
+		color = rgb(user.r_hair, user.g_hair, user.b_hair)

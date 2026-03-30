@@ -9,6 +9,10 @@
 "b" = (
 /turf/template_noop,
 /area/template_noop)
+"c" = (
+/obj/item/weapon/gun/sentry/ads_system/premade,
+/turf/closed/wall/mainship/outer/canterbury,
+/area/shuttle/minidropship)
 "d" = (
 /obj/machinery/computer/camera{
 	network = list("dropship2")
@@ -89,10 +93,6 @@
 /obj/effect/turf_decal/tile/transparent/dark_blue/full,
 /turf/open/floor/mainship/floor,
 /area/shuttle/minidropship)
-"s" = (
-/obj/machinery/telecomms/relay/preset/telecomms/onboard,
-/turf/closed/wall/mainship/outer/canterbury,
-/area/shuttle/minidropship)
 "t" = (
 /obj/structure/dropship_piece/singlewindow/tadpole{
 	dir = 1
@@ -147,7 +147,6 @@
 /obj/effect/turf_decal/tile/transparent/dark_blue/full,
 /obj/machinery/door_control/minidropship{
 	dir = 4;
-	id = "minidropship_podlock";
 	name = "inner door-control";
 	pixel_x = -25
 	},
@@ -283,8 +282,8 @@ b
 (3,1,1) = {"
 k
 p
+c
 F
-s
 q
 l
 F

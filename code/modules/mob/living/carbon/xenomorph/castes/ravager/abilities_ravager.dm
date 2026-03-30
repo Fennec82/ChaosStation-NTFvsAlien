@@ -100,6 +100,9 @@
 ///Cleans up after charge is finished
 /datum/action/ability/activable/xeno/charge/proc/charge_complete()
 	SIGNAL_HANDLER
+	var/mob/living/victim = locate() in xeno_owner.loc.contents
+	if(victim)
+		mob_hit(xeno_owner, victim)
 	UnregisterSignal(owner, list(COMSIG_XENO_OBJ_THROW_HIT, COMSIG_MOVABLE_POST_THROW, COMSIG_XENOMORPH_LEAP_BUMP))
 	xeno_owner.xeno_flags &= ~XENO_LEAPING
 
@@ -182,6 +185,7 @@
 
 	if(armor_penetration) // Since everything references the caste for armor peneration, this is how to individually give armor peneration without changing everything.
 		RegisterSignal(xeno_owner, COMSIG_XENOMORPH_ATTACK_LIVING, PROC_REF(on_attack_living))
+		RegisterSignal(xeno_owner, COMSIG_XENOMORPH_DISARM_LIVING, PROC_REF(on_attack_living))
 	for(var/atom/movable/ravaged_atom AS in atoms_to_ravage)
 		if(ishitbox(ravaged_atom) || isvehicle(ravaged_atom))
 			ravaged_atom.attack_alien(xeno_owner, xeno_owner.xeno_caste.melee_damage * xeno_owner.xeno_melee_damage_modifier, armor_penetration = xeno_owner.xeno_caste.melee_ap + armor_penetration) // Handles APC/Tank stuff. Has to be before the !ishuman check or else ravage does work properly on vehicles.
@@ -705,7 +709,7 @@
 #define MAX_DAMAGE_PER_DISINTEGRATING 25
 
 /datum/action/ability/xeno_action/bloodthirst
-	name = "bloodthirst"
+	name = "Bloodthirst"
 	desc = "Passive ability for generating bloodthirst"
 	hidden = TRUE
 	///tick time of last time we attacked a human
@@ -771,7 +775,7 @@
 #define DEATHMARK_MESSAGE_COOLDOWN 2 SECONDS
 
 /datum/action/ability/xeno_action/deathmark
-	name = "deathmark"
+	name = "Deathmark"
 	desc = "Mark yourself for death, filling your bloodthirst, but failing to deal enough damage to living creatures while it is active instantly kills you."
 	action_icon = 'icons/Xeno/actions/ravager.dmi'
 	action_icon_state = "deathmark"

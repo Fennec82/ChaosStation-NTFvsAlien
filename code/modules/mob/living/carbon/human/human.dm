@@ -1,5 +1,8 @@
 /mob/living/carbon/human/Initialize(mapload)
-	blood_type = pick(7;"O-", 38;"O+", 6;"A-", 34;"A+", 2;"B-", 9;"B+", 1;"AB-", 3;"AB+")
+	if(client)
+		blood_type = client.prefs.blood_type
+	else
+		blood_type = pick(7;"O-", 38;"O+", 6;"A-", 34;"A+", 2;"B-", 9;"B+", 1;"AB-", 3;"AB+")
 
 	set_jump_component()
 	if(!species)
@@ -70,6 +73,7 @@
 
 	GLOB.huds[DATA_HUD_BASIC].add_hud_to(src)
 	GLOB.huds[DATA_HUD_XENO_HEART].add_to_hud(src)
+	GLOB.huds[DATA_HUD_XENO_HUMAN_SHARED].add_hud_to(src)
 
 /mob/living/carbon/human/register_init_signals()
 	. = ..()
@@ -81,6 +85,7 @@
 	RegisterSignal(src, COMSIG_KB_GIVE, PROC_REF(give_signal_handler))
 
 /mob/living/carbon/human/Destroy()
+	log_game("Marking [logdetails(src)] as undefibbable because their body is being deleted.")
 	set_undefibbable()
 	assigned_squad?.remove_from_squad(src)
 	remove_from_all_mob_huds()
@@ -802,7 +807,8 @@
 	reagents = R
 	R.my_atom = WEAKREF(src)
 
-	species.create_organs(src)
+	species.create_limbs(src, oldspecies)
+	species.create_organs(src, oldspecies)
 
 	dextrous = TRUE
 
@@ -850,7 +856,7 @@
 		return FALSE
 	return ..()
 
-/mob/living/carbon/human/smokecloak_on()
+/mob/living/carbon/human/smokecloak_on(smokecloak_alpha)
 	var/obj/item/storage/backpack/marine/satchel/scout_cloak/S = back
 	if(istype(S) && S.camo_active)
 		return FALSE

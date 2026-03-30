@@ -61,19 +61,21 @@
 // *********** Resin building
 // ***************************************
 /datum/action/ability/activable/xeno/secrete_resin/hivelord
-	ability_cost = 100
+	ability_cost = 25
 	buildable_structures = list(
+		//Each entry corresponds to an entry in the global resin_images_list, in order.
+		//Make sure to keep them synced up.
 		/turf/closed/wall/resin/regenerating/thick,
 		/turf/closed/wall/resin/membrane/thick,
 		/obj/alien/resin/sticky,
 		/obj/structure/mineral_door/resin/thick,
 		/obj/structure/bed/nest,
-		/obj/structure/bed/nest/wall,
 		/obj/structure/xeno/lighttower,
+		/obj/structure/bed/nest/advanced,
+		/obj/structure/bed/nest/advanced/special,
 		/turf/closed/wall/resin/regenerating/special/bulletproof,
 		/turf/closed/wall/resin/regenerating/special/fireproof,
 		/turf/closed/wall/resin/regenerating/special/hardy,
-		/obj/structure/bed/nest/advanced,
 	)
 
 // ***************************************
@@ -155,7 +157,7 @@
 		owner.balloon_alert(owner, "resin walk ended, no plasma")
 		resinwalk_off(TRUE)
 		return
-	if(!xeno_owner.loc_weeds_type && weeding_cost > 0 && xeno_owner.plasma_stored >= weeding_cost)
+	if(!xeno_owner.loc_weeds_type && weeding_cost > 0 && xeno_owner.plasma_stored >= (weeding_cost+10))
 		var/obj/alien/weeds/created_weeds = new(xeno_owner.loc)
 		SSweeds_decay.decaying_list += created_weeds // Check if it should go away (no nearby node) or stick around (nearby node).
 		xeno_owner.handle_weeds_on_movement() // loc_weeds_type is changed here.
@@ -255,9 +257,6 @@
 
 	playsound(T, 'sound/weapons/pierce.ogg', 25, 1)
 
-	newt.creator = xeno_owner
-	newt.RegisterSignal(xeno_owner, COMSIG_QDELETING, TYPE_PROC_REF(/obj/structure/xeno/tunnel, clear_creator))
-
 	xeno_owner.tunnels.Add(newt)
 
 	add_cooldown()
@@ -266,7 +265,7 @@
 
 	newt.tunnel_desc = "[get_area(newt)] (X: [newt.x], Y: [newt.y])"
 
-	xeno_message("[xeno_owner.name] has built a new tunnel at [newt.tunnel_desc]!", "xenoannounce", 5, xeno_owner.get_xeno_hivenumber())
+	xeno_message("[xeno_owner.name] has built a new tunnel at [newt.tunnel_desc]!", "xenoannounce", 3, xeno_owner.get_xeno_hivenumber())
 
 	if(LAZYLEN(xeno_owner.tunnels) > HIVELORD_TUNNEL_SET_LIMIT) //if we exceed the limit, delete the oldest tunnel set.
 		var/obj/structure/xeno/tunnel/old_tunnel = xeno_owner.tunnels[1]
@@ -387,23 +386,23 @@
 	if(!.)
 		return
 
-	if(!isxeno(target))
+	if(!iscarbon(target))
 		if(!silent)
-			target.balloon_alert(owner, "can only heal xenos!")
+			target.balloon_alert(owner, "can only heal living targets!")
 		return FALSE
-	var/mob/living/carbon/xenomorph/patient = target
+	var/mob/living/carbon/patient = target
 
-	if(!CHECK_BITFIELD(use_state_flags|override_flags, ABILITY_IGNORE_DEAD_TARGET) && patient.stat == DEAD)
+/*	if(!CHECK_BITFIELD(use_state_flags|override_flags, ABILITY_IGNORE_DEAD_TARGET) && patient.stat == DEAD)
 		if(!silent)
-			target.balloon_alert(owner, "she's dead!")
+			target.balloon_alert(owner, "it's dead!")
+		return FALSE */
+
+	if(!check_distance(patient, silent))
 		return FALSE
 
-	if(!check_distance(target, silent))
-		return FALSE
-
-	if(HAS_TRAIT(target, TRAIT_HEALING_INFUSION))
+	if(HAS_TRAIT(patient, TRAIT_HEALING_INFUSION))
 		if(!silent)
-			target.balloon_alert(owner, "already infused!")
+			patient.balloon_alert(owner, "already infused!")
 		return FALSE
 
 
@@ -437,7 +436,7 @@
 	new /obj/effect/temp_visual/telekinesis(get_turf(target))
 	to_chat(target, span_xenodanger("Our wounds begin to knit and heal rapidly as [owner]'s healing energies infuse us.")) //Let the target know.
 
-	var/mob/living/carbon/xenomorph/patient = target
+	var/mob/living/carbon/patient = target
 
 	patient.apply_status_effect(STATUS_EFFECT_HEALING_INFUSION, HIVELORD_HEALING_INFUSION_DURATION * status_multiplier, HIVELORD_HEALING_INFUSION_TICKS * status_multiplier, innate_healing) //per debuffs.dm
 	if(resin_jelly_duration)
@@ -485,11 +484,13 @@
 		return FALSE
 
 	playsound(src, SFX_ALIEN_RESIN_BUILD, 25)
-	new xeno_owner.selected_plant(get_turf(owner))
+	new xeno_owner.selected_plant(get_turf(owner), xeno_owner.get_xeno_hivenumber())
 	add_cooldown()
 	return succeed_activate()
 
 /datum/action/ability/xeno_action/sow/update_button_icon()
+	if(QDELETED(xeno_owner) || QDELETED(button))
+		return
 	button.overlays.Cut()
 	button.overlays += image('icons/Xeno/actions/construction.dmi', button, initial(xeno_owner.selected_plant.name))
 	return ..()

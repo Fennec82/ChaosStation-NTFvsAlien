@@ -35,8 +35,6 @@
 	var/const/signfont = PAPER_SIGN_FONT
 	var/const/crayonfont = PAPER_CRAYON_FONT
 
-//lipstick wiping is in code/game/objects/items/weapons/cosmetics.dm!
-
 /obj/item/paper/Initialize()
 	. = INITIALIZE_HINT_LATELOAD
 	..()
@@ -84,6 +82,14 @@
 	set src in usr
 
 	var/n_name = stripped_input(usr, "What would you like to label the paper?", "Paper Labelling")
+	n_name = replacetext(n_name, "autoplay>", "")
+	n_name = replacetext(n_name, "loop>", "")
+	n_name = replacetext(n_name, "<embed", "")
+	n_name = replacetext(n_name, "<", "")
+	n_name = replacetext(n_name, ">", "")
+	n_name = replacetext(n_name, "byond://", "byond;//")
+	n_name = replacetext(n_name, "https://", "https;//")
+	n_name = replacetext(n_name, "<video", "")
 	if((loc == usr && usr.stat == 0))
 		name = "[(n_name ? "[n_name]" : "paper")]"
 
@@ -111,22 +117,22 @@
 		examine(M)
 		return
 
-	if(user.zone_selected == "mouth") // lipstick wiping
+	if(user.zone_selected == "head") // face paint wiping
 		if(!ishuman(M))
 			return
 		var/mob/living/carbon/human/H = M
 		if(H == user)
-			to_chat(user, span_notice("You wipe off the lipstick with [src]."))
+			to_chat(user, span_notice("You wipe off the face paint with [src]."))
 			H.makeup_style = null
 			H.update_body()
 			return
 
-		user.visible_message(span_warning("[user] begins to wipe [H]'s lipstick off with \the [src]."), \
-							span_notice("You begin to wipe off [H]'s lipstick."))
+		user.visible_message(span_warning("[user] begins to wipe [H]'s face paint off with \the [src]."), \
+							span_notice("You begin to wipe off [H]'s face paint."))
 		if(!do_after(user, 10, NONE, H, BUSY_ICON_FRIENDLY))
 			return
-		user.visible_message(span_notice("[user] wipes [H]'s lipstick off with \the [src]."), \
-							span_notice("You wipe off [H]'s lipstick."))
+		user.visible_message(span_notice("[user] wipes [H]'s face paint off with \the [src]."), \
+							span_notice("You wipe off [H]'s face paint."))
 		H.makeup_style = null
 		H.update_body()
 
@@ -275,6 +281,16 @@
 			return
 
 		t = replacetext(t, "\n", "<BR>")
+		//injection protection
+		t = replacetext(t, "autoplay>", "")
+		t = replacetext(t, "loop>", "")
+		t = replacetext(t, "<embed", "")
+		t = replacetext(t, "<", "")
+		t = replacetext(t, ">", "")
+		t = replacetext(t, "byond://", "byond;//")
+		t = replacetext(t, "https://", "https;//")
+		t = replacetext(t, "<video", "")
+		//injection protection end
 		t = parsepencode(t, i, usr, iscrayon) // Encode everything from pencode to html
 
 		if(id!="end")

@@ -197,7 +197,10 @@ GLOBAL_VAR(restart_counter)
 	// This was printed early in startup to the world log and config_error.log,
 	// but those are both private, so let's put the commit info in the runtime
 	// log which is ultimately public.
+	/*NTF edit - status_update_server_start() handles this
 	log_runtime(GLOB.revdata.get_log_message())
+	*/
+	status_update_server_start()
 
 #ifndef USE_CUSTOM_ERROR_HANDLER
 	world.log = file("[GLOB.log_directory]/dd.log")
@@ -207,7 +210,9 @@ GLOBAL_VAR(restart_counter)
 #endif
 
 /world/Topic(T, addr, master, key)
+	#ifdef USE_TGS
 	TGS_TOPIC	//redirect to server tools if necessary
+	#endif
 
 	var/static/list/topic_handlers = TopicHandlers()
 
@@ -295,12 +300,13 @@ GLOBAL_VAR(restart_counter)
 			msg += "Game Mode: [SSticker.mode.name]"
 			msg += "Round End State: [SSticker.mode.round_finished]"
 
-		if(length(GLOB.clients))
-			msg += "Players: [length(GLOB.clients)]"
+		if(length(GLOB.whitelisted_clients))
+			msg += "Players: [length(GLOB.whitelisted_clients)]"
 
 		if(length(msg))
 			send2chat(msg.Join(" | "), CONFIG_GET(string/end_of_round_channel))
 
+	status_update_next_gamemode(GLOB.next_gamemode, TRUE)
 	to_chat(world, span_boldannounce("Rebooting world..."))
 	Master.Shutdown()
 
@@ -309,6 +315,7 @@ GLOBAL_VAR(restart_counter)
 	return
 	#endif
 
+	log_world("World rebooting with [length(GLOB.amia_requests_outstanding)] outstanding amia requests")
 	if(check_hard_reboot())
 		log_world("World hard rebooted at [time_stamp()]")
 		shutdown_logging() // See comment below.
@@ -330,12 +337,14 @@ GLOBAL_VAR(restart_counter)
 		if(Lines[1])
 			GLOB.master_mode = Lines[1]
 			log_config("Saved mode is '[GLOB.master_mode]'")
+			GLOB.next_gamemode = GLOB.master_mode
 
 
 /world/proc/save_mode(the_mode)
 	var/F = file("data/mode.txt")
 	fdel(F)
 	WRITE_FILE(F, the_mode)
+	GLOB.next_gamemode = the_mode
 
 
 /world/proc/update_status()
@@ -344,6 +353,14 @@ GLOBAL_VAR(restart_counter)
 		// If you didn't see a server name, or the master controller
 		// is stilling initing, we don't update the hub.
 		return
+	var/name_without_wl = replacetext(server_name, "(WL at Discord)", "")
+	if(CONFIG_GET(flag/amia_whitelist_enabled))
+		if(server_name == name_without_wl)
+			server_name += "(WL at Discord)"
+	else
+		server_name = name_without_wl
+	server_name = trim(server_name)
+
 
 	// Start generating the hub status
 	// Note: Hub content is limited to 254 characters, including HTML/CSS. Image width is limited to 450 pixels.

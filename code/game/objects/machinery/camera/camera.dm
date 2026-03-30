@@ -22,23 +22,14 @@
 	var/in_use_lights = FALSE
 	var/internal_light = TRUE //Whether it can light up when an AI views it
 
-
 /obj/machinery/camera/Initialize(mapload, newDir)
 	. = ..()
 	icon_state = "camera"
 
-	if(newDir)
-		setDir(newDir)
+	setDir(newDir ? newDir : dir)
 
-	switch(dir)
-		if(NORTH)
-			pixel_y = -16
-		if(SOUTH)
-			pixel_y = 16
-		if(EAST)
-			pixel_x = -16
-		if(WEST)
-			pixel_x = 16
+	if(length(network) == 1 && network[1] == "marinemainship" && is_ground_level(z))
+		network = list("colony")
 
 	for(var/i in network)
 		network -= i
@@ -83,6 +74,18 @@
 		. += span_info("Its maintenance panel is currently open.")
 		if(!status && powered())
 			. += span_info("It can reactivated with a <b>screwdriver</b>.")
+
+/obj/machinery/camera/setDir(newdir)
+	. = ..()
+	switch(dir)
+		if(NORTH)
+			pixel_z = -16
+		if(SOUTH)
+			pixel_z = 32
+		if(EAST)
+			pixel_w = -16
+		if(WEST)
+			pixel_w = 16
 
 
 /obj/machinery/camera/proc/camera_ui_data()
@@ -174,6 +177,8 @@
 
 /obj/machinery/camera/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage * xeno_attacker.xeno_melee_damage_modifier, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
+		return FALSE
+	if(xeno_attacker.handcuffed)
 		return FALSE
 
 	if(obj_integrity <= 0)

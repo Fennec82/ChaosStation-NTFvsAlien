@@ -7011,8 +7011,8 @@
 	},
 /area/lv624/lazarus/research)
 "fAE" = (
-/obj/structure/cable,
 /obj/machinery/power/geothermal,
+/obj/structure/cable,
 /turf/open/floor/mainship/plate,
 /area/mainship/patrol_base/som)
 "fAT" = (
@@ -8839,9 +8839,7 @@
 /turf/open/floor/bcircuit/off,
 /area/lv624/lazarus/sandtemple)
 "hxk" = (
-/obj/structure/table,
-/obj/item/ashtray/glass,
-/obj/item/tool/crowbar,
+/obj/effect/landmark/static_comms/net_two,
 /turf/open/floor/tile/brown{
 	dir = 9
 	},
@@ -9163,6 +9161,7 @@
 	dir = 4
 	},
 /obj/effect/spawner/random/misc/plushie,
+/obj/structure/cable,
 /turf/open/floor/wood,
 /area/lv624/lazarus/captain)
 "hNZ" = (
@@ -10622,7 +10621,6 @@
 	},
 /area/lv624/lazarus/main_hall)
 "jgF" = (
-/obj/structure/largecrate,
 /obj/item/mecha_parts/mecha_equipment/repair_droid{
 	pixel_y = -10
 	},
@@ -13014,6 +13012,13 @@
 	name = "CLF Bunks";
 	outside = 0
 	})
+"lBF" = (
+/obj/item/stack/sheet/wood{
+	amount = 50
+	},
+/obj/effect/landmark/static_comms/net_one,
+/turf/open/floor/plating,
+/area/lv624/lazarus/quartstorage/dome)
 "lBK" = (
 /obj/effect/spawner/random/misc/structure/broken_reinforced_window/colonyspawn,
 /obj/machinery/door/poddoor/mainship/open{
@@ -14703,9 +14708,6 @@
 /obj/effect/landmark/xeno_resin_door,
 /turf/open/floor/plating/ground/dirt,
 /area/lv624/ground/caves/central1/garbledradio)
-"ndS" = (
-/turf/open/floor/mainship/plate,
-/area/mainship/patrol_base/som)
 "neu" = (
 /obj/effect/turf_decal/warning_stripes/thin{
 	dir = 8
@@ -16802,7 +16804,6 @@
 /area/lv624/lazarus/quartstorage/dome)
 "pyc" = (
 /obj/structure/mineral_door/wood,
-/obj/structure/cable,
 /obj/structure/cable,
 /obj/structure/cable,
 /turf/open/floor/plating/ground/desertdam/asphalt/tile,
@@ -20757,11 +20758,11 @@
 /turf/open/floor/plating/warning,
 /area/lv624/lazarus/robotics)
 "tsP" = (
-/obj/structure/cable,
-/obj/structure/largecrate/supply/generator,
 /obj/machinery/light{
 	dir = 1
 	},
+/obj/structure/largecrate/supply/generator,
+/obj/structure/cable,
 /turf/open/floor/mainship/plate,
 /area/mainship/patrol_base/som)
 "ttF" = (
@@ -22340,6 +22341,8 @@
 "uVl" = (
 /obj/structure/table,
 /obj/item/tool/multitool,
+/obj/item/tool/crowbar,
+/obj/item/ashtray/glass,
 /turf/open/floor/tile/brown{
 	dir = 9
 	},
@@ -66188,8 +66191,8 @@ wNs
 vfk
 iJa
 hmu
-hxk
 pir
+hxk
 pir
 rBH
 pir
@@ -66515,8 +66518,8 @@ cIl
 vfk
 aES
 hmu
-giS
-giS
+pir
+pir
 pir
 pir
 pir
@@ -89693,7 +89696,7 @@ rdQ
 ngA
 kau
 tSV
-tSV
+lBF
 kop
 ixW
 dLo
@@ -97176,7 +97179,7 @@ mOs
 mOs
 qWA
 fAE
-ndS
+txB
 krr
 lRT
 vzm

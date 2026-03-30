@@ -723,12 +723,12 @@ So if we are on the 32th absolute pixel coordinate we are on tile 1, but if we a
 		if (uncrossing)
 			return FALSE //you don't hit the cade from behind.
 	if(proj.ammo.ammo_behavior_flags & AMMO_BETTER_COVER_RNG || proj.iff_signal) //sniper and IFF rounds are better at getting past cover
-		hit_chance *= 0.8
+		hit_chance *= 0.9
 	///50% better protection when shooting from outside accurate range.
 	if(proj.distance_travelled > proj.ammo.accurate_range)
 		hit_chance *= 1.5
 ///Accuracy over 100 increases the chance of squeezing the bullet past the structure's uncovered areas.
-	hit_chance = min(hit_chance , hit_chance + 100 - proj.accuracy)
+	hit_chance = hit_chance + (min(0, (100 - proj.accuracy))/2)
 	return prob(hit_chance)
 
 /obj/do_projectile_hit(atom/movable/projectile/proj)
@@ -738,7 +738,7 @@ So if we are on the 32th absolute pixel coordinate we are on tile 1, but if we a
 	bullet_act(proj)
 
 /obj/machinery/deployable/mounted/projectile_hit(atom/movable/projectile/proj, cardinal_move, uncrossing)
-	if(operator?.wear_id?.iff_signal & proj.iff_signal)
+	if(operator?.get_iff_signal() & proj.iff_signal)
 		return FALSE
 	if(src == proj.original_target)
 		return TRUE
@@ -784,7 +784,11 @@ So if we are on the 32th absolute pixel coordinate we are on tile 1, but if we a
 	if(proj.firer == src)
 		return FALSE
 	if(lying_angle && src != proj.original_target)
-		return FALSE
+		if(proj.firer?.faction)
+			if((GLOB.faction_to_iff[proj.firer.faction] & get_iff_signal()) || incapacitated())
+				return FALSE
+		else //normal behavior if no faction on proj
+			return FALSE
 	if((proj.ammo.ammo_behavior_flags & AMMO_XENO) && (isnestedhost(src) || stat == DEAD))
 		return FALSE
 	if(pass_flags & PASS_PROJECTILE) //he's beginning to believe
@@ -844,8 +848,8 @@ So if we are on the 32th absolute pixel coordinate we are on tile 1, but if we a
 	var/hit_roll = rand(0, 99) //Our randomly generated roll
 
 	if(hit_chance > hit_roll) //Hit
-		if(hit_roll > (hit_chance-25)) //if you hit by a small margin, you hit a random bodypart instead of what you were aiming for
-			proj.def_zone = pick(GLOB.base_miss_chance)
+		if(hit_roll > (hit_chance-50)) //if you hit by a small margin, you hit a random bodypart instead of what you were aiming for
+			proj.def_zone = BODY_ZONE_CHEST
 		return TRUE
 
 	if(!lying_angle) //Narrow miss!
@@ -892,7 +896,7 @@ So if we are on the 32th absolute pixel coordinate we are on tile 1, but if we a
 		return FALSE
 	if(proj.ammo.ammo_behavior_flags & AMMO_SKIPS_ALIENS)
 		return FALSE
-	if((proj.ammo.ammo_behavior_flags & AMMO_SNIPER) && proj.iff_signal)
+	if((proj.ammo.ammo_behavior_flags & AMMO_SNIPER_TURRET) && proj.iff_signal)
 		var/datum/status_effect/incapacitating/recently_sniped/sniped = is_recently_sniped()
 		var/obj/item/weapon/gun/shooter = proj.shot_from
 
@@ -1002,13 +1006,38 @@ So if we are on the 32th absolute pixel coordinate we are on tile 1, but if we a
 	return TRUE
 
 /mob/living/carbon/xenomorph/bullet_act(atom/movable/projectile/proj)
+	if(!issamexenohive(proj.shot_from) && has_status_effect(STATUS_EFFECT_NO_HEALTH_REGEN))
+		remove_status_effect(STATUS_EFFECT_NO_HEALTH_REGEN)
+		no_health_regen_grace_period = TRUE
+		addtimer(CALLBACK(src, PROC_REF(grace_period_end)), 15 SECONDS)
 	if(issamexenohive(proj.shot_from) && (isxeno(proj.shot_from) || istype(proj.shot_from, /obj/structure/xeno))) //Aliens won't be harming allied aliens.
 		return
+
+	var/mob/prey = eaten_mob || devouring_mob
+	if(ismob(prey))
+		var/effect = max(0,proj.ammo.plasma_drain + proj.damage + proj.sundering)
+		if(effect)
+			if(prey.stat == DEAD)
+				add_slowdown(SLOWDOWN_ARMOR_VERY_HEAVY)
+				apply_status_effect(/datum/status_effect/shatter, 5 SECONDS)
+				apply_status_effect(/datum/status_effect/noplasmaregen, 5 SECONDS)
+				if(!CHECK_BITFIELD(xeno_caste.caste_flags, CASTE_PLASMADRAIN_IMMUNE))
+					use_plasma(effect)
+			else
+				add_slowdown(SLOWDOWN_ARMOR_MEDIUM)
+				if(prob(30))
+					apply_status_effect(/datum/status_effect/shatter, 0.1 SECONDS)
+					apply_status_effect(/datum/status_effect/noplasmaregen, 1 SECONDS)
+				if(!CHECK_BITFIELD(xeno_caste.caste_flags, CASTE_PLASMADRAIN_IMMUNE))
+					use_plasma(effect/5)
 
 	if(proj.ammo.plasma_drain && !CHECK_BITFIELD(xeno_caste.caste_flags, CASTE_PLASMADRAIN_IMMUNE))
 		use_plasma(proj.ammo.plasma_drain)
 
 	return ..()
+
+/mob/living/carbon/xenomorph/proc/grace_period_end()
+	no_health_regen_grace_period = FALSE
 
 /atom/movable/projectile/hitscan
 	///The icon of the laser beam that will be created

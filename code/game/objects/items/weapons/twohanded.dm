@@ -1,3 +1,4 @@
+/*NTF EDIT - This file was unticked and causing ticked file enforcment errors.  it appears to be largely redundant with code\game\objects\items\weapons\two_handed\twohanded.dm
 /obj/item/weapon/twohanded
 	icon = 'icons/obj/items/weapons/twohanded.dmi'
 	worn_icon_list = list(
@@ -403,6 +404,7 @@
 		/obj/item/attachable/angledgrip,
 		/obj/item/weapon/gun/pistol/plasma_pistol,
 		/obj/item/weapon/gun/shotgun/combat/masterkey,
+		/obj/item/weapon/gun/pistol/g22/tranq,
 		/obj/item/weapon/gun/flamer/mini_flamer,
 		/obj/item/weapon/gun/grenade_launcher/underslung,
 		/obj/item/attachable/motiondetector,
@@ -512,22 +514,6 @@
 		icon_state = "rocketsledge_w"
 	else
 		icon_state = "rocketsledge"
-
-/obj/item/weapon/twohanded/rocketsledge/afterattack(obj/target, mob/user, flag)
-	if(istype(target, /obj/structure/reagent_dispensers/fueltank) && get_dist(user,target) <= 1)
-		var/obj/structure/reagent_dispensers/fueltank/RS = target
-		if(RS.reagents.total_volume == 0)
-			to_chat(user, span_warning("Out of fuel!"))
-			return ..()
-
-		var/fuel_transfer_amount = min(RS.reagents.total_volume, (max_fuel - reagents.get_reagent_amount(/datum/reagent/fuel)))
-		RS.reagents.remove_reagent(/datum/reagent/fuel, fuel_transfer_amount)
-		reagents.add_reagent(/datum/reagent/fuel, fuel_transfer_amount)
-		playsound(loc, 'sound/effects/refill.ogg', 25, 1, 3)
-		to_chat(user, span_notice("You refill [src] with fuel."))
-		update_icon()
-
-	return ..()
 
 /obj/item/weapon/twohanded/rocketsledge/unique_action(mob/user)
 	. = ..()
@@ -741,22 +727,6 @@
 	. = ..()
 	. += "It contains [reagents.get_reagent_amount(/datum/reagent/fuel)]/[max_fuel] units of fuel!"
 
-///Refueling with fueltank
-/obj/item/weapon/twohanded/chainsaw/afterattack(obj/target, mob/user, flag)
-	if(!istype(target, /obj/structure/reagent_dispensers/fueltank) || get_dist(user,target) > 1)
-		return
-	var/obj/structure/reagent_dispensers/fueltank/saw = target
-	if(saw.reagents.total_volume == 0)
-		balloon_alert(user, "no fuel!")
-		return ..()
-	var/fuel_transfer_amount = min(saw.reagents.total_volume, (max_fuel - reagents.get_reagent_amount(/datum/reagent/fuel)))
-	saw.reagents.remove_reagent(/datum/reagent/fuel, fuel_transfer_amount)
-	reagents.add_reagent(/datum/reagent/fuel, fuel_transfer_amount)
-	playsound(loc, 'sound/effects/refill.ogg', 25, 1, 3)
-	update_icon()
-
-	return ..()
-
 /obj/item/weapon/twohanded/chainsaw/attack(mob/living/carbon/M, mob/living/carbon/user)
 	rip_apart(user)
 	return ..()
@@ -807,3 +777,4 @@
 	playsound(loc, 'sound/machines/switch.ogg', 25)
 	toggle_active()
 	toggle_motor(user)
+*/

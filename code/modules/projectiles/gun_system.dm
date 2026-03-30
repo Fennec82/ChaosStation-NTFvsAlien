@@ -244,7 +244,7 @@
 	///Determines character slowdown from aim mode. Default is 66%
 	var/aim_speed_modifier = 6
 	/// Time to enter aim mode, generally one second.
-	var/aim_time = 12 SECONDS
+	var/aim_time = 0.5 SECONDS //you get slowed down and shoot slower anyway.
 
 	///How many shots can the weapon shoot in burst? Anything less than 2 and you cannot toggle burst.
 	var/burst_amount = 1
@@ -380,9 +380,6 @@
 	var/knockdown_threshold = 100
 	///Range of deployed turret
 	var/turret_range = 7
-	///IFF signal for sentries. If it is set here it will be this signal forever. If null the IFF signal will be dependant on the deployer.
-	var/sentry_iff_signal = NONE
-
 	///Icon state used for an added overlay for a sentry. Currently only used in Build-A-Sentry.
 	var/placed_overlay_iconstate = "rifle"
 
@@ -462,6 +459,8 @@
 
 ///Set the user in argument as gun_user
 /obj/item/weapon/gun/proc/set_gun_user(mob/user)
+	if(ismovable(user) && !istype(src, /obj/item/weapon/gun/rifle/drone))
+		faction = user.faction
 	active_attachable?.set_gun_user(user)
 	if(user == gun_user)
 		return
@@ -477,6 +476,7 @@
 		COMSIG_KB_UNLOADGUN,
 		COMSIG_KB_GUN_SAFETY,
 		COMSIG_KB_UNIQUEACTION,
+		COMSIG_KB_UNIQUEACTION_UNDER,
 		COMSIG_KB_AUTOEJECT,
 		COMSIG_QDELETING,
 		COMSIG_RANGED_ACCURACY_MOD_CHANGED,
@@ -518,6 +518,7 @@
 		RegisterSignal(gun_user, COMSIG_MOB_MOUSEDRAG, PROC_REF(change_target))
 	else
 		RegisterSignal(gun_user, COMSIG_KB_UNIQUEACTION, PROC_REF(unique_action))
+	RegisterSignal(gun_user, COMSIG_KB_UNIQUEACTION_UNDER, PROC_REF(unique_action_under))
 	RegisterSignal(gun_user, COMSIG_QDELETING, PROC_REF(clean_gun_user))
 	RegisterSignals(gun_user, list(COMSIG_MOB_MOUSEUP, COMSIG_ITEM_ZOOM), PROC_REF(stop_fire))
 	RegisterSignal(gun_user, COMSIG_ITEM_UNZOOM, PROC_REF(on_unzoom))
@@ -854,7 +855,8 @@
 	//The gun should return the bullet that it already loaded from the end cycle of the last Fire().
 	var/atom/movable/projectile/projectile_to_fire = in_chamber //Load a bullet in or check for existing one.
 	if(!projectile_to_fire) //If there is nothing to fire, click.
-		playsound(src, dry_fire_sound, 25, 1, 5)
+		if(dry_fire_sound)
+			playsound(src, dry_fire_sound, 25, 1, 5)
 		if(CHECK_BITFIELD(reciever_flags, AMMO_RECIEVER_ROTATES_CHAMBER) && !CHECK_BITFIELD(reciever_flags, AMMO_RECIEVER_REQUIRES_UNIQUE_ACTION) && !CHECK_BITFIELD(reciever_flags, AMMO_RECIEVER_CYCLE_ONLY_BEFORE_FIRE))
 			cycle(gun_user, FALSE)
 		windup_checked = WEAPON_WINDUP_NOT_CHECKED
@@ -882,7 +884,8 @@
 		if(!(CHECK_BITFIELD(reciever_flags, AMMO_RECIEVER_REQUIRES_UNIQUE_ACTION) || CHECK_BITFIELD(reciever_flags, AMMO_RECIEVER_CYCLE_ONLY_BEFORE_FIRE)))
 			cycle(null)
 		if(length(chamber_items) && CHECK_BITFIELD(reciever_flags, AMMO_RECIEVER_AUTO_EJECT) && CHECK_BITFIELD(reciever_flags, AMMO_RECIEVER_MAGAZINES) && get_current_rounds(chamber_items[current_chamber_position]) < (!CHECK_BITFIELD(reciever_flags, AMMO_RECIEVER_REQUIRES_UNIQUE_ACTION) ? rounds_per_shot : 0))
-			playsound(src, empty_sound, 25, 1)
+			if(empty_sound)
+				playsound(src, empty_sound, 25, 1)
 			unload(after_fire = TRUE)
 	update_ammo_count()
 	gun_user?.hud_used?.update_ammo_hud(src, get_ammo_list(), get_display_ammo_count())
@@ -1109,7 +1112,8 @@
 	var/atom/movable/projectile/projectile_to_fire = in_chamber
 
 	if(!projectile_to_fire) //We actually have a projectile, let's move on.
-		playsound(src, dry_fire_sound, 25, 1, 5)
+		if(dry_fire_sound)
+			playsound(src, dry_fire_sound, 25, 1, 5)
 		ENABLE_BITFIELD(gun_features_flags, GUN_CAN_POINTBLANK)
 		return
 
@@ -1118,7 +1122,8 @@
 	user.visible_message("<span class = 'warning'>[user] pulls the trigger!</span>")
 	var/actual_sound = (active_attachable?.fire_sound) ? active_attachable.fire_sound : fire_sound
 	var/sound_volume = (HAS_TRAIT(src, TRAIT_GUN_SILENCED) && !active_attachable) ? 25 : 60
-	playsound(user, actual_sound, sound_volume, 1)
+	if(actual_sound)
+		playsound(user, actual_sound, sound_volume, 1)
 	simulate_recoil(2, Get_Angle(user, M))
 	var/obj/item/weapon/gun/revolver/current_revolver = src
 	var/admin_msg = "committed suicide with [src] (Dmg:[projectile_to_fire.damage], Dmg type: [projectile_to_fire.ammo.damage_type])"
@@ -1146,6 +1151,7 @@
 		user.apply_damage(200, OXY)
 		if(ishuman(user) && user == M)
 			var/mob/living/carbon/human/HM = user
+			log_game("Marking [logdetails(HM)] as undefibbable because they blew their own brains out.")
 			HM.set_undefibbable(TRUE) //can't be defibbed back from self inflicted gunshot to head
 		user.death()
 
@@ -1216,7 +1222,8 @@
 		return
 	if(CHECK_BITFIELD(reciever_flags, AMMO_RECIEVER_CLOSED)) //We want to open it.
 		DISABLE_BITFIELD(reciever_flags, AMMO_RECIEVER_CLOSED)
-		playsound(src, opened_sound, 25, 1)
+		if(opened_sound)
+			playsound(src, opened_sound, 25, 1)
 		if(shell_eject_animation)
 			flick("[shell_eject_animation]", src)
 		if(chamber_opened_message)
@@ -1344,7 +1351,7 @@
 		else
 			chamber_items += new_mag
 		get_ammo()
-		if(user)
+		if(user && reload_sound)
 			playsound(src, reload_sound, 25, 1)
 		if(!magazine_features_flags || (magazine_features_flags && !CHECK_BITFIELD(magazine_features_flags, MAGAZINE_WORN)))
 			new_mag.forceMove(src)
@@ -1381,16 +1388,18 @@
 					items_to_insert += mag.create_handful(null, 1)
 				else
 					items_to_insert += mag
-				playsound(src, hand_reload_sound, 25, 1)
+				if(hand_reload_sound)
+					playsound(src, hand_reload_sound, 25, 1)
 			else
 				var/rounds_in_chamber = CHECK_BITFIELD(reciever_flags, AMMO_RECIEVER_ROTATES_CHAMBER) ? rounds : length(chamber_items)
-				if(CHECK_BITFIELD(mag.magazine_flags,MAGAZINE_REQUIRES_EMPTY_GUN) && rounds_in_chamber)
+				if(!CHECK_BITFIELD(reciever_flags,AMMO_RECIEVER_MULTICLIP) && rounds_in_chamber)
 					to_chat(user, span_warning("[src] must be completely empty to use the [mag]!"))
 					return FALSE
 				var/rounds_to_fill = min(mag.current_rounds, max_chamber_items - rounds_in_chamber)
 				for(var/i = 0, i < rounds_to_fill, i++)
 					items_to_insert += mag.create_handful(null, 1)
-				playsound(src, reload_sound, 25, 1)
+				if(reload_sound)
+					playsound(src, reload_sound, 25, 1)
 		else
 			items_to_insert += new_mag
 
@@ -1409,7 +1418,7 @@
 	for(var/obj/obj_to_insert in items_to_insert)
 		obj_to_insert.forceMove(src)
 		user?.temporarilyRemoveItemFromInventory(obj_to_insert)
-	if(!CHECK_BITFIELD(reciever_flags, AMMO_RECIEVER_HANDFULS))
+	if(!CHECK_BITFIELD(reciever_flags, AMMO_RECIEVER_HANDFULS) && reload_sound)
 		playsound(src, reload_sound, 25, 1)
 	if(!CHECK_BITFIELD(reciever_flags, AMMO_RECIEVER_REQUIRES_UNIQUE_ACTION) && !CHECK_BITFIELD(reciever_flags, AMMO_RECIEVER_TOGGLES_OPEN) && !in_chamber && max_chamber_items && !CHECK_BITFIELD(reciever_flags, AMMO_RECIEVER_CYCLE_ONLY_BEFORE_FIRE))
 		cycle(user, FALSE)
@@ -1488,7 +1497,8 @@
 	var/obj/item/mag = chamber_items[current_chamber_position]
 	if(!mag)
 		return
-	playsound(src, unload_sound, 25, 1, 5)
+	if(unload_sound)
+		playsound(src, unload_sound, 25, 1, 5)
 	user?.visible_message(span_notice("[user] unloads [mag] from [src]."),
 	span_notice("You unload [mag] from [src]."), null, 4)
 	if(drop && !(CHECK_BITFIELD(reciever_flags, AMMO_RECIEVER_MAGAZINES) && CHECK_BITFIELD(get_magazine_features_flags(mag), MAGAZINE_WORN)))
@@ -1579,7 +1589,8 @@
 	if(num_of_casings)
 		casing.current_casings += num_of_casings
 		casing.update_appearance()
-	playsound(current_turf, sound_to_play, 25, 1, 5)
+	if(sound_to_play)
+		playsound(current_turf, sound_to_play, 25, 1, 5)
 
 
 ///Gets a projectile to fire from the magazines ammo type.
@@ -1734,8 +1745,10 @@
 
 ///Checks if the gun can be fired
 /obj/item/weapon/gun/proc/able_to_fire(mob/user)
-	if(!user || user.incapacitated()  || user.lying_angle || !isturf(user.loc))
-		return
+	if(!user || user.incapacitated() || !isturf(user.loc))
+		return FALSE
+	if(!bipod_check(user))
+		return FALSE
 	if(rounds - rounds_per_shot < 0 && rounds)
 		to_chat(user, span_warning("There's not enough rounds left to fire."))
 		return FALSE
@@ -1752,7 +1765,9 @@
 		to_chat(user, span_warning("Your armor does not allow you to use this firearm!"))
 		return FALSE
 	if(HAS_TRAIT(src, TRAIT_GUN_SAFETY))
+		balloon_alert(user, "Safety is on!")
 		to_chat(user, span_warning("The safety is on!"))
+		playsound(user, dry_fire_sound, 25, 1, 5)
 		return FALSE
 	if(CHECK_BITFIELD(gun_features_flags, GUN_WIELDED_FIRING_ONLY)) //If we're not holding the weapon with both hands when we should.
 		if(!master_gun && !CHECK_BITFIELD(item_flags, WIELDED))
@@ -1801,10 +1816,14 @@
 	//Guns with low ammo have their firing sound
 	var/firing_sndfreq = CHECK_BITFIELD(gun_features_flags, GUN_NO_PITCH_SHIFT_NEAR_EMPTY) ? FALSE : ((max(rounds, 1) / (max_rounds ? max_rounds : max_shells ? max_shells : 1)) > 0.25) ? FALSE : 55000
 	if(HAS_TRAIT(src, TRAIT_GUN_SILENCED))
+		if(!fire_sound)
+			return
 		playsound(user, fire_sound, GUN_FIRE_SOUND_VOLUME/2, firing_sndfreq ? TRUE : FALSE, frequency = firing_sndfreq)
 		return
 	if(firing_sndfreq && fire_rattle)
 		playsound(user, fire_rattle, GUN_FIRE_SOUND_VOLUME, FALSE)
+		return
+	if(!fire_sound)
 		return
 	playsound(user, fire_sound, GUN_FIRE_SOUND_VOLUME, firing_sndfreq ? TRUE : FALSE, frequency = firing_sndfreq)
 
@@ -1819,10 +1838,9 @@
 	projectile_to_fire.projectile_speed += shell_speed_mod
 	if(gun_features_flags & GUN_IFF || HAS_TRAIT(src, TRAIT_GUN_IS_AIMING) || projectile_to_fire.ammo.ammo_behavior_flags & AMMO_IFF)
 		var/iff_signal
-		if(ishuman(firer))
-			var/mob/living/carbon/human/_firer = firer
-			var/obj/item/card/id/id = _firer.get_idcard()
-			iff_signal = id?.iff_signal
+		if(ismob(firer))
+			var/mob/firing_mob = firer
+			iff_signal = firing_mob.get_iff_signal()
 		else if(istype(firer, /obj/machinery/deployable/mounted/sentry))
 			var/obj/machinery/deployable/mounted/sentry/sentry = firer
 			iff_signal = sentry.iff_signal
@@ -1835,6 +1853,8 @@
 		var/mob/living/living_firer = firer
 		if(living_firer.IsStaggered())
 			projectile_to_fire.damage *= STAGGER_DAMAGE_MULTIPLIER
+			projectile_to_fire.accuracy *= STAGGER_ACCURACY_MULTIPLIER
+			projectile_to_fire.point_blank_range = 0 //no point blank bonus when staggered
 
 ///Sets the projectile accuracy and scatter
 /obj/item/weapon/gun/proc/setup_bullet_accuracy()

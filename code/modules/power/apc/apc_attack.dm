@@ -1,6 +1,8 @@
 /obj/machinery/power/apc/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage * xeno_attacker.xeno_melee_damage_modifier, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return FALSE
+	if(xeno_attacker.handcuffed)
+		return
 
 	if(effects)
 		xeno_attacker.do_attack_animation(src, ATTACK_EFFECT_CLAW)
@@ -29,30 +31,6 @@
 /obj/machinery/power/apc/attackby(obj/item/I, mob/user, params)
 	. = ..()
 	if(.)
-		return
-
-	if(istype(I, /obj/item/weapon/zombie_claw) || ispath(I, /obj/item/weapon/zombie_claw))
-		if(user.status_flags & INCORPOREAL)
-			return
-
-		user.do_attack_animation(src, ATTACK_EFFECT_CLAW)
-		user.visible_message(span_danger("[user] slashes \the [src]!"), \
-		span_danger("We slash \the [src]!"), null, 5)
-		playsound(loc, SFX_ALIEN_CLAW_METAL, 25, 1)
-
-		var/allcut = wires.is_all_cut()
-
-		if(beenhit >= pick(3, 4) && !CHECK_BITFIELD(machine_stat, PANEL_OPEN))
-			ENABLE_BITFIELD(machine_stat, PANEL_OPEN)
-			update_appearance()
-			visible_message(span_danger("\The [src]'s cover swings open, exposing the wires!"), null, null, 5)
-
-		else if(CHECK_BITFIELD(machine_stat, PANEL_OPEN) && !allcut)
-			wires.cut_all()
-			update_appearance()
-			visible_message(span_danger("\The [src]'s wires snap apart in a rain of sparks!"), null, null, 5)
-		else
-			beenhit += 1
 		return
 
 	if(istype(I, /obj/item/cell) && opened) //Trying to put a cell inside

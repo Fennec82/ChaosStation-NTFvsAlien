@@ -105,11 +105,14 @@
 			DEATHTIME_MESSAGE(usr)
 			return
 
+	if(tgui_alert(usr, "This will return you to the lobby so you can rejoin.  You will not be able to reclone.  Are you sure you wish to continue?", "Return to lobby", list("Yes", "No")) != "Yes")
+		return
 	var/mob/living/carbon/human/humancorpse = src
 	var/mob/dead/observer/ghost = src
 	if(isobserver(ghost))
 		humancorpse = ghost.can_reenter_corpse?.resolve()
 	if(ishuman(humancorpse) && humancorpse.mind == mind)
+		log_game("Marking [logdetails(humancorpse)] as undefibbable because it[isobserver(ghost) ? "'s ghost, [logdetails(ghost)]," : ""] is using the Respawn verb.")
 		humancorpse.set_undefibbable()
 	to_chat(usr, span_notice("You can respawn now, enjoy your new life!<br><b>Make sure to play a different character, and please roleplay correctly.</b>"))
 	GLOB.round_statistics.total_human_respawns++
@@ -185,12 +188,13 @@
 		/datum/job/pmc,
 		/datum/job/special_forces,
 		/datum/job/icc,
+		/datum/job/vsd,
 	)
 
 	// List of HvH factions - these are handled differently, using the quick loadout outfits.
 	var/list/static/hvh_faction_list = list(/datum/job/som, /datum/job/terragov)
 	// List of rare factions, not common because they're funny in moderation / stronk.
-	var/list/static/rare_faction_list = list(/datum/job/sectoid, /datum/job/imperial, /datum/job/skeleton)
+	var/list/static/rare_faction_list = list(/datum/job/sectoid, /datum/job/imperial, /datum/job/skeleton, /datum/job/erp, /datum/job/retired)
 
 
 	var/total_list = base_faction_list + hvh_faction_list

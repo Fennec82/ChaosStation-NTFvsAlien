@@ -1709,7 +1709,6 @@
 /obj/machinery/light{
 	dir = 4
 	},
-/obj/structure/reagent_dispensers/fueltank/barrel,
 /turf/open/floor/tile/dark/brown2,
 /area/outpost/cargo/engineering)
 "ir" = (
@@ -2042,6 +2041,11 @@
 	dir = 8
 	},
 /area/outpost/yard/east)
+"jN" = (
+/obj/effect/landmark/weed_node,
+/obj/effect/ai_node,
+/turf/open/floor/plating/ground/mars/random/cave,
+/area/outpost/caves/south)
 "jO" = (
 /obj/effect/decal/cleanable/blood/writing{
 	dir = 4
@@ -2565,6 +2569,7 @@
 /obj/structure/bed/chair/office{
 	dir = 4
 	},
+/obj/effect/ai_node,
 /turf/open/floor/plating,
 /area/outpost/engineering/engine)
 "lY" = (
@@ -4454,10 +4459,6 @@
 	dir = 1
 	},
 /area/outpost/hallway/east)
-"uR" = (
-/obj/machinery/telecomms/relay/preset/telecomms,
-/turf/closed/mineral/smooth/bigred/indestructible,
-/area/lv624/lazarus/console)
 "uS" = (
 /obj/machinery/atmospherics/pipe/manifold/green/hidden{
 	dir = 8
@@ -6402,6 +6403,7 @@
 /obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
 /obj/effect/spawner/random/engineering/powercell,
+/obj/effect/ai_node,
 /turf/open/floor/plating,
 /area/outpost/engineering/engine)
 "Ee" = (
@@ -7914,6 +7916,7 @@
 /obj/effect/turf_decal/warning_stripes/thin{
 	dir = 4
 	},
+/obj/structure/reagent_dispensers/fueltank/barrel,
 /turf/open/floor/tile/dark2,
 /area/outpost/cargo/engineering)
 "Lv" = (
@@ -7944,6 +7947,7 @@
 /turf/open/floor/tile/dark,
 /area/outpost/science)
 "Lz" = (
+/obj/structure/reagent_dispensers/fueltank/barrel,
 /turf/open/floor/tile/dark/brown2{
 	dir = 9
 	},
@@ -8104,6 +8108,10 @@
 	dir = 9
 	},
 /area/outpost/medbay/storage)
+"Mk" = (
+/obj/effect/landmark/static_comms/net_one,
+/turf/open/floor/tile/dark,
+/area/outpost/arrivals)
 "Mm" = (
 /turf/open/floor/plating/ground/mars/dirttosand{
 	dir = 6
@@ -9892,8 +9900,10 @@
 	},
 /area/outpost/science)
 "Up" = (
-/obj/structure/reagent_dispensers/fueltank/barrel,
-/turf/open/floor/tile/dark/brown2,
+/obj/effect/landmark/static_comms/net_two,
+/turf/open/floor/tile/dark/brown2{
+	dir = 9
+	},
 /area/outpost/cargo/engineering)
 "Uq" = (
 /turf/open/floor/plating/ground/mars/cavetodirt{
@@ -10962,6 +10972,7 @@
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 10
 	},
+/obj/effect/ai_node,
 /turf/open/floor/tile/dark/purple2{
 	dir = 5
 	},
@@ -15943,7 +15954,7 @@ Og
 VC
 Vt
 Vt
-Vt
+Mk
 Vt
 OH
 Vt
@@ -24706,8 +24717,8 @@ DX
 QK
 Zb
 wz
-wz
 yj
+wz
 Cn
 wz
 wz
@@ -25102,8 +25113,8 @@ cR
 Ed
 xY
 fE
-MG
 eE
+MG
 MU
 MG
 CU
@@ -25499,7 +25510,7 @@ ob
 MG
 Bz
 lX
-eE
+MG
 JG
 MG
 MG
@@ -26026,8 +26037,8 @@ hK
 wQ
 hK
 hK
-IH
-wQ
+jN
+hK
 yW
 yW
 yW
@@ -26932,7 +26943,7 @@ ys
 iI
 Zm
 dD
-nV
+Ta
 uX
 ys
 ys
@@ -27327,8 +27338,8 @@ cG
 ys
 PA
 Cf
+lg
 Up
-Lz
 Cf
 ys
 Ya
@@ -27460,7 +27471,7 @@ ys
 Mw
 rQ
 iq
-Ta
+nV
 Gi
 ys
 ys
@@ -29491,7 +29502,7 @@ Kv
 Kv
 gw
 gP
-uR
+gP
 gP
 yW
 yW

@@ -193,20 +193,29 @@ GLOBAL_PROTECT(exp_specialmap)
 			if(respawn && (SSticker.mode?.round_type_flags & MODE_SILO_RESPAWN))
 				continue
 			GLOB.round_statistics.larva_from_marine_spawning += adjusted_jobworth_list[index] / scaled_job.job_points_needed
+			log_game("Added [adjusted_jobworth_list[index] / scaled_job.job_points_needed] [scaled_job.title] larva from occupying a [title] slot")
 		scaled_job.add_job_points(adjusted_jobworth_list[index])
-	var/datum/hive_status/normal_hive = GLOB.hive_datums[XENO_HIVE_NORMAL]
-	normal_hive.update_tier_limits()
+	for(var/datum/hive_status/normal_hive in GLOB.hive_datums)
+		normal_hive.update_tier_limits()
 	return TRUE
 
 /datum/job/proc/free_job_positions(amount)
 	if(amount <= 0)
 		CRASH("free_job_positions() called with amount: [amount]")
 	current_positions = max(current_positions - amount, 0)
-	for(var/index in jobworth)
+	var/adjusted_jobworth_list = SSticker.mode?.get_adjusted_jobworth_list(jobworth) || jobworth
+	for(var/index in adjusted_jobworth_list)
 		var/datum/job/scaled_job = SSjob.GetJobType(index)
 		if(!(scaled_job in SSjob.active_joinable_occupations))
 			continue
+		if(isxenosjob(scaled_job))
+			if(SSticker.mode?.round_type_flags & MODE_SILO_RESPAWN)
+				continue
+			GLOB.round_statistics.larva_debt_from_marines_cryoing += adjusted_jobworth_list[index] / scaled_job.job_points_needed
+			log_game("Added [adjusted_jobworth_list[index] / scaled_job.job_points_needed] [scaled_job.title] larva debt from freeing up a [title] slot")
 		scaled_job.remove_job_points(jobworth[index])
+	for(var/datum/hive_status/normal_hive in GLOB.hive_datums)
+		normal_hive.update_tier_limits()
 
 ///Adds to job points, adding a new slot if threshold reached
 /datum/job/proc/add_job_points(amount)
@@ -384,6 +393,8 @@ GLOBAL_PROTECT(exp_specialmap)
 						return /mob/living/carbon/human/species/robot/deltad
 					if("Sterling")
 						return /mob/living/carbon/human/species/robot/bravada
+					if("Synskin")
+						return /mob/living/carbon/human/species/robot/synskin
 			to_chat(prefs.parent, span_danger("nonhuman joins are currently disabled, your species has been defaulted to Human"))
 			return /mob/living/carbon/human
 		if("Mothellian")

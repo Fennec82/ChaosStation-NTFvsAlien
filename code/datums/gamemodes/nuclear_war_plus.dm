@@ -25,6 +25,7 @@
 		/datum/job/terragov/squad/specialist = 1,
 		/datum/job/terragov/squad/leader = 1,
 		/datum/job/terragov/squad/standard = -1,
+		/datum/job/terragov/squad/slut = -1,
 		/datum/job/clf/breeder = -1,
 		/datum/job/clf/standard = -1,
 		/datum/job/clf/medic = 2,
@@ -32,7 +33,7 @@
 		/datum/job/clf/tech = 2,
 		/datum/job/clf/leader = 1,
 		/datum/job/xenomorph = FREE_XENO_AT_START,
-		/datum/job/xenomorph/corrupted = FREE_XENO_AT_START_CORRUPT,
+		/datum/job/xenomorph/green = FREE_XENO_AT_START,
 		/datum/job/xenomorph/queen = 1
 	)
 	factions = list(FACTION_TERRAGOV, FACTION_XENO, FACTION_CLF)

@@ -9,6 +9,7 @@
 	minimap_icon = "CLF1"
 	jobworth = list(
 		/datum/job/terragov/squad/smartgunner = SMARTIE_POINTS_REGULAR,
+		/datum/job/terragov/squad/specialist = SMARTIE_POINTS_REGULAR,
 		/datum/job/terragov/squad/corpsman = SMARTIE_POINTS_REGULAR,
 		/datum/job/terragov/squad/engineer = SMARTIE_POINTS_REGULAR,
 		/datum/job/terragov/silicon/synthetic = SYNTH_POINTS_REGULAR,
@@ -25,7 +26,7 @@
 /datum/job/clf/get_spawn_message_information(mob/M)
 	. = ..()
 	. += separator_hr("[span_role_header("<b>[title] Information</b>")]")
-	. += {"As a CLF member you are a ex NTC worker, now a servant of Xenomorphs, they are superior, evolved beings that you must serve.
+	. += {"As a CLF member you are an ex NTC worker or a defector from one of the main factions. Whatever your reasons, you are now a servant of Xenomorphs, they are superior, evolved beings that you must serve.
 You can understand but not speak xeno language but they can understand your language already, Obey your Xenomorph masters.
 Your primary goal is to serve the hive, and ultimate goal is to liberate the colonies from all occupational forces so the Xenos may reclaim the lands, and breed your kind forever."}
 
@@ -62,10 +63,11 @@ Your primary goal is to serve the hive, and ultimate goal is to liberate the col
 		/datum/outfit/job/clf/medic/skorpion,
 		/datum/outfit/job/clf/medic/paladin,
 	)
-	access = list(ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_CIVILIAN_MEDICAL, ACCESS_CLF_CARGO, ACCESS_CLF_TADPOLE, ACCESS_CLF_ENGINEERING, ACCESS_CLF_PRISON, ACCESS_CIVILIAN_PUBLIC)
-	minimal_access = list(ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_CIVILIAN_MEDICAL, ACCESS_CLF_CARGO, ACCESS_CLF_TADPOLE, ACCESS_CLF_ENGINEERING, ACCESS_CLF_PRISON, ACCESS_CIVILIAN_PUBLIC)
+	access = ALL_CLF_ACCESS
+	minimal_access = ALL_CLF_ACCESS
 	jobworth = list(
 		/datum/job/terragov/squad/smartgunner = SMARTIE_POINTS_MEDIUM,
+		/datum/job/terragov/squad/specialist = SMARTIE_POINTS_MEDIUM,
 		/datum/job/terragov/squad/corpsman = SMARTIE_POINTS_REGULAR,
 		/datum/job/terragov/squad/engineer = SMARTIE_POINTS_REGULAR,
 		/datum/job/terragov/silicon/synthetic = SYNTH_POINTS_REGULAR,
@@ -89,6 +91,7 @@ Your primary goal is to serve the hive, and ultimate goal is to liberate the col
 	)
 	jobworth = list(
 		/datum/job/terragov/squad/smartgunner = SMARTIE_POINTS_HIGH,
+		/datum/job/terragov/squad/specialist = SMARTIE_POINTS_HIGH,
 		/datum/job/terragov/squad/corpsman = SMARTIE_POINTS_REGULAR,
 		/datum/job/terragov/squad/engineer = SMARTIE_POINTS_REGULAR,
 		/datum/job/terragov/silicon/synthetic = SYNTH_POINTS_REGULAR,
@@ -116,6 +119,7 @@ Your primary goal is to serve the hive, and ultimate goal is to liberate the col
 	supervisors = "the xenomorphs"
 	jobworth = list(
 		/datum/job/terragov/squad/smartgunner = SMARTIE_POINTS_HIGH,
+		/datum/job/terragov/squad/specialist = SMARTIE_POINTS_HIGH,
 		/datum/job/terragov/squad/corpsman = SMARTIE_POINTS_REGULAR,
 		/datum/job/terragov/squad/engineer = SMARTIE_POINTS_REGULAR,
 		/datum/job/terragov/silicon/synthetic = SYNTH_POINTS_REGULAR,
@@ -128,6 +132,7 @@ Your primary goal is to serve the hive, and ultimate goal is to liberate the col
 	comm_title = "CLF0"
 	minimap_icon = "CLF0"
 	outfit = /datum/outfit/job/clf/breeder
+	skills_type = /datum/skills/slut/clf
 	job_flags = JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_ADDTOMANIFEST
 	multiple_outfits = FALSE
 
@@ -144,8 +149,8 @@ Your primary goal is to serve the hive, and ultimate goal is to liberate the col
 	supervisors = "the xenomorphs and CLF"
 	total_positions = 1
 	skills_type = /datum/skills/synthetic
-	access = list(ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_CIVILIAN_MEDICAL, ACCESS_CLF_CARGO, ACCESS_CLF_TADPOLE, ACCESS_CLF_ENGINEERING, ACCESS_CLF_PRISON, ACCESS_CIVILIAN_PUBLIC)
-	minimal_access = list(ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_CIVILIAN_MEDICAL, ACCESS_CLF_CARGO, ACCESS_CLF_TADPOLE, ACCESS_CLF_ENGINEERING, ACCESS_CLF_PRISON, ACCESS_CIVILIAN_PUBLIC)
+	access = ALL_CLF_ACCESS
+	minimal_access = ALL_CLF_ACCESS
 	display_order = JOB_DISPLAY_ORDER_SYNTHETIC
 	outfit = /datum/outfit/job/civilian/synthetic/clf
 	exp_requirements = XP_REQ_EXPERIENCED
@@ -154,6 +159,7 @@ Your primary goal is to serve the hive, and ultimate goal is to liberate the col
 	jobworth = list(
 		/datum/job/xenomorph = LARVA_POINTS_SHIPSIDE_STRONG,
 		/datum/job/terragov/squad/smartgunner = SMARTIE_POINTS_REGULAR,
+		/datum/job/terragov/squad/specialist = SMARTIE_POINTS_REGULAR,
 		/datum/job/terragov/command/mech_pilot = MECH_POINTS_REGULAR,
 	)
 	html_description = {"
@@ -166,6 +172,7 @@ Your primary goal is to serve the hive, and ultimate goal is to liberate the col
 	minimap_icon = "synth"
 	jobworth = list(
 		/datum/job/terragov/squad/smartgunner = SMARTIE_POINTS_HIGH,
+		/datum/job/terragov/squad/specialist = SMARTIE_POINTS_HIGH,
 		/datum/job/terragov/squad/corpsman = SMARTIE_POINTS_REGULAR,
 		/datum/job/terragov/squad/engineer = SMARTIE_POINTS_REGULAR,
 		/datum/job/terragov/silicon/synthetic = SYNTH_POINTS_REGULAR,
@@ -178,6 +185,20 @@ Your primary goal is to serve the hive, and ultimate goal is to liberate the col
 /datum/job/clf/silicon/synthetic/clf/return_spawn_type(datum/preferences/prefs)
 	if(prefs?.synthetic_type == "Early Synthetic")
 		return /mob/living/carbon/human/species/early_synthetic
+	if(prefs?.synthetic_type == "Robot")
+		switch(prefs?.robot_type)
+			if("Basic")
+				return /mob/living/carbon/human/species/robot
+			if("Hammerhead")
+				return /mob/living/carbon/human/species/robot/alpharii
+			if("Chilvaris")
+				return /mob/living/carbon/human/species/robot/charlit
+			if("Ratcher")
+				return /mob/living/carbon/human/species/robot/deltad
+			if("Sterling")
+				return /mob/living/carbon/human/species/robot/bravada
+			if("Synskin")
+				return /mob/living/carbon/human/species/robot/synskin
 	return /mob/living/carbon/human/species/synthetic
 
 /datum/job/clf/silicon/synthetic/clf/return_skills_type(datum/preferences/prefs)
@@ -212,16 +233,40 @@ Your primary goal is to serve the hive, and ultimate goal is to liberate the col
 In addition, being a Synthetic gives you knowledge in every field and specialization possible on-board the ship."}
 
 /datum/job/clf/tech
-	title = "CLF Base Technician"
+	title = "CLF Combat Technician"
 	paygrade = "CLF5"
 	comm_title = "CLF4"
 	minimap_icon = "CLF4"
-	skills_type = /datum/skills/st
+	skills_type = /datum/skills/combat_engineer
 	job_flags = JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_ADDTOMANIFEST
 	outfit = /datum/outfit/job/clf/tech
 	multiple_outfits = FALSE
 	jobworth = list(
 		/datum/job/terragov/squad/smartgunner = SMARTIE_POINTS_MEDIUM,
+		/datum/job/terragov/squad/specialist = SMARTIE_POINTS_MEDIUM,
+		/datum/job/terragov/squad/corpsman = SMARTIE_POINTS_REGULAR,
+		/datum/job/terragov/squad/engineer = SMARTIE_POINTS_REGULAR,
+		/datum/job/terragov/silicon/synthetic = SYNTH_POINTS_REGULAR,
+		/datum/job/terragov/command/mech_pilot = MECH_POINTS_REGULAR,
+	)
+
+/datum/job/clf/mo
+	title = "CLF Medical Officer"
+	paygrade = "MO"
+	comm_title = "CLFMO"
+	minimap_icon = "CLF2"
+	supervisors = "The Hive."
+	total_positions = 1
+	skills_type = /datum/skills/cmo
+	outfit = /datum/outfit/job/clf/mo
+	exp_requirements = XP_REQ_EXPERT
+	exp_type = EXP_TYPE_REGULAR_ALL
+	job_flags = JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_ADDTOMANIFEST|JOB_FLAG_ISCOMMAND|JOB_FLAG_BOLD_NAME_ON_SELECTION|JOB_FLAG_PROVIDES_SQUAD_HUD
+	access = ALL_CLF_ACCESS
+	minimal_access = ALL_CLF_ACCESS
+	jobworth = list(
+		/datum/job/terragov/squad/smartgunner = SMARTIE_POINTS_MEDIUM,
+		/datum/job/terragov/squad/specialist = SMARTIE_POINTS_MEDIUM,
 		/datum/job/terragov/squad/corpsman = SMARTIE_POINTS_REGULAR,
 		/datum/job/terragov/squad/engineer = SMARTIE_POINTS_REGULAR,
 		/datum/job/terragov/silicon/synthetic = SYNTH_POINTS_REGULAR,

@@ -45,29 +45,28 @@
 
 /datum/ammo/bullet/pepperball
 	name = "pepperball"
-	icon = 'ntf_modular/icons/obj/ammo/ammo.dmi'
 	hud_state = "pepperball"
 	hud_state_empty = "pepperball_empty"
-	ammo_behavior_flags = AMMO_BALLISTIC
+	ammo_behavior_flags = NONE //no ballistic so no blood sprite.
 	accurate_range = 15
 	damage_type = STAMINA
 	armor_type = BIO
-	damage = 40
+	damage = 57
 	penetration = 0
 	shrapnel_chance = 0
 	///percentage of xenos total plasma to drain when hit by a pepperball
 	var/drain_multiplier = 0.025
+	bullet_color = COLOR_LIGHT_PINK
 	plasma_drain = 20
 
 /datum/ammo/bullet/pepperball/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
 	if(isxeno(target_mob))
 		var/mob/living/carbon/xenomorph/X = target_mob
-		if(!(X.xeno_caste.caste_flags & CASTE_PLASMADRAIN_IMMUNE))
-			X.use_plasma(drain_multiplier * X.xeno_caste.plasma_max * X.xeno_caste.plasma_regen_limit)
+		X.use_stun_health(drain_multiplier * X.xeno_caste.max_health)
 
 /datum/ammo/bullet/pepperball/pepperball_mini
-	damage = 40
-	drain_multiplier = 0.03
+	damage = 42
+	drain_multiplier = 0.02
 	plasma_drain = 15
 
 /datum/ammo/alloy_spike
@@ -218,20 +217,20 @@
 	max_range = 10
 
 /datum/ammo/grenade_container/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
-	drop_nade(get_turf(target_mob))
+	drop_nade(get_turf(target_mob), proj)
 
 /datum/ammo/grenade_container/on_hit_obj(obj/target_obj, atom/movable/projectile/proj)
-	drop_nade(target_obj.density ? get_step_towards(target_obj, proj) : target_obj.loc)
+	drop_nade(target_obj.density ? get_step_towards(target_obj, proj) : target_obj.loc, proj)
 
 /datum/ammo/grenade_container/on_hit_turf(turf/target_turf, atom/movable/projectile/proj)
-	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf)
+	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf, proj)
 
 /datum/ammo/grenade_container/do_at_max_range(turf/target_turf, atom/movable/projectile/proj)
-	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf)
+	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf, proj)
 
-/datum/ammo/grenade_container/drop_nade(turf/T)
-	var/obj/item/explosive/grenade/G = new nade_type(T)
-	G.visible_message(span_warning("\A [G] lands on [T]!"))
+/datum/ammo/grenade_container/drop_nade(turf/target_turf, atom/movable/projectile/proj)
+	var/obj/item/explosive/grenade/G = new nade_type(target_turf)
+	G.visible_message(span_warning("\A [G] lands on [target_turf]!"))
 	G.det_time = 10
 	G.activate()
 

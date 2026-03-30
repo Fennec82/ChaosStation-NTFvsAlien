@@ -43,6 +43,11 @@
 	contains = list(/obj/item/storage/box/mlrs_rockets/sleep)
 	cost = 100
 
+/datum/supply_packs/explosives/mlrs_rockets_minelayer
+	name = "TA-40L Minelayer MLRS Rocket Pack (x16)"
+	contains = list(/obj/item/storage/box/mlrs_rockets/minelayer)
+	cost = 100
+
 /datum/supply_packs/imports/halterex
 	name = "NT Halter extended mag (x1)"
 	contains = list(/obj/item/ammo_magazine/rifle/nt_halter/extended)
@@ -51,7 +56,7 @@
 /datum/supply_packs/imports/halterdrum
 	name = "NT Halter drum mag (x1)"
 	contains = list(/obj/item/ammo_magazine/rifle/nt_halter/drum)
-	cost = 25
+	cost = 15
 
 /datum/supply_packs/imports/halterexlaser
 	name = "NT Halter extended laser mag (x1)"
@@ -61,32 +66,22 @@
 /datum/supply_packs/imports/halterdrumlaser
 	name = "NT Halter drum laser mag (x1)"
 	contains = list(/obj/item/ammo_magazine/rifle/nt_halter/laser/drum)
-	cost = 25
+	cost = 15
 
 /datum/supply_packs/imports/haltercharged
-	name = "NT Halter charged mag (x1)"
+	name = "NT Halter taser mag (x1)"
 	contains = list(/obj/item/ammo_magazine/rifle/nt_halter/charged)
-	cost = 100
+	cost = 60
 
 /datum/supply_packs/imports/haltersmart
-	name = "NT Halter smart mag crate (x1)"
+	name = "NT Halter smart mag (x1)"
 	contains = list(/obj/item/ammo_magazine/rifle/nt_halter/smart)
-	cost = 25
+	cost = 5 //its pretty ass and small cap anyway.
 
 /datum/supply_packs/imports/halterfoxfire
-	name = "NT Halter foxfire mag crate (x1)"
+	name = "NT Halter foxfire mag (x1)"
 	contains = list(/obj/item/ammo_magazine/rifle/nt_halter/foxfire)
-	cost = 25
-
-/datum/supply_packs/imports/antienergyshield
-	name = "NTC Anti Energy Shield"
-	contains = list(/obj/item/armor_module/module/eshield/absorbant/energy)
-	cost = 1000
-
-/datum/supply_packs/imports/antiballisticshield
-	name = "KZ Anti Ballsitic Shield"
-	contains = list(/obj/item/armor_module/module/eshield/absorbant/ballistic)
-	cost = 1000
+	cost = 20
 
 /datum/supply_packs/imports/unity_ammo
 	name = "NT105 Unity Revolver Ammo"
@@ -96,49 +91,111 @@
 /datum/supply_packs/medical/nanopaste
 	name = "Nanopaste (x5)"
 	contains = list(
-		/obj/item/stack/nanopaste = 5
+		/obj/item/stack/nanopaste,
+		/obj/item/stack/nanopaste,
+		/obj/item/stack/nanopaste,
+		/obj/item/stack/nanopaste,
+		/obj/item/stack/nanopaste,
 	)
 	cost = 150
 
-/* save until we got faction specific req
-/datum/supply_packs/imports/unity
-	name = "NT105 Unity Revolver"
-	contains = list(/obj/item/weapon/gun/pistol/xmdivider/ntc)
-	cost = 100
+/datum/supply_packs/explosives/explosives_mines_at
+	name = "anti tank mines"
+	notes = "Contains 5 Anti Tank mines"
+	contains = list(/obj/item/storage/box/explosive_mines/antitank)
+	cost = 350
 
-/datum/supply_packs/imports/divider
-	name = "CC/104 Divider Revolver"
-	contains = list(/obj/item/weapon/gun/pistol/xmdivider)
-	cost = 100
-
-/datum/supply_packs/imports/divider
-	name = "CC/104 Divider Revolver incendiary Ammo"
-	contains = list(/obj/item/ammo_magazine/pistol/xmdivider)
-	cost = 3
-
-/datum/supply_packs/imports/divider
-	name = "CC/104 Divider Revolver Armor Piercing Ammo"
-	contains = list(/obj/item/ammo_magazine/pistol/xmdivider/ap)
-	cost = 3
-
-/datum/supply_packs/imports/g22_tranq
-	name = "P-22 Custom Tranq Pistol"
-	contains = list(/obj/item/weapon/gun/pistol/g22/tranq)
-	cost = 200
-
-/datum/supply_packs/imports/g22_tranq_ammo
-	name = "P-22 Custom Pistol Tranq Magazine"
-	contains = list(/obj/item/ammo_magazine/pistol/g22tranq)
-	cost = 3
-
-/datum/supply_packs/imports/moonbeam
-	name = "NTC 'Moonbeam' tranq sniper rifle"
-	contains = list(/obj/item/weapon/gun/rifle/chambered/nonlethal)
+/datum/supply_packs/clothing/dispenser/medical
+	name = "Automedical Dispenser"
+	contains = list(/obj/item/storage/backpack/dispenser/medic)
 	cost = 400
 
-/datum/supply_packs/imports/g22_tranq_ammo
-	name = "P-22 Custom Pistol Tranq Magazine"
-	contains = list(/obj/item/ammo_magazine/rifle/chamberedrifle/tranq)
-	cost = 5
+/datum/supply_packs/engineering/stasispod
+	name = "Standard Stasis Pod"
+	contains = list(/obj/structure/bed/chair/stasis)
+	cost = 25
 
-*/
+/datum/supply_packs/engineering/stasispod/dark
+	name = "Dark Stasis Pod"
+	contains = list(/obj/structure/bed/chair/stasis/dark)
+	cost = 25
+
+/datum/supply_packs/engineering/stasispod/pilot
+	name = "Pilot Stasis Pod"
+	contains = list(/obj/structure/bed/chair/stasis/pilot)
+	cost = 25
+
+/datum/supply_packs/engineering/stasispod/captain
+	name = "Command Stasis Pod"
+	contains = list(/obj/structure/bed/chair/stasis/captain)
+	cost = 25
+
+/datum/supply_packs/engineering/stasispod/sec
+	name = "Security Stasis Pod"
+	contains = list(/obj/structure/bed/chair/stasis/sec)
+	cost = 25
+
+/datum/supply_packs/engineering/stasispod/med
+	name = "Medical Stasis Pod"
+	contains = list(/obj/structure/bed/chair/stasis/med)
+	cost = 25
+
+/datum/supply_packs/engineering/stasispod/explo
+	name = "Explorer Stasis Pod"
+	contains = list(/obj/structure/bed/chair/stasis/explo)
+	cost = 25
+
+/datum/supply_packs/engineering/stasispod/engi
+	name = "Engineering Stasis Pod"
+	contains = list(/obj/structure/bed/chair/stasis/engi)
+	cost = 25
+
+/datum/supply_packs/engineering/stasispod/indus
+	name = "Industrial Stasis Pod"
+	contains = list(/obj/structure/bed/chair/stasis/indust)
+	cost = 25
+
+/datum/supply_packs/engineering/stasispod/red
+	name = "Red Stasis Pod"
+	contains = list(/obj/structure/bed/chair/stasis/red)
+	cost = 25
+
+/datum/supply_packs/imports/antienergyshield
+	name = "NTC Anti Energy Shield"
+	contains = list(/obj/item/armor_module/module/eshield/absorbant/energy)
+	cost = 500
+
+/datum/supply_packs/imports/antiballisticshield
+	name = "KZ Anti Ballsitic Shield"
+	contains = list(/obj/item/armor_module/module/eshield/absorbant/ballistic)
+	cost = 500
+
+/datum/supply_packs/imports/m16/ammo/extended
+	name = "FN M16 Assault Rifle Ammo Extended Mag"
+	contains = list(/obj/item/ammo_magazine/rifle/m16_quadstack)
+	cost = 6
+
+/datum/supply_packs/imports/m16/ammo/drum
+	name = "FN M16 Assault Rifle Ammo Drum"
+	contains = list(/obj/item/ammo_magazine/rifle/m16_cmag)
+	cost = 10
+
+//faction specific things below here.
+
+/datum/supply_packs/imports/antienergyshieldfs
+	name = "NTC Anti Energy Shield (Faction Supply)"
+	contains = list(/obj/item/armor_module/module/eshield/absorbant/energy)
+	faction_lock = list(FACTION_TERRAGOV)
+	cost = 350
+
+/datum/supply_packs/imports/antiballisticshieldfs
+	name = "KZ Anti Ballsitic Shield (Faction Supply)"
+	contains = list(/obj/item/armor_module/module/eshield/absorbant/ballistic)
+	faction_lock = list(FACTION_VSD)
+	cost = 350
+
+/datum/supply_packs/medical/carpotoxin
+	name = "Carpotoxin Bottle"
+	contains = list(/obj/item/reagent_containers/glass/bottle/carpotoxin)
+	faction_lock = list(FACTION_TERRAGOV) //novamed
+	cost = 400

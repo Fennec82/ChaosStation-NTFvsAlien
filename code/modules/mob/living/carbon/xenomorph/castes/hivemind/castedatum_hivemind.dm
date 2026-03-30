@@ -49,7 +49,6 @@
 		/datum/action/ability/xeno_action/teleport,
 		/datum/action/ability/xeno_action/rally_hive/hivemind,
 		/datum/action/ability/activable/xeno/command_minions,
-		/datum/action/ability/xeno_action/psychic_whisper,
 		/datum/action/ability/xeno_action/psychic_influence,
 		/datum/action/ability/xeno_action/psychic_radiance,
 		/datum/action/ability/activable/xeno/impregnate,
@@ -66,6 +65,8 @@
 		/datum/action/ability/activable/xeno/place_pattern,
 		/datum/action/ability/xeno_action/create_edible_jelly,
 		/datum/action/ability/xeno_action/place_stew_pod,
+		/datum/action/ability/activable/xeno/possession,
+/*		/datum/action/ability/activable/xeno/creation,*/// Currently non-operational
 	)
 
 /datum/xeno_caste/hivemind/on_caste_applied(mob/xenomorph)
@@ -86,3 +87,4 @@
 	aura_strength = 4 //Good pheros
 
 	speed = 1.5
+

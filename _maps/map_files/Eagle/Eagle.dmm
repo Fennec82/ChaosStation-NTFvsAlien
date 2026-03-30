@@ -72,12 +72,24 @@
 /area/shuttle/canterbury{
 	name = "The Eagle"
 	})
+"ev" = (
+/obj/machinery/telecomms/server/presets/medical,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
+"eS" = (
+/obj/effect/soundplayer,
+/turf/closed/wall/mainship,
+/area/testroom)
 "fU" = (
 /obj/machinery/vending/armor_supply,
 /turf/open/floor/mainship,
 /area/shuttle/canterbury{
 	name = "The Eagle"
 	})
+"gn" = (
+/obj/machinery/telecomms/server/presets/command,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
 "gp" = (
 /obj/structure/bed/chair/dropship/pilot{
 	dir = 1
@@ -158,6 +170,10 @@
 /area/shuttle/canterbury{
 	name = "The Eagle"
 	})
+"jH" = (
+/obj/machinery/telecomms/server/presets/common,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
 "jR" = (
 /turf/open/space/basic,
 /area/space)
@@ -182,6 +198,10 @@
 /area/shuttle/canterbury{
 	name = "The Eagle"
 	})
+"ly" = (
+/obj/machinery/telecomms/server/presets/alpha,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
 "me" = (
 /turf/closed/wall/mainship,
 /area/shuttle/canterbury{
@@ -204,6 +224,10 @@
 /area/shuttle/canterbury{
 	name = "The Eagle"
 	})
+"nH" = (
+/obj/machinery/telecomms/server/presets/engineering,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
 "nK" = (
 /obj/machinery/light{
 	dir = 4
@@ -213,6 +237,16 @@
 /area/shuttle/canterbury{
 	name = "The Eagle"
 	})
+"nO" = (
+/obj/machinery/status_display,
+/turf/closed/wall/mainship,
+/area/testroom)
+"oC" = (
+/obj/machinery/light/mainship/small{
+	dir = 4
+	},
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
 "pn" = (
 /obj/structure/table/mainship,
 /obj/machinery/door_control{
@@ -243,6 +277,14 @@
 /area/shuttle/canterbury{
 	name = "The Eagle"
 	})
+"sd" = (
+/obj/structure/sign/fixedinplace/evac,
+/turf/closed/wall/mainship,
+/area/testroom)
+"sx" = (
+/obj/machinery/telecomms/bus/preset_four,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
 "tq" = (
 /obj/effect/landmark/start/job/crash/squadmarine,
 /obj/effect/landmark/start/job/crash/squadmarine,
@@ -281,13 +323,24 @@
 /area/shuttle/canterbury{
 	name = "The Eagle"
 	})
+"vr" = (
+/obj/machinery/telecomms/server/presets/charlie,
+/obj/machinery/camera/autoname/mainship,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
 "vD" = (
 /obj/structure/cable,
-/obj/machinery/telecomms/relay/preset/telecomms,
+/obj/machinery/telecomms/allinone,
 /turf/closed/wall/mainship,
 /area/shuttle/canterbury{
 	name = "The Eagle"
 	})
+"vR" = (
+/obj/machinery/light/mainship/small{
+	dir = 1
+	},
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
 "vV" = (
 /obj/effect/landmark/start/job/captain,
 /turf/open/floor/plating/plating_catwalk,
@@ -308,6 +361,13 @@
 /area/shuttle/canterbury{
 	name = "The Eagle"
 	})
+"xH" = (
+/obj/structure/window/framed/mainship/requisitions,
+/obj/machinery/door/firedoor/mainship{
+	dir = 2
+	},
+/turf/open/floor/plating,
+/area/testroom)
 "yh" = (
 /obj/effect/landmark/start/job/synthetic,
 /obj/effect/landmark/start/job/synthetic,
@@ -379,6 +439,29 @@
 	},
 /turf/open/space/transit/atmos,
 /area/space)
+"BW" = (
+/obj/machinery/light/mainship/small{
+	dir = 8
+	},
+/obj/machinery/telecomms/processor/preset_one,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
+"Cc" = (
+/obj/machinery/telecomms/processor/preset_three,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
+"CC" = (
+/obj/machinery/telecomms/bus/preset_three,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
+"Ee" = (
+/obj/machinery/telecomms/receiver/preset_right,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
+"EU" = (
+/obj/machinery/telecomms/relay/preset/telecomms,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
 "Fl" = (
 /obj/effect/landmark/start/job/cmo,
 /turf/open/floor/plating/plating_catwalk,
@@ -421,6 +504,13 @@
 /area/shuttle/canterbury{
 	name = "The Eagle"
 	})
+"HK" = (
+/obj/machinery/light/mainship/small{
+	dir = 8
+	},
+/obj/machinery/telecomms/server/presets/sec,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
 "HV" = (
 /obj/machinery/light{
 	dir = 8
@@ -430,6 +520,14 @@
 /area/shuttle/canterbury{
 	name = "The Eagle"
 	})
+"Jt" = (
+/obj/machinery/telecomms/processor/preset_four,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
+"KD" = (
+/obj/machinery/telecomms/processor/preset_two,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
 "KF" = (
 /obj/machinery/light{
 	dir = 1
@@ -448,6 +546,14 @@
 /area/shuttle/canterbury{
 	name = "The Eagle"
 	})
+"Lw" = (
+/obj/machinery/telecomms/server/presets/bravo,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
+"Ly" = (
+/obj/machinery/telecomms/broadcaster/preset_left,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
 "LK" = (
 /obj/effect/landmark/start/job/squadsmartgunner,
 /obj/effect/landmark/start/job/squadsmartgunner,
@@ -485,6 +591,20 @@
 	},
 /turf/open/space/transit/atmos,
 /area/space)
+"NC" = (
+/obj/machinery/telecomms/server/presets/cas,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
+"NW" = (
+/turf/closed/wall/mainship,
+/area/testroom)
+"Od" = (
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
+"Og" = (
+/obj/machinery/telecomms/server/presets/delta,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
 "PJ" = (
 /obj/structure/shuttle/engine/propulsion/burst/right,
 /turf/open/space/transit/atmos,
@@ -500,6 +620,14 @@
 /area/shuttle/canterbury{
 	name = "The Eagle"
 	})
+"RL" = (
+/obj/machinery/telecomms/hub/preset,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
+"RU" = (
+/obj/machinery/telecomms/server/presets/requisitions,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
 "SO" = (
 /obj/effect/landmark/start/job/crash/squadmarine,
 /obj/effect/landmark/start/job/crash/squadmarine,
@@ -565,6 +693,14 @@
 /area/shuttle/canterbury{
 	name = "The Eagle"
 	})
+"Vx" = (
+/obj/machinery/telecomms/bus/preset_one,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
+"VY" = (
+/obj/machinery/telecomms/receiver/preset_left,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
 "WD" = (
 /obj/structure/ladder/id_linked{
 	id = "eagleladder2";
@@ -580,6 +716,10 @@
 /area/shuttle/canterbury{
 	name = "The Eagle"
 	})
+"XZ" = (
+/obj/machinery/telecomms/bus/preset_two,
+/turf/open/floor/mainship/tcomms,
+/area/testroom)
 "YE" = (
 /obj/machinery/marine_selector/clothes,
 /turf/open/floor/mainship,
@@ -587,7 +727,6 @@
 	name = "The Eagle"
 	})
 "ZI" = (
-/obj/structure/cable,
 /obj/structure/cable,
 /obj/machinery/loadout_vendor,
 /turf/open/floor/plating/plating_catwalk,
@@ -706,11 +845,11 @@ zQ
 zQ
 zQ
 zQ
-zQ
-zQ
-zQ
-zQ
-zQ
+eS
+NW
+NW
+sd
+NW
 zQ
 Nu
 zQ
@@ -746,11 +885,11 @@ zQ
 zQ
 zQ
 zQ
-zQ
-zQ
-zQ
-zQ
-zQ
+NW
+ly
+HK
+RU
+nO
 zQ
 Nu
 zQ
@@ -786,11 +925,11 @@ zQ
 zQ
 zQ
 zQ
-zQ
-zQ
-zQ
-zQ
-zQ
+NW
+Lw
+Od
+gn
+NW
 zQ
 Nu
 zQ
@@ -826,11 +965,11 @@ zQ
 zQ
 zQ
 zQ
-zQ
-zQ
-zQ
-zQ
-zQ
+NW
+vr
+Od
+nH
+NW
 zQ
 Nu
 zQ
@@ -866,11 +1005,11 @@ zQ
 zQ
 zQ
 zQ
-zQ
-zQ
-zQ
-zQ
-zQ
+NW
+Og
+Od
+ev
+NW
 zQ
 Nu
 zQ
@@ -906,11 +1045,11 @@ zQ
 zQ
 zQ
 zQ
-zQ
-zQ
-zQ
-zQ
-zQ
+NW
+jH
+Od
+NC
+NW
 zQ
 Nu
 zQ
@@ -946,11 +1085,11 @@ zQ
 zQ
 zQ
 zQ
-zQ
-zQ
-zQ
-zQ
-zQ
+NW
+Od
+vR
+Ly
+NW
 zQ
 Nu
 zQ
@@ -986,12 +1125,12 @@ zQ
 zQ
 zQ
 zQ
-zQ
-zQ
-zQ
-zQ
-zQ
-zQ
+NW
+VY
+Vx
+BW
+NW
+NW
 Nu
 zQ
 "}
@@ -1026,12 +1165,12 @@ zQ
 zQ
 zQ
 zQ
-zQ
-zQ
-zQ
-zQ
-zQ
-zQ
+NW
+Ee
+XZ
+Od
+KD
+xH
 Nu
 zQ
 "}
@@ -1066,12 +1205,12 @@ zQ
 zQ
 zQ
 zQ
-zQ
-zQ
-zQ
-zQ
-zQ
-zQ
+NW
+Od
+Od
+Od
+RL
+xH
 Nu
 zQ
 "}
@@ -1106,12 +1245,12 @@ zQ
 zQ
 zQ
 zQ
-zQ
-zQ
-zQ
-zQ
-zQ
-zQ
+NW
+Od
+CC
+Od
+Cc
+xH
 Nu
 zQ
 "}
@@ -1146,12 +1285,12 @@ zQ
 zQ
 zQ
 zQ
-zQ
-zQ
-zQ
-zQ
-zQ
-zQ
+NW
+EU
+sx
+oC
+Jt
+xH
 Nu
 zQ
 "}
@@ -1186,12 +1325,12 @@ zQ
 zQ
 zQ
 zQ
-zQ
-zQ
-zQ
-zQ
-zQ
-zQ
+NW
+NW
+NW
+NW
+NW
+NW
 Nu
 zQ
 "}

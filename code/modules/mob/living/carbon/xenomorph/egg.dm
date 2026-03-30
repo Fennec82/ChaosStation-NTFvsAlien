@@ -1,3 +1,6 @@
+///how long egg huggers live when out
+#define EGG_HUGGER_LIFETIME 4 MINUTES
+
 /obj/alien/egg
 	name = "theoretical egg"
 	density = FALSE
@@ -112,6 +115,7 @@
 	playsound(src.loc, 'sound/effects/alien/egg_move.ogg', 25)
 	flick("egg opening", src)
 	var/obj/item/clothing/mask/facehugger/hugger = new hugger_type(null, hivenumber)
+	hugger.lifecycle = EGG_HUGGER_LIFETIME
 	hugger.hand_attach_time = initial(hugger.hand_attach_time) * hand_attach_time_multiplier
 	hugger_type = null
 	addtimer(CALLBACK(hugger, TYPE_PROC_REF(/atom/movable, forceMove), loc), 1 SECONDS)
@@ -119,6 +123,8 @@
 
 /obj/alien/egg/hugger/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage * xeno_attacker.xeno_melee_damage_modifier, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
+		return FALSE
+	if(xeno_attacker.handcuffed)
 		return FALSE
 
 	if(!istype(xeno_attacker))
@@ -178,6 +184,7 @@
 			to_chat(user, span_xenowarning("This one is occupied with a child."))
 		return FALSE
 	if(user)
+		user.dropItemToGround(facehugger)
 		user.visible_message(span_xenowarning("[user] slides [facehugger] back into [src]."),span_xenonotice("You place the child into [src]."))
 	hugger_type = facehugger.type
 	qdel(facehugger)

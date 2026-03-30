@@ -11,6 +11,7 @@
 	width = 7
 	height = 9
 	rechargeTime = 0
+	alarm_loop_type = /datum/looping_sound/looping_launch_announcement_alarm/tadpole
 
 /obj/docking_port/stationary/marine_dropship/minidropship/som
 	name = "SOM Minidropship hangar pad"
@@ -27,13 +28,28 @@
 	rechargeTime = 0
 
 /obj/docking_port/stationary/marine_dropship/minidropship/clf
-	name = "CLF Van Parking Spot"
+	name = "Technical Vehicle Parking Spot"
 	id = SHUTTLE_CLFTADPOLE
-	roundstart_template = /datum/map_template/shuttle/minidropship/old
+	//roundstart_template = /datum/map_template/shuttle/minidropship/clf
+
 
 /obj/docking_port/mobile/marine_dropship/minidropship/clf
-	name = "CLF Van"
+	name = "Technical Van"
 	id = SHUTTLE_CLFTADPOLE
+	dwidth = 0
+	dheight = 0
+	width = 6
+	height = 8
+	rechargeTime = 0
+
+/obj/docking_port/stationary/marine_dropship/minidropship/colmil
+	name = "CM Minidropship Parking Spot"
+	id = SHUTTLE_CMTADPOLE
+	//roundstart_template = /datum/map_template/shuttle/minidropship/colmil
+
+/obj/docking_port/mobile/marine_dropship/minidropship/colmil
+	name = "CM Tadpole"
+	id = SHUTTLE_CMTADPOLE
 	dwidth = 0
 	dheight = 0
 	width = 7
@@ -87,6 +103,16 @@
 /obj/machinery/computer/camera_advanced/shuttle_docker/minidropship/clf
 	name = "CLF Van Controls"
 	shuttleId = SHUTTLE_CLFTADPOLE
+	origin_port_id = SHUTTLE_CLFTADPOLE
+	req_access = null
+	req_one_access = null
+	networks = null
+
+/obj/machinery/computer/camera_advanced/shuttle_docker/minidropship/colmil
+	name = "CM Tadpole navigation computer"
+	shuttleId = SHUTTLE_CMTADPOLE
+	origin_port_id = SHUTTLE_CMTADPOLE
+	req_access = null
 	req_one_access = null
 	networks = null
 
@@ -222,6 +248,8 @@
 		return
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return
+	if(xeno_attacker.handcuffed)
+		return
 	if(HAS_TRAIT_FROM(xeno_attacker, TRAIT_TURRET_HIDDEN, STEALTH_TRAIT))
 		return
 	xeno_attacker.visible_message("[xeno_attacker] begins to slash delicately at the computer",
@@ -327,6 +355,7 @@
 	.["take_off_locked"] = ( !(fly_state == SHUTTLE_ON_GROUND || fly_state == SHUTTLE_ON_SHIP) || shuttle_port?.mode != SHUTTLE_IDLE)
 	.["return_to_ship_locked"] = (fly_state != SHUTTLE_IN_ATMOSPHERE || shuttle_port?.mode != SHUTTLE_IDLE)
 	var/obj/docking_port/mobile/marine_dropship/shuttle = shuttle_port
+	.["takeoff_alarm"] = shuttle?.playing_takeoff_alarm
 	.["equipment_data"] = list()
 	var/element_nbr = 1
 	for(var/X in shuttle?.equipments)
@@ -346,6 +375,12 @@
 			return_to_ship()
 		if("toggle_nvg")
 			toggle_nvg()
+		if("takeoff_alarm")
+			var/obj/docking_port/mobile/marine_dropship/shuttle = shuttle_port
+			if(!shuttle.playing_takeoff_alarm)
+				. = shuttle.start_takeoff_alarm(usr, FALSE) // will fast-track a UI update if successful
+			else
+				. = shuttle.stop_takeoff_alarm(usr, FALSE)
 		if("equip_interact")
 			var/base_tag = text2num(params["equip_interact"])
 			var/obj/docking_port/mobile/marine_dropship/shuttle = shuttle_port
@@ -372,7 +407,7 @@
 		to_chat(owner, span_warning("The shuttle can't move while docked on the planet"))
 		return
 	var/area/landing_area = get_area(remote_eye)
-	if(!(landing_area.area_flags & MARINE_BASE))
+	if(!(landing_area.area_flags & MARINE_BASE) && origin.shuttleId == SHUTTLE_TADPOLE)
 		SEND_GLOBAL_SIGNAL(COMSIG_GLOB_TADPOLE_LANDED_OUT_LZ)
 	origin.shuttle_port.callTime = SHUTTLE_LANDING_CALLTIME
 	origin.next_fly_state = SHUTTLE_ON_GROUND

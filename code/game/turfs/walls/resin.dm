@@ -21,6 +21,7 @@
 	allow_pass_flags = PASS_FIRE
 	///Which hive it belongs to
 	var/hivenumber = XENO_HIVE_NORMAL
+	var/wall_mult = RESIN_WALL_MULT
 
 /turf/closed/wall/resin/add_debris_element()
 	AddElement(/datum/element/debris, null, -40, 8, 0.7)
@@ -32,7 +33,8 @@
 	var/datum/hive_status/hive = GLOB.hive_datums[hivenumber]
 	name = "[hive.prefix][name]"
 	if(hive.color)
-		add_filter("hive_color", 10, outline_filter(2, hive.color))
+		color = gradient(COLOR_BLACK, hive.color, 0.5)
+		add_filter("hive_color", 10, outline_filter(1, hive.color))
 	return INITIALIZE_HINT_LATELOAD
 
 /turf/closed/wall/resin/AfterChange(flags)
@@ -111,7 +113,7 @@
 	max_integrity = 120
 	opacity = FALSE
 	alpha = 150
-	allow_pass_flags = PASS_GLASS
+	allow_pass_flags = PASS_GLASS|PASS_FIRE
 	smoothing_flags = SMOOTH_BITMASK
 	smoothing_groups = list(SMOOTH_GROUP_XENO_STRUCTURES)
 	canSmoothWith = list(SMOOTH_GROUP_XENO_STRUCTURES)
@@ -144,6 +146,8 @@
 
 /turf/closed/wall/resin/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage * xeno_attacker.xeno_melee_damage_modifier, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
+		return
+	if(xeno_attacker.handcuffed)
 		return
 	if(!issamexenohive(xeno_attacker))
 		SEND_SIGNAL(xeno_attacker, COMSIG_XENOMORPH_ATTACK_OBJ, src)
@@ -291,6 +295,7 @@
 	max_upgradable_health = 250
 	soft_armor = list(MELEE = 0, BULLET = 110, LASER = 100, ENERGY = 100, BOMB = 20, BIO = 0, FIRE = 0, ACID = 0) //You aren't damaging this with bullets without alot of AP.
 	filtercolor = COLOR_WALL_BULLETPROOF
+	wall_mult = BULLET_WALL_MULT
 
 /turf/closed/wall/resin/regenerating/special/fireproof
 	name = "fireproof resin wall"
@@ -299,6 +304,7 @@
 	soft_armor = list(MELEE = 0, BULLET = 65, LASER = 75, ENERGY = 75, BOMB = 0, BIO = 0, FIRE = 200, ACID = 0)
 	filtercolor = COLOR_WALL_FIREPROOF
 	allow_pass_flags = NONE // To prevent fire from passing beyond it.
+	wall_mult = FIRE_WALL_MULT
 
 /turf/closed/wall/resin/regenerating/special/hardy
 	name = "hardy resin wall"
@@ -306,3 +312,4 @@
 	max_upgrade_per_tick = 12 //Upgrades faster, but if damaged at all it will be put on cooldown still to help against walling in combat.
 	soft_armor = list(MELEE = 80, BULLET = 30, LASER = 25, ENERGY = 75, BOMB = 80, BIO = 0, FIRE = 0, ACID = 0)
 	filtercolor = COLOR_WALL_HARDY
+	wall_mult = HARDY_WALL_MULT

@@ -1,9 +1,7 @@
 /datum/round_event_control/stock_uptick
 	name = "Supply point increase"
 	typepath = /datum/round_event/stock_uptick
-	weight = 15
-	earliest_start = 30 MINUTES
-	max_occurrences = 10
+	weight = 72
 
 	gamemode_blacklist = list("Crash", "Combat Patrol", "Sensor Capture", "Campaign", "Zombie Crash")
 	/// the faction for the next event to activate
@@ -16,6 +14,8 @@
 	if((faction in SSpoints.supply_points) && !(SSpoints.supply_points[faction] >= 3000))
 		return TRUE
 	for(var/possible_faction in shuffle(SSpoints.supply_points))
+		if(possible_faction == FACTION_NEUTRAL)
+			continue
 		if(SSpoints.supply_points[possible_faction] >= 3000)
 			continue
 		faction = possible_faction
@@ -38,9 +38,10 @@
 	if(points_to_be_added > 1250) //cap the max amount of points at 1250
 		points_to_be_added = 1250
 	SSpoints.add_supply_points(faction, points_to_be_added)
-	if(faction == FACTION_TERRAGOV || faction == FACTION_VSD)
-		priority_announce("Due to an increase in [faction] quarterly revenues, their supply allotment has increased by [points_to_be_added] points.")
+	SSpoints.add_dropship_points(faction, points_to_be_added)
+	if(faction == FACTION_TERRAGOV || faction == FACTION_VSD || faction == FACTION_NANOTRASEN)
+		minor_announce("Due to an increase in [faction] quarterly revenues, their supply allotment has increased by [points_to_be_added] points.", should_play_sound = FALSE)
 	else
-		priority_announce("Due to an increase in anonymous donations to [faction], their supply allotment has increased by [points_to_be_added] points.")
+		minor_announce("Due to an increase in anonymous donations to [faction], their supply allotment has increased by [points_to_be_added] points.", should_play_sound = FALSE)
 
 	qdel(src)

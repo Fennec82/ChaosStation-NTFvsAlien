@@ -5,8 +5,20 @@
 	/// Name of the subsystem - you must change this
 	name = "fire coderbus"
 
-	/// Order of initialization. Higher numbers are initialized first, lower numbers later. Use or create defines such as [INIT_ORDER_DEFAULT] so we can see the order in one file.
-	var/init_order = INIT_ORDER_DEFAULT
+	/// Determines which subsystems this subsystem is dependent on to initialize. Will initialize after all specified subsystems.
+	/// If init_stage is earlier than a dependent subsystem, will throw an error and push the init stage forward to that subsystem.
+	/// Usage: Put the typepaths of the subsystems that need to init before this one in this list.
+	var/list/dependencies = list()
+
+	/// The inverse of the dependencies. Can be set manually, but will also get evaluated at runtime. Turns into a list of instances at runtime.
+	/// Usage: Put the typepaths of the subsystems that need to init after this one in this list.
+	var/list/dependents
+
+	/// ID of the subsystem. Set automatically when the dependency graph is evaluated. Used primarily in determining order.
+	var/ordering_id = 0
+
+	/// **Do not modify.** Automatically set when the dependency graph is evaluated. Similar to ordering_id, but evaluated after init_stage.
+	var/init_order = 0
 
 	/// Time to wait (in deciseconds) between each call to fire(). Must be a positive integer.
 	var/wait = 20
@@ -139,6 +151,8 @@
 	var/datum/controller/subsystem/queue_node
 	var/queue_node_priority
 	var/queue_node_flags
+	if(Master.iteration < 3)
+		log_world("MC: enqueue() queueing [logdetails(src)]([stat_entry()]) on MC iteration [Master.iteration].  queue_head = [logdetails(Master.queue_head)], last_type_processed = [logdetails(Master.last_type_processed)].")
 
 	for (queue_node = Master.queue_head; queue_node; queue_node = queue_node.queue_next)
 		queue_node_priority = queue_node.queued_priority
@@ -190,6 +204,8 @@
 		queue_prev = queue_node.queue_prev
 		queue_node.queue_prev = src
 
+	if(Master.iteration < 3)
+		log_world("MC: enqueue() just queued [logdetails(src)]([stat_entry()]) on MC iteration [Master.iteration].  queue_head = [logdetails(Master.queue_head)], last_type_processed = [logdetails(Master.last_type_processed)], src.queue_next = [logdetails(queue_next)], src.queue_prev = [logdetails(queue_prev)].")
 
 /datum/controller/subsystem/proc/dequeue()
 	if (queue_next)

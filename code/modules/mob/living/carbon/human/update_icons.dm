@@ -352,7 +352,7 @@ GLOBAL_LIST_EMPTY(damage_icon_parts)
 		if(istype(part,/datum/limb/head) && !(part.limb_status & LIMB_DESTROYED))
 			has_head = 1
 
-		if(part.limb_status & LIMB_DESTROYED)
+		if(part.limb_status & LIMB_DESTROYED ||	part.invisible)
 			icon_key = "[icon_key]0"
 		else if(part.limb_status & LIMB_ROBOT)
 			icon_key = "[icon_key]2"
@@ -380,7 +380,8 @@ GLOBAL_LIST_EMPTY(damage_icon_parts)
 		//Robotic limbs are handled in get_icon() so all we worry about are missing or dead limbs.
 		//No icon stored, so we need to start with a basic one.
 		var/datum/limb/chest = get_limb("chest")
-		base_icon = chest.get_icon(race_icon, physique_key)
+		if(!chest.invisible)
+			base_icon = chest.get_icon(race_icon, physique_key)
 
 		if(chest.limb_status & LIMB_NECROTIZED)
 			base_icon.ColorTone(necrosis_color_mod)
@@ -390,7 +391,7 @@ GLOBAL_LIST_EMPTY(damage_icon_parts)
 
 			var/icon/temp //Hold the bodypart icon for processing.
 
-			if(part.limb_status & LIMB_DESTROYED)
+			if(part.limb_status & LIMB_DESTROYED ||	part.invisible)
 				continue
 
 			if(istype(part, /datum/limb/chest)) //already done above
@@ -454,8 +455,8 @@ GLOBAL_LIST_EMPTY(damage_icon_parts)
 		eyes.Blend(rgb(r_eyes, g_eyes, b_eyes), ICON_ADD)
 		stand_icon.Blend(eyes, ICON_OVERLAY)
 
-		//Mouth	(lipstick!)
-		if(makeup_style && (species?.species_flags & HAS_LIPS))	//skeletons are allowed to wear lipstick no matter what you think, agouri.
+		//Face (Face paint)
+		if(makeup_style && (species?.species_flags & HAS_LIPS))	//skeletons are allowed to wear face paint no matter what you think, agouri.
 			stand_icon.Blend(new/icon('icons/mob/human_face.dmi', "camo_[makeup_style]_s"), ICON_OVERLAY)
 
 	/*NTF Removal

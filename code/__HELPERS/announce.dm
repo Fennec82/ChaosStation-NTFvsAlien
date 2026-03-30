@@ -44,7 +44,7 @@
 	else
 		finalized_alert = faction_alert_default_span(jointext(alert_strings, ""))
 
-	return finalized_alert
+	return span_icannounce(finalized_alert)
 
 /**
  * Make a priority announcement to a target
@@ -167,11 +167,15 @@
  * * alert - optional, alert or notice?
  * * receivers - a list of all players to send the message to
  */
-/proc/minor_announce(message, title = "Attention:", alert, list/receivers = GLOB.alive_human_list, should_play_sound = FALSE)
+/proc/minor_announce(message, title = "Attention:", alert, list/receivers = GLOB.human_mob_list | GLOB.observer_list, should_play_sound = FALSE)
 	if(!message)
 		return
 
-	var/sound/S = alert ? sound('sound/misc/notice1.ogg') : sound('sound/misc/notice2.ogg')
+	var/sound/S
+	if(istype(alert, /sound))
+		S = alert
+	else
+		S = alert ? sound('sound/misc/notice1.ogg') : sound('sound/misc/notice2.ogg')
 	S.channel = CHANNEL_ANNOUNCEMENTS
 	for(var/mob/M AS in receivers)
 		if(!isnewplayer(M) && !isdeaf(M))

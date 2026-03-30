@@ -90,14 +90,12 @@
 	damage = 55
 	damage_type = STAMINA
 	shrapnel_chance = 0
-	plasma_drain = 14
 
 /datum/ammo/bullet/shotgun/flechette/flechette_spread/rubber
 	name = "additional rubber pellet"
 	damage = 44
 	damage_type = STAMINA
 	shrapnel_chance = 0
-	plasma_drain = 11
 
 /datum/ammo/bullet/shotgun/buckshot
 	name = "shotgun buckshot shell"
@@ -157,20 +155,20 @@
 	damage_falloff = 0.5
 	penetration = 0
 
-/datum/ammo/bullet/shotgun/frag/drop_nade(turf/T)
-	explosion(T, weak_impact_range = 2, tiny = TRUE, explosion_cause=src)
+/datum/ammo/bullet/shotgun/frag/drop_nade(turf/target_turf, atom/movable/projectile/proj)
+	explosion(target_turf, weak_impact_range = 2, tiny = TRUE, explosion_cause=src)
 
 /datum/ammo/bullet/shotgun/frag/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
-	drop_nade(get_turf(target_mob))
+	drop_nade(get_turf(target_mob), proj)
 
 /datum/ammo/bullet/shotgun/frag/on_hit_obj(obj/target_obj, atom/movable/projectile/proj)
-	drop_nade(target_obj.density ? get_step_towards(target_obj, proj) : target_obj.loc)
+	drop_nade(target_obj.density ? get_step_towards(target_obj, proj) : target_obj.loc, proj)
 
 /datum/ammo/bullet/shotgun/frag/on_hit_turf(turf/target_turf, atom/movable/projectile/proj)
-	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf)
+	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf, proj)
 
 /datum/ammo/bullet/shotgun/frag/do_at_max_range(turf/target_turf, atom/movable/projectile/proj)
-	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf)
+	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf, proj)
 
 /datum/ammo/bullet/shotgun/frag/frag_spread
 	name = "additional frag shell"
@@ -202,9 +200,18 @@
 	bonus_projectiles_scatter = 4
 	accuracy_variation = 9
 	accurate_range = 3
-	max_range = 8
+	max_range = 6
 	damage = 55
-	damage_falloff = 5
+	damage_falloff = 7
+
+/datum/ammo/bullet/shotgun/heavy_spread
+	name = "additional buckshot"
+	icon_state = "buckshot"
+	accuracy_variation = 9
+	accurate_range = 3
+	max_range = 6
+	damage = 50
+	damage_falloff = 7
 
 /datum/ammo/bullet/shotgun/heavy_buckshot/on_hit_turf(turf/target_turf, atom/movable/projectile/proj)
 	if(iswallturf(target_turf))
@@ -228,12 +235,12 @@
 	hud_state = "shotgun_slug"
 	ammo_behavior_flags = AMMO_BALLISTIC
 	shell_speed = 3
-	max_range = 6
-	damage = 110
+	max_range = 13
+	damage = 120
 	penetration = 25
 	sundering = 9
-	damage_falloff = 10
-	var/vehicle_stun_duration = 2 SECONDS
+	damage_falloff = 1.5
+	var/vehicle_stun_duration = 1.5 SECONDS
 
 /datum/ammo/bullet/shotgun/barrikada/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
 	staggerstun(target_mob, proj, slowdown = 2, stagger = 3 SECONDS, knockback = 2)
@@ -260,15 +267,6 @@
 		var/turf/closed/wall/affected_turf = target_turf
 		affected_turf.take_damage(damage * 4, BRUTE, BULLET)
 
-/datum/ammo/bullet/shotgun/heavy_spread
-	name = "additional buckshot"
-	icon_state = "buckshot"
-	accuracy_variation = 9
-	accurate_range = 3
-	max_range = 10
-	damage = 60
-	damage_falloff = 4
-
 /datum/ammo/bullet/shotgun/heavy_flechette
 	name = "heavy flechette shell"
 	handful_icon_state = "heavy_shotgun_flechette"
@@ -279,11 +277,14 @@
 	bonus_projectiles_amount = 2
 	bonus_projectiles_scatter = 3
 	accuracy_variation = 8
-	max_range = 15
-	damage = 55
-	damage_falloff = 0.5
+	max_range = 10
+	damage = 65
 	penetration = 20
 	sundering = 15
+
+/datum/ammo/bullet/shotgun/flechette/heavy_flechette_spread
+	name = "additional flechette"
+	damage = 55
 
 /datum/ammo/bullet/shotgun/heavy_flechette/on_hit_obj(obj/target_obj, atom/movable/projectile/proj)
 	if(istype(target_obj, /obj/machinery/door))
@@ -294,11 +295,6 @@
 	if(iswallturf(target_turf))
 		var/turf/closed/wall/affected_turf = target_turf
 		affected_turf.take_damage(damage * 4, BRUTE, BULLET)
-
-/datum/ammo/bullet/shotgun/flechette/heavy_flechette_spread
-	name = "additional flechette"
-	damage = 50
-	damage_falloff = 4
 
 /datum/ammo/bullet/shotgun/sx16_flechette
 	name = "shotgun flechette shell"
@@ -339,7 +335,7 @@
 	bonus_projectiles_amount = 4
 	bonus_projectiles_scatter = 2
 	max_range = 15
-	damage = 17
+	damage = 40
 	damage_falloff = 0.25
 	penetration = 15
 	sundering = 1.5
@@ -354,8 +350,8 @@
 	ammo_behavior_flags = AMMO_BALLISTIC
 	shell_speed = 3
 	max_range = 15
-	damage = 60
-	penetration = 30
+	damage = 80
+	penetration = 20
 	sundering = 3.5
 
 /datum/ammo/bullet/shotgun/tx15_slug/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
@@ -401,7 +397,7 @@
 	penetration = 30
 
 /datum/ammo/bullet/shotgun/mbx900_tracker/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
-	target_mob.AddComponent(/datum/component/dripping, DRIP_ON_TIME, 60 SECONDS, 3 SECONDS)
+	target_mob.AddComponent(/datum/component/dripping, DRIP_ON_TIME, 60 SECONDS, 1 SECONDS)
 
 /datum/ammo/bullet/shotgun/tracker
 	name = "shotgun tracker shell"
@@ -414,7 +410,7 @@
 	penetration = 10
 
 /datum/ammo/bullet/shotgun/tracker/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
-	target_mob.AddComponent(/datum/component/dripping, DRIP_ON_TIME, 60 SECONDS, 3 SECONDS)
+	target_mob.AddComponent(/datum/component/dripping, DRIP_ON_TIME, 60 SECONDS, 1 SECONDS)
 
 //I INSERT THE SHELLS IN AN UNKNOWN ORDER
 /datum/ammo/bullet/shotgun/blank

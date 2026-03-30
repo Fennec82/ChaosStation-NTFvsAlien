@@ -133,7 +133,13 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 				LAZYSET(channels, ch_name, keyslot2.channels[ch_name])
 
 	for(var/ch_name in channels)
-		secure_radio_connections[ch_name] = add_radio(src, GLOB.radiochannels[ch_name])
+		if(ch_name in GLOB.radiochannels)
+			secure_radio_connections += ch_name
+			secure_radio_connections[ch_name] = add_radio(src, GLOB.radiochannels[ch_name])
+		else
+			log_runtime("[ch_name] not found in GLOB.radiochannels!")
+			if(GLOB.radiochannels)
+				log_runtime("GLOB.radiochannels = [json_encode(GLOB.radiochannels)]")
 
 	/// only headsets autoupdate squads cuz im lazy and dont want to redo this proc
 	if(keyslot?.custom_squad_factions || keyslot2?.custom_squad_factions)
@@ -194,6 +200,10 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	. = ..()
 	if(faction == FACTION_SOM)
 		camera = new /obj/machinery/camera/headset/som(src)
+	else if(faction == FACTION_VSD)
+		camera = new /obj/machinery/camera/headset/kz(src)
+	else if(faction == FACTION_CLF)
+		camera = new /obj/machinery/camera/headset/clf(src)
 	else
 		camera = new(src)
 
@@ -307,6 +317,12 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 /obj/item/radio/headset/mainship/proc/update_minimap_icon()
 	SIGNAL_HANDLER
 	SSminimaps.remove_marker(wearer)
+	if(locator_disabled_timer || wearer.stat == DEAD)
+		if(camera.status)
+			camera.toggle_cam(null, FALSE)
+	else
+		if(headset_hud_on && wearer.stat != DEAD && !(camera.status))
+			camera.toggle_cam(null, FALSE)
 	if(!wearer.job || !wearer.job.minimap_icon || locator_disabled_timer)
 		return
 	var/marker_flags = initial(minimap_type.marker_flags)
@@ -474,6 +490,8 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 
 /obj/item/radio/headset/mainship/marine
 	keyslot = /obj/item/encryptionkey/general
+	///Is designated as the squad leader, ensures correct radio channels
+	var/squad_leader = FALSE
 
 /obj/item/radio/headset/mainship/marine/Initialize(mapload, datum/squad/squad, rank)
 	if(squad)
@@ -496,6 +514,12 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 			keyslot2 = /obj/item/encryptionkey/med
 		name = dat + " radio headset"
 	return ..()
+
+/obj/item/radio/headset/mainship/marine/recalculateChannels()
+	. = ..()
+	if(squad_leader)
+		channels[RADIO_CHANNEL_COMMAND] = TRUE
+		secure_radio_connections[RADIO_CHANNEL_COMMAND] = add_radio(src, GLOB.radiochannels[RADIO_CHANNEL_COMMAND])
 
 /obj/item/radio/headset/mainship/marine/alpha
 	name = "marine alpha radio headset"
@@ -624,11 +648,12 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	keyslot2 = /obj/item/encryptionkey/sec
 
 /obj/item/radio/headset/mainship/marine/pmc
-	name = "pmc radio headset"
+	name = "AC radio headset"
 	icon_state = "headset_marine_generic"
 	keyslot = /obj/item/encryptionkey/PMC
-	keyslot2 = /obj/item/encryptionkey/mcom
+	keyslot2 = /obj/item/encryptionkey/general
 	frequency = FREQ_PMC
+	faction = FACTION_NANOTRASEN
 
 /obj/item/radio/headset/mainship/marine/icc
 	name = "colonial militia headset"
@@ -639,7 +664,7 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	minimap_type = /datum/action/minimap/icc
 
 /obj/item/radio/headset/mainship/vsd
-	name = "kaizoku headset"
+	name = "kaizoku corporation headset"
 	icon_state = "headset_marine_generic"
 	keyslot = /obj/item/encryptionkey/vsd
 	frequency = FREQ_VSD
@@ -709,11 +734,6 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	name = "retirement home headset"
 	keyslot = /obj/item/encryptionkey/retired
 	frequency = FREQ_RETIRED
-
-/obj/item/radio/headset/mainship/vsd
-	name = "kaizoku corporation headset"
-	keyslot = /obj/item/encryptionkey/vsd
-	frequency = FREQ_VSD
 
 /obj/item/radio/headset/distress/erp
 	name = "prankster headset"

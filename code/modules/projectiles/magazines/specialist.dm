@@ -335,12 +335,14 @@
 
 //VSD RPG
 
+/obj/item/ammo_magazine/rocket/vsd
+	reload_delay = 2 SECONDS
+
 /obj/item/ammo_magazine/rocket/vsd/he
 	name = "\improper 84mm HE 'Anti-Personnel' rocket"
 	desc = "84mm High Explosive Anti Personnel case. Designed for clearing out enemy personnel with a bang."
 	icon_state = "c153_he"
 	default_ammo = /datum/ammo/rocket/som
-	reload_delay = 2 SECONDS
 	bonus_overlay = "c153_he"
 
 /obj/item/ammo_magazine/rocket/vsd/incendiary
@@ -436,8 +438,6 @@
 /obj/item/ammo_magazine/rifle/pepperball/pepperball_mini
 	name = "small pepperball canister (SAN balls)"
 	desc = "A small canister for use with the miniature pepperball gun."
-	icon = 'icons/obj/items/ammo/misc.dmi'
-	icon_state = "pepperball_mini"
 	default_ammo = /datum/ammo/bullet/pepperball/pepperball_mini
 	max_rounds = 20
 	w_class = WEIGHT_CLASS_SMALL

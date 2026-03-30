@@ -1,19 +1,19 @@
 #define SKILLSID "skills-[unarmed]-[melee_weapons]\
 -[combat]-[pistols]-[shotguns]-[rifles]-[smgs]-[heavy_weapons]-[smartgun]\
--[engineer]-[construction]-[leadership]-[medical]-[surgery]-[pilot]-[police]-[powerloader]-[large_vehicle]-[mech]-[stamina]"
+-[engineer]-[construction]-[leadership]-[medical]-[surgery]-[pilot]-[police]-[powerloader]-[large_vehicle]-[mech]-[stamina]-[sex]"
 
 #define SKILLSIDSRC(S) "skills-[S.unarmed]-[S.melee_weapons]\
 -[S.combat]-[S.pistols]-[S.shotguns]-[S.rifles]-[S.smgs]-[S.heavy_weapons]-[S.smartgun]\
--[S.engineer]-[S.construction]-[S.leadership]-[S.medical]-[S.surgery]-[S.pilot]-[S.police]-[S.powerloader]-[S.large_vehicle]-[S.mech]-[S.stamina]"
+-[S.engineer]-[S.construction]-[S.leadership]-[S.medical]-[S.surgery]-[S.pilot]-[S.police]-[S.powerloader]-[S.large_vehicle]-[S.mech]-[S.stamina]-[S.sex]"
 
 /proc/getSkills(unarmed = 0, melee_weapons = 0,\
 combat = 0, pistols = 0, shotguns = 0, rifles = 0, smgs = 0, heavy_weapons = 0, smartgun = 0,\
-engineer = 0, construction = 0, leadership = 0, medical = 0, surgery = 0, pilot = 0, police = 0, powerloader = 0, large_vehicle = 0, mech = 0, stamina = 0)
+engineer = 0, construction = 0, leadership = 0, medical = 0, surgery = 0, pilot = 0, police = 0, powerloader = 0, large_vehicle = 0, mech = 0, stamina = 0, sex = 0)
 	. = locate(SKILLSID)
 	if(!.)
 		. = new /datum/skills(unarmed, melee_weapons,\
 			combat, pistols, shotguns, rifles, smgs, heavy_weapons, smartgun,\
-			engineer, construction, leadership, medical, surgery, pilot, police, powerloader, large_vehicle, mech, stamina)
+			engineer, construction, leadership, medical, surgery, pilot, police, powerloader, large_vehicle, mech, stamina, sex)
 
 /proc/getSkillsType(skills_type = /datum/skills)
 	var/datum/skills/new_skill = skills_type
@@ -37,6 +37,7 @@ engineer = 0, construction = 0, leadership = 0, medical = 0, surgery = 0, pilot 
 	var/large_vehicle = initial(new_skill.large_vehicle)
 	var/stamina = initial(new_skill.stamina)
 	var/mech = initial(new_skill.mech)
+	var/sex = initial(new_skill.sex)
 	. = locate(SKILLSID)
 	if(!.)
 		. = new skills_type
@@ -68,11 +69,11 @@ engineer = 0, construction = 0, leadership = 0, medical = 0, surgery = 0, pilot 
 	var/mech = SKILL_MECH_DEFAULT
 	///Effects stamina regen rate and regen delay
 	var/stamina = SKILL_STAMINA_DEFAULT
-
+	var/sex = SKILL_SEX_DEFAULT
 
 /datum/skills/New(unarmed, melee_weapons,\
 combat, pistols, shotguns, rifles, smgs, heavy_weapons, smartgun,\
-engineer, construction, leadership, medical, surgery, pilot, police, powerloader, large_vehicle, mech, stamina)
+engineer, construction, leadership, medical, surgery, pilot, police, powerloader, large_vehicle, mech, stamina, sex)
 	if(!isnull(unarmed))
 		src.unarmed = unarmed
 	if(!isnull(melee_weapons))
@@ -113,12 +114,14 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 		src.mech = mech
 	if(!isnull(stamina))
 		src.stamina = stamina
+	if(!isnull(sex))
+		src.sex = sex
 	tag = SKILLSIDSRC(src)
 
 /// returns/gets a new skills datum with values changed according to the args passed
 /datum/skills/proc/modifyRating(unarmed, melee_weapons,\
 combat, pistols, shotguns, rifles, smgs, heavy_weapons, smartgun,\
-engineer, construction, leadership, medical, surgery, pilot, police, powerloader, large_vehicle, mech, stamina)
+engineer, construction, leadership, medical, surgery, pilot, police, powerloader, large_vehicle, mech, stamina, sex)
 	return getSkills(src.unarmed+unarmed,\
 	src.melee_weapons+melee_weapons,\
 	src.combat+combat,\
@@ -138,7 +141,8 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 	src.powerloader+powerloader,\
 	src.large_vehicle+large_vehicle,\
 	src.mech+mech,\
-	src.stamina+stamina)
+	src.stamina+stamina,\
+	src.sex+sex)
 
 /// acts as [/proc/modifyRating] but instead modifies all values rather than several specific ones
 /datum/skills/proc/modifyAllRatings(difference)
@@ -161,12 +165,13 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 	src.powerloader+difference,\
 	src.large_vehicle+difference,\
 	src.mech+difference,\
-	src.stamina+difference)
+	src.stamina+difference,\
+	src.sex+difference)
 
 /// acts as [/proc/modifyRating] but sets the rating directly rather than modify it
 /datum/skills/proc/setRating(unarmed, melee_weapons,\
 combat, pistols, shotguns, rifles, smgs, heavy_weapons, smartgun,\
-engineer, construction, leadership, medical, surgery, pilot, police, powerloader, large_vehicle, mech, stamina)
+engineer, construction, leadership, medical, surgery, pilot, police, powerloader, large_vehicle, mech, stamina, sex)
 	return getSkills((isnull(unarmed) ? src.unarmed : unarmed),\
 		(isnull(melee_weapons) ? src.melee_weapons : melee_weapons),\
 		(isnull(combat) ? src.combat : combat),\
@@ -186,7 +191,8 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 		(isnull(powerloader) ? src.powerloader : powerloader),\
 		(isnull(large_vehicle) ? src.large_vehicle : large_vehicle),\
 		(isnull(mech) ? src.mech : mech),\
-		(isnull(stamina) ? src.stamina : stamina))
+		(isnull(stamina) ? src.stamina : stamina),\
+		(isnull(sex) ? src.sex : sex))
 
 /datum/skills/vv_edit_var(var_name, var_value)
 	if(var_name == NAMEOF(src, tag))
@@ -227,14 +233,8 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 		SKILL_LARGE_VEHICLE = large_vehicle,
 		SKILL_MECH = mech,
 		SKILL_STAMINA = stamina,
+		SKILL_SEX = sex,
 	)
-
-/datum/skills/slut
-	name = SQUAD_SLUT
-	medical = SKILL_MEDICAL_NOVICE //gotta keep that puss tended
-	combat = SKILL_COMBAT_DEFAULT //can still use guns
-	construction = SKILL_CONSTRUCTION_METAL //build a cum shack
-	stamina = SKILL_STAMINA_TRAINED //fucking is hard work
 
 /datum/skills/civilian
 	name = "Civilian"
@@ -250,10 +250,11 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 	medical = SKILL_MEDICAL_NOVICE
 
 /datum/skills/civilian/worker
-	name = "Survivor"
+	name = "Worker"
 	combat = SKILL_COMBAT_UNTRAINED
 	pistols = SKILL_PISTOLS_TRAINED
-	medical = SKILL_MEDICAL_COMPETENT
+	medical = SKILL_MEDICAL_PRACTICED
+	surgery = SKILL_SURGERY_TRAINED
 	construction = SKILL_CONSTRUCTION_MASTER
 	engineer = SKILL_ENGINEER_ENGI
 	powerloader = SKILL_POWERLOADER_MASTER
@@ -277,7 +278,7 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 
 /datum/skills/civilian/survivor/scientist
 	name = "Survivor Scientist"
-	medical = SKILL_MEDICAL_PRACTICED
+	medical = SKILL_MEDICAL_EXPERT // Survivor scientists cant do science??
 	surgery = SKILL_SURGERY_PROFESSIONAL
 	combat = SKILL_COMBAT_UNTRAINED
 
@@ -312,7 +313,7 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 	powerloader = SKILL_POWERLOADER_DABBLING
 
 /datum/skills/combat_engineer/pmc
-	name = "PMC Engineer"
+	name = "AC Engineer"
 	unarmed = SKILL_UNARMED_TRAINED
 	medical = SKILL_MEDICAL_NOVICE
 	stamina = SKILL_STAMINA_TRAINED
@@ -320,8 +321,9 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 /datum/skills/combat_medic
 	name = SQUAD_CORPSMAN
 	leadership = SKILL_LEAD_BEGINNER
-	medical = SKILL_MEDICAL_PRACTICED
-	surgery = SKILL_SURGERY_TRAINED
+	medical = SKILL_MEDICAL_COMPETENT
+	surgery = SKILL_SURGERY_PROFESSIONAL
+	sex = SKILL_SEX_TRAINED //Healslut
 
 /datum/skills/combat_medic/crafty
 	name = "Crafty Combat Medic"
@@ -330,7 +332,7 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 	surgery = SKILL_SURGERY_PROFESSIONAL
 
 /datum/skills/combat_medic/pmc
-	name = "PMC Medic"
+	name = "AC Medic"
 	unarmed = SKILL_UNARMED_TRAINED
 	engineer = SKILL_ENGINEER_METAL
 	construction = SKILL_ENGINEER_METAL
@@ -399,7 +401,7 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 	engineer = SKILL_ENGINEER_MASTER
 	construction = SKILL_CONSTRUCTION_MASTER
 	combat = SKILL_COMBAT_UNTRAINED
-	medical = SKILL_MEDICAL_COMPETENT
+	medical = SKILL_MEDICAL_EXPERT // Research is a valuable skill, lets let them do that too
 	unarmed = SKILL_UNARMED_MASTER
 	surgery = SKILL_SURGERY_PROFESSIONAL
 	pilot = SKILL_PILOT_TRAINED
@@ -420,28 +422,9 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 	combat = SKILL_COMBAT_TRAINED
 	smartgun = SKILL_SMART_TRAINED
 
-/datum/skills/ceo
-	name = CHIEF_EXECUTIVE_OFFICER
-	leadership = SKILL_LEAD_MASTER
-	police = SKILL_POLICE_MP
-	medical = SKILL_MEDICAL_MASTER
-	surgery = SKILL_SURGERY_MASTER
-	engineer = SKILL_ENGINEER_ENGI
-	construction = SKILL_CONSTRUCTION_ADVANCED
-	powerloader = SKILL_POWERLOADER_MASTER
-	unarmed = SKILL_UNARMED_MASTER
-	melee_weapons = SKILL_MELEE_SUPER
-	combat = SKILL_COMBAT_TRAINED
-	pistols = SKILL_PISTOLS_TRAINED
-	shotguns = SKILL_SHOTGUNS_TRAINED
-	rifles = SKILL_RIFLES_TRAINED
-	smgs = SKILL_SMGS_TRAINED
-	heavy_weapons = SKILL_HEAVY_WEAPONS_TRAINED
-	smartgun = SKILL_SMART_TRAINED
-
 /datum/skills/fo
 	name = FIELD_COMMANDER
-	engineer = SKILL_ENGINEER_ENGI //to fix CIC apc.
+	engineer = SKILL_ENGINEER_PLASTEEL //to fix CIC apc. NTF change: ENGI -> PLASTEEL
 	construction = SKILL_CONSTRUCTION_PLASTEEL
 	leadership = SKILL_LEAD_MASTER
 	medical = SKILL_MEDICAL_PRACTICED
@@ -487,12 +470,11 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 /datum/skills/so
 	name = STAFF_OFFICER
 	engineer = SKILL_ENGINEER_ENGI
-	construction = SKILL_CONSTRUCTION_PLASTEEL
-	engineer = SKILL_ENGINEER_PLASTEEL
-	leadership = SKILL_LEAD_EXPERT
+	construction = SKILL_CONSTRUCTION_ADVANCED //Fortify cic for the impending doom
+	leadership = SKILL_LEAD_MASTER
 	medical = SKILL_MEDICAL_PRACTICED
 	surgery = SKILL_SURGERY_AMATEUR
-	powerloader = SKILL_POWERLOADER_TRAINED
+	powerloader = SKILL_POWERLOADER_PRO
 	police = SKILL_POLICE_MP
 	smartgun = SKILL_SMART_TRAINED
 
@@ -555,7 +537,7 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 	powerloader = SKILL_POWERLOADER_MASTER
 
 /datum/skills/pmc
-	name = "PMC Private"
+	name = "AC Private"
 	construction = SKILL_CONSTRUCTION_METAL
 	engineer = SKILL_ENGINEER_METAL
 	unarmed = SKILL_UNARMED_TRAINED
@@ -616,7 +598,7 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 	heavy_weapons = SKILL_HEAVY_WEAPONS_TRAINED
 
 /datum/skills/sl/pmc
-	name = "PMC Leader"
+	name = "AC Leader"
 	unarmed = SKILL_UNARMED_MP
 	melee_weapons = SKILL_MELEE_TRAINED
 	medical = SKILL_MEDICAL_PRACTICED
@@ -665,7 +647,7 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 	smartgun = SKILL_SMART_TRAINED
 
 /datum/skills/specialist/pmc
-	name = "PMC Specialist"
+	name = "AC Specialist"
 	combat = SKILL_COMBAT_TRAINED
 	melee_weapons = SKILL_MELEE_SUPER
 	pistols = SKILL_PISTOLS_TRAINED
@@ -693,7 +675,7 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 	leadership = SKILL_LEAD_BEGINNER
 
 /datum/skills/smartgunner/pmc
-	name = "PMC Smartgunner"
+	name = "AC Smartgunner"
 	unarmed = SKILL_UNARMED_MP
 	engineer = SKILL_ENGINEER_METAL
 	construction = SKILL_CONSTRUCTION_METAL

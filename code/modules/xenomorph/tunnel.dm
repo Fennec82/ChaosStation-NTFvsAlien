@@ -20,8 +20,6 @@ TUNNEL
 	xeno_structure_flags = IGNORE_WEED_REMOVAL
 	///Description added by the hivelord.
 	var/tunnel_desc = ""
-	///What hivelord created that tunnel. Can be null
-	var/mob/living/carbon/xenomorph/hivelord/creator = null
 
 /obj/structure/xeno/tunnel/Initialize(mapload, _hivenumber)
 	. = ..()
@@ -33,32 +31,22 @@ TUNNEL
 	var/area/tunnel_area = get_area(src)
 	if(tunnel_area.area_flavor == AREA_FLAVOR_URBAN && !SSticker.HasRoundStarted())
 		icon_state = "manhole_open[rand(1,3)]"
+	tunnel_desc = "[get_area(src)] (X: [x], Y: [y])"
 
 /obj/structure/xeno/tunnel/Destroy()
 	var/turf/drop_loc = get_turf(src)
 	for(var/atom/movable/thing AS in contents) //Empty the tunnel of contents
 		thing.forceMove(drop_loc)
 
-	if(!QDELETED(creator))
-		to_chat(creator, span_xenoannounce("You sense your [name] at [tunnel_desc] has been destroyed!") ) //Alert creator
-
 	xeno_message("Hive tunnel [name] at [tunnel_desc] has been destroyed!", "xenoannounce", 5, hivenumber) //Also alert hive because tunnels matter.
 
 	LAZYREMOVE(GLOB.xeno_tunnels_by_hive[hivenumber], src)
-	if(creator)
-		creator.tunnels -= src
-	creator = null
 
 	for(var/datum/atom_hud/xeno_tactical/xeno_tac_hud in GLOB.huds) //HUD clean up
 		xeno_tac_hud.remove_from_hud(src)
 	SSminimaps.remove_marker(src)
 
 	return ..()
-
-///Signal handler for creator destruction to clear reference
-/obj/structure/xeno/tunnel/proc/clear_creator()
-	SIGNAL_HANDLER
-	creator = null
 
 /obj/structure/xeno/tunnel/examine(mob/user)
 	. = ..()
@@ -79,15 +67,11 @@ TUNNEL
 /obj/structure/xeno/tunnel/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage * xeno_attacker.xeno_melee_damage_modifier, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
 	if(!istype(xeno_attacker) || xeno_attacker.stat || xeno_attacker.lying_angle || xeno_attacker.status_flags & INCORPOREAL)
 		return
+	if(xeno_attacker.handcuffed)
+		return
 
 	if(!(issamexenohive(xeno_attacker)))
 		return ..()
-
-	if(xeno_attacker.a_intent == INTENT_HARM && xeno_attacker == creator)
-		balloon_alert(xeno_attacker, "Filling in tunnel...")
-		if(do_after(xeno_attacker, HIVELORD_TUNNEL_DISMANTLE_TIME, IGNORE_HELD_ITEM, src, BUSY_ICON_BUILD))
-			deconstruct(FALSE)
-		return
 
 	if(xeno_attacker.anchored)
 		balloon_alert(xeno_attacker, "Cannot enter while immobile")
@@ -175,7 +159,7 @@ TUNNEL
 		M.visible_message(span_xenonotice("\The [M] begins crawling down into \the [src].") , \
 		span_xenonotice("We begin crawling down into \the [src] to <b>[targettunnel.tunnel_desc]</b>.") )
 
-	if(isxenolarva(M)) //Larva can zip through near-instantly, they are wormlike after all
+	if(isxenolarva(M) || isxenofacehugger(M)) //Larva can zip through near-instantly, they are wormlike after all
 		tunnel_time = 5
 
 	if(!do_after(M, tunnel_time, IGNORE_HELD_ITEM, src, BUSY_ICON_GENERIC))

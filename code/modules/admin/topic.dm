@@ -400,6 +400,10 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 					newmob.forceMove(location)
 			if("larva")
 				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/larva, location, null, delmob)
+			//RUTGNC EDIT BEGIN
+			if("facehugger")
+				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/facehugger, location, null, delmob)
+			//RUTGMC EDIT END
 			if("defender")
 				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/defender, location, null, delmob)
 			if("warrior")
@@ -454,6 +458,8 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/puppeteer, location, null, delmob)
 			if("pyrogen")
 				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/pyrogen, location,null , delmob)
+			if("chimera")
+				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/chimera, location, null, delmob)
 			if("behemoth")
 				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/behemoth, location, null, delmob)
 			if("human")
@@ -1050,7 +1056,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 			dat += "<a href='byond://?src=[REF(usr.client.holder)];[HrefToken()];changemode=[mode]'>[mode.name]</a><br>"
 		dat += "<br>"
 		dat += "Now: [GLOB.master_mode]<br>"
-		dat += "Next Round: [trim(file2text("data/mode.txt"))]"
+		dat += "Next Round: [GLOB.next_gamemode]"
 
 		var/datum/browser/browser = new(usr, "change_mode", "<div align='center'>Change Gamemode</div>")
 		browser.set_content(dat)
@@ -1464,12 +1470,13 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 			usr.client.holder.ban_parse_href(href_list, TRUE)
 
 
-	else if(href_list["searchunbankey"] || href_list["searchunbanadminkey"] || href_list["searchunbanip"] || href_list["searchunbancid"])
+	else if(href_list["searchunbankey"] || href_list["searchunbanadminkey"] || href_list["searchunbanip"] || href_list["searchunbancid"] || href_list["searchunbanbanid"])
 		var/player_key = href_list["searchunbankey"]
 		var/admin_key = href_list["searchunbanadminkey"]
 		var/player_ip = href_list["searchunbanip"]
 		var/player_cid = href_list["searchunbancid"]
-		usr.client.holder.unbanpanel(player_key, admin_key, player_ip, player_cid)
+		var/ban_id = href_list["searchunbanbanid"]
+		usr.client.holder.unbanpanel(player_key, admin_key, player_ip, player_cid, ban_id)
 
 
 	else if(href_list["unbanpagecount"])
@@ -1478,7 +1485,8 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 		var/admin_key = href_list["unbanadminkey"]
 		var/player_ip = href_list["unbanip"]
 		var/player_cid = href_list["unbancid"]
-		usr.client.holder.unbanpanel(player_key, admin_key, player_ip, player_cid, page)
+		var/ban_id = href_list["searchunbanbanid"]
+		usr.client.holder.unbanpanel(player_key, admin_key, player_ip, player_cid, ban_id, page = page)
 
 
 	else if(href_list["editbanid"])
@@ -1504,7 +1512,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 		var/page = href_list["unbanpage"]
 		var/admin_key = href_list["unbanadminkey"]
 		usr.client.holder.unban(ban_id, player_key, player_ip, player_cid, role, page, admin_key)
-		usr.client.holder.unbanpanel(player_key, admin_key, player_ip, player_cid)
+		usr.client.holder.unbanpanel(player_key, admin_key, player_ip, player_cid, ban_id)
 
 
 	else if(href_list["unbanlog"])
@@ -1544,6 +1552,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 		if(J.current_positions >= J.total_positions)
 			to_chat(usr, span_warning("Filling would cause an overflow. Please add more slots first."))
 			return
+		log_game("Occupying 1 [J.title] slot due to [usr.ckey] commanding this via the admin job panel.")
 		J.occupy_job_positions(1)
 
 		SSadmin_verbs.dynamic_invoke_verb(usr, /datum/admin_verb/job_slots)
@@ -1562,6 +1571,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 		if(J.current_positions <= 0)
 			to_chat(usr, span_warning("Cannot free more job slots."))
 			return
+		log_game("Freeing 1 [J.title] slot due to [usr.ckey] commanding this via the admin job panel.")
 		J.free_job_positions(1)
 
 		SSadmin_verbs.dynamic_invoke_verb(usr, /datum/admin_verb/job_slots)

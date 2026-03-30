@@ -1,4 +1,6 @@
 /mob/living/carbon/xenomorph/Bump(atom/A)
+	if(handcuffed)
+		return
 	if(ismecha(A))
 		var/obj/vehicle/sealed/mecha/mecha = A
 		var/mob_swap_mode = NO_SWAP
@@ -151,7 +153,13 @@
 	if(HAS_TRAIT(src, TRAIT_VALHALLA_XENO))
 		return FALSE
 	if(upgrade == XENO_UPGRADE_NORMAL)
-		return hive.purchases.upgrades_by_name[GLOB.tier_to_primo_upgrade[xeno_caste.tier]].times_bought
+		var/primo_upgrade_name = GLOB.tier_to_primo_upgrade[xeno_caste.tier]
+		if(!primo_upgrade_name)
+			return FALSE
+		var/datum/hive_upgrade/primo_upgrade = hive.purchases.upgrades_by_name[primo_upgrade_name]
+		if(!istype(primo_upgrade))
+			return FALSE
+		return primo_upgrade.times_bought
 	if(upgrade == XENO_UPGRADE_INVALID || upgrade == XENO_UPGRADE_PRIMO || upgrade == XENO_UPGRADE_BASETYPE)
 		return FALSE
 	stack_trace("Logic for handling this Upgrade tier wasn't written")
@@ -175,6 +183,9 @@
 		. += "Upgrade Progress: (FINISHED)"
 
 	. += "Health: [health]/[maxHealth][overheal ? " + [overheal]": ""]" //Changes with balance scalar, can't just use the caste
+
+	if(stun_health_damage > 0)
+		. += "Stun Health Damage: [stun_health_damage]/[health]"
 
 	if(xeno_caste.caste_flags & CASTE_MUTATIONS_ALLOWED)
 		. += "Biomass: [!isnull(SSpoints.xeno_biomass_points_by_hive[hivenumber]) ? SSpoints.xeno_biomass_points_by_hive[hivenumber] : 0]/[MUTATION_BIOMASS_MAXIMUM]"
@@ -258,7 +269,6 @@
 	plasma_stored = plasma_stored - value
 	if(plasma_stored < 0)
 		plasma_stored = 0
-		Paralyze(15 SECONDS) // 3 seconds after xeno paralyze resistance applied
 	update_action_button_icons()
 	if(!update_plasma)
 		return
@@ -270,6 +280,45 @@
 	if(!update_plasma)
 		return
 	hud_set_plasma()
+
+/mob/living/carbon/xenomorph/proc/set_stun_health(value, update_stun_health = TRUE)
+	stun_health_damage = clamp(value, 0, health)
+	if(value == 0 && stun_health_crit)
+		stun_health_crit = FALSE
+		SetParalyzed(0)
+		if(stun_health_crit_timer)
+			deltimer(stun_health_crit_timer)
+			stun_health_crit_timer = null
+	if(!update_stun_health)
+		return
+	hud_set_plasma()
+
+/mob/living/carbon/xenomorph/proc/use_stun_health(value, update_stun_health = TRUE)
+	if(stun_health_crit)
+		return
+	stun_health_damage = clamp(stun_health_damage + value, 0, health)
+	if(stun_health_damage >= health && !stun_health_crit)
+		stun_health_crit = TRUE
+		Paralyze(45 SECONDS)
+		if(!stun_health_crit_timer)
+			stun_health_crit_timer = addtimer(CALLBACK(src, PROC_REF(stun_health_crit_end)), 9 SECONDS, TIMER_STOPPABLE)
+	update_action_button_icons()
+	if(!update_stun_health)
+		return
+	hud_set_plasma()
+
+/mob/living/carbon/xenomorph/proc/gain_stun_health(value, update_stun_health = TRUE)
+	stun_health_damage = clamp(stun_health_damage - value, 0, health)
+	update_action_button_icons()
+	if(!update_stun_health)
+		return
+	hud_set_plasma()
+
+/mob/living/carbon/xenomorph/proc/stun_health_crit_end()
+	stun_health_crit = FALSE
+	if(stun_health_crit_timer)
+		deltimer(stun_health_crit_timer)
+		stun_health_crit_timer = null
 
 //Strip all inherent xeno verbs from your caste. Used in evolution.
 /mob/living/carbon/xenomorph/proc/remove_inherent_verbs()
@@ -374,12 +423,12 @@
 	var/datum/game_mode/mode = SSticker.mode
 	switch(new_lighting_cutoff)
 		if(LIGHTING_CUTOFF_FULLBRIGHT, LIGHTING_CUTOFF_HIGH, LIGHTING_CUTOFF_MEDIUM)
-			if(!(mode.round_type_flags & MODE_SURVIVAL))
+			if(!(mode.round_type_flags2 & MODE_2_SURVIVAL))
 				ENABLE_BITFIELD(sight, SEE_MOBS)
 			ENABLE_BITFIELD(sight, SEE_OBJS)
 			ENABLE_BITFIELD(sight, SEE_TURFS)
 		if(LIGHTING_CUTOFF_VISIBLE)
-			if(!(mode.round_type_flags & MODE_SURVIVAL))
+			if(!(mode.round_type_flags2 & MODE_2_SURVIVAL))
 				ENABLE_BITFIELD(sight, SEE_MOBS)
 			DISABLE_BITFIELD(sight, SEE_OBJS)
 			DISABLE_BITFIELD(sight, SEE_TURFS)
@@ -624,7 +673,8 @@
 	var/mob/living/carbon/victim = eaten_mob
 	eaten_mob = null
 	if(make_cocoon)
-		ADD_TRAIT(victim, TRAIT_PSY_DRAINED, TRAIT_PSY_DRAINED)
+		if(victim.stat == DEAD)
+			ADD_TRAIT(victim, TRAIT_PSY_DRAINED, TRAIT_PSY_DRAINED)
 		if(HAS_TRAIT(victim, TRAIT_UNDEFIBBABLE))
 			victim.med_hud_set_status()
 		new /obj/structure/cocoon(loc, hivenumber, victim)
@@ -669,4 +719,3 @@
 
 /mob/living/carbon/xenomorph/on_eord(turf/destination)
 	revive(TRUE)
-

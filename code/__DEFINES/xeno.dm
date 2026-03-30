@@ -30,14 +30,29 @@
 #define RESIN_DOOR "resin door"
 #define RESIN_NEST "resin nest"
 #define RESIN_MEMBRANE "resin membrane"
-#define WALL_RESIN_NEST "wall resin nest"
+//#define WALL_RESIN_NEST "wall resin nest"
 #define LIGHT_TOWER "light tower"
 #define ADVANCED_RESIN_NEST "tentacle breeding nest"
+#define SPECIAL_RESIN_NEST "sentient tentacle breeding nest"
 
 //Special resin defines
 #define BULLETPROOF_WALL "bulletproof resin wall"
 #define FIREPROOF_WALL "fireproof resin wall"
 #define HARDY_WALL "hardy resin wall"
+
+// Hits needed to take down if dmg is 25 with zero ap (Queen): Regular/Regenerating/Regenerating full hp
+#define RESIN_WALL_MULT 1.4 // 6/3/9
+#define RESIN_DOOR_MULT 2.4 // 4/4/4
+#define HARDY_WALL_MULT 4.5 // 4/4/13
+#define FIRE_WALL_MULT 1.4 // 3/3/6
+#define BULLET_WALL_MULT 1.4 // 3/3/8
+
+#define STICKY_RESIN_MULT 2 // One hit
+
+#define BEETLE "beetle"
+#define NYMPH "nymph"
+#define MANTIS "mantis"
+#define SCORPION "scorpion"
 
 //Xeno reagents defines
 #define DEFILER_NEUROTOXIN "Neurotoxin"
@@ -153,17 +168,27 @@ GLOBAL_LIST_INIT(plant_images_list, list(
 
 //List of resin structure images
 GLOBAL_LIST_INIT(resin_images_list, list(
+		//This is the menu for secrete resin.
+		//Each entry corresponds to an entry in secrete resin's buildable_structures list, in order.
+		//Make sure to keep them synced up.
 		RESIN_WALL = image('icons/Xeno/actions/construction.dmi', icon_state = RESIN_WALL),
 		RESIN_MEMBRANE = image('ntf_modular/icons/Xeno/construction.dmi', icon_state = RESIN_MEMBRANE),
 		STICKY_RESIN = image('icons/Xeno/actions/construction.dmi', icon_state = STICKY_RESIN),
 		RESIN_DOOR = image('icons/Xeno/actions/construction.dmi', icon_state = RESIN_DOOR),
 		RESIN_NEST = image('ntf_modular/icons/Xeno/construction.dmi', icon_state = RESIN_NEST),
-		WALL_RESIN_NEST = image('ntf_modular/icons/Xeno/construction.dmi', icon_state = WALL_RESIN_NEST),
-		RESIN_LIGHTTOWER = image('ntf_modular/icons/Xeno/construction.dmi', icon_state = LIGHT_TOWER),
+		LIGHT_TOWER = image('ntf_modular/icons/Xeno/construction.dmi', icon_state = LIGHT_TOWER),
+		ADVANCED_RESIN_NEST = image('ntf_modular/icons/Xeno/construction.dmi', icon_state = RESIN_NEST),
+		SPECIAL_RESIN_NEST = image('ntf_modular/icons/Xeno/construction.dmi', icon_state = RESIN_NEST),//sentient nest
 		BULLETPROOF_WALL = image('icons/Xeno/actions/construction.dmi', icon_state = BULLETPROOF_WALL),
 		FIREPROOF_WALL = image('icons/Xeno/actions/construction.dmi', icon_state = FIREPROOF_WALL),
 		HARDY_WALL = image('icons/Xeno/actions/construction.dmi', icon_state = HARDY_WALL),
-		ADVANCED_RESIN_NEST = image('ntf_modular/icons/Xeno/construction.dmi', icon_state = RESIN_NEST),
+		))
+
+GLOBAL_LIST_INIT(spawnable_minion_list, list(
+		/mob/living/carbon/xenomorph/beetle = image('ntf_modular/icons/Xeno/actions.dmi', icon_state = BEETLE),
+		/mob/living/carbon/xenomorph/nymph = image('ntf_modular/icons/Xeno/actions.dmi', icon_state = NYMPH),
+		/mob/living/carbon/xenomorph/mantis = image('ntf_modular/icons/Xeno/actions.dmi', icon_state = MANTIS),
+		/mob/living/carbon/xenomorph/scorpion = image('ntf_modular/icons/Xeno/actions.dmi', icon_state = SCORPION),
 		))
 
 /*List of special resin structure images
@@ -188,6 +213,7 @@ GLOBAL_LIST_INIT(puppeteer_phero_images_list, list(
 #define UPGRADE_FLAG_MESSAGE_HIVE (1<<0)
 #define UPGRADE_FLAG_ONETIME (1<<1)
 #define UPGRADE_FLAG_USES_TACTICAL (1<<2)
+#define UPGRADE_FLAG_MUST_BE_HIVE_RULER (1<<3)
 
 GLOBAL_LIST_INIT(xeno_ai_spawnable, list(
 	/mob/living/carbon/xenomorph/beetle/ai,
@@ -256,3 +282,6 @@ GLOBAL_LIST_INIT(xeno_ai_spawnable, list(
 #define XENO_STRUCTURE_DETECTION_COOLDOWN 30 SECONDS
 ///Proxy detection radius
 #define XENO_STRUCTURE_DETECTION_RANGE 10
+
+///Turrets cannot be build closer than this range to another
+#define XENO_TURRET_EXCLUSION_RANGE 6

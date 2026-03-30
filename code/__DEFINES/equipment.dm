@@ -27,7 +27,7 @@
 
 #define PASSABLE (PASS_THROW|PASS_PROJECTILE|PASS_AIR)
 #define Z_FLYING (PASS_LOW_STRUCTURE|PASS_FIRE)
-#define HOVERING (PASS_LOW_STRUCTURE|PASS_MOB|PASS_DEFENSIVE_STRUCTURE|PASS_FIRE)
+#define HOVERING (PASS_LOW_STRUCTURE|PASS_MOB|PASS_DEFENSIVE_STRUCTURE|PASS_FIRE|PASS_TANK)
 
 //==========================================================================================
 
@@ -181,7 +181,8 @@
 #define TINT_3 3
 #define TINT_4 4
 #define TINT_5 5
-#define TINT_BLIND 6
+#define TINT_6 6
+#define TINT_BLIND 7
 
 //Inventory depth: limits how many nested storage items you can access directly.
 //1: stuff in mob, 2: stuff in backpack, 3: stuff in box in backpack, etc

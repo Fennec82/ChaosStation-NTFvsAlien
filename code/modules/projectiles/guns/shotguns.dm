@@ -105,12 +105,12 @@
 	attachable_offset = list("muzzle_x" = 41, "muzzle_y" = 20,"rail_x" = 15, "rail_y" = 20, "under_x" = 23, "under_y" = 12, "stock_x" = 11, "stock_y" = 14)
 	starting_attachment_types = list(/obj/item/attachable/stock/t39stock)
 
-	fire_delay = 1.4 SECONDS
+	fire_delay = 1.2 SECONDS
 	accuracy_mult = 1.05
 	accuracy_mult_unwielded = 0.65
 	scatter = 3
 	scatter_unwielded = 12
-	damage_mult = 0.7  //30% less damage. Faster firerate.
+	damage_mult = 0.85  //15% less damage. Faster firerate.
 	recoil = 2
 	recoil_unwielded = 4
 	wield_delay = 1 SECONDS
@@ -123,19 +123,22 @@
 /obj/item/weapon/gun/shotgun/combat/masterkey
 	name = "masterkey shotgun"
 	desc = "A weapon-mounted, three-shot shotgun. Reloadable with any normal 12 gauge shell. The short barrel reduces the ammo's effectiveness drastically in exchange for fitting as a attachment.."
-	icon = 'icons/obj/items/guns/attachments/gun.dmi'
+	icon = 'ntf_modular/icons/obj/items/guns/attachments/gun.dmi'
 	icon_state = "masterkey"
+	cocked_sound = 'sound/weapons/guns/interact/trenchgun_pump.ogg'
 	max_chamber_items = 2
 	attachable_allowed = list()
 	starting_attachment_types = list()
 	slot = ATTACHMENT_SLOT_UNDER
 	attach_delay = 3 SECONDS
 	detach_delay = 3 SECONDS
+	reciever_flags = AMMO_RECIEVER_HANDFULS|AMMO_RECIEVER_REQUIRES_UNIQUE_ACTION|AMMO_RECIEVER_UNIQUE_ACTION_LOCKS
 	gun_features_flags = GUN_IS_ATTACHMENT|GUN_AMMO_COUNTER|GUN_ATTACHMENT_FIRE_ONLY|GUN_WIELDED_STABLE_FIRING_ONLY|GUN_CAN_POINTBLANK|GUN_WIELDED_FIRING_ONLY|GUN_SMOKE_PARTICLES
 	default_ammo_type = /datum/ammo/bullet/shotgun/buckshot
-	damage_mult = 0.6 // 40% less damage, but MUCH higher falloff.
 	scatter = 3
-	fire_delay = 2 SECONDS
+	damage_mult = 0.85
+	cock_delay = 1.2 SECONDS
+	fire_delay = 1.5 SECONDS
 	pixel_shift_x = 14
 	pixel_shift_y = 18
 
@@ -359,6 +362,13 @@
 		/obj/item/attachable/magnetic_harness,
 		/obj/item/attachable/motiondetector,
 		/obj/item/attachable/stock/trenchgun,
+		/obj/item/attachable/lasersight,
+		/obj/item/attachable/bayonet/converted,
+		/obj/item/attachable/bayonet,
+		/obj/item/attachable/bayonet/som,
+		/obj/item/attachable/verticalgrip,
+		/obj/item/attachable/angledgrip,
+		/obj/item/attachable/gyro,
 	)
 	item_map_variant_flags = NONE
 	attachable_offset = list("muzzle_x" = 34, "muzzle_y" = 19,"rail_x" = 12, "rail_y" = 21, "under_x" = 37, "under_y" = 16, "stock_x" = 0, "stock_y" = 12)
@@ -368,7 +378,7 @@
 
 	fire_delay = 1.2 SECONDS
 	max_chamber_items = 5
-	damage_mult = 0.75
+	damage_mult = 1
 	accuracy_mult_unwielded = 1
 
 	scatter = 4
@@ -555,7 +565,6 @@
 		/obj/item/attachable/stock/mosin,
 	)
 	actions_types = list(/datum/action/item_action/aim_mode)
-	aim_time = 1 SECONDS
 	force = 20
 	aim_fire_delay = 0.75 SECONDS
 	aim_speed_modifier = 0.8
@@ -622,7 +631,7 @@
 	attachable_offset = list("muzzle_x" = 45, "muzzle_y" = 23,"rail_x" = 17, "rail_y" = 25, "under_x" = 19, "under_y" = 14, "stock_x" = 15, "stock_y" = 12)
 	actions_types = list(/datum/action/item_action/aim_mode)
 	aim_slowdown = 0.35
-	aim_time = 3 SECONDS
+	aim_time = 2 SECONDS
 	fire_delay = 1 SECONDS
 
 	scatter = -25
@@ -919,14 +928,12 @@
 		/obj/item/attachable/magnetic_harness,
 		/obj/item/attachable/lasersight,
 		/obj/item/weapon/gun/flamer/mini_flamer,
-		/obj/item/weapon/gun/shotgun/combat/masterkey,
 		/obj/item/weapon/gun/grenade_launcher/underslung,
 	)
 
 	attachable_offset = list("muzzle_x" = 40, "muzzle_y" = 17,"rail_x" = 12, "rail_y" = 23, "under_x" = 29, "under_y" = 12, "stock_x" = 13, "stock_y" = 15)
 
 	fire_delay = 1.75 SECONDS
-	damage_mult = 0.9
 	wield_delay = 0.95 SECONDS
 	burst_amount = 2
 	burst_delay = 0.01 SECONDS //basically instantaneous two shots
@@ -934,9 +941,14 @@
 	scatter = 1
 	burst_scatter_mult = 2 // 2x4=8
 	accuracy_mult = 1
+	autobalance_monitor_value = ZX_PRICE
+	damage_mult = 0.7
 
 /obj/item/weapon/gun/shotgun/zx76/standard
 	starting_attachment_types = list(/obj/item/attachable/bayonet/converted, /obj/item/attachable/magnetic_harness, /obj/item/attachable/verticalgrip)
+
+/obj/item/weapon/gun/shotgun/zx76/valhalla
+	autobalance_monitor_value = null
 
 //-------------------------------------------------------
 //V-51 SOM shotgun
@@ -974,7 +986,7 @@
 	accuracy_mult_unwielded = 0.6
 	scatter = 4
 	scatter_unwielded = 16
-	damage_mult = 0.85
+	damage_mult = 1
 	recoil = 1
 	recoil_unwielded = 4
 	aim_slowdown = 0.35
@@ -1075,7 +1087,7 @@
 	item_map_variant_flags = NONE
 	attachable_offset = list("muzzle_x" = 49, "muzzle_y" = 21,"rail_x" = 19, "rail_y" = 24, "under_x" = 40, "under_y" = 16, "stock_x" = 0, "stock_y" = 12)
 
-	fire_delay = 1.8 SECONDS
+	fire_delay = 1.6 SECONDS
 	max_chamber_items = 14
 
 	scatter = 6
@@ -1086,7 +1098,7 @@
 
 	cock_delay = 1.0 SECONDS
 	aim_slowdown = 0.55
-	damage_mult = 0.8 //fucking thing has 15 rounds.
+	damage_mult = 1 //fucking thing has 5 more rounds than the SOM shotgun but fires slower
 
 /obj/item/weapon/gun/shotgun/pump/ksg/standard
 	starting_attachment_types = list(/obj/item/attachable/reddot, /obj/item/attachable/verticalgrip, /obj/item/attachable/compensator,)
@@ -1135,11 +1147,11 @@
 	starting_attachment_types = null
 	attachable_offset = list("muzzle_x" = 52, "muzzle_y" = 20,"rail_x" = 24, "rail_y" = 22, "under_x" = 35, "under_y" = 14, "stock_x" = 13, "stock_y" = 13)
 
-	fire_delay = 3 //one shot every 0.3 seconds.
+	fire_delay = 0.8 SECONDS
 	accuracy_mult = 1.05
 	scatter = 3
-	damage_mult = 0.6  //40% less damage.
-	recoil = 0.5
+	damage_mult = 0.75  //25% less damage.
+	recoil = 1
 	wield_delay = 0.6 SECONDS
 	aim_slowdown = 0.2
 

@@ -254,7 +254,10 @@
 				else
 					emitted_gas = new /datum/effect_system/smoke_spread/xeno/ozelomelyn/light(xeno_owner)
 			if(/datum/reagent/toxin/xeno_aphrotoxin)
-				emitted_gas = new /datum/effect_system/smoke_spread/xeno/aphrotoxin(xeno_owner)
+				if(opaque)
+					emitted_gas = new /datum/effect_system/smoke_spread/xeno/aphrotoxin/opaque(xeno_owner)
+				else
+					emitted_gas = new /datum/effect_system/smoke_spread/xeno/aphrotoxin/light(xeno_owner)
 
 	if(xeno_owner.IsStaggered()) //If we got staggered, return
 		to_chat(xeno_owner, span_xenowarning("We try to emit toxins but are staggered!"))
@@ -387,6 +390,10 @@
 	update_button_icon() //Update immediately to get our default
 
 /datum/action/ability/xeno_action/select_reagent/update_button_icon()
+	if(!button)
+		return
+	if(QDELETED(owner))
+		return FALSE
 	var/atom/A = xeno_owner.selected_reagent
 	action_icon_state = initial(A.name)
 	return ..()
@@ -567,7 +574,7 @@
 		var/mob/living/livingtarget = A
 		if(livingtarget.stat == DEAD)
 			if(!silent)
-				livingtarget.balloon_alert(owner, "you're dead!")
+				livingtarget.balloon_alert(owner, "it's dead!")
 			return FALSE
 	var/atom/movable/target = A
 	if(target.anchored)

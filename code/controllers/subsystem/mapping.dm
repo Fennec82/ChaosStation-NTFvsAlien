@@ -1,6 +1,5 @@
 SUBSYSTEM_DEF(mapping)
 	name = "Mapping"
-	init_order = INIT_ORDER_MAPPING
 	runlevels = ALL
 
 	var/list/datum/map_config/configs
@@ -10,6 +9,8 @@ SUBSYSTEM_DEF(mapping)
 
 	var/list/shuttle_templates = list()
 	var/list/minidropship_templates = list()
+
+	var/list/capsule_templates = list()
 
 	///list of all modular mapping templates
 	var/list/modular_templates = list()
@@ -226,6 +227,7 @@ SUBSYSTEM_DEF(mapping)
 	map_templates = SSmapping.map_templates
 	minidropship_templates = SSmapping.minidropship_templates
 	shuttle_templates = SSmapping.shuttle_templates
+	capsule_templates = SSmapping.capsule_templates
 	modular_templates = SSmapping.modular_templates
 	unused_turfs = SSmapping.unused_turfs
 	turf_reservations = SSmapping.turf_reservations
@@ -242,7 +244,9 @@ SUBSYSTEM_DEF(mapping)
 	multiz_levels = SSmapping.multiz_levels
 	loaded_lazy_templates = SSmapping.loaded_lazy_templates
 
-#define INIT_ANNOUNCE(X) to_chat(world, span_alert("<b>[X]</b>")); log_world(X)
+GLOBAL_VAR_INIT(maps_loaded_data, "")
+
+#define INIT_ANNOUNCE(X) to_chat(world, span_alert("<b>[X]</b>")); log_world(X); GLOB.maps_loaded_data += "[X]\n"
 /datum/controller/subsystem/mapping/proc/LoadGroup(list/errorList, name, path, files, list/traits, list/default_traits, silent = FALSE, height_autosetup = TRUE)
 	. = list()
 	var/start_time = REALTIMEOFDAY
@@ -313,21 +317,21 @@ SUBSYSTEM_DEF(mapping)
 	ground_start = world.maxz + 1
 
 	var/datum/map_config/ground_map = configs[GROUND_MAP]
-	INIT_ANNOUNCE("Loading [ground_map.map_name]...")
+	INIT_ANNOUNCE("Loading Ground Map : [ground_map.map_name]...")
 	LoadGroup(FailedZs, ground_map.map_name, ground_map.map_path, ground_map.map_file, ground_map.traits, ZTRAITS_GROUND, height_autosetup = ground_map.height_autosetup)
 	// Also saving this as a feedback var as we don't have ship_name in the round table.
 	SSblackbox.record_feedback("text", "ground_map", 1, ground_map.map_name)
 
 	#if !(defined(CIBUILDING) && !defined(ALL_MAPS))
 	var/datum/map_config/ship_map = configs[SHIP_MAP]
-	INIT_ANNOUNCE("Loading [ship_map.map_name]...")
+	INIT_ANNOUNCE("Loading Ship Map : [ship_map.map_name]...")
 	LoadGroup(FailedZs, ship_map.map_name, ship_map.map_path, ship_map.map_file, ship_map.traits, ZTRAITS_MAIN_SHIP, height_autosetup = ship_map.height_autosetup)
 	// Also saving this as a feedback var as we don't have ship_name in the round table.
 	SSblackbox.record_feedback("text", "ship_map", 1, ship_map.map_name)
 	#endif
 
 	var/datum/map_config/antag_map = configs[ANTAG_MAP]
-	INIT_ANNOUNCE("Loading [antag_map.map_name]...")
+	INIT_ANNOUNCE("Loading Antag Map : [antag_map.map_name]...")
 	LoadGroup(FailedZs, antag_map.map_name, antag_map.map_path, antag_map.map_file, antag_map.traits, ZTRAITS_ANTAG_SHIP)
 
 	if(SSdbcore.Connect())
@@ -345,6 +349,7 @@ SUBSYSTEM_DEF(mapping)
 		msg += ". Yell at your server host!"
 		INIT_ANNOUNCE(msg)
 #undef INIT_ANNOUNCE
+	status_update_maps_loaded()
 
 /datum/controller/subsystem/mapping/proc/changemap(datum/map_config/VM, maptype = GROUND_MAP)
 	LAZYINITLIST(next_map_configs)
@@ -383,6 +388,7 @@ SUBSYSTEM_DEF(mapping)
 
 	preloadShuttleTemplates()
 	preloadModularTemplates()
+	preloadShelterTemplates()
 
 /proc/generateMapList(filename)
 	. = list()
@@ -443,6 +449,16 @@ SUBSYSTEM_DEF(mapping)
 		else if (last_round_player_count >= M.min_player_num && last_round_player_count <= M.max_player_num) //if we exceed the minimum or maximum players numbers for a modular map don't add it to our list of valid modules that can be loaded
 			modular_templates[M.modular_id] += M
 		map_templates[M.type] = M
+
+/datum/controller/subsystem/mapping/proc/preloadShelterTemplates()
+	for(var/item in subtypesof(/datum/map_template/capsule))
+		var/datum/map_template/capsule/shelter_type = item
+		if(!(initial(shelter_type.mappath)))
+			continue
+		var/datum/map_template/capsule/S = new shelter_type()
+
+		capsule_templates[S.shelter_id] = S
+		map_templates[S.shelter_id] = S
 
 /// Adds a new reservation z level. A bit of space that can be handed out on request
 /// Of note, reservations default to transit turfs, to make their most common use, shuttles, faster

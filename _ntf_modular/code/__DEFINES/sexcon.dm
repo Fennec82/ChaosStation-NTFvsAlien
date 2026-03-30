@@ -1,5 +1,8 @@
 #define SEX_ACTION(sex_action_type) GLOB.sex_actions[sex_action_type]
 
+#define MAX_LARVA_PREGNANCIES GLOB.max_larva_count_per_mob
+#define MAX_LARVA_PREGNANCIES_SOL 3
+
 #define MAX_AROUSAL 225
 #define PASSIVE_EJAC_THRESHOLD 208
 #define ACTIVE_EJAC_THRESHOLD 200
@@ -35,10 +38,11 @@
 
 #define SEX_DRAIN_STYLE_HEAL_TARGET 1
 #define SEX_DRAIN_STYLE_DRAIN_STAMINA 2
-#define SEX_DRAIN_STYLE_DRAIN_BLOOD 3
+#define SEX_DRAIN_STYLE_DRAIN_BLOOD_FAST 3
+#define SEX_DRAIN_STYLE_DRAIN_BLOOD_SLOW 4
 
 #define SEX_DRAIN_MIN 1
-#define SEX_DRAIN_MAX 3
+#define SEX_DRAIN_MAX 4
 
 #define SEX_MANUAL_AROUSAL_DEFAULT 1
 #define SEX_MANUAL_AROUSAL_UNAROUSED 2
@@ -65,3 +69,12 @@
 
 
 #define VIOLATED_ALLOWED_TIME (10 MINUTES)
+
+///hole defines
+#define HOLE_MOUTH "mouth"
+#define HOLE_ASS "ass"
+#define HOLE_VAGINA "pussy"
+#define HOLE_NIPPLE "nipple"
+#define HOLE_EAR "ear"
+
+#define HOLE_LIST list(HOLE_MOUTH,HOLE_ASS,HOLE_VAGINA,HOLE_NIPPLE,HOLE_EAR)

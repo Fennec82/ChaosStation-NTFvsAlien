@@ -182,11 +182,13 @@
 
 
 /mob/living/carbon/human/has_brain()
-	if(get_organ_slot(ORGAN_SLOT_BRAIN))
-		var/datum/internal_organ/brain = get_organ_slot(ORGAN_SLOT_BRAIN)
-		if(brain && istype(brain))
-			return TRUE
-	return FALSE
+	var/datum/internal_organ/brain = get_organ_slot(ORGAN_SLOT_BRAIN)
+	if(!istype(brain))
+		return FALSE
+	var/datum/limb/braincase = get_limb(brain.parent_limb)
+	if(braincase.limb_status & LIMB_DESTROYED)
+		return FALSE
+	return TRUE
 
 /mob/living/carbon/human/has_eyes()
 	if(get_organ_slot(ORGAN_SLOT_EYES))
@@ -320,7 +322,7 @@
 	if(!has_working_organs())
 		return DEFIB_FAIL_BAD_ORGANS
 
-	if(health + getOxyLoss() + additional_health_increase <= get_death_threshold())
+	if((health + getOxyLoss() + additional_health_increase <= get_death_threshold()) && !HAS_TRAIT(src, TRAIT_IMMEDIATE_DEFIB))
 		return DEFIB_FAIL_TOO_MUCH_DAMAGE
 
 	return DEFIB_POSSIBLE
@@ -389,3 +391,76 @@
 		inactive_hand.attack_hand(src)
 		return
 	inactive_hand.attackby(active_hand, src)
+
+/mob/living/MouseDrop_T(atom/dropping, mob/user)
+	. = ..()
+	if(dropping != usr)
+		return
+	if(!isliving(dropping))
+		return
+	if(!isliving(user))
+		return
+	if(!user.sexcon || !sexcon)
+		return
+	if(user.incapacitated(TRUE))
+		return
+	if(dropping != src)
+		user.sexcon.set_target(src)
+		if(user.a_intent != INTENT_HELP && !user.sexcon.current_action)
+			user.face_atom(src)
+			face_atom(user)
+			var/action = /datum/sex_action/rimming // neuter things ig
+			if(gender == MALE)
+				if(user.gender == MALE || (isxeno(user) && user.client?.prefs?.xenogender > 2))
+					action = pick(/datum/sex_action/anal_sex, /datum/sex_action/throat_sex, /datum/sex_action/frotting) //funny frot
+				else if(user.gender == FEMALE)
+					action = pick(/datum/sex_action/vaginal_ride_sex, /datum/sex_action/anal_ride_sex, /datum/sex_action/blowjob)
+			else if(gender == FEMALE)
+				if(user.gender == MALE || (isxeno(user) && user.client?.prefs?.xenogender <= 2))
+					action = pick(/datum/sex_action/vaginal_sex, /datum/sex_action/anal_sex, /datum/sex_action/throat_sex)
+				else if(user.gender == FEMALE)
+					action = pick(/datum/sex_action/scissoring, /datum/sex_action/facesitting, /datum/sex_action/cunnilingus)
+			user.sexcon.speed = SEX_SPEED_HIGH
+			if(user.a_intent == INTENT_GRAB) //in place of help cuz that opens regular sexcon
+				balloon_alert_to_viewers("QK heal sex")
+				if(!buckled)
+					user.start_pulling(src)
+				user.sexcon.drain_style = SEX_DRAIN_STYLE_HEAL_TARGET
+				user.sexcon.force = SEX_FORCE_LOW
+			if(user.a_intent == INTENT_HARM)
+				balloon_alert_to_viewers("QK health-drain sex")
+				user.sexcon.drain_style = SEX_DRAIN_STYLE_DRAIN_BLOOD_FAST
+				user.sexcon.force = SEX_FORCE_MAX
+			if(user.a_intent == INTENT_DISARM)
+				balloon_alert_to_viewers("QK stam-drain sex")
+				if(!buckled)
+					user.start_pulling(src)
+				user.sexcon.drain_style = SEX_DRAIN_STYLE_DRAIN_STAMINA
+				user.sexcon.force = SEX_FORCE_MID
+			if(lying_angle)
+				AdjustParalyzed(2 SECONDS)
+				user.forceMove(loc)
+				user.sexcon.speed = SEX_SPEED_EXTREME
+			else
+				AdjustImmobilized(1 SECONDS)
+			user.sexcon.try_start_action(action)
+			return
+	erptime(user, src)
+
+/mob/living/proc/start_quick_fuck(mob/target, sexforce = SEX_FORCE_MID)
+	if(!istype(target))
+		return
+	var/action
+	if(gender == MALE)
+		if(target.gender == MALE || target.sexcon.can_use_penis())
+			action = pick(/datum/sex_action/anal_sex, /datum/sex_action/tailpegging_anal, /datum/sex_action/throat_sex)
+		else if(target.gender == FEMALE)
+			action = pick(/datum/sex_action/vaginal_ride_sex, /datum/sex_action/anal_ride_sex, /datum/sex_action/throat_sex)
+	else if(gender == FEMALE)
+		if(target.gender == MALE || target.sexcon.can_use_penis())
+			action = pick(/datum/sex_action/vaginal_sex, /datum/sex_action/anal_sex, /datum/sex_action/blowjob)
+		else if(target.gender == FEMALE)
+			action = pick(/datum/sex_action/scissoring, /datum/sex_action/tailpegging_vaginal, /datum/sex_action/tailpegging_anal, /datum/sex_action/force_cunnilingus)
+	sexcon.force = SEX_FORCE_MAX
+	sexcon.set_target(target)
+	sexcon.try_start_action(action)

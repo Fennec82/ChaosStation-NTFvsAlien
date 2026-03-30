@@ -500,13 +500,13 @@
 		if(SLOT_IN_HEAD)
 			return head
 		/// NTF EDIT START
-		if(ITEM_SLOT_UNDERWEAR)
+		if(SLOT_UNDERWEAR)
 			return w_underwear
-		if(ITEM_SLOT_SOCKS)
+		if(SLOT_SOCKS)
 			return w_socks
-		if(ITEM_SLOT_SHIRT)
+		if(SLOT_SHIRT)
 			return w_undershirt
-		if(ITEM_SLOT_BRA)
+		if(SLOT_BRA)
 			return bra
 		/// NTF EDIT END
 

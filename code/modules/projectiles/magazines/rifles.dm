@@ -228,12 +228,37 @@
 
 /obj/item/ammo_magazine/rifle/m16
 	name = "\improper M16 magazine (5.56x45mm)"
-	desc = "A 5.56x45mm magazine for the M16 assault rifle platform."
+	desc = "A thirty round 5.56x45mm magazine for the M16 assault rifle platform."
 	caliber = CALIBER_556X45
-	icon_state = "m16" //PLACEHOLDER
-	icon_state_mini = "mag_rifle_big"
+	icon_state = "m16"
+	icon_state_mini = "mag_rifle"
+	bonus_overlay = "m16_mag"
 	default_ammo = /datum/ammo/bullet/rifle
-	max_rounds = 30 //Also comes in 30 and 100 round Beta-C mag.
+	max_rounds = 30 //Other variants include a quad stacked 60 mag and 100 round Beta-C mag.
+
+/obj/item/ammo_magazine/rifle/m16_quadstack
+	name = "\improper M16 quad stacked magazine (5.56x45mm)"
+	desc = "A sixty round 5.56x45mm quad stacked magazine for the M16 assault rifle platform."
+	caliber = CALIBER_556X45
+	icon_state = "m16quad"
+	icon_state_mini = "mag_rifle_big"
+	bonus_overlay = "m16_quadmag"
+	default_ammo = /datum/ammo/bullet/rifle
+	max_rounds = 60 //Also comes in 30 and 100 round Beta-C mag.
+	aim_speed_mod = 0.2
+	wield_delay_mod = 0.2 SECONDS
+
+/obj/item/ammo_magazine/rifle/m16_cmag
+	name = "\improper M16 beta c-mag (5.56x45mm)"
+	desc = "A hundred round 5.56x45mm beta-c mag for the M16 assault rifle platform."
+	caliber = CALIBER_556X45
+	icon_state = "m16cmag"
+	icon_state_mini = "mag_drum"
+	bonus_overlay = "m16_cmag"
+	default_ammo = /datum/ammo/bullet/rifle
+	max_rounds = 100 //Also comes in 30 and 100 round Beta-C mag.
+	aim_speed_mod = 0.4
+	wield_delay_mod = 0.4 SECONDS
 
 //-------------------------------------------------------
 //FAMAS RIFLE
@@ -271,7 +296,7 @@
 	icon = 'icons/obj/items/ammo/machinegun.dmi'
 	icon_state_mini = "mag_gpmg"
 	caliber = CALIBER_10x26_CASELESS
-	default_ammo = /datum/ammo/bullet/rifle/machinegun
+	default_ammo = /datum/ammo/bullet/rifle/som_machinegun //ntf change cause som mg fucks
 	w_class = WEIGHT_CLASS_NORMAL
 	max_rounds = 200
 	reload_delay = 3 SECONDS
@@ -631,6 +656,29 @@
 	max_rounds = 8
 
 //-------------------------------------------------------
+/obj/item/ammo_magazine/rifle/boltclip/dragoon
+	name = "clip of 9.8x22mm rifle rounds"
+	desc = "A Disposible Stripper clip filled with exotic rifle bullets."
+	icon_state = "clipdragoon"
+	default_ammo = /datum/ammo/bullet/dragoon
+	caliber = CALIBER_98x22
+	max_rounds = 5
+	w_class = WEIGHT_CLASS_SMALL
+	icon_state_mini = "clips"
+	reload_delay = 5
+
+/obj/item/ammo_magazine/rifle/boltclip/dragoon/pox //Poison rounds
+	name = "clip of green-tipped 9.8x22mm rifle rounds"
+	desc = "A Disposible Stripper clip filled with exotic rifle bullets."
+	icon_state = "clipdragoonp"
+	default_ammo = /datum/ammo/bullet/dragoon/pox
+	caliber = CALIBER_98x22
+	max_rounds = 5
+	w_class = WEIGHT_CLASS_SMALL
+	icon_state_mini = "clips"
+	reload_delay = 5
+
+//-------------------------------------------------------
 //V-31 SOM rifle
 
 /obj/item/ammo_magazine/rifle/som
@@ -658,6 +706,7 @@
 	w_class = WEIGHT_CLASS_NORMAL
 	default_ammo = /datum/ammo/bullet/rifle/ap
 	max_rounds = 50
+	scatter_mod = 3
 
 /obj/item/ammo_magazine/rifle/som/incendiary
 	name = "\improper V-31 incendiary magazine (10x24mm)"
@@ -880,10 +929,18 @@
 	default_ammo = /datum/ammo/bullet/rifle/heavy/rubber
 	color = list(1,0,0,0, 0,1,0,0, 0,1.5,1,0, 0,0,0,1) //recolor it green.  New sprites would be better but too much work
 
+/obj/item/ammo_magazine/rifle/vsd_carbine/rubber/extended
+	name = "\improper CC/77 extended rubber magazine (10x24mm)"
+	max_rounds = 48
+	wield_delay_mod = 0.2 SECONDS
+	scatter_mod = 2
+
 /obj/item/ammo_magazine/rifle/vsd_carbine/extended
 	name = "\improper CC/77 extended magazine (10x24mm)"
 	icon_state = "c77_ext"
 	max_rounds = 48
+	wield_delay_mod = 0.2 SECONDS
+	scatter_mod = 2
 
 /obj/item/ammo_magazine/rifle/vsd_carbine/ap
 	name = "\improper CC/77 armor-piercing magazine (10x24mm)"

@@ -9,6 +9,7 @@
 	icon = null
 	worn_icon_list = list(slot_wear_suit_str = 'icons/mob/modular/modular_armor.dmi')
 	slowdown = SLOWDOWN_ARMOR_MEDIUM
+	shows_butt = TRUE
 	shows_bottom_genital = TRUE
 
 	attachments_allowed = list(
@@ -51,9 +52,17 @@
 
 	allowed_uniform_type = /obj/item/clothing/under
 
+/*
 /obj/item/clothing/suit/modular/xenonauten/hodgrenades
 	starting_attachments = list(
 		/obj/item/armor_module/module/ballistic_armor,
+		/obj/item/armor_module/storage/grenade,
+	)
+*/
+
+/obj/item/clothing/suit/modular/xenonauten/svalgrenades
+	starting_attachments = list(
+		/obj/item/armor_module/module/eshield,
 		/obj/item/armor_module/storage/grenade,
 	)
 
@@ -160,12 +169,6 @@
 		/obj/item/armor_module/storage/medical,
 	)
 
-/obj/item/clothing/suit/modular/xenonauten/light/vanguard
-	starting_attachments = list(
-		/obj/item/armor_module/module/valkyrie_autodoc,
-		/obj/item/armor_module/storage/medical,
-	)
-
 /obj/item/clothing/suit/modular/xenonauten/heavy
 	name = "\improper Xenonauten-H pattern armored vest"
 	desc = "A XN-H vest, also known as Xenonauten, a set vest with modular attachments made to work in many enviroments. This one seems to be a heavy variant. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
@@ -215,11 +218,14 @@
 		/obj/item/armor_module/storage/engineering,
 	)
 
+
 /obj/item/clothing/suit/modular/xenonauten/heavy/grenadier //Literally grenades
 	starting_attachments = list(
-		/obj/item/armor_module/module/ballistic_armor,
+//		/obj/item/armor_module/module/ballistic_armor,
+		/obj/item/armor_module/module/eshield, //no hod, so give them a shield intead
 		/obj/item/armor_module/storage/grenade,
 	)
+
 
 /obj/item/clothing/suit/modular/xenonauten/heavy/surt
 	starting_attachments = list(
@@ -276,114 +282,10 @@
 		/obj/item/weapon/energy/sword,
 	)
 
-/obj/item/clothing/suit/modular/xenonauten/light/bikini
-	name = "\improper NTC-B bikini armor"
-	desc = "A NTC-B vest, a set... of extra-light bikini armor? with modular attachments made to work in many enviroments. This one seems to be a bikini variant. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
-	greyscale_config = /datum/greyscale_config/xenonaut/bikini
-	slowdown = SLOWDOWN_ARMOR_VERY_LIGHT
-	soft_armor = list(MELEE = 35, BULLET = 50, LASER = 50, ENERGY = 50, BOMB = 40, BIO = 40, FIRE = 50, ACID = 40)
-	shows_bottom_genital = TRUE
-
-/obj/item/clothing/suit/modular/xenonauten/light/bikini/som
-	name = "\improper SOM M-69 Bikini-pattern light armor"
-	desc = "An unusal armor made by the " + FACTION_SOM + ", apparently based on an NTC design. Extra-light bikini armor with modular attachments made to work in many enviroments. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
-	attachments_allowed = list(
-		/obj/item/armor_module/module/better_shoulder_lamp,
-		/obj/item/armor_module/module/valkyrie_autodoc/som,
-		/obj/item/armor_module/module/fire_proof/som,
-		/obj/item/armor_module/module/tyr_extra_armor/som,
-		/obj/item/armor_module/module/knight/som,
-		/obj/item/armor_module/module/mimir_environment_protection/som,
-		/obj/item/armor_module/module/hlin_explosive_armor,
-		/obj/item/armor_module/module/chemsystem,
-		/obj/item/armor_module/module/eshield/som,
-		/obj/item/armor_module/module/eshield/som/overclocked,
-		/obj/item/armor_module/storage/general,
-		/obj/item/armor_module/storage/ammo_mag,
-		/obj/item/armor_module/storage/engineering,
-		/obj/item/armor_module/storage/medical,
-		/obj/item/armor_module/storage/general/som,
-		/obj/item/armor_module/storage/engineering/som,
-		/obj/item/armor_module/storage/medical/som,
-		/obj/item/armor_module/storage/injector,
-		/obj/item/armor_module/storage/grenade,
-		/obj/item/armor_module/storage/integrated,
-		/obj/item/armor_module/armor/badge,
-	)
-
-/obj/item/clothing/suit/modular/xenonauten/light/bikini/neutral
-	attachments_allowed = list(
-		/obj/item/armor_module/module/better_shoulder_lamp,
-		/obj/item/armor_module/module/valkyrie_autodoc,
-		/obj/item/armor_module/module/fire_proof,
-		/obj/item/armor_module/module/tyr_extra_armor,
-		/obj/item/armor_module/module/tyr_extra_armor/mark1,
-		/obj/item/armor_module/module/mimir_environment_protection,
-		/obj/item/armor_module/module/mimir_environment_protection/mark1,
-		/obj/item/armor_module/module/hlin_explosive_armor,
-		/obj/item/armor_module/module/ballistic_armor,
-		/obj/item/armor_module/module/chemsystem,
-		/obj/item/armor_module/module/knight,
-		/obj/item/armor_module/module/eshield,
-		/obj/item/armor_module/module/eshield/absorbant/energy,
-		/obj/item/armor_module/module/eshield/absorbant/ballistic,
-		/obj/item/armor_module/module/eshield/overclocked,
-		/obj/item/armor_module/module/mirage,
-		/obj/item/armor_module/module/armorlock,
-
-		/obj/item/armor_module/storage/general,
-		/obj/item/armor_module/storage/ammo_mag,
-		/obj/item/armor_module/storage/engineering,
-		/obj/item/armor_module/storage/medical,
-		/obj/item/armor_module/storage/general/som,
-		/obj/item/armor_module/storage/engineering/som,
-		/obj/item/armor_module/storage/medical/som,
-		/obj/item/armor_module/storage/injector,
-		/obj/item/armor_module/storage/grenade,
-		/obj/item/armor_module/storage/integrated,
-		/obj/item/armor_module/armor/badge,
-
-		/obj/item/armor_module/module/valkyrie_autodoc/som,
-		/obj/item/armor_module/module/fire_proof/som,
-		/obj/item/armor_module/module/tyr_extra_armor/som,
-		/obj/item/armor_module/module/knight/som,
-		/obj/item/armor_module/module/mimir_environment_protection/som,
-		/obj/item/armor_module/module/eshield/som,
-		/obj/item/armor_module/module/eshield/som/overclocked,
-	)
-
-/obj/item/clothing/suit/modular/xenonauten/light/bikini/neutral/vsd
-	name = "\improper Crasher MT-B/69 bikini armor"
-	desc = "An unusal armor made by the " + FACTION_VSD + ", apparently based on an NTC design. Extra-light bikini armor with modular attachments made to work in many enviroments. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
-
-/obj/item/clothing/suit/modular/xenonauten/light/bikini/neutral/icc
-	name = "\improper Modelle/69 'Bikini' combat armor"
-	desc = "An unusal armor made by the " + FACTION_ICC + ", apparently based on an NTC design. Extra-light bikini armor with modular attachments made to work in many enviroments. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
-
-/obj/item/clothing/suit/modular/xenonauten/bulletresistant
-	name = "\improper NTC bullet-resistant armor"
-	desc = "A lightweight set of armor that excels in protecting the wearer against high-velocity solid projectiles. This one has bullet resistant padding on the limbs aswell."
-	blood_overlay_type = "armor"
-	soft_armor = list(MELEE = 35, BULLET = 55, LASER = 35, ENERGY = 30, BOMB = 45, BIO = 45, FIRE = 45, ACID = 45)
-	hard_armor = list(MELEE = 0, BULLET = 20, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, FIRE = 0, ACID = 5)
-	slowdown = 0
-
-	greyscale_config = /datum/greyscale_config/xenonaut/bulletproof
-
-/obj/item/clothing/suit/modular/xenonauten/ablative
-	name = "\improper NTC ablative armor"
-	desc = "A lightweight set of armor that excels in protecting the wearer against laser and energy attacks thanks to it's reflective plating."
-	blood_overlay_type = "armor"
-	soft_armor = list(MELEE = 35, BULLET = 35, LASER = 55, ENERGY = 50, BOMB = 45, BIO = 45, FIRE = 45, ACID = 45)
-	hard_armor = list(MELEE = 0, BULLET = 0, LASER = 15, ENERGY = 10, BOMB = 0, BIO = 0, FIRE = 0, ACID = 5)
-	slowdown = 0
-
-	greyscale_config = /datum/greyscale_config/xenonaut/ablative
-
 /obj/item/clothing/suit/storage/marine/ballistic
 	name = "\improper Crasher multi-threat ballistic armor"
 	desc = "A reused design of a old body armor system from the 21st century."
-	soft_armor = list(MELEE = 40, BULLET = 50, LASER = 50, ENERGY = 25, BOMB = 30, BIO = 5, FIRE = 25, ACID = 30)
+	soft_armor = list(MELEE = 40, BULLET = 65, LASER = 60, ENERGY = 40, BOMB = 45, BIO = 45, FIRE = 45, ACID = 45)
 	slowdown = 0.25
 	armor_protection_flags = CHEST|GROIN|ARMS|LEGS|FEET|HANDS
 	icon = 'icons/mob/clothing/suits/marine_armor.dmi'
@@ -433,7 +335,7 @@
 	icon_state = "vsd_vest"
 	worn_icon_state = "vsd_vest"
 	slowdown = SLOWDOWN_ARMOR_LIGHT
-	soft_armor = list(MELEE = 35, BULLET = 50, LASER = 20, ENERGY = 15, BOMB = 30, BIO = 10, FIRE = 25, ACID = 30)
+	soft_armor = list(MELEE = 35, BULLET = 65, LASER = 45, ENERGY = 40, BOMB = 40, BIO = 45, FIRE = 45, ACID = 45)
 	item_map_variant_flags = NONE
 	armor_features_flags = NONE
 
@@ -456,14 +358,16 @@
 	desc = "Kaizoku Corporation's uncommon use body armor, used usually by engineers. Protects the user from most bullet calibers."
 	icon_state = "vsd_marmor"
 	worn_icon_state = "vsd_marmor"
-	soft_armor = list(MELEE = 40, BULLET = 70, LASER = 20, ENERGY = 15, BOMB = 40, BIO = 10, FIRE = 25, ACID = 30)
+	slowdown = SLOWDOWN_ARMOR_MEDIUM
+	soft_armor = list(MELEE = 45, BULLET = 75, LASER = 55, ENERGY = 45, BOMB = 45, BIO = 50, FIRE = 45, ACID = 55)
 
 /obj/item/clothing/suit/storage/marine/vsd_two/harmor
 	name = "Crasher multi-threat heavy-set ballistic armor"
 	desc = "The Kaizoku Corporation's leader set of armor, rarely given to the grunts. Protects the user from most bullet calibers."
 	icon_state = "vsd_harmor"
 	worn_icon_state = "vsd_harmor"
-	soft_armor = list(MELEE = 45, BULLET = 75, LASER = 20, ENERGY = 15, BOMB = 45, BIO = 10, FIRE = 25, ACID = 30)
+	slowdown = SLOWDOWN_ARMOR_HEAVY
+	soft_armor = list(MELEE = 50, BULLET = 80, LASER = 55, ENERGY = 45, BOMB = 50, BIO = 55, FIRE = 55, ACID = 60)
 
 /obj/item/clothing/suit/storage/marine/usl_squad
 	name = "UL5 personal armor"
@@ -488,6 +392,30 @@
 	)
 	colorable_allowed = ICON_STATE_VARIANTS_ALLOWED
 	current_variant = "USL"
+
+/obj/item/clothing/suit/storage/marine/usl_squadul5urban
+	name = "UL5 personal armor"
+	desc = "Standard body armor of the USL operatives, now in service with KZ. The UL5 (United Light MK5) is a set of light body armor, roughly on par with the venerable Xenonauten in service with the NTC."
+	icon = 'icons/mob/clothing/suits/marine_armor.dmi'
+	worn_icon_list = list(
+		slot_wear_suit_str = 'icons/mob/clothing/suits/marine_armor.dmi',
+	)
+	slowdown = SLOWDOWN_ARMOR_LIGHT
+	icon_state = "main_vest"
+	worn_icon_state = "main_vest"
+	soft_armor = list(MELEE = 55, BULLET = 60, LASER = 60, ENERGY = 60, BOMB = 55, BIO = 10, FIRE = 60, ACID = 60)
+	item_map_variant_flags = NONE
+	armor_features_flags = NONE
+
+	icon_state_variants = list(
+		"USL",
+		"urban",
+		"jungle",
+		"desert",
+		"snow",
+	)
+	colorable_allowed = ICON_STATE_VARIANTS_ALLOWED
+	current_variant = "urban"
 
 /obj/item/clothing/suit/storage/marine/usl_squad/larmor_two
 	name = "UL5 stealth armor"

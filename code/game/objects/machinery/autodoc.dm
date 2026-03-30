@@ -29,7 +29,7 @@
 #define SURGERY_PROCEDURE_EXTERNAL_DIALYSIS 15
 #define SURGERY_PROCEDURE_EXTERNAL_BLOOD 16
 
-#define UNNEEDED_DELAY 10 SECONDS // How long to waste if someone queues an unneeded surgery.
+#define UNNEEDED_DELAY 5 SECONDS // How long to waste if someone queues an unneeded surgery.
 
 //Autodoc
 /obj/machinery/autodoc
@@ -237,6 +237,8 @@
 		to_chat(xeno_attacker, span_xenowarning("There is nothing of interest in there."))
 		return
 	if(xeno_attacker.status_flags & INCORPOREAL || xeno_attacker.do_actions)
+		return
+	if(xeno_attacker.handcuffed)
 		return
 	visible_message(span_warning("[xeno_attacker] begins to pry the [src]'s cover!"), 3)
 	playsound(src,'sound/effects/metal_creaking.ogg', 25, 1)
@@ -506,14 +508,12 @@
 			var/datum/limb/head/operated_head = operated_limb
 			if(operated_head.disfigured || operated_head.face_surgery_stage > 0)
 				surgery_list += new /datum/autodoc_surgery(operated_limb, null, SURGERY_CATEGORY_LIMB, SURGERY_PROCEDURE_LIMB_FACIAL)
-		switch(operated_limb.limb_status)
-			if(LIMB_BROKEN)
-				surgery_list += new /datum/autodoc_surgery(operated_limb, null, SURGERY_CATEGORY_LIMB, SURGERY_PROCEDURE_LIMB_BROKEN)
-			if(LIMB_DESTROYED)
-				if(operated_limb.body_part != HEAD && !(operated_limb.parent.limb_status & LIMB_DESTROYED)) // We want to pick the missing limb that is most accurate: missing foot = foot, missing foot + leg = leg.
-					surgery_list += new /datum/autodoc_surgery(operated_limb, null, SURGERY_CATEGORY_LIMB, SURGERY_PROCEDURE_LIMB_MISSING)
-			if(LIMB_NECROTIZED)
-				surgery_list += new /datum/autodoc_surgery(operated_limb, null, SURGERY_CATEGORY_LIMB, SURGERY_PROCEDURE_LIMB_NECROTIZED)
+		if(operated_limb.limb_status & LIMB_BROKEN)
+			surgery_list += new /datum/autodoc_surgery(operated_limb, null, SURGERY_CATEGORY_LIMB, SURGERY_PROCEDURE_LIMB_BROKEN)
+		if(operated_limb.limb_status & LIMB_DESTROYED && operated_limb.body_part != HEAD && !(operated_limb.parent?.limb_status & LIMB_DESTROYED)) // We want to pick the missing limb that is most accurate: missing foot = foot, missing foot + leg = leg.
+			surgery_list += new /datum/autodoc_surgery(operated_limb, null, SURGERY_CATEGORY_LIMB, SURGERY_PROCEDURE_LIMB_MISSING)
+		if(operated_limb.limb_status & LIMB_NECROTIZED)
+			surgery_list += new /datum/autodoc_surgery(operated_limb, null, SURGERY_CATEGORY_LIMB, SURGERY_PROCEDURE_LIMB_NECROTIZED)
 		var/already_added_surgery = FALSE
 		if(length(operated_limb.implants))
 			for(var/obj/item/implant_in_question AS in operated_limb.implants)
@@ -849,7 +849,7 @@
 									live_larva.forceMove(get_turf(src))
 								else
 									embyro.forceMove(occupant.loc)
-									occupant.status_flags &= ~XENO_HOST
+									//occupant.status_flags &= ~XENO_HOST //this is handled by /obj/item/alien_embryo/process()
 								qdel(embyro)
 					if(length(limb_ref.implants))
 						for(var/obj/item/implant AS in limb_ref.implants)
@@ -1297,7 +1297,7 @@
 			needed = FALSE
 			for(var/i in connected.occupant.limbs)
 				var/datum/limb/L = i
-				if(L.limb_status & LIMB_DESTROYED && !(L.parent.limb_status & LIMB_DESTROYED) && L.body_part != HEAD)
+				if(L.limb_status & LIMB_DESTROYED && L.body_part != HEAD && !(L.parent?.limb_status & LIMB_DESTROYED))
 					N.fields["autodoc_manual"] += new /datum/autodoc_surgery(L, null, SURGERY_CATEGORY_LIMB, SURGERY_PROCEDURE_LIMB_MISSING)
 					needed = TRUE
 			if(!needed)

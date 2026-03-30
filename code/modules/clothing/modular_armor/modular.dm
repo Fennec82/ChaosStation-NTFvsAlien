@@ -118,6 +118,10 @@
 		/obj/item/armor_module/armor/legs/marine/mjolnir,
 		/obj/item/armor_module/armor/arms/marine/mjolnir,
 
+		/obj/item/armor_module/armor/chest/marine/invis,
+		/obj/item/armor_module/armor/chest/marine/skirmisher/invis,
+		/obj/item/armor_module/armor/chest/marine/assault/invis,
+
 		/obj/item/armor_module/module/better_shoulder_lamp,
 		/obj/item/armor_module/module/valkyrie_autodoc,
 		/obj/item/armor_module/module/fire_proof,
@@ -134,6 +138,12 @@
 		/obj/item/armor_module/module/eshield/absorbant/ballistic,
 		/obj/item/armor_module/module/mirage,
 		/obj/item/armor_module/module/armorlock,
+		/obj/item/armor_module/module/eshield/som,
+		/obj/item/armor_module/module/valkyrie_autodoc/som,
+		/obj/item/armor_module/module/fire_proof/som,
+		/obj/item/armor_module/module/tyr_extra_armor/som,
+		/obj/item/armor_module/module/knight/som,
+		/obj/item/armor_module/module/mimir_environment_protection/som,
 
 		/obj/item/armor_module/storage/general,
 		/obj/item/armor_module/storage/ammo_mag,
@@ -152,6 +162,7 @@
 	///Uniform type that is allowed to be worn with this.
 	var/allowed_uniform_type = /obj/item/clothing/under
 
+	shows_butt = TRUE
 	shows_bottom_genital = TRUE
 	shows_top_genital = TRUE
 
@@ -255,11 +266,16 @@
 		/obj/item/armor_module/module/ballistic_armor,
 		/obj/item/armor_module/module/chemsystem,
 		/obj/item/armor_module/module/eshield,
-		/obj/item/armor_module/module/eshield/absorbant/energy,
-		/obj/item/armor_module/module/eshield/absorbant/ballistic,
+		/obj/item/armor_module/module/eshield/overclocked,
 		/obj/item/armor_module/module/mirage,
 		/obj/item/armor_module/module/armorlock,
 		/obj/item/armor_module/module/knight,
+		/obj/item/armor_module/module/eshield/som,
+		/obj/item/armor_module/module/valkyrie_autodoc/som,
+		/obj/item/armor_module/module/fire_proof/som,
+		/obj/item/armor_module/module/tyr_extra_armor/som,
+		/obj/item/armor_module/module/knight/som,
+		/obj/item/armor_module/module/mimir_environment_protection/som,
 
 		/obj/item/armor_module/storage/general,
 		/obj/item/armor_module/storage/ammo_mag,
@@ -273,6 +289,26 @@
 		/obj/item/armor_module/storage/integrated,
 		/obj/item/armor_module/armor/badge,
 	)
+	var/mob/living/carbon/human/wearer = null
+
+/obj/item/clothing/suit/modular/rownin/equipped(mob/user, slot)
+	. = ..()
+	if(slot != SLOT_WEAR_SUIT)
+		return
+	wearer = user
+
+/obj/item/clothing/suit/modular/rownin/unequipped(mob/unequipper, slot)
+	. = ..()
+	wearer = null
+
+/obj/item/clothing/suit/modular/rownin/emp_act(severity)
+	. = ..()
+	wearer.add_movespeed_modifier("rownin_emp", 10, override = TRUE, multiplicative_slowdown = slowdown * -1, conflict = TRUE)
+	addtimer(CALLBACK(src, PROC_REF(rownin_emp_end), wearer), severity * 2 SECONDS)
+
+/obj/item/clothing/suit/modular/rownin/proc/rownin_emp_end(mob/living/carbon/human/wearussy)
+	if(wearussy)
+		wearussy.remove_movespeed_modifier("rownin_emp", TRUE)
 
 /obj/item/clothing/suit/modular/rownin/erp
 	name = "\improper ERP rownin Skeleton"
@@ -281,6 +317,49 @@
 	slowdown = SLOWDOWN_ARMOR_MEDIUM
 
 	allowed_uniform_type = /obj/item/clothing/under/rank/clown/erp
+
+/obj/item/clothing/suit/modular/rownin/vsdelite
+	name = "KZ Rownin Skeleton"
+	desc = "An experimental Rownin Skeleton modified by KZ. Reserved for Lieutenants and above. Outfitted with both the valkyrie autodoc beta and an overclocked eshield for improved odds of survival. The armor supports only the core modules it arrived with, but can be outfitted with any storage module. Only the valkyrie autodoc beta and overclocked eshield can fit on the specialized skeleton. Due to complex rigging, they cannot be applied to most forms of modular armor. The added weight reduces it's granted speed also. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
+	attachments_by_slot = list(
+		ATTACHMENT_SLOT_CHESTPLATE,
+		ATTACHMENT_SLOT_SHOULDER,
+		ATTACHMENT_SLOT_KNEE,
+		ATTACHMENT_SLOT_MODULE,
+		ATTACHMENT_SLOT_STORAGE,
+		ATTACHMENT_SLOT_BADGE,
+		ATTACHMENT_SLOT_BELT,
+	)
+	attachments_allowed = list(
+// Armor Modules
+		/obj/item/armor_module/module/valkyrie_autodoc_beta,
+		/obj/item/armor_module/module/eshield/vsd/overclocked,
+// Storage Modules
+		/obj/item/armor_module/storage/general,
+		/obj/item/armor_module/storage/ammo_mag,
+		/obj/item/armor_module/storage/engineering,
+		/obj/item/armor_module/storage/medical,
+		/obj/item/armor_module/storage/general/som,
+		/obj/item/armor_module/storage/engineering/som,
+		/obj/item/armor_module/storage/medical/som,
+		/obj/item/armor_module/storage/injector,
+		/obj/item/armor_module/storage/grenade,
+		/obj/item/armor_module/storage/integrated,
+		/obj/item/armor_module/armor/badge,
+		)
+	starting_attachments = list(
+		/obj/item/armor_module/module/eshield/vsd/overclocked,
+		/obj/item/armor_module/module/valkyrie_autodoc_beta,
+		/obj/item/armor_module/storage/ammo_mag,
+	)
+	slowdown = -0.3
+
+/obj/item/clothing/suit/modular/rownin/vsdelitealt
+	name = "\improper Rownin Skeleton"
+	starting_attachments = list(
+		/obj/item/armor_module/module/eshield/overclocked,
+		/obj/item/armor_module/storage/ammo_mag,
+	)
 
 /obj/item/clothing/suit/modular/hardsuit_exoskeleton
 	name = "\improper FleckTex WY-01 modular exoskeleton"
@@ -321,6 +400,12 @@
 		/obj/item/armor_module/module/eshield/absorbant/ballistic,
 		/obj/item/armor_module/module/mirage,
 		/obj/item/armor_module/module/armorlock,
+		/obj/item/armor_module/module/eshield/som,
+		/obj/item/armor_module/module/valkyrie_autodoc/som,
+		/obj/item/armor_module/module/fire_proof/som,
+		/obj/item/armor_module/module/tyr_extra_armor/som,
+		/obj/item/armor_module/module/knight/som,
+		/obj/item/armor_module/module/mimir_environment_protection/som,
 
 		/obj/item/armor_module/storage/general,
 		/obj/item/armor_module/storage/ammo_mag,
@@ -359,6 +444,8 @@
 		/obj/item/armor_module/armor/arms/marine/vsd_hardsuit/hephaestus,
 		/obj/item/armor_module/armor/legs/marine/vsd_hardsuit/hephaestus,
 
+		/obj/item/armor_module/armor/chest/marine/vsd_hardsuit/aphrodite,
+
 		/obj/item/armor_module/module/better_shoulder_lamp,
 		/obj/item/armor_module/module/valkyrie_autodoc,
 		/obj/item/armor_module/module/fire_proof,
@@ -368,10 +455,18 @@
 		/obj/item/armor_module/module/ballistic_armor,
 		/obj/item/armor_module/module/chemsystem,
 		/obj/item/armor_module/module/eshield,
+		/obj/item/armor_module/module/eshield/absorbant/energy,
+		/obj/item/armor_module/module/eshield/absorbant/ballistic,
 		/obj/item/armor_module/module/mirage,
 		/obj/item/armor_module/module/armorlock,
 		/obj/item/armor_module/module/eshield/absorbant/energy,
 		/obj/item/armor_module/module/eshield/absorbant/ballistic,
+		/obj/item/armor_module/module/eshield/som,
+		/obj/item/armor_module/module/valkyrie_autodoc/som,
+		/obj/item/armor_module/module/fire_proof/som,
+		/obj/item/armor_module/module/tyr_extra_armor/som,
+		/obj/item/armor_module/module/knight/som,
+		/obj/item/armor_module/module/mimir_environment_protection/som,
 
 		/obj/item/armor_module/storage/general,
 		/obj/item/armor_module/storage/ammo_mag,
@@ -386,6 +481,13 @@
 		/obj/item/armor_module/armor/badge,
 	)
 
+/obj/item/clothing/suit/modular/vsd_exoskeleton/nt
+	name = "\improper NT powered modular exoskeleton"
+	desc = "NT altered more airflow-allowing take of the CrashCore Industries modular hardsuit exoskeleton, made to lift up the 'Super-Heavy' armor systems and designed for full compatiability with jaeger modules. Comes with pre-installed light armour-plating and a shoulder lamp. Mount armor pieces to it by clicking on the frame with the components. Use Alt-Click to remove any attached items."
+	icon_state = "exoskeletonnt"
+	worn_icon_state = "exoskeletonnt"
+	greyscale_config = /datum/greyscale_config/vsd_hardsuit/exoskeleton/nt
+
 /** Core helmet module */
 /obj/item/clothing/head/modular
 	name = "Jaeger Pattern Helmet"
@@ -397,7 +499,7 @@
 	greyscale_config = /datum/greyscale_config/armor_mk1
 	greyscale_colors = ARMOR_PALETTE_BLACK
 
-	armor_protection_flags = HEAD
+	armor_protection_flags = HEAD|FACE|EYES
 	armor_features_flags = ARMOR_NO_DECAP
 	inventory_flags = BLOCKSHARPOBJ
 	inv_hide_flags = HIDEEARS|HIDE_EXCESS_HAIR
@@ -416,6 +518,7 @@
 	attachments_allowed = list(
 		/obj/item/armor_module/module/tyr_head,
 		/obj/item/armor_module/module/fire_proof_helmet,
+		/obj/item/armor_module/module/hod_head,
 		/obj/item/armor_module/module/mimir_environment_protection/mimir_helmet,
 		/obj/item/armor_module/module/mimir_environment_protection/mimir_helmet/mark1,
 		/obj/item/armor_module/module/welding,
@@ -428,7 +531,6 @@
 		/obj/item/armor_module/storage/helmet,
 		/obj/item/armor_module/armor/badge,
 	)
-
 
 
 	colorable_colors = LEGACY_ARMOR_PALETTES_LIST

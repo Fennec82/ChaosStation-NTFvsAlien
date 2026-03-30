@@ -1,4 +1,4 @@
-#define NEST_RESIST_TIME 120 SECONDS
+#define NEST_RESIST_TIME 60 SECONDS
 #define NEST_UNBUCKLED_COOLDOWN 5 SECONDS
 
 ///Alium nests. Essentially beds with an unbuckle delay that only aliums can buckle mobs to.
@@ -12,11 +12,13 @@
 	buckling_x = 0
 	buildstacktype = null //can't be disassembled and doesn't drop anything when destroyed
 	resistance_flags = UNACIDABLE|XENO_DAMAGEABLE
-	max_integrity = 100
+	obj_flags = parent_type::obj_flags|PROJ_IGNORE_DENSITY
+	max_integrity = 50
 	layer = BELOW_OPEN_DOOR_LAYER
-	var/buckleoverlaydir = SOUTH
 	var/unbuckletime = 6 SECONDS
 	var/resist_time = NEST_RESIST_TIME
+	///deep cave made ones need a welder to save people from.
+	var/welder_needed_unbuckle = FALSE
 
 /obj/structure/bed/nest/ai_should_stay_buckled(mob/living/carbon/npc)
 	return TRUE
@@ -30,7 +32,8 @@
 			return
 		var/mob/M = G.grabbed_thing
 		to_chat(user, span_notice("You place [M] on [src]."))
-		M.forceMove(loc)
+		if(!density)
+			M.forceMove(loc)
 		user_buckle_mob(M, user)
 
 
@@ -83,9 +86,20 @@
 
 
 /obj/structure/bed/nest/user_unbuckle_mob(mob/living/buckled_mob, mob/user, silent)
+	if(user.do_actions)
+		return FALSE
 	if(buckled_mob != user)
 		if(user.incapacitated())
 			return FALSE
+		var/area/the_area = get_area(src)
+		if(the_area.ceiling >= CEILING_UNDERGROUND && !isxeno(user) && welder_needed_unbuckle)
+			to_chat(user, span_warning("You need to use a welder to get through this thick resin."))
+			return FALSE
+		if(isxeno(user))
+			var/mob/living/carbon/xenomorph/xuser = user
+			if(!(xuser.xeno_caste.caste_flags & CASTE_IS_BUILDER) && !(SSticker.mode.round_type_flags2 & MODE_2_CHILL_RULES))
+				to_chat(xuser, span_xenowarning("We should not meddle with the nested hosts, best leave that to the drones."))
+				return FALSE
 		buckled_mob.visible_message(span_notice("\The [user] begins to pull \the [buckled_mob] free from \the [src]!"),
 			span_notice("\The [user] begins to pull you free from \the [src]."),
 			span_notice("You hear squelching."))
@@ -101,6 +115,10 @@
 		silent = TRUE
 		return ..()
 
+	var/area/the_area = get_area(src)
+	if(the_area.ceiling >= CEILING_UNDERGROUND && welder_needed_unbuckle)
+		to_chat(buckled_mob, span_warning("The resin here is too strong to break free on your own..."))
+		return FALSE
 	if(buckled_mob.incapacitated(TRUE))
 		to_chat(buckled_mob, span_warning("You're currently unable to try that."))
 		return FALSE
@@ -135,79 +153,11 @@
 /obj/structure/bed/nest/update_overlays()
 	. = ..()
 	if(LAZYLEN(buckled_mobs))
-		. += image("icon_state" = "nest_overlay", "layer" = LYING_MOB_LAYER + 0.1)
+		if(!istype(src, /obj/structure/bed/nest/wall))
+			. += image("icon_state" = "nest_overlay", "layer" = LYING_MOB_LAYER + 0.1)
 
 /obj/structure/bed/nest/fire_act(burn_level)
 	take_damage(burn_level * 2, BURN, FIRE)
-
-/obj/structure/bed/nest/wall
-	name = "wall alien nest"
-	desc = "It's a wall of thick, sticky resin as a nest."
-	icon = 'ntf_modular/icons/Xeno/Effects.dmi'
-	icon_state = "nestwall"
-	allow_pass_flags = null
-	buckle_lying = 0
-	buckling_x = 0
-	buckling_y = 0
-	density = TRUE
-	smoothing_groups = list(SMOOTH_GROUP_XENO_STRUCTURES)
-
-/obj/structure/bed/nest/wall/user_buckle_mob(mob/living/buckling_mob, mob/user, check_loc = TRUE, silent)
-	buckleoverlaydir = get_dir(src.loc, user.loc)
-	src.dir = buckleoverlaydir
-	face_atom(user)
-	buckling_mob.face_atom(user)
-	. = ..()
-	if(!.)
-		return
-	walldir_update(buckling_mob)
-	buckling_mob.set_lying_angle(0)
-	update_overlays()
-
-/obj/structure/bed/nest/wall/update_overlays()
-	. = ..()
-	if(LAZYLEN(buckled_mobs))
-		. += image("icon_state" = "nestwall_overlay", "layer" = 6, "dir" = buckleoverlaydir, pixel_x = buckling_x, pixel_y = buckling_y)
-
-/obj/structure/bed/nest/wall/proc/walldir_update(mob/buckling_mob)
-	switch(buckleoverlaydir)
-		if(4,3,5)
-			buckleoverlaydir = 4
-			dir = 4
-			buckling_mob.dir = 4
-			buckling_y = 0
-			buckling_x = 12
-			layer = 3
-		if(8,9,7)
-			buckleoverlaydir = 8
-			dir = 8
-			buckling_mob.dir = 8
-			buckling_y = 0
-			buckling_x = -12
-			layer = 3
-		if(1)
-			dir = 1
-			buckling_mob.dir = 1
-			buckling_y = 12
-			buckling_x = 0
-			layer = 5
-		if(2)
-			dir = 2
-			buckling_mob.dir = 2
-			buckling_y = -6
-			buckling_x = 0
-			layer = 3
-	buckling_mob.pixel_y = buckling_y
-	buckling_mob.pixel_x = buckling_x
-
-/obj/structure/bed/nest/wall/user_unbuckle_mob(mob/living/buckled_mob)
-	. = ..()
-	src.buckling_x = 0
-	src.buckling_y = 0
-	src.layer = 3
-	buckled_mob.pixel_x = 0
-	buckled_mob.pixel_y = 0
-
 
 #undef NEST_RESIST_TIME
 #undef NEST_UNBUCKLED_COOLDOWN

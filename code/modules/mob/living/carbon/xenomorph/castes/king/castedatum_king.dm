@@ -21,7 +21,7 @@
 	plasma_gain = 90
 
 	// *** Health *** //
-	max_health = 630
+	max_health = 600
 
 	// *** Sunder *** //
 	sunder_multiplier = 0.8
@@ -30,11 +30,10 @@
 	upgrade_threshold = TIER_THREE_THRESHOLD
 	maximum_active_caste = 1
 /* NTF EDIT - No minimum for evolution
-	evolve_min_xenos = 8
-	evolve_population_lock = 40 // Mech
+	evolve_min_xenos = 12
 */
-	deevolves_to = /mob/living/carbon/xenomorph/drone //NTF Edit - allow evolution/regression
-	death_evolution_delay = 7 MINUTES
+	deevolves_to = /datum/xeno_caste/drone //NTF Edit - allow evolution/regression
+	death_evolution_delay = 15 MINUTES
 
 	// *** Flags *** //
 /* NTF Edit - allow evolution/regression, building
@@ -57,7 +56,6 @@
 
 	actions = list(
 		/datum/action/ability/xeno_action/xeno_resting,
-		/datum/action/ability/xeno_action/psychic_whisper,
 		/datum/action/ability/xeno_action/psychic_influence,
 		/datum/action/ability/xeno_action/psychic_radiance,
 		/datum/action/ability/activable/xeno/impregnate,
@@ -74,7 +72,6 @@
 		/datum/action/ability/xeno_action/petrify,
 		/datum/action/ability/activable/xeno/off_guard,
 		/datum/action/ability/activable/xeno/shattering_roar,
-		/datum/action/ability/xeno_action/psychic_summon,
 		/datum/action/ability/xeno_action/pheromones,
 		/datum/action/ability/xeno_action/pheromones/emit_recovery,
 		/datum/action/ability/xeno_action/pheromones/emit_warding,
@@ -108,7 +105,6 @@
 
 	actions = list(
 		/datum/action/ability/xeno_action/xeno_resting,
-		/datum/action/ability/xeno_action/psychic_whisper,
 		/datum/action/ability/xeno_action/psychic_influence,
 		/datum/action/ability/xeno_action/psychic_radiance,
 		/datum/action/ability/activable/xeno/impregnate,
@@ -164,7 +160,7 @@
 	plasma_gain = 60
 
 	// *** Health *** //
-	max_health = 585
+	max_health = 560
 
 	// *** Sunder *** //
 	sunder_multiplier = 1.0
@@ -187,7 +183,6 @@
 
 	actions = list(
 		/datum/action/ability/xeno_action/xeno_resting,
-		/datum/action/ability/xeno_action/psychic_whisper,
 		/datum/action/ability/xeno_action/psychic_influence,
 		/datum/action/ability/xeno_action/psychic_radiance,
 		/datum/action/ability/activable/xeno/impregnate,
@@ -233,7 +228,6 @@
 	// *** Abilities *** //
 	actions = list(
 		/datum/action/ability/xeno_action/xeno_resting,
-		/datum/action/ability/xeno_action/psychic_whisper,
 		/datum/action/ability/xeno_action/psychic_influence,
 		/datum/action/ability/xeno_action/psychic_radiance,
 		/datum/action/ability/activable/xeno/impregnate,

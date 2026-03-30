@@ -746,8 +746,6 @@
 /turf/open/floor/rcircuit/off,
 /area/bigredv2/outside/marshal_office)
 "aiZ" = (
-/obj/machinery/computer/security,
-/obj/structure/table,
 /turf/open/floor/rcircuit,
 /area/bigredv2/outside/marshal_office)
 "aja" = (
@@ -7850,7 +7848,7 @@
 "cCz" = (
 /obj/structure/table,
 /obj/effect/spawner/random/engineering/tech_supply,
-/obj/item/phone,
+/obj/structure/transmitter/colony_net/desk/auto_id,
 /turf/open/floor/tile/dark/blue2{
 	dir = 1
 	},
@@ -8849,11 +8847,6 @@
 /obj/effect/ai_node,
 /turf/open/floor,
 /area/bigredv2/outside/engineering)
-"eMf" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/landmark/weed_node,
-/turf/open/floor/tile/dark,
-/area/bigredv2/outside/marshal_office)
 "eNF" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
@@ -9919,9 +9912,9 @@
 /turf/open/floor/wood,
 /area/bigredv2/outside/nanotrasen_lab/inside)
 "hbe" = (
-/obj/machinery/telecomms/relay/preset/telecomms,
-/turf/closed/mineral/smooth/bigred/indestructible,
-/area/storage/testroom)
+/obj/effect/landmark/static_comms/net_two,
+/turf/open/floor/plating/ground/mars/random/sand,
+/area/bigredv2/outside/virology)
 "hbp" = (
 /obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
@@ -12910,10 +12903,6 @@
 /obj/effect/landmark/weed_node,
 /turf/open/floor,
 /area/bigredv2/outside/marshal_office)
-"nEz" = (
-/obj/effect/landmark/weed_node,
-/turf/open/floor/plating/ground/mars/random/sand,
-/area/bigredv2/outside/virology)
 "nEK" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/open/floor/tile/darkgreen/darkgreen2/corner{
@@ -15088,7 +15077,7 @@
 "syZ" = (
 /obj/structure/table/wood,
 /obj/item/reagent_containers/food/drinks/coffee,
-/obj/item/phone,
+/obj/structure/transmitter/colony_net/desk/auto_id,
 /turf/open/floor/carpet/side{
 	dir = 6
 	},
@@ -15164,7 +15153,6 @@
 /turf/open/floor/freezer,
 /area/bigredv2/outside/virology)
 "sJh" = (
-/obj/structure/closet/l3closet/security,
 /obj/machinery/light{
 	dir = 1
 	},
@@ -16100,10 +16088,6 @@
 /obj/effect/landmark/weed_node,
 /turf/open/floor/plating/ground/mars/dirttosand/autosmooth,
 /area/bigredv2/outside/virology)
-"uON" = (
-/obj/effect/landmark/weed_node,
-/turf/open/floor/plating/ground/mars/random/dirt,
-/area/bigredv2/outside/virology)
 "uPO" = (
 /obj/effect/landmark/weed_node,
 /turf/open/floor/tile/darkgreen/darkgreen2/corner{
@@ -17020,6 +17004,12 @@
 /obj/effect/landmark/lv624/fog_blocker,
 /turf/open/floor/plating/ground/mars/random/cave,
 /area/bigredv2/caves/northeast)
+"wNy" = (
+/obj/effect/landmark/static_comms/net_one,
+/turf/open/floor/tile/vault{
+	dir = 8
+	},
+/area/bigredv2/outside/marshal_office)
 "wOh" = (
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
@@ -18417,7 +18407,7 @@ aaa
 aaa
 hXy
 vcQ
-hbe
+vcQ
 vcQ
 gCQ
 gCQ
@@ -23265,7 +23255,7 @@ aaa
 ddm
 vUc
 vUc
-uON
+vUc
 vUc
 aMz
 aNf
@@ -23913,11 +23903,11 @@ aaa
 aaa
 aaa
 aaa
-ddm
+foH
 riz
 dYn
+hbe
 aFv
-nEz
 aMz
 nBq
 aNi
@@ -24349,7 +24339,7 @@ aaa
 aaa
 foH
 vUc
-uOJ
+riz
 aFv
 aFv
 aMz
@@ -35592,7 +35582,7 @@ gzM
 gzM
 acp
 pUl
-nQj
+wNy
 pUl
 nQj
 acp
@@ -36243,7 +36233,7 @@ gzM
 gzM
 acp
 pXI
-eMf
+uHi
 nwk
 tII
 acp

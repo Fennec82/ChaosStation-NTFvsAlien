@@ -58,7 +58,7 @@
 	/// The sound the closet makes when closed
 	var/close_sound = 'sound/machines/click.ogg'
 	/// The delay between stuns getting out of the closet causes
-	var/closet_stun_delay = 2 SECONDS
+	var/closet_stun_delay = 1 SECONDS
 
 
 

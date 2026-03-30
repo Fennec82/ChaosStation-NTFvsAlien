@@ -250,12 +250,17 @@ WEAPONS
 /datum/supply_packs/weapons/tx54_airburst
 	name = "GL-54 airburst grenade magazine"
 	contains = list(/obj/item/ammo_magazine/rifle/tx54)
-	cost = 20
+	cost = 25
+
+/datum/supply_packs/weapons/tx54_he
+	name = "GL-54 HE grenade magazine"
+	contains = list(/obj/item/ammo_magazine/rifle/tx54/he)
+	cost = 120
 
 /datum/supply_packs/weapons/tx54_incendiary
 	name = "GL-54 incendiary grenade magazine"
 	contains = list(/obj/item/ammo_magazine/rifle/tx54/incendiary)
-	cost = 60
+	cost = 75
 
 /datum/supply_packs/weapons/tx54_smoke
 	name = "GL-54 tactical smoke grenade magazine"
@@ -271,6 +276,16 @@ WEAPONS
 	name = "GL-54 tanglefoot grenade magazine"
 	contains = list(/obj/item/ammo_magazine/rifle/tx54/smoke/tangle)
 	cost = 48
+
+/datum/supply_packs/weapons/tx54_smoke/acid
+	name = "GL-54 acid smoke grenade magazine"
+	contains = list(/obj/item/ammo_magazine/rifle/tx54/smoke/acid)
+	cost = 120
+
+/datum/supply_packs/weapons/tx54_razor
+	name = "GL-54 razorburn grenade magazine"
+	contains = list(/obj/item/ammo_magazine/rifle/tx54/razor)
+	cost = 180
 
 /datum/supply_packs/weapons/tx55
 	name = "AR-55 OICW Rifle"
@@ -324,6 +339,11 @@ WEAPONS
 	contains = list(/obj/item/weapon/gun/rifle/pepperball)
 	cost = 100
 
+/datum/supply_packs/weapons/pepperball/mag
+	name = "PB-12 pepperball gun magazine (x1)"
+	contains = list(/obj/item/ammo_magazine/rifle/pepperball)
+	cost = 3
+
 /datum/supply_packs/weapons/bricks
 	name = "Brick"
 	contains = list(/obj/item/weapon/brick)
@@ -350,7 +370,7 @@ WEAPONS
 /datum/supply_packs/weapons/tx8
 	name = "BR-8 Scout Rifle"
 	contains = list(/obj/item/weapon/gun/rifle/tx8)
-	cost = 400
+	cost = TX8_PRICE
 	available_against_xeno_only = TRUE
 
 /datum/supply_packs/weapons/scout_regular
@@ -428,7 +448,7 @@ WEAPONS
 /datum/supply_packs/weapons/zx76
 	name = "ZX-76 Twin-Barrled Burst Shotgun"
 	contains = list(/obj/item/weapon/gun/shotgun/zx76)
-	cost = 1500
+	cost = ZX_PRICE
 
 /datum/supply_packs/weapons/shotguntracker
 	name = "12 Gauge Tracker Shells"
@@ -463,7 +483,7 @@ WEAPONS
 /datum/supply_packs/weapons/antimaterial
 	name = "SR-26 Antimaterial rifle (AMR) kit"
 	contains = list(/obj/item/weapon/gun/rifle/sniper/antimaterial)
-	cost = 800
+	cost = AMR_PRICE
 	available_against_xeno_only = TRUE
 
 /datum/supply_packs/weapons/antimaterial_ammo
@@ -527,7 +547,7 @@ WEAPONS
 /datum/supply_packs/weapons/napalm_X
 	name = "FL-84 X fuel tank"
 	contains = list(/obj/item/ammo_magazine/flamer_tank/large/X)
-	cost = 300
+	cost = 500
 
 /datum/supply_packs/weapons/back_fuel_tank
 	name = "Standard back fuel tank"
@@ -537,12 +557,12 @@ WEAPONS
 /datum/supply_packs/weapons/back_fuel_tank_x
 	name = "X-fuel backpack"
 	contains = list(/obj/item/ammo_magazine/flamer_tank/backtank/X)
-	cost = 600
+	cost = 1000
 
 /datum/supply_packs/weapons/fueltank
 	name = "X-fuel tank"
 	contains = list(/obj/structure/reagent_dispensers/fueltank/xfuel)
-	cost = 600
+	cost = 1000
 	containertype = null
 
 /datum/supply_packs/weapons/rpgoneuse
@@ -620,8 +640,12 @@ WEAPONS
 	contains = list(/obj/item/ammo_magazine/pistol/standard_pistol/smart_pistol)
 	cost = 10
 
-/datum/supply_packs/weapons/moonbeam_ammo
-	name = "Moonbeam NL sniper rifle tranq magazine"
-	contains = list(/obj/item/ammo_magazine/rifle/chamberedrifle/tranq)
-	cost = 30
-
+/datum/supply_packs/weapons/laserweapons
+	name = "Standard laser weapon bundle" // Since we can buy an xray laser rifle but not regular ones?
+	contains = list(/obj/item/weapon/gun/energy/lasgun/lasrifle/standard_marine_carbine,
+/obj/item/weapon/gun/energy/lasgun/lasrifle/standard_marine_rifle,
+/obj/item/weapon/gun/energy/lasgun/lasrifle/standard_marine_sniper,
+/obj/item/weapon/gun/energy/lasgun/lasrifle/standard_marine_mlaser,
+/obj/item/cell/lasgun/volkite/powerpack/marine,
+/obj/item/cell/lasgun/volkite/powerpack/marine/backpack,)
+	cost = 250

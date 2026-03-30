@@ -13,6 +13,7 @@
 
 	// *** Melee Attacks *** //
 	melee_damage = 28
+	attack_delay = 9
 
 	// *** Speed *** //
 	speed = -0.3
@@ -22,16 +23,16 @@
 	plasma_gain = 90
 
 	// *** Health *** //
-	max_health = 540
+	max_health = 520
 
 	// *** Sunder *** //
-	sunder_multiplier = 0.8
+	sunder_multiplier = 1
 
 	// *** Evolution *** //
 	upgrade_threshold = TIER_THREE_THRESHOLD
 	maximum_active_caste = 1
-	death_evolution_delay = 5 MINUTES
-	deevolves_to = /mob/living/carbon/xenomorph/drone
+	death_evolution_delay = 10 MINUTES
+	deevolves_to = /datum/xeno_caste/drone
 
 	// *** Flags *** //
 /* NTF edit - allow evolution
@@ -59,7 +60,6 @@
 
 	actions = list(
 		/datum/action/ability/xeno_action/xeno_resting,
-		/datum/action/ability/xeno_action/psychic_whisper,
 		/datum/action/ability/xeno_action/psychic_influence,
 		/datum/action/ability/xeno_action/psychic_radiance,
 		/datum/action/ability/activable/xeno/impregnate,
@@ -67,7 +67,7 @@
 		/datum/action/ability/activable/xeno/devour,
 		/datum/action/ability/activable/xeno/cocoon,
 		/datum/action/ability/activable/xeno/plant_weeds,
-		/datum/action/ability/xeno_action/lay_egg,
+		/datum/action/ability/xeno_action/lay_egg/advanced,
 		/datum/action/ability/activable/xeno/secrete_resin/hivelord,
 		/datum/action/ability/xeno_action/blessing_menu,
 		/datum/action/ability/activable/xeno/tail_stab,
@@ -117,7 +117,6 @@
 
 	actions = list(
 		/datum/action/ability/xeno_action/xeno_resting,
-		/datum/action/ability/xeno_action/psychic_whisper,
 		/datum/action/ability/xeno_action/psychic_influence,
 		/datum/action/ability/xeno_action/psychic_radiance,
 		/datum/action/ability/activable/xeno/impregnate,
@@ -125,7 +124,7 @@
 		/datum/action/ability/activable/xeno/devour,
 		/datum/action/ability/activable/xeno/cocoon,
 		/datum/action/ability/activable/xeno/plant_weeds,
-		/datum/action/ability/xeno_action/lay_egg,
+		/datum/action/ability/xeno_action/lay_egg/advanced,
 		/datum/action/ability/activable/xeno/secrete_resin/hivelord,
 		/datum/action/ability/xeno_action/blessing_menu,
 		/datum/action/ability/activable/xeno/tail_stab,

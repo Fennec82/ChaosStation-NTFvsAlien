@@ -11301,9 +11301,7 @@
 /area/magmoor/compound/east)
 "hSR" = (
 /obj/structure/flora/pottedplant/twentytwo,
-/turf/open/floor/tile/red/redtaupecorner{
-	dir = 2
-	},
+/turf/open/floor/tile/red/redtaupecorner,
 /area/magmoor/security/lobby)
 "hTt" = (
 /obj/structure/cable,
@@ -11793,7 +11791,6 @@
 "ijT" = (
 /obj/effect/decal/cleanable/blood/splatter/animated,
 /obj/structure/table/reinforced/flipped{
-	dir = 2;
 	pixel_y = 4
 	},
 /obj/item/ammo_casing,
@@ -14981,10 +14978,6 @@
 /obj/machinery/mining/brace,
 /turf/open/floor/mainship/cargo,
 /area/magmoor/cargo/processing/south)
-"ksR" = (
-/obj/machinery/telecomms/relay/preset/telecomms,
-/turf/closed/mineral/smooth/lavawall/indestructible,
-/area/storage/testroom)
 "ksX" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 6
@@ -25678,6 +25671,7 @@
 /area/magmoor/compound/southwest)
 "sbF" = (
 /obj/item/trash/eat,
+/obj/effect/landmark/static_comms/net_two,
 /turf/open/floor/plating/ground/concrete,
 /area/magmoor/civilian/jani)
 "sbG" = (
@@ -30625,6 +30619,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 6
 	},
+/obj/effect/landmark/static_comms/net_one,
 /turf/open/floor/mainship/ntlogo,
 /area/magmoor/civilian/arrival)
 "vzw" = (
@@ -35553,7 +35548,7 @@ iLH
 iLH
 ube
 ube
-ksR
+ube
 ube
 ube
 "}

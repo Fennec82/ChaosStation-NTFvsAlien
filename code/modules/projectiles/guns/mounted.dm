@@ -54,10 +54,12 @@
 
 	attachable_allowed = list(
 		/obj/item/attachable/scope/unremovable/hsg_102,
+		/obj/item/attachable/motiondetector/advanced/sg,
 	)
 
 	starting_attachment_types = list(
 		/obj/item/attachable/scope/unremovable/hsg_102,
+		/obj/item/attachable/motiondetector/advanced/sg,
 	)
 
 	allowed_ammo_types = list(
@@ -213,7 +215,7 @@
 	w_class = WEIGHT_CLASS_HUGE
 	equip_slot_flags = ITEM_SLOT_BACK
 	icon = 'icons/obj/machines/deployable/heavy_laser.dmi'
-	icon_state = "heavylaser"
+	icon_state = "heavylaser_deployable"
 
 	fire_sound = 'sound/weapons/guns/fire/tank_flamethrower.ogg'
 	reload_sound = 'sound/weapons/guns/interact/minigun_cocked.ogg'
@@ -469,7 +471,14 @@
 	damage_falloff_mult = 0.25
 	undeploy_time = 0.5 SECONDS
 	max_integrity = 200
+	actions_types = list(/datum/action/item_action/aim_mode)
 
+/obj/item/weapon/gun/standard_mmg/toggle_deployment_flag(deployed)
+	if(deployed)
+		aim_time = 1 SECONDS
+	else
+		aim_time = initial(aim_time)
+	. = ..()
 
 /obj/item/weapon/gun/standard_mmg/machinegunner
 	starting_attachment_types = list(/obj/item/attachable/stock/t27, /obj/item/attachable/scope/unremovable/mmg)
@@ -488,8 +497,8 @@
 	inhand_x_dimension = 64
 	inhand_y_dimension = 32
 	caliber = CALIBER_14X5 // codex
-	max_shells = 5 //codex
-	max_chamber_items = 5
+	max_shells = 6 //codex
+	max_chamber_items = 6
 	force = 30
 	fire_sound = 'sound/weapons/guns/fire/ptrs.ogg'
 	dry_fire_sound = 'sound/weapons/guns/fire/m41a_empty.ogg'
@@ -564,7 +573,7 @@
 
 	gun_firemode_list = list(GUN_FIREMODE_SEMIAUTO)
 	actions_types = list(/datum/action/item_action/aim_mode)
-	aim_time = 24 SECONDS
+	aim_time = 6 SECONDS
 	reciever_flags = AMMO_RECIEVER_MAGAZINES|AMMO_RECIEVER_AUTO_EJECT
 	soft_armor = list(MELEE = 60, BULLET = 50, LASER = 50, ENERGY = 50, BOMB = 50, BIO = 100, FIRE = 0, ACID = 0)
 
@@ -781,11 +790,13 @@
 	attachable_allowed = list(
 		/obj/item/attachable/at45barrel,
 		/obj/item/attachable/stock/at45stock,
+		/obj/item/attachable/motiondetector/advanced/sg,
 	)
 
 	starting_attachment_types = list(
 		/obj/item/attachable/at45barrel,
 		/obj/item/attachable/stock/at45stock,
+		/obj/item/attachable/motiondetector/advanced/sg,
 	)
 	attachable_offset = list("muzzle_x" = 56, "muzzle_y" = 16,"rail_x" = 18, "rail_y" = 24, "under_x" = 28, "under_y" = 13, "stock_x" = -11, "stock_y" = 0)
 

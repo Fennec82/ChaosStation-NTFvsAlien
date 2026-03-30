@@ -55,7 +55,6 @@
 
 	actions = list(
 		/datum/action/ability/xeno_action/xeno_resting,
-		/datum/action/ability/xeno_action/psychic_whisper,
 		/datum/action/ability/xeno_action/psychic_influence,
 		/datum/action/ability/activable/xeno/impregnate,
 		/datum/action/ability/xeno_action/watch_xeno,
@@ -100,11 +99,10 @@
 	// Primordial Upgrade: Corrosive Lance and Neurotoxin Lance are now selectable spit types in Toggle Bombard Type, one of Boiler's abilities.
 
 	// *** Ranged Attack *** //
-	spit_types = list(/datum/ammo/xeno/boiler_gas, /datum/ammo/xeno/boiler_gas/lance, /datum/ammo/xeno/boiler_gas/corrosive, /datum/ammo/xeno/boiler_gas/corrosive/lance)
+	spit_types = list(/datum/ammo/xeno/boiler_gas, /datum/ammo/xeno/boiler_gas/lance, /datum/ammo/xeno/boiler_gas/corrosive, /datum/ammo/xeno/boiler_gas/corrosive/lance, /datum/ammo/xeno/boiler_gas/aphro, /datum/ammo/xeno/boiler_gas/aphro/lance)
 
 	actions = list(
 		/datum/action/ability/xeno_action/xeno_resting,
-		/datum/action/ability/xeno_action/psychic_whisper,
 		/datum/action/ability/xeno_action/psychic_influence,
 		/datum/action/ability/activable/xeno/impregnate,
 		/datum/action/ability/xeno_action/watch_xeno,
@@ -130,13 +128,19 @@
 	upgrade = XENO_UPGRADE_BASETYPE
 	caste_desc = "Gross! The large creature is venting a hot steam."
 
-		// *** Ranged Attack *** //
-	spit_delay = 0.75 SECONDS
-	spit_types = list(/datum/ammo/xeno/acid/airburst)
+	// *** Melee Attacks *** //
+	attack_delay = 7
+
+	// *** Speed *** //
+	speed = -0.7
+
+	max_health = 450
+
+	// *** Defense *** //
+	soft_armor = list(MELEE = 50, BULLET = 50, LASER = 50, ENERGY = 50, BOMB = 10, BIO = 40, FIRE = 40, ACID = 40)
 
 	actions = list(
 		/datum/action/ability/xeno_action/xeno_resting,
-		/datum/action/ability/xeno_action/psychic_whisper,
 		/datum/action/ability/xeno_action/psychic_influence,
 		/datum/action/ability/activable/xeno/impregnate,
 		/datum/action/ability/xeno_action/watch_xeno,
@@ -144,9 +148,8 @@
 		/datum/action/ability/activable/xeno/devour,
 		/datum/action/ability/xeno_action/place_acidwell,
 		/datum/action/ability/activable/xeno/corrosive_acid/strong,
-		/datum/action/ability/activable/xeno/xeno_spit,
-		/datum/action/ability/xeno_action/smokescreen_spit,
-		/datum/action/ability/activable/xeno/spray_acid/line/boiler,
+		/datum/action/ability/activable/xeno/smokescreen_spit,
+		/datum/action/ability/activable/xeno/charge/acid_dash,
 		/datum/action/ability/xeno_action/steam_rush,
 		/datum/action/ability/xeno_action/create_edible_jelly,
 		/datum/action/ability/xeno_action/place_stew_pod,
@@ -166,7 +169,6 @@
 
 	actions = list(
 		/datum/action/ability/xeno_action/xeno_resting,
-		/datum/action/ability/xeno_action/psychic_whisper,
 		/datum/action/ability/xeno_action/psychic_influence,
 		/datum/action/ability/activable/xeno/impregnate,
 		/datum/action/ability/xeno_action/watch_xeno,
@@ -174,9 +176,8 @@
 		/datum/action/ability/activable/xeno/devour,
 		/datum/action/ability/xeno_action/place_acidwell,
 		/datum/action/ability/activable/xeno/corrosive_acid/strong,
-		/datum/action/ability/activable/xeno/xeno_spit,
-		/datum/action/ability/xeno_action/smokescreen_spit,
-		/datum/action/ability/activable/xeno/spray_acid/line/boiler,
+		/datum/action/ability/activable/xeno/smokescreen_spit,
+		/datum/action/ability/activable/xeno/charge/acid_dash,
 		/datum/action/ability/xeno_action/steam_rush,
 		/datum/action/ability/activable/xeno/high_pressure_spit,
 		/datum/action/ability/xeno_action/create_edible_jelly,

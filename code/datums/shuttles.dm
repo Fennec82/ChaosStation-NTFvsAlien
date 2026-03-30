@@ -183,7 +183,17 @@
 	suffix = "_som"
 	display_name = "Tadpole Carrier Model"
 	pickable = FALSE
+/*
+/datum/map_template/shuttle/minidropship/clf
+	suffix = "_clf"
+	display_name = "CLF Technical"
+	pickable = FALSE
 
+/datum/map_template/shuttle/minidropship/colmil
+	suffix = "_col"
+	display_name = "CM minidropship"
+	pickable = FALSE
+*/
 /datum/map_template/shuttle/escape_pod
 	shuttle_id = SHUTTLE_ESCAPE_POD
 	name = "Escape Pod"
@@ -223,6 +233,10 @@
 /datum/map_template/shuttle/supplysom
 	shuttle_id = "supplysom"
 	name = "Som Supply Shuttle"
+
+/datum/map_template/shuttle/supplyicc
+	shuttle_id = "supplyicc"
+	name = "CM Supply Shuttle"
 
 /datum/map_template/shuttle/shipelevator
 	shuttle_id = SHUTTLE_SHIPELEVATOR

@@ -37,7 +37,6 @@
 	spit_cost = 55
 	added_spit_delay = 0 SECONDS
 	damage_type = STAMINA
-	plasma_drain = 3
 	accurate_range = 5
 	max_range = 10
 	accuracy_variation = 3
@@ -46,7 +45,7 @@
 	slowdown_stacks = 1.5
 	smoke_strength = 0.5
 	smoke_range = 0
-	reagent_transfer_amount = 4
+	reagent_transfer_amount = 5
 	var/smoke_type = /datum/effect_system/smoke_spread/xeno/neuro/light
 	var/reagent_type = /datum/reagent/toxin/xeno_neurotoxin
 
@@ -109,15 +108,15 @@
 
 /datum/ammo/xeno/toxin/upgrade1
 	smoke_strength = 0.6
-	reagent_transfer_amount = 5
+	reagent_transfer_amount = 6
 
 /datum/ammo/xeno/toxin/upgrade2
 	smoke_strength = 0.7
-	reagent_transfer_amount = 6
+	reagent_transfer_amount = 7.5
 
 /datum/ammo/xeno/toxin/upgrade3
 	smoke_strength = 0.75
-	reagent_transfer_amount = 6.5
+	reagent_transfer_amount = 8
 
 
 /datum/ammo/xeno/toxin/heavy //Praetorian
@@ -125,18 +124,16 @@
 	spit_cost = 100
 	added_spit_delay = 0 SECONDS
 	damage = 10
-	plasma_drain = 3
 	smoke_strength = 1
-	reagent_transfer_amount = 10
+	reagent_transfer_amount = 12
 
 /datum/ammo/xeno/toxin/auto
 	damage = 3
-	plasma_drain = 1
 	damage_falloff = 0.2
 	spit_cost = 20
 	added_spit_delay = 0 SECONDS
 	smoke_strength = 0.25
-	reagent_transfer_amount = 2.5
+	reagent_transfer_amount = 3
 
 /datum/ammo/xeno/toxin/aphrotoxin
 	name = "aphrotoxin spit"
@@ -144,7 +141,6 @@
 	spit_cost = 65
 	added_spit_delay = 0.1 SECONDS
 	damage_type = STAMINA
-	plasma_drain = 7
 	accurate_range = 5
 	max_range = 10
 	accuracy_variation = 3
@@ -175,13 +171,11 @@
 	spit_cost = 120
 	added_spit_delay = 0 SECONDS
 	damage = 35
-	plasma_drain = 9
 	smoke_strength = 1
 	reagent_transfer_amount = 8
 
 /datum/ammo/xeno/toxin/aphrotoxin/auto
 	damage = 12
-	plasma_drain = 3
 	damage_falloff = 0.2
 	spit_cost = 25
 	added_spit_delay = 0 SECONDS
@@ -194,7 +188,6 @@
 	ping = null
 	ammo_behavior_flags = AMMO_SKIPS_ALIENS|AMMO_TARGET_TURF|AMMO_XENO
 	damage_type = STAMINA
-	plasma_drain = 5
 	armor_type = BIO
 	spit_cost = 50
 	sound_hit = "alien_resin_build2"
@@ -232,10 +225,12 @@
 /datum/ammo/xeno/sticky/proc/drop_resin(turf/T, hivenumber = XENO_HIVE_NORMAL)
 	if(T.density || istype(T, /turf/open/space)) // No structures in space
 		return
-
 	for(var/obj/O in T.contents)
 		if(is_type_in_typecache(O, GLOB.no_sticky_resin))
 			return
+	var/obj/alien/weeds/alien_weeds = locate() in T
+	if(!alien_weeds || hivenumber != alien_weeds.get_xeno_hivenumber())
+		return
 
 	new /obj/alien/resin/sticky/thin(T, hivenumber)
 
@@ -300,14 +295,14 @@
 /datum/ammo/xeno/acid/on_shield_block(mob/target_mob, atom/movable/projectile/proj)
 	airburst(target_mob, proj)
 
-/datum/ammo/xeno/acid/drop_nade(turf/T) //Leaves behind an acid pool; defaults to 1-3 seconds.
-	if(T.density)
+/datum/ammo/xeno/acid/drop_nade(turf/target_turf, atom/movable/projectile/proj) //Leaves behind an acid pool; defaults to 1-3 seconds.
+	if(target_turf)
 		return
-	xenomorph_spray(T, puddle_duration, puddle_acid_damage)
+	xenomorph_spray(target_turf, puddle_duration, puddle_acid_damage)
 
 /datum/ammo/xeno/acid/medium
 	name = "acid spatter"
-	damage = 35
+	damage = 32
 	ammo_behavior_flags = AMMO_XENO
 
 /datum/ammo/xeno/acid/auto
@@ -321,13 +316,13 @@
 	drop_nade(get_turf(target_mob), proj)
 
 /datum/ammo/xeno/acid/auto/on_hit_obj(obj/target_obj, atom/movable/projectile/proj)
-	drop_nade(target_obj.density ? get_step_towards(target_obj, proj) : get_turf(target_obj))
+	drop_nade(target_obj.density ? get_step_towards(target_obj, proj) : get_turf(target_obj), proj)
 
 /datum/ammo/xeno/acid/auto/on_hit_turf(turf/target_turf, atom/movable/projectile/proj)
-	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf)
+	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf, proj)
 
 /datum/ammo/xeno/acid/auto/do_at_max_range(turf/target_turf, atom/movable/projectile/proj)
-	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf)
+	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf, proj)
 
 /datum/ammo/xeno/acid/passthrough
 	name = "acid spittle"
@@ -348,16 +343,16 @@
 
 /datum/ammo/xeno/acid/heavy/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
 	var/turf/target_turf = get_turf(target_mob)
-	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf)
+	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf, proj)
 
 /datum/ammo/xeno/acid/heavy/on_hit_obj(obj/target_obj, atom/movable/projectile/proj)
-	drop_nade(target_obj.density ? get_step_towards(target_obj, proj) : get_turf(target_obj))
+	drop_nade(target_obj.density ? get_step_towards(target_obj, proj) : get_turf(target_obj), proj)
 
 /datum/ammo/xeno/acid/heavy/on_hit_turf(turf/target_turf, atom/movable/projectile/proj)
-	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf)
+	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf, proj)
 
 /datum/ammo/xeno/acid/heavy/do_at_max_range(turf/target_turf, atom/movable/projectile/proj)
-	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf)
+	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf, proj)
 
 
 ///For the Spitter's Scatterspit ability
@@ -371,77 +366,32 @@
 	puddle_duration = 1 SECONDS //Lasts 2-4 seconds
 
 ///For the Sizzler Boiler's Spit
-/datum/ammo/xeno/acid/airburst
-	name = "acid steam spittle"
-	spit_cost = 50
-	damage = 20
-	ammo_behavior_flags = AMMO_XENO|AMMO_TARGET_TURF
-	bonus_projectiles_type = /datum/ammo/xeno/acid/airburst_bomblet
-	bonus_projectiles_scatter = 10
-	///How many projectiles we split into
-	var/bonus_projectile_quantity = 3
-
-/datum/ammo/xeno/acid/airburst/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
-	var/turf/det_turf = get_step_towards(target_mob, proj)
-	fire_directionalburst(proj, proj.firer, proj.shot_from, bonus_projectile_quantity, Get_Angle(proj.starting_turf, target_mob), loc_override = det_turf)
-
-/datum/ammo/xeno/acid/airburst/on_hit_obj(obj/target_obj, atom/movable/projectile/proj)
-	var/turf/det_turf = get_step_towards(target_obj, proj)
-	fire_directionalburst(proj, proj.firer, proj.shot_from, bonus_projectile_quantity, Get_Angle(proj.starting_turf, target_obj), loc_override = det_turf)
-
-/datum/ammo/xeno/acid/airburst/on_hit_turf(turf/target_turf, atom/movable/projectile/proj)
-	var/turf/det_turf = get_step_towards(target_turf, proj)
-	fire_directionalburst(proj, proj.firer, proj.shot_from, bonus_projectile_quantity, Get_Angle(proj.starting_turf, target_turf), loc_override = det_turf)
-
-/datum/ammo/xeno/acid/airburst/do_at_max_range(turf/target_turf, atom/movable/projectile/proj)
-	var/turf/det_turf = get_step_towards(target_turf, proj)
-	fire_directionalburst(proj, proj.firer, proj.shot_from, bonus_projectile_quantity, Get_Angle(proj.starting_turf, target_turf), loc_override = det_turf)
-
-/datum/ammo/xeno/acid/airburst_bomblet
-	name = "acid steam spatter"
-	icon_state = "neurotoxin"
-	ammo_behavior_flags = AMMO_XENO|AMMO_SKIPS_ALIENS|AMMO_PASS_THROUGH_MOB|AMMO_LEAVE_TURF
-	max_range = 3
-	shell_speed = 1
-	damage = 15
-	penetration = 0
-	/// smoke type created when the projectile detonates
-	var/datum/effect_system/smoke_spread/smoketype = /datum/effect_system/smoke_spread/xeno/acid
-	///radius this smoke will encompass
-	var/smoke_radius = 0
-	///duration the smoke will last
-	var/smoke_duration = 2
-
-/datum/ammo/xeno/acid/airburst_bomblet/drop_nade(turf/T)
-	var/datum/effect_system/smoke_spread/smoke = new smoketype()
-	playsound(T, 'sound/effects/smoke.ogg', 25, 1, 4)
-	smoke.set_up(smoke_radius, T, smoke_duration)
-	smoke.start()
-
-/datum/ammo/xeno/acid/airburst_bomblet/on_hit_obj(obj/target_obj, atom/movable/projectile/proj)
-	drop_nade(target_obj.allow_pass_flags & PASS_PROJECTILE ? get_step_towards(target_obj, proj) : get_turf(target_obj))
-
-/datum/ammo/xeno/acid/airburst_bomblet/on_hit_turf(turf/target_turf, atom/movable/projectile/proj)
-	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf)
-
-/datum/ammo/xeno/acid/airburst_bomblet/do_at_max_range(turf/target_turf, atom/movable/projectile/proj)
-	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf)
-
-/datum/ammo/xeno/acid/airburst/heavy
+/datum/ammo/xeno/acid/smokescreen
 	name = "acid steam glob"
 	icon_state = "neurotoxin"
 	added_spit_delay = 1 SECONDS
 	spit_cost = 50
 	damage = 35
+	max_range = 6
 	stagger_duration = 2 SECONDS
 	slowdown_stacks = 3
 	ammo_behavior_flags = AMMO_XENO|AMMO_TARGET_TURF
-	bonus_projectiles_type = /datum/ammo/xeno/acid/airburst_bomblet/smokescreen
+	bonus_projectiles_type = /datum/ammo/xeno/acid/smokescreen_bomblet
 	bonus_projectiles_scatter = 30
-	bonus_projectile_quantity = 5
+	///How many projectiles we split into
+	var/bonus_projectile_quantity = 5
+	/// smoke type created when the projectile fails to reach max range
+	var/datum/effect_system/smoke_spread/smoketype_fail = /datum/effect_system/smoke_spread/xeno/acid/fast
 
-/datum/ammo/xeno/acid/airburst/heavy/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
-	. = ..()
+/datum/ammo/xeno/acid/smokescreen/drop_nade(turf/target_turf, atom/movable/projectile/proj)
+	var/datum/effect_system/smoke_spread/smoke = new smoketype_fail()
+	playsound(target_turf, 'sound/effects/smoke.ogg', 10, 1, 2)
+	smoke.set_up(1, target_turf)
+	smoke.start()
+
+/datum/ammo/xeno/acid/smokescreen/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
+	var/turf/det_turf = get_step_towards(target_mob, proj)
+	fire_directionalburst(proj, proj.firer, proj.shot_from, bonus_projectile_quantity, Get_Angle(proj.starting_turf, target_mob), loc_override = det_turf)
 	if(iscarbon(target_mob))
 		var/mob/living/carbon/target_carbon = target_mob
 		if(target_carbon.issamexenohive(proj.firer))
@@ -449,27 +399,69 @@
 		target_carbon.adjust_stagger(stagger_duration)
 		target_carbon.add_slowdown(slowdown_stacks)
 
-/datum/ammo/xeno/acid/airburst/heavy/neurotoxin
-	damage_type = STAMINA
-	plasma_drain = 9
-	bonus_projectiles_type = /datum/ammo/xeno/acid/airburst_bomblet/smokescreen/neurotoxin
+///Hitting an object causes the bomblet to fail and release transparent fast-dissipating smoke
+/datum/ammo/xeno/acid/smokescreen/on_hit_obj(obj/target_obj, atom/movable/projectile/proj)
+	drop_nade(target_obj.density ? get_step_towards(target_obj, proj) : get_turf(target_obj), proj)
 
-/datum/ammo/xeno/acid/airburst_bomblet/smokescreen
+///Hitting a mob causes the bomblet to fail and release transparent fast-dissipating smoke
+/datum/ammo/xeno/acid/smokescreen/on_hit_turf(turf/target_turf, atom/movable/projectile/proj)
+	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf, proj)
+
+/datum/ammo/xeno/acid/smokescreen/do_at_max_range(turf/target_turf, atom/movable/projectile/proj)
+	var/turf/det_turf = get_step_towards(target_turf, proj)
+	fire_directionalburst(proj, proj.firer, proj.shot_from, bonus_projectile_quantity, Get_Angle(proj.starting_turf, target_turf), loc_override = det_turf)
+
+///Extra projectiles made by /datum/ammo/xeno/acid/smokescreen
+/datum/ammo/xeno/acid/smokescreen_bomblet
+	name = "acid steam spatter"
+	icon_state = "neurotoxin"
+	ammo_behavior_flags = AMMO_XENO|AMMO_SKIPS_ALIENS|AMMO_PASS_THROUGH_MOB|AMMO_LEAVE_TURF
 	max_range = 5
+	shell_speed = 1
 	damage = 6
-	smoketype = /datum/effect_system/smoke_spread/xeno/acid
-	smoke_radius = 1
-	smoke_duration = 4
+	penetration = 0
+	/// smoke type created when the projectile detonates
+	var/datum/effect_system/smoke_spread/smoketype = /datum/effect_system/smoke_spread/xeno/acid/opaque
+	///radius this smoke will encompass
+	var/smoke_radius = 1
+	///duration the smoke will last
+	var/smoke_duration = 4
+	/// smoke type created when the projectile fails to reach max range
+	var/datum/effect_system/smoke_spread/smoketype_fail = /datum/effect_system/smoke_spread/xeno/acid/fast
 
-/datum/ammo/xeno/acid/airburst_bomblet/smokescreen/neurotoxin
+///Drops a smoke bomblet
+/datum/ammo/xeno/acid/smokescreen_bomblet/proc/drop_bomblet(turf/target_turf, max_range_reached = FALSE)
+	var/chosen_smoke = max_range_reached ? smoketype : smoketype_fail
+	var/datum/effect_system/smoke_spread/smoke = new chosen_smoke()
+	playsound(target_turf, 'sound/effects/smoke.ogg', 25, 1, 4)
+	smoke.set_up(smoke_radius, target_turf, smoke_duration)
+	smoke.start()
+
+///Hitting an object causes the bomblet to fail and release transparent fast-dissipating smoke
+/datum/ammo/xeno/acid/smokescreen_bomblet/on_hit_obj(obj/target_obj, atom/movable/projectile/proj)
+	drop_bomblet(target_obj.density ? get_step_towards(target_obj, proj) : get_turf(target_obj), FALSE)
+
+///Hitting a mob causes the bomblet to fail and release transparent fast-dissipating smoke
+/datum/ammo/xeno/acid/smokescreen_bomblet/on_hit_turf(turf/target_turf, atom/movable/projectile/proj)
+	drop_bomblet(target_turf.density ? get_step_towards(target_turf, proj) : target_turf, FALSE)
+
+///Reaching max range causes the bomblet to detonate and release opaque long-lasting smoke
+/datum/ammo/xeno/acid/smokescreen_bomblet/do_at_max_range(turf/target_turf, atom/movable/projectile/proj)
+	drop_bomblet(target_turf.density ? get_step_towards(target_turf, proj) : target_turf, TRUE)
+
+/datum/ammo/xeno/acid/smokescreen/neurotoxin
 	damage_type = STAMINA
-	plasma_drain = 2
-	smoketype = /datum/effect_system/smoke_spread/xeno/neuro/light
+	bonus_projectiles_type = /datum/ammo/xeno/acid/smokescreen_bomblet/neurotoxin
+	smoketype_fail = /datum/effect_system/smoke_spread/xeno/neuro/light/fast
+
+/datum/ammo/xeno/acid/smokescreen_bomblet/neurotoxin
+	damage_type = STAMINA
+	smoketype = /datum/effect_system/smoke_spread/xeno/neuro
 
 ///For the Sizzler Boiler's primo
 /datum/ammo/xeno/acid/heavy/high_pressure_spit
 	name = "pressurized steam glob"
-	icon_state = "boiler_gas"
+	icon_state = "boiler_corrosive"
 	damage = 50
 	ammo_behavior_flags = AMMO_XENO|AMMO_SKIPS_ALIENS
 	max_range = 16
@@ -505,7 +497,7 @@
 	ammo_behavior_flags = AMMO_XENO|AMMO_SKIPS_ALIENS
 
 /datum/ammo/rocket/he/xadar/on_hit_obj(obj/target_obj, atom/movable/projectile/proj)
-	drop_nade(get_turf(target_obj))
+	drop_nade(get_turf(target_obj), proj)
 	if(ishitbox(target_obj))
 		var/obj/hitbox/vehiclehitbox = target_obj
 		vehiclehitbox.root.take_damage(XADAR_VEHICLE_DAMAGE)
@@ -513,10 +505,10 @@
 	if(isvehicle(target_obj))
 		target_obj.take_damage(XADAR_VEHICLE_DAMAGE)
 
-/datum/ammo/rocket/he/xadar/drop_nade(turf/T)
-	new /obj/effect/temp_visual/xadar_blast(locate((T.x - 1),(T.y - 1),T.z)) // Gets the tile SE of the impact zone to center the effect properly
-	playsound(T, 'sound/effects/xadarblast.ogg', 50, 1)
-	for(var/mob/living/carbon/human/human_victim AS in cheap_get_humans_near(T,2))
+/datum/ammo/rocket/he/xadar/drop_nade(turf/target_turf, atom/movable/projectile/proj)
+	new /obj/effect/temp_visual/xadar_blast(locate((target_turf.x - 1),(target_turf.y - 1),target_turf.z)) // Gets the tile SE of the impact zone to center the effect properly
+	playsound(target_turf, 'sound/effects/xadarblast.ogg', 50, 1)
+	for(var/mob/living/carbon/human/human_victim AS in cheap_get_humans_near(target_turf,2))
 		human_victim.adjust_stagger(4 SECONDS)
 		human_victim.apply_damage(90, BURN, BODY_ZONE_CHEST, ACID,  penetration = 10)
 		var/throwlocation = human_victim.loc
@@ -525,5 +517,5 @@
 		if(human_victim.stat == DEAD)
 			continue
 		human_victim.throw_at(throwlocation, 6, 1.5, src, TRUE)
-	for(var/acid_tile in filled_turfs(get_turf(T), 1.5, "circle", pass_flags_checked = PASS_AIR|PASS_PROJECTILE))
+	for(var/acid_tile in filled_turfs(get_turf(target_turf), 1.5, "circle", pass_flags_checked = PASS_AIR|PASS_PROJECTILE))
 		xenomorph_spray(acid_tile, 5 SECONDS, 40, null, TRUE)

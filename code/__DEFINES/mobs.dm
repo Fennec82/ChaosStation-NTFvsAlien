@@ -80,7 +80,7 @@ GLOBAL_VAR_INIT(max_larva_count_per_mob, 3) //Added for adminbus reasons
 	Germs and infections
 */
 
-#define GERM_LEVEL_AMBIENT 110		//maximum germ level you can reach by standing still
+#define GERM_LEVEL_AMBIENT 100		//maximum germ level you can reach by standing still
 #define GERM_LEVEL_MOVE_CAP 200		//maximum germ level you can reach by running around
 
 #define INFECTION_LEVEL_ONE 100
@@ -254,6 +254,14 @@ GLOBAL_LIST_INIT(xenoupgradetiers, list(XENO_UPGRADE_BASETYPE, XENO_UPGRADE_INVA
 
 /// If the limb's total damage percent is higher than this, it can be severed.
 #define LIMB_MAX_DAMAGE_SEVER_RATIO 0.8
+/// Factor for limb blood flow rate
+#define LIMB_FLOW_FACTOR 60
+/// Macro for a limb's blood flow rate based on its brute damage
+#define LIMB_FLOW_RATE(limb_brute) (limb_brute / LIMB_FLOW_FACTOR)
+/// Factor for IB wound flow rate
+#define INTERNAL_BLEEDING_FLOW_FACTOR 30
+/// Macro for an IB wound's blood flow rate based on blood volume and wound severity
+#define INTERNAL_BLEEDING_FLOW_RATE(blood_volume, intensity) (blood_volume - intensity / INTERNAL_BLEEDING_FLOW_FACTOR)
 
 /////////////////MOVE DEFINES//////////////////////
 #define MOVE_INTENT_WALK 0
@@ -287,100 +295,103 @@ GLOBAL_LIST_INIT(xenoupgradetiers, list(XENO_UPGRADE_BASETYPE, XENO_UPGRADE_INVA
 #define SURGERY_CAN_USE 1
 #define SURGERY_INVALID 2
 
-#define NECRO_TREAT_MIN_DURATION 40
-#define NECRO_TREAT_MAX_DURATION 60
+#define NECRO_TREAT_MIN_DURATION 20
+#define NECRO_TREAT_MAX_DURATION 30
 
-#define NECRO_REMOVE_MIN_DURATION 60
-#define NECRO_REMOVE_MAX_DURATION 80
+#define NECRO_REMOVE_MIN_DURATION 30
+#define NECRO_REMOVE_MAX_DURATION 40
 
-#define HEMOSTAT_REMOVE_MIN_DURATION 40
-#define HEMOSTAT_REMOVE_MAX_DURATION 60
+#define HEMOSTAT_REMOVE_MIN_DURATION 20
+#define HEMOSTAT_REMOVE_MAX_DURATION 30
 
-#define BONESETTER_MIN_DURATION 60
-#define BONESETTER_MAX_DURATION 80
+#define BONESETTER_MIN_DURATION 30
+#define BONESETTER_MAX_DURATION 40
 
-#define BONEGEL_REPAIR_MIN_DURATION 40
-#define BONEGEL_REPAIR_MAX_DURATION 60
+#define BONEGEL_REPAIR_MIN_DURATION 25
+#define BONEGEL_REPAIR_MAX_DURATION 30
 
-#define FIXVEIN_MIN_DURATION 60
-#define FIXVEIN_MAX_DURATION 80
+#define FIXVEIN_MIN_DURATION 30
+#define FIXVEIN_MAX_DURATION 40
 
-#define FIX_ORGAN_MIN_DURATION 60
-#define FIX_ORGAN_MAX_DURATION 80
+#define FIX_ORGAN_MIN_DURATION 30
+#define FIX_ORGAN_MAX_DURATION 40
 
-#define BONEGEL_CLOSE_ENCASED_MIN_DURATION 40
-#define BONEGEL_CLOSE_ENCASED_MAX_DURATION 60
+#define BONEGEL_CLOSE_ENCASED_MIN_DURATION 20
+#define BONEGEL_CLOSE_ENCASED_MAX_DURATION 30
 
-#define RETRACT_CLOSE_ENCASED_MIN_DURATION 30
-#define RETRACT_CLOSE_ENCASED_MAX_DURATION 40
+#define RETRACT_CLOSE_ENCASED_MIN_DURATION 15
+#define RETRACT_CLOSE_ENCASED_MAX_DURATION 20
 
-#define RETRACT_OPEN_ENCASED_MIN_DURATION 30
-#define RETRACT_OPEN_ENCASED_MAX_DURATION 40
+#define RETRACT_OPEN_ENCASED_MIN_DURATION 15
+#define RETRACT_OPEN_ENCASED_MAX_DURATION 20
 
-#define SAW_OPEN_ENCASED_MIN_DURATION 60
-#define SAW_OPEN_ENCASED_MAX_DURATION 80
+#define SAW_OPEN_ENCASED_MIN_DURATION 30
+#define SAW_OPEN_ENCASED_MAX_DURATION 40
 
-#define INCISION_MANAGER_MIN_DURATION 60
+#define INCISION_MANAGER_MIN_DURATION 30
 #define INCISION_MANAGER_MAX_DURATION 80
 
-#define CAUTERY_MIN_DURATION 60
-#define CAUTERY_MAX_DURATION 80
+#define CAUTERY_MIN_DURATION 30
+#define CAUTERY_MAX_DURATION 40
 
-#define BONECHIPS_REMOVAL_MIN_DURATION 40
-#define BONECHIPS_REMOVAL_MAX_DURATION 60
+#define BONECHIPS_REMOVAL_MIN_DURATION 20
+#define BONECHIPS_REMOVAL_MAX_DURATION 30
 #define BONECHIPS_MAX_DAMAGE 20
 
-#define HEMOTOMA_MIN_DURATION 60
-#define HEMOTOMA_MAX_DURATION 80
+#define HEMOTOMA_MIN_DURATION 30
+#define HEMOTOMA_MAX_DURATION 40
 
-#define ROBOLIMB_CUT_MIN_DURATION 60
-#define ROBOLIMB_CUT_MAX_DURATION 80
+#define ROBOLIMB_CUT_MIN_DURATION 30
+#define ROBOLIMB_CUT_MAX_DURATION 40
 
-#define ROBOLIMB_MEND_MIN_DURATION 60
-#define ROBOLIMB_MEND_MAX_DURATION 80
+#define ROBOLIMB_MEND_MIN_DURATION 30
+#define ROBOLIMB_MEND_MAX_DURATION 40
 
-#define ROBOLIMB_PREPARE_MIN_DURATION 60
-#define ROBOLIMB_PREPARE_MAX_DURATION 80
+#define ROBOLIMB_PREPARE_MIN_DURATION 30
+#define ROBOLIMB_PREPARE_MAX_DURATION 40
 
-#define ROBOLIMB_ATTACH_MIN_DURATION 60
-#define ROBOLIMB_ATTACH_MAX_DURATION 80
+#define ROBOLIMB_ATTACH_MIN_DURATION 30
+#define ROBOLIMB_ATTACH_MAX_DURATION 40
 
-#define EYE_CUT_MIN_DURATION 60
-#define EYE_CUT_MAX_DURATION 80
+#define EYE_CUT_MIN_DURATION 30
+#define EYE_CUT_MAX_DURATION 40
 
-#define EYE_LIFT_MIN_DURATION 30
-#define EYE_LIFT_MAX_DURATION 40
+#define EYE_LIFT_MIN_DURATION 15
+#define EYE_LIFT_MAX_DURATION 20
 
-#define EYE_MEND_MIN_DURATION 40
-#define EYE_MEND_MAX_DURATION 60
+#define EYE_MEND_MIN_DURATION 20
+#define EYE_MEND_MAX_DURATION 30
 
-#define EYE_CAUTERISE_MIN_DURATION 60
-#define EYE_CAUTERISE_MAX_DURATION 80
+#define EYE_CAUTERISE_MIN_DURATION 30
+#define EYE_CAUTERISE_MAX_DURATION 40
 
-#define FACIAL_CUT_MIN_DURATION 60
-#define FACIAL_CUT_MAX_DURATION 80
+#define FACIAL_CUT_MIN_DURATION 30
+#define FACIAL_CUT_MAX_DURATION 40
 
-#define FACIAL_MEND_MIN_DURATION 40
-#define FACIAL_MEND_MAX_DURATION 60
+#define FACIAL_MEND_MIN_DURATION 20
+#define FACIAL_MEND_MAX_DURATION 30
 
-#define FACIAL_FIX_MIN_DURATION 30
-#define FACIAL_FIX_MAX_DURATION 40
+#define FACIAL_FIX_MIN_DURATION 15
+#define FACIAL_FIX_MAX_DURATION 20
 
-#define FACIAL_CAUTERISE_MIN_DURATION 60
-#define FACIAL_CAUTERISE_MAX_DURATION 80
+#define FACIAL_CAUTERISE_MIN_DURATION 30
+#define FACIAL_CAUTERISE_MAX_DURATION 40
 
-#define SUTURE_MIN_DURATION 80
-#define SUTURE_MAX_DURATION 90
+#define SUTURE_MIN_DURATION 40
+#define SUTURE_MAX_DURATION 50
 
-#define DEFAT_MIN_DURATION 120
-#define DEFAT_MAX_DURATION 150
+#define DEFAT_MIN_DURATION 60
+#define DEFAT_MAX_DURATION 70
 
 #define LIMB_PRINTING_TIME 30
 #define LIMB_METAL_AMOUNT 125
 #define LIMB_MATTER_AMOUNT 100
 
+#define STANDARD_DNR_TIME 150 //5 minutes
+#define SOL_DNR_TIME 2400 //80 minutes
+
 //How long it takes for a human to become undefibbable
-#define TIME_BEFORE_DNR 1300 //In life ticks, multiply by 2 to have seconds
+GLOBAL_VAR_INIT(time_before_dnr, STANDARD_DNR_TIME) //multiply by 2
 
 ///Default living `maxHealth`
 #define LIVING_DEFAULT_MAX_HEALTH 100
@@ -407,6 +418,7 @@ GLOBAL_LIST_INIT(xenoupgradetiers, list(XENO_UPGRADE_BASETYPE, XENO_UPGRADE_INVA
 #define ROBOTIC_LIMBS (1<<18)
 #define GREYSCALE_BLOOD (1<<19)
 #define IS_INSULATED (1<<20)
+#define SPECIES_NO_HUG (1<<21)
 
 //=================================================
 
@@ -544,6 +556,8 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 #define XENO_DESTROY_OWN_STRUCTURES (1<<6)
 ///ability to destroy weeds
 #define XENO_DESTROY_WEEDS (1<<7)
+///can move while zoomed
+#define XENO_CAN_MOVE_ZOOMED (1<<8)
 
 
 #define XENO_DEFAULT_VENT_ENTER_TIME 4.5 SECONDS //Standard time for a xeno to enter a vent.
@@ -554,6 +568,7 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 #define XENO_ACID_WELL_MAX_CHARGES 5 //Maximum number of charges for the acid well
 
 #define HIVE_CAN_HIJACK (1<<0)
+#define HIVE_CAN_COLLAPSE_FROM_SILO (1<<1)
 
 #define XENO_PULL_CHARGE_TIME 2 SECONDS
 #define XENO_SLOWDOWN_REGEN 0.4
@@ -568,7 +583,7 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 #define XENO_LARVAL_AMOUNT_RECURRING 5
 #define XENO_LARVAL_CHANNEL_TIME 0.5 SECONDS
 
-#define XENO_NEURO_AMOUNT_RECURRING 5
+#define XENO_NEURO_AMOUNT_RECURRING 6
 #define XENO_NEURO_CHANNEL_TIME 0.25 SECONDS
 
 #define XENO_HEALTH_ALERT_TRIGGER_PERCENT 0.25 //If a xeno is damaged while its current hit points are less than this percent of its maximum, we send out an alert to the hive
@@ -714,8 +729,6 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 #define CARRIER_HUGGER_THROW_SPEED 2
 #define CARRIER_HUGGER_THROW_DISTANCE 7
 #define CARRIER_SLASH_HUGGER_DAMAGE 25
-///how many can be beared at once
-#define MAX_LARVA_PREGNANCIES GLOB.max_larva_count_per_mob
 //Defiler defines
 #define DEFILER_GAS_CHANNEL_TIME 0.5 SECONDS
 #define DEFILER_GAS_DELAY 1 SECONDS
@@ -801,6 +814,8 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 #define BOILER_BOMBARD_COOLDOWN_REDUCTION 1.5 SECONDS
 /// Amount of stored globs needed to start glowing.
 #define	BOILER_LUMINOSITY_THRESHOLD 2
+/// Charge distance for Sizzler's acid dash
+#define BOILER_CHARGEDISTANCE 5
 
 //Hivelord defines
 #define HIVELORD_TUNNEL_DISMANTLE_TIME 3 SECONDS
@@ -877,9 +892,6 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 //Spiderling defines
 #define TIME_TO_DISSOLVE 5 SECONDS
 #define SPIDERLING_RAGE_RANGE 10 // how close a nearby human has to be in order to be targeted
-
-//Praetorian defines
-#define PRAE_CHARGEDISTANCE 5
 
 //Dancer defines
 #define DANCER_IMPALE_PENETRATION 37 //armor penetration done by impale to marked targets - NTF Buff; Tailstab already exists

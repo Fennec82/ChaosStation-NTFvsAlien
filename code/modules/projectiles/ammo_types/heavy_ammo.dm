@@ -43,10 +43,10 @@
 
 /datum/ammo/bullet/minigun/ltaap
 	name = "chaingun bullet"
-	damage = 15
-	penetration = 20
+	damage = 30
+	penetration = 35
 	sundering = 1
-	ammo_behavior_flags = AMMO_BALLISTIC|AMMO_BETTER_COVER_RNG|AMMO_IFF
+	ammo_behavior_flags = AMMO_BALLISTIC|AMMO_BETTER_COVER_RNG
 	damage_falloff = 1
 	accurate_range = 7
 	accuracy = 10
@@ -69,12 +69,13 @@
 	penetration = 50
 	sundering = 12.5
 	shrapnel_chance = 0
-	max_range = 35
+	max_range = 20
+	accurate_range_min = 4
 	///Bonus flat damage to walls, balanced around resin walls.
 	var/autocannon_wall_bonus = 50
 
 /datum/ammo/bullet/auto_cannon/on_hit_turf(turf/target_turf, atom/movable/projectile/proj)
-	proj.proj_max_range -= 20
+	proj.proj_max_range -= 10
 
 	if(istype(target_turf, /turf/closed/wall))
 		var/turf/closed/wall/wall_victim = target_turf
@@ -105,7 +106,7 @@
 	penetration = 35
 	sundering = 7.5
 	shrapnel_chance = 25
-	max_range = 30
+	max_range = 10
 	airburst_multiplier = 0.5
 	autocannon_wall_bonus = 25
 
@@ -218,9 +219,12 @@
 	hud_state = "hivelo"
 	hud_state_empty = "hivelo_empty"
 	ammo_behavior_flags = AMMO_BALLISTIC
-	damage = 40
-	penetration = 45
-	sundering = 4
+	damage = 70
+	penetration = 35
+	sundering = 8
+
+/datum/ammo/bullet/tank_autocannon_ap/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
+	staggerstun(target_mob, proj, slowdown = 1)
 
 /datum/ammo/rocket/tank_autocannon_he
 	name = "autocannon high explosive"
@@ -228,16 +232,20 @@
 	hud_state = "hivelo_fire"
 	hud_state_empty = "hivelo_empty"
 	ammo_behavior_flags = AMMO_BALLISTIC
-	damage = 15
-	penetration = 20
+	armor_type = BOMB
+	damage = 10
+	penetration = 0
 	sundering = 0
+	airburst_multiplier = 2
+	shell_speed = 3
 
-/datum/ammo/rocket/tank_autocannon_he/drop_nade(turf/T)
-	explosion(T, weak_impact_range = 2, tiny = TRUE)
+/datum/ammo/rocket/tank_autocannon_he/drop_nade(turf/target_turf, atom/movable/projectile/proj)
+	airburst(target_turf, proj)
+	explosion(target_turf, weak_impact_range = 2, tiny = TRUE)
 
 /datum/ammo/rocket/tank_autocannon_he/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
 	//this specifically doesn't knockback. Don't change the explosion above weak.
-	drop_nade(get_turf(target_mob))
+	drop_nade(get_turf(target_mob), proj)
 
 // SARDEN
 
@@ -260,19 +268,19 @@
 	sundering = 0.5
 	max_range = 21
 
-/datum/ammo/bullet/sarden/high_explosive/drop_nade(turf/T)
-	explosion(T, light_impact_range = 2, weak_impact_range = 4, explosion_cause=src)
+/datum/ammo/bullet/sarden/high_explosive/drop_nade(turf/target_turf, atom/movable/projectile/proj)
+	explosion(target_turf, light_impact_range = 2, weak_impact_range = 4, explosion_cause=src)
 
 /datum/ammo/bullet/sarden/high_explosive/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
 	var/target_turf = get_turf(target_mob)
 	staggerstun(target_mob, proj, max_range, knockback = 1, hard_size_threshold = 3)
-	drop_nade(target_turf)
+	drop_nade(target_turf, proj)
 
 /datum/ammo/bullet/sarden/high_explosive/on_hit_obj(obj/target_obj, atom/movable/projectile/proj)
-	drop_nade(target_obj.density ? get_step_towards(target_obj, proj) : target_obj.loc)
+	drop_nade(target_obj.density ? get_step_towards(target_obj, proj) : target_obj.loc, proj)
 
 /datum/ammo/bullet/sarden/high_explosive/on_hit_turf(turf/target_turf, atom/movable/projectile/proj)
-	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf)
+	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf, proj)
 
 /datum/ammo/bullet/sarden/high_explosive/do_at_max_range(turf/target_turf, atom/movable/projectile/proj)
-	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf)
+	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf, proj)

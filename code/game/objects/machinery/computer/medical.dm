@@ -20,7 +20,7 @@
 	set name = "Eject ID Card"
 	set src in oview(1)
 
-	if(!usr || usr.stat || usr.lying_angle)
+	if(!usr || usr.stat)
 		return
 
 	if(scan)

@@ -39,7 +39,11 @@
 // extra reference for how many boiler acid globs we have
 #define VREF_MUTABLE_CORROSIVEGLOB_COUNTER "VREF_CORROSIVEGLOB_COUNTER"
 // extra reference for how many boiler acid globs we have
+#define VREF_MUTABLE_APHROGLOB_COUNTER "VREF_ARPHOGLOB_COUNTER"
+// extra reference for how many boiler acid globs we have
 #define VREF_MUTABLE_AMMO_COUNTER "VREF_AMMO_COUNTER"
+// extra reference for how many stacks of sizzler steam rush we have
+#define VREF_MUTABLE_STEAMRUSH_STACKS "VREF_STEAMRUSH_STACKS"
 // extra reference for how many globadier acid mines we have
 #define VREF_MUTABLE_ACID_MINES_COUNTER "VREF_ACIDMINE_COUNTER"
 // extra reference for how many globadier grenades we have

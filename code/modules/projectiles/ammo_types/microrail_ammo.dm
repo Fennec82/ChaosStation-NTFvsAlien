@@ -86,7 +86,7 @@
 /datum/ammo/bullet/micro_rail_spread/incendiary
 	name = "incendiary flechette"
 	ammo_behavior_flags = AMMO_BALLISTIC|AMMO_PASS_THROUGH_MOB|AMMO_INCENDIARY|AMMO_LEAVE_TURF
-	damage = 15
+	damage = 5
 	penetration = 5
 	sundering = 1.5
 	max_range = 6
@@ -97,7 +97,7 @@
 /datum/ammo/bullet/micro_rail_spread/incendiary/drop_flame(turf/T)
 	if(!istype(T))
 		return
-	T.ignite(5, 10)
+	T.ignite(3, 6)
 
 /datum/ammo/bullet/micro_rail_spread/incendiary/on_leave_turf(turf/target_turf, atom/movable/projectile/proj)
 	if(prob(40))
@@ -184,23 +184,23 @@
 	///radius this smoke will encompass
 	var/smokeradius = 1
 
-/datum/ammo/smoke_burst/drop_nade(turf/T)
+/datum/ammo/smoke_burst/drop_nade(turf/target_turf, atom/movable/projectile/proj)
 	var/datum/effect_system/smoke_spread/smoke = new smoketype()
-	playsound(T, 'sound/effects/smoke.ogg', 25, 1, 4)
-	smoke.set_up(smokeradius, T, rand(5,9))
+	playsound(target_turf, 'sound/effects/smoke.ogg', 25, 1, 4)
+	smoke.set_up(smokeradius, target_turf, rand(5,9))
 	smoke.start()
 
 /datum/ammo/smoke_burst/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
-	drop_nade(get_turf(target_mob))
+	drop_nade(get_turf(target_mob), proj)
 
 /datum/ammo/smoke_burst/on_hit_obj(obj/target_obj, atom/movable/projectile/proj)
-	drop_nade(target_obj.allow_pass_flags & PASS_PROJECTILE ? get_step_towards(target_obj, proj) : get_turf(target_obj))
+	drop_nade(target_obj.allow_pass_flags & PASS_PROJECTILE ? get_step_towards(target_obj, proj) : get_turf(target_obj), proj)
 
 /datum/ammo/smoke_burst/on_hit_turf(turf/target_turf, atom/movable/projectile/proj)
-	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf)
+	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf, proj)
 
 /datum/ammo/smoke_burst/do_at_max_range(turf/target_turf, atom/movable/projectile/proj)
-	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf)
+	drop_nade(target_turf.density ? get_step_towards(target_turf, proj) : target_turf, proj)
 
 /datum/ammo/smoke_burst/tank
 	max_range = 7

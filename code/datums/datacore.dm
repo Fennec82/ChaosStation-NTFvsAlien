@@ -109,9 +109,11 @@ GLOBAL_DATUM_INIT(datacore, /datum/datacore, new)
 	//Xenomorphs
 	if(ooc || viewfaction == FACTION_CLF || viewfaction == FACTION_TERRAGOV)
 		for(var/mob/living/carbon/xenomorph/X in GLOB.xeno_mob_list)
+			if(X.tier == XENO_TIER_MINION)
+				continue
 			if(!ooc)
 				if((viewfaction == FACTION_CLF) == (X.get_xeno_hivenumber() == XENO_HIVE_CORRUPTED)) //clf can see everyone but corrupted, NTC can only see corrupted
-					break
+					continue
 			var/name = X.real_name
 			var/rank = X.xeno_caste.caste_name
 			//var/squad_name = "N/A"
@@ -282,6 +284,7 @@ GLOBAL_DATUM_INIT(datacore, /datum/datacore, new)
 	G.fields["sex"] = H.gender
 	G.fields["species"] = H.get_species()
 	G.fields["citizenship"] = H.citizenship
+	G.fields["blood_type"] = H.blood_type
 	G.fields["religion"] = H.religion
 	if(H.gen_record)
 		G.fields["notes"] = H.gen_record

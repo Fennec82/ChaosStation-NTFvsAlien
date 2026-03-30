@@ -29,7 +29,7 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 	///The respawn time for marines
 	var/respawn_time = 30 MINUTES
 	//The respawn time for Xenomorphs
-	var/xenorespawn_time = 5 MINUTES
+	var/xenorespawn_time = 2.5 MINUTES
 	///How many points do you need to win in a point gamemode
 	var/win_points_needed = 0
 	///The points per faction, assoc list
@@ -60,7 +60,7 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 	///Includes T3 xenos in the calculation for maximum T3 slots.
 	var/tier_three_inclusion = FALSE
 	///How often you can caste swap
-	var/caste_swap_cooldown = 15 MINUTES
+	var/caste_swap_cooldown = 1 MINUTES
 	///List of castes we dont want to be evolvable depending on gamemode.
 	var/list/restricted_castes
 
@@ -87,7 +87,15 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 	///if fun tads are enabled by default
 	var/enable_fun_tads = FALSE
 
+	///The current mission type being played
+	var/datum/campaign_mission/current_mission
+	///campaign stats organised by faction
+	var/list/datum/faction_stats/stat_list = list()
+
 	var/roundstart_players = 0
+	///dnr time in ticks for this mode.
+	var/custom_dnr_time
+	var/max_larva_preg_at_once
 
 /datum/game_mode/New()
 	initialize_emergency_calls()
@@ -98,8 +106,9 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 
 
 /datum/game_mode/proc/can_start(bypass_checks = FALSE)
-	if(!(config_tag in SSmapping.configs[GROUND_MAP].gamemodes) && !bypass_checks)
-		log_world("attempted to start [src.type] on "+SSmapping.configs[GROUND_MAP].map_name+" which doesn't support it.")
+	if((!(config_tag in SSmapping.configs[GROUND_MAP].gamemodes) || ((SSmapping.configs[GROUND_MAP].map_name in blacklist_ground_maps) && !(SSmapping.configs[GROUND_MAP].map_name in whitelist_ground_maps))) && !bypass_checks)
+		log_world("Attempted to start [name] on "+SSmapping.configs[GROUND_MAP].map_name+" which doesn't support it.")
+		to_chat(world, "<b>Unable to start [name].</b> [SSmapping.configs[GROUND_MAP].map_name] isn't supported on [name].")
 		// start a gamemode vote, in theory this should never happen.
 		addtimer(CALLBACK(SSvote, TYPE_PROC_REF(/datum/controller/subsystem/vote, initiate_vote), "gamemode", "SERVER"), 10 SECONDS)
 		return FALSE
@@ -126,7 +135,7 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 		L.after_round_start()
 
 	// Determine roundstart player count, used for population locks.
-	SSticker.mode.roundstart_players = length(GLOB.clients)
+	SSticker.mode.roundstart_players = length(GLOB.whitelisted_clients)
 	to_chat(world, "Round initialized with a Population of [SSticker.mode.roundstart_players]")
 	SSblackbox.record_feedback("text", "initial_players", 1, SSticker.mode.roundstart_players)
 	for(var/datum/job/job AS in valid_job_types)
@@ -135,10 +144,20 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 			continue
 		job.on_pre_setup()
 
+	for(var/faction in human_factions)
+		stat_list[faction] = new /datum/faction_stats(faction)
+
+	if(max_larva_preg_at_once)
+		GLOB.max_larva_count_per_mob = max_larva_preg_at_once
+	else
+		GLOB.max_larva_count_per_mob = MAX_LARVA_PREGNANCIES
+
 	return TRUE
 
 /datum/game_mode/proc/setup()
 	SHOULD_CALL_PARENT(TRUE)
+	if(custom_dnr_time)
+		GLOB.time_before_dnr = custom_dnr_time
 	SSpoints.prepare_supply_packs_list(CHECK_BITFIELD(round_type_flags, MODE_HUMAN_ONLY))
 	for(var/faction in human_factions)
 		SSpoints.dropship_points[faction] = 0
@@ -171,10 +190,20 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 		var/datum/db_query/query_round_game_mode = SSdbcore.NewQuery("UPDATE [format_table_name("round")] SET [sql] WHERE id = :roundid", list("roundid" = GLOB.round_id))
 		query_round_game_mode.Execute()
 		qdel(query_round_game_mode)
-	if(round_type_flags & MODE_XENO_SPAWN_PROTECT)
-		var/datum/job/xenomorph/xeno_job = SSjob.GetJobType(GLOB.hivenumber_to_job_type[XENO_HIVE_NORMAL])
-		xeno_job.free_xeno_at_start = 0
+	for(var/hivenumber in GLOB.hive_datums)
+		var/datum/job/xenomorph/xeno_job = SSjob.GetJobType(GLOB.hivenumber_to_job_type[hivenumber])
+		if((hivenumber == XENO_HIVE_NORMAL) && (round_type_flags & MODE_XENO_SPAWN_PROTECT))
+			xeno_job.free_xeno_at_start = 0
+			continue
+		xeno_job.free_xeno_at_start = xeno_job.total_positions
 
+	addtimer(CALLBACK(src, PROC_REF(give_wages)), 20 MINUTES)
+
+/datum/game_mode/proc/give_wages()
+	for(var/faction in stat_list)
+		var/datum/faction_stats/faction_stats = stat_list[faction]
+		faction_stats.apply_cash(250)
+	addtimer(CALLBACK(src, PROC_REF(give_wages)), 20 MINUTES)
 /datum/game_mode/proc/new_player_topic(mob/new_player/NP, href, list/href_list)
 	return FALSE
 
@@ -205,9 +234,9 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 	for(var/i in GLOB.new_player_list)
 		var/mob/new_player/player = i
 		var/mob/living = player.transfer_character()
+		player = null
 		if(!living)
 			continue
-		qdel(player)
 		living.client.init_verbs()
 		living.notransform = TRUE
 		SEND_GLOBAL_SIGNAL(COMSIG_GLOB_PLAYER_ROUNDSTART_SPAWNED, living)
@@ -232,9 +261,8 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 	end_round_fluff()
 	log_game("The round has ended.")
 	SSdbcore.SetRoundEnd()
-	if(time_between_round)
-		SSpersistence.last_modes_round_date[name] = world.realtime
-		SSpersistence.last_modes_round_date[time_between_round_group_name] = world.realtime
+	SSpersistence.last_modes_round_date[name] = world.realtime
+	SSpersistence.last_modes_round_date[time_between_round_group_name] = world.realtime
 	//Collects persistence features
 	if(allow_persistence_save)
 		SSpersistence.CollectData()
@@ -281,7 +309,7 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 
 	msg += "<hr>"
 
-	for(var/i in GLOB.clients)
+	for(var/i in GLOB.whitelisted_clients)
 		var/client/C = i
 		if(!check_other_rights(C, R_ADMIN, FALSE))
 			continue
@@ -379,10 +407,24 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 	for(var/obj/effect/landmark/eord_roomba/landmark in GLOB.eord_roomba_spawns)
 		new /obj/machinery/bot/roomba/valhalla/eord(get_turf(landmark))
 
+///This is overridden on the child types. Called by [/datum/hive_status/normal/handle_ruler_timer()] after a countdown to end the round.
 /datum/game_mode/proc/orphan_hivemind_collapse()
 	return
 
+///This is overriden on the child types. Provides the amount of time left before orphan collapse.
 /datum/game_mode/proc/get_hivemind_collapse_countdown()
+	return
+
+///This is overriden on the child types. Called by [update_silo_death_timer] after a countdown to end the round.
+/datum/game_mode/proc/siloless_hive_collapse()
+	return
+
+///This is overridden on the child types. Called to start/stop the silo death timer.
+/datum/game_mode/proc/update_silo_death_timer(datum/hive_status/silo_owner)
+	return
+
+///This is overridden on the child types. Provides the amount of time left before silo collapse.
+/datum/game_mode/proc/get_siloless_collapse_countdown()
 	return
 
 ///Provides the amount of time left before the game ends, used for the stat panel
@@ -418,22 +460,32 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 	if(GLOB.round_statistics.total_projectile_hits[FACTION_XENO])
 		parts += "[GLOB.round_statistics.total_projectile_hits[FACTION_XENO]] projectiles managed to hit xenomorphs. For a [(GLOB.round_statistics.total_projectile_hits[FACTION_XENO] / max(GLOB.round_statistics.total_projectiles_fired[FACTION_TERRAGOV], 1)) * 100]% accuracy total!"
 
+	if(GLOB.round_statistics.intel_max_chain)
+		parts += "The longest intel chain cashed in had length [GLOB.round_statistics.intel_max_chain]."
+	for(var/chain_length in GLOB.round_statistics.intel_chain_sold_by_list)
+		parts += "The first chain of length [chain_length] cashed in was cashed in by [GLOB.round_statistics.intel_chain_sold_by_list[chain_length]] for [GLOB.round_statistics.intel_chain_sold_for_list[chain_length]]."
 	if(GLOB.round_statistics.strategic_psypoints_from_generators)
 		parts += "[GLOB.round_statistics.strategic_psypoints_from_generators] strategic psy points were obtained from generators, at an average rate of [GLOB.round_statistics.strategic_psypoints_from_generators * ((1 HOURS) /(1 SECONDS)) / GLOB.round_statistics.generator_seconds] points per generator per hour."
 		var/avg_gen_time = GLOB.round_statistics.generator_seconds * 1 SECONDS / GLOB.generators_on_ground
 		parts += "The average generator was held by xenos for [DisplayTimeText(avg_gen_time)], or [100 * avg_gen_time / GLOB.round_statistics.round_length]% of the round."
 	if(GLOB.round_statistics.strategic_psypoints_from_hive_target_rewards)
 		parts += "[GLOB.round_statistics.strategic_psypoints_from_hive_target_rewards] strategic psy points were obtained from [GLOB.round_statistics.hive_target_rewards] hive target rewards, for an average of [GLOB.round_statistics.strategic_psypoints_from_hive_target_rewards/GLOB.round_statistics.hive_target_rewards] points per hive target reward claimed."
-	if(GLOB.round_statistics.strategic_psypoints_from_embryos)
-		parts += "[GLOB.round_statistics.strategic_psypoints_from_embryos] strategic psy points were obtained from [GLOB.round_statistics.total_larva_burst] embryos, for an average of [GLOB.round_statistics.strategic_psypoints_from_embryos/GLOB.round_statistics.total_larva_burst] points per larva born."
+	if(GLOB.round_statistics.total_embryos_rewarding)
+		parts += "[GLOB.round_statistics.strategic_psypoints_from_embryos] strategic psy points were obtained from [GLOB.round_statistics.total_embryos_rewarding] embryos, for an average of [GLOB.round_statistics.strategic_psypoints_from_embryos/GLOB.round_statistics.total_embryos_rewarding] points per embryo."
+	if(GLOB.round_statistics.total_larva_burst)
+		parts += "[GLOB.round_statistics.strategic_psypoints_from_births] strategic psy points were obtained from [GLOB.round_statistics.total_larva_burst] larva births, for an average of [GLOB.round_statistics.strategic_psypoints_from_births/GLOB.round_statistics.total_larva_burst] points per larva born."
 	if(GLOB.round_statistics.strategic_psypoints_from_cocoons)
 		parts += "[GLOB.round_statistics.strategic_psypoints_from_cocoons] strategic psy points were obtained from [GLOB.round_statistics.cocoons] cocoons, for an average of [GLOB.round_statistics.strategic_psypoints_from_cocoons/GLOB.round_statistics.cocoons] points per cocoon."
 	if(GLOB.round_statistics.strategic_psypoints_from_psydrains)
 		parts += "[GLOB.round_statistics.strategic_psypoints_from_psydrains] strategic psy points were obtained from [GLOB.round_statistics.psydrains] psydrains, for an average of [GLOB.round_statistics.strategic_psypoints_from_psydrains/GLOB.round_statistics.psydrains] points per psydrain."
+	if(GLOB.round_statistics.strategic_psypoints_from_intel)
+		parts += "[GLOB.round_statistics.strategic_psypoints_from_intel] strategic psy points were obtained from intel disks."
 	if(GLOB.round_statistics.biomass_from_hive_target_rewards)
 		parts += "[GLOB.round_statistics.biomass_from_hive_target_rewards] biomass was obtained from [GLOB.round_statistics.hive_target_rewards] hive target rewards, for an average of [GLOB.round_statistics.biomass_from_hive_target_rewards/GLOB.round_statistics.hive_target_rewards] points per hive target reward claimed."
-	if(GLOB.round_statistics.biomass_from_embryos)
-		parts += "[GLOB.round_statistics.biomass_from_embryos] biomass was obtained from [GLOB.round_statistics.total_larva_burst] embryos, for an average of [GLOB.round_statistics.biomass_from_embryos/GLOB.round_statistics.total_larva_burst] points per larva born."
+	if(GLOB.round_statistics.total_embryos_rewarding)
+		parts += "[GLOB.round_statistics.biomass_from_embryos] biomass was obtained from [GLOB.round_statistics.total_embryos_rewarding] embryos, for an average of [GLOB.round_statistics.biomass_from_embryos/GLOB.round_statistics.total_embryos_rewarding] points per embryo."
+	if(GLOB.round_statistics.total_larva_burst)
+		parts += "[GLOB.round_statistics.biomass_from_births] biomass was obtained from [GLOB.round_statistics.total_larva_burst] larva births, for an average of [GLOB.round_statistics.biomass_from_births/GLOB.round_statistics.total_larva_burst] points per larva born."
 	if(GLOB.round_statistics.biomass_from_cocoons)
 		parts += "[GLOB.round_statistics.biomass_from_cocoons] biomass was obtained from [GLOB.round_statistics.cocoons] cocoons, for an average of [GLOB.round_statistics.biomass_from_cocoons/GLOB.round_statistics.cocoons] points per cocoon."
 	if(GLOB.round_statistics.biomass_from_psydrains)
@@ -457,6 +509,8 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 		parts += "[GLOB.round_statistics.obs_fired] orbital bombardements were fired."
 	if(GLOB.round_statistics.total_human_deaths[FACTION_TERRAGOV])
 		parts += "[GLOB.round_statistics.total_human_deaths[FACTION_TERRAGOV]] people were killed, among which [GLOB.round_statistics.total_human_revives[FACTION_TERRAGOV]] were revived and [GLOB.round_statistics.total_human_respawns] respawned. For a [(GLOB.round_statistics.total_human_revives[FACTION_TERRAGOV] / max(GLOB.round_statistics.total_human_deaths[FACTION_TERRAGOV], 1)) * 100]% revival rate and a [(GLOB.round_statistics.total_human_respawns / max(GLOB.round_statistics.total_human_deaths[FACTION_TERRAGOV], 1)) * 100]% respawn rate."
+	if(GLOB.round_statistics.zombies_permad)
+		parts += "[GLOB.round_statistics.zombies_permad] zombies were permanently killed."
 	if(SSevacuation.human_escaped)
 		parts += "[SSevacuation.human_escaped] marines manage to evacuate, among [SSevacuation.initial_human_on_ship] that were on ship when xenomorphs arrived."
 	if(GLOB.round_statistics.now_pregnant)
@@ -490,6 +544,10 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 		parts += "[GLOB.round_statistics.drone_essence_link] health points restored through Drone's Essence Link."
 	if(GLOB.round_statistics.drone_essence_link_sunder)
 		parts += "[GLOB.round_statistics.drone_essence_link_sunder] sunder removed through Drone's Essence Link."
+	if(GLOB.round_statistics.hivelord_healing_infusion)
+		parts += "[GLOB.round_statistics.hivelord_healing_infusion] health points restored through Hivelord's Healing Infusion."
+	if(GLOB.round_statistics.hivelord_healing_infusion_sunder)
+		parts += "[GLOB.round_statistics.hivelord_healing_infusion_sunder] sunder removed through Hivelord's Healing Infusion."
 	if(GLOB.round_statistics.sentinel_drain_stings)
 		parts += "[GLOB.round_statistics.sentinel_drain_stings] number of times Sentinel drain sting was used."
 	if(GLOB.round_statistics.defender_charge_victims)
@@ -562,6 +620,8 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 		parts += "[GLOB.round_statistics.boiler_acid_smokes] number of times Boilers spat out a glob of acid."
 	if(GLOB.round_statistics.boiler_neuro_smokes)
 		parts += "[GLOB.round_statistics.boiler_neuro_smokes] number of times Boilers spat out a glob of neurotoxin."
+	if(GLOB.round_statistics.boiler_aphro_smokes)
+		parts += "[GLOB.round_statistics.boiler_aphro_smokes] number of times Boilers spat out a glob of aphrotoxin."
 	if(GLOB.round_statistics.psy_crushes)
 		parts += "[GLOB.round_statistics.psy_crushes] number of times Warlocks used psychic crush."
 	if(GLOB.round_statistics.psy_blasts)
@@ -581,9 +641,21 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 	if(GLOB.round_statistics.larva_from_cocoon)
 		parts += "[GLOB.round_statistics.larva_from_cocoon] larvas came from cocoons."
 	if(GLOB.round_statistics.larva_from_marine_spawning)
-		parts += "[GLOB.round_statistics.larva_from_marine_spawning] larvas came from marine spawning."
+		parts += "[GLOB.round_statistics.larva_from_marine_spawning] larvas came from marines spawning."
+	if(GLOB.round_statistics.larva_debt_from_marines_cryoing)
+		parts += "[GLOB.round_statistics.larva_debt_from_marines_cryoing] larva debt came from marines cryoing."
 	if(GLOB.round_statistics.larva_from_siloing_body)
 		parts += "[GLOB.round_statistics.larva_from_siloing_body] larvas came from siloing bodies."
+	if(GLOB.round_statistics.larva_from_intel)
+		parts += "[GLOB.round_statistics.larva_from_intel] larvas came from intel disk rewards."
+	if(GLOB.round_statistics.larva_from_converted_psypoints)
+		parts += "[GLOB.round_statistics.larva_from_converted_psypoints] larvas came from converted psy points."
+	if(GLOB.round_statistics.larva_from_converted_biomass)
+		parts += "[GLOB.round_statistics.larva_from_converted_biomass] larvas came from converted biomass."
+	if(GLOB.round_statistics.larva_from_hive_target_rewards)
+		parts += "[GLOB.round_statistics.larva_from_hive_target_rewards] larvas came from hive target rewards."
+	if(GLOB.round_statistics.larva_from_crash_autobalance)
+		parts += "[GLOB.round_statistics.larva_from_crash_autobalance] larvas were added automatically due to low xeno pop on crash."
 	if(GLOB.round_statistics.points_from_ambrosia)
 		parts += "[GLOB.round_statistics.points_from_ambrosia] requisitions points gained from ambrosia."
 	if(GLOB.round_statistics.points_from_intel)
@@ -615,6 +687,7 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 			var/last = GLOB.round_statistics.req_items_produced[length(GLOB.round_statistics.req_items_produced)]
 			parts += "[GLOB.round_statistics.req_items_produced[path]] [initial(path.name)][last ? "." : ","]"
 
+	status_update_round_end(parts)
 	if(length(parts))
 		return "<div class='panel stationborder'>[parts.Join("<br>")]</div>"
 	else
@@ -642,7 +715,7 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 					num_xenos += 1/XENO_MARINE_RATIO
 					continue
 			if(count_flags & COUNT_IGNORE_ALTERNATE_FACTION_MARINES)
-				if(H.faction != FACTION_TERRAGOV)
+				if((H.faction != FACTION_TERRAGOV) && (H.faction != FACTION_NANOTRASEN))
 					continue
 			else
 				if(H.faction == FACTION_XENO)
@@ -725,6 +798,9 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 	return FALSE
 
 /datum/game_mode/proc/CanLateSpawn(mob/new_player/NP, datum/job/job)
+	if(!WHITELIST_CHECK(NP.client))
+		WHITELIST_MESSAGE(NP.client)
+		return FALSE
 	if(!isnewplayer(NP))
 		return FALSE
 	if(!NP.IsJobAvailable(job, TRUE))
@@ -855,6 +931,12 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 			continue
 		var/datum/job/scaled_job = SSjob.GetJobType(job_type)
 		scaled_job.job_points_needed = job_points_needed_by_job_type[job_type]
+	if(/datum/job/xenomorph in job_points_needed_by_job_type)
+		for(var/hivenumber in GLOB.hivenumber_to_job_type)
+			var/datum/job/xeno_job = SSjob.GetJobType(GLOB.hivenumber_to_job_type[hivenumber])
+			if(!(xeno_job in job_points_needed_by_job_type))
+				xeno_job.job_points_needed = job_points_needed_by_job_type[/datum/job/xenomorph]
+
 	return TRUE
 
 /datum/game_mode/proc/scale_squad_jobs()
@@ -868,7 +950,7 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 /datum/game_mode/proc/display_report()
 	GLOB.common_report = build_roundend_report()
 	log_roundend_report()
-	for(var/client/C in GLOB.clients)
+	for(var/client/C in GLOB.whitelisted_clients)
 		show_roundend_report(C)
 		give_show_report_button(C)
 		CHECK_TICK
@@ -1086,6 +1168,9 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 				forced_disks += candidate
 			else
 				viable_disks += candidate
+		else
+			new /obj/machinery/computer/intel_computer(get_turf(candidate))
+			qdel(candidate)
 	if((length(viable_disks) + length(forced_disks)) < length(GLOB.nuke_disk_generator_types)) //Lets in maps with > 3 disks for a given set and just behaves like the previous rng in that case.
 		CRASH("Warning: Current map has too few nuke disk generators to correctly generate disks for set \">[chosen_disk_set]<\". Make sure both generators and json are set up correctly.")
 	if(length(forced_disks) > length(GLOB.nuke_disk_generator_types))
@@ -1098,6 +1183,9 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 			spawn_loc = pick_n_take(viable_disks)
 		new disk_generator(get_turf(spawn_loc))
 		qdel(spawn_loc)
+	for(var/obj/structure/nuke_disk_candidate/candidate AS in GLOB.nuke_disk_spawn_locs)
+		new /obj/machinery/computer/intel_computer(get_turf(candidate))
+		qdel(candidate)
 
 /// Add gamemode related items to statpanel
 /datum/game_mode/proc/get_status_tab_items(datum/dcs, mob/source, list/items)
@@ -1130,9 +1218,10 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 /datum/game_mode/proc/handle_larva_timer(datum/dcs, mob/source, list/items)
 	if(!(round_type_flags & MODE_INFESTATION))
 		return
-	var/larva_position = SEND_SIGNAL(source.client, COMSIG_CLIENT_GET_LARVA_QUEUE_POSITION)
-	if (larva_position) // If non-zero, we're in queue
-		items += "Position in larva candidate queue: [larva_position]"
+	for(var/hivenumber in GLOB.hive_datums)
+		var/larva_position = SEND_SIGNAL(source.client, COMSIG_CLIENT_GET_LARVA_QUEUE_POSITION, hivenumber)
+		if(larva_position)
+			items += "Position in [GLOB.hive_datums[hivenumber].name] larva candidate queue: [larva_position]"
 
 	var/datum/job/xeno_job = SSjob.GetJobType(/datum/job/xenomorph)
 	var/stored_larva = xeno_job.total_positions - xeno_job.current_positions

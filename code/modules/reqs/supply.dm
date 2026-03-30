@@ -1,5 +1,4 @@
 GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
-		/mob/living,
 		/obj/item/disk/nuclear,
 		/obj/item/radio/beacon,
 		/obj/vehicle,
@@ -22,6 +21,14 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 /obj/docking_port/stationary/supply
 	id = "supply_home"
 	roundstart_template = /datum/map_template/shuttle/supply
+	width = 5
+	dwidth = 2
+	dheight = 2
+	height = 5
+
+/obj/docking_port/stationary/supply/ntc_pad
+	id = "ntc_pad"
+	roundstart_template = null
 	width = 5
 	dwidth = 2
 	dheight = 2
@@ -51,10 +58,21 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 	dheight = 0
 	height = 1
 
+/obj/docking_port/stationary/supplyicc
+	id = "supply_icc"
+	roundstart_template = /datum/map_template/shuttle/supplyicc
+	dir = 1
+	width = 1
+	dwidth = 0
+	dheight = 1
+	height = 3
+
+
 /obj/docking_port/mobile/supply
 	name = "supply shuttle"
 	id = SHUTTLE_SUPPLY
-	callTime = 15 SECONDS
+	callTime = 3 SECONDS
+	ignitionTime = 1 SECONDS
 
 	dir = WEST
 	port_direction = EAST
@@ -68,6 +86,10 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 	/// Id of the home docking port
 	var/home_id = "supply_home"
 	railing_gear_name = "supply"
+	var/cargo_pad
+
+/obj/docking_port/mobile/supply/ntc
+	cargo_pad = "ntc_pad"
 
 /obj/docking_port/mobile/supply/Destroy(force)
 	for(var/i in railings)
@@ -176,13 +198,13 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 	faction = _faction
 	dropship_points = _dropship_points
 
-/obj/docking_port/mobile/supply/proc/sell()
+/obj/docking_port/mobile/supply/proc/sell(datum/weakref/user_weakref)
 	for(var/place in shuttle_areas)
 		var/area/shuttle/shuttle_area = place
 		for(var/atom/movable/AM in shuttle_area)
 			if(AM.anchored)
 				continue
-			var/list/datum/export_report = AM.supply_export(faction)
+			var/list/datum/export_report = AM.supply_export(faction, user_weakref.resolve())
 			if(export_report)
 				SSpoints.export_history += export_report
 			qdel(AM)
@@ -439,6 +461,9 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 					else
 						shopping_cart -= P.type
 				if("addone")
+					if(P.faction_lock && !(ui.user.faction in P.faction_lock))
+						to_chat(ui.user, span_warning("You cannot order this supply pack due to faction restrictions."))
+						return
 					if(shopping_cart[P.type])
 						shopping_cart[P.type]++
 					else
@@ -451,6 +476,9 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 						cart_cost += SP.cost * shopping_cart[SP.type]
 					var/excess_points = SSpoints.supply_points[ui_user.faction] - cart_cost
 					var/number_to_buy = min(round(excess_points / P.cost), 20) //hard cap at 20
+					if(P.faction_lock && !(ui.user.faction in P.faction_lock))
+						to_chat(ui.user, span_warning("You cannot order this supply pack due to faction restrictions."))
+						return
 					if(shopping_cart[P.type])
 						shopping_cart[P.type] += number_to_buy
 					else
@@ -464,13 +492,16 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 					to_chat(usr, "For safety reasons, the Automated Storage and Retrieval System cannot store live, friendlies, classified nuclear weaponry or homing beacons.")
 					playsound(supply_shuttle.return_center_turf(), 'sound/machines/buzz-two.ogg', 50, 0)
 				else
-					playsound(supply_shuttle.return_center_turf(), 'sound/machines/elevator_move.ogg', 50, 0)
-					SSshuttle.moveShuttleToTransit(shuttle_id, TRUE)
-					addtimer(CALLBACK(supply_shuttle, TYPE_PROC_REF(/obj/docking_port/mobile/supply, sell)), 15 SECONDS)
+					playsound(supply_shuttle.return_center_turf(), 'sound/machines/hydraulic.ogg', 50, 0)
+					if(supply_shuttle.cargo_pad)
+						SSshuttle.moveShuttle(shuttle_id, supply_shuttle.cargo_pad, TRUE)
+					else
+						SSshuttle.moveShuttleToTransit(shuttle_id, TRUE)
+					addtimer(CALLBACK(supply_shuttle, TYPE_PROC_REF(/obj/docking_port/mobile/supply, sell), WEAKREF(ui.user)), 4 SECONDS)
 			else
 				var/obj/docking_port/D = SSshuttle.getDock(home_id)
 				supply_shuttle.buy(usr, src)
-				playsound(D.return_center_turf(), 'sound/machines/elevator_move.ogg', 50, 0)
+				playsound(D.return_center_turf(), 'sound/machines/hydraulic.ogg', 50, 0)
 				SSshuttle.moveShuttle(shuttle_id, home_id, TRUE)
 			. = TRUE
 		if("approve")
@@ -550,6 +581,7 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 	worn_icon_state = "radiopack"
 	///Var for the window pop-up
 	var/datum/supply_ui/requests/supply_interface
+	storage_type = /datum/storage/backpack/no_delay
 
 /obj/item/storage/backpack/marine/radiopack/equipped(mob/user, slot)
 	. = ..()
@@ -564,9 +596,11 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 	SIGNAL_HANDLER
 	inplace_interference[1] = max(0, inplace_interference[1] - 1)
 
+/*
 /obj/item/storage/backpack/marine/radiopack/Initialize(mapload, ...)
 	. = ..()
 	AddComponent(/datum/component/beacon, FALSE, 0, icon_state + "_active")
+*/
 
 /obj/item/storage/backpack/marine/radiopack/examine(mob/user)
 	. = ..()
@@ -591,6 +625,12 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 	home_id = "supply_clf"
 	req_access = list(ACCESS_CLF_CARGO)
 
+/obj/machinery/computer/supplycomp/icc
+	shuttle_id = "supplyicc"
+	faction = FACTION_ICC
+	home_id = "supply_icc"
+	req_access = list(ACCESS_ICC_CARGO)
+
 /obj/docking_port/mobile/supply/som
 	dir = 1
 	height = 1
@@ -614,6 +654,18 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 	width = 3
 	faction = FACTION_CLF
 	railing_gear_name = "supply_clf"
+
+/obj/docking_port/mobile/supply/icc
+	dir = 2
+	height = 3
+	home_id = "supply_icc"
+	id = "supplyicc"
+	name = "CM supply shuttle"
+	dheight = 0
+	dwidth = 0
+	width = 1
+	faction = FACTION_ICC
+	railing_gear_name = "supply_icc"
 
 /obj/docking_port/mobile/supply/vehicle
 	railing_gear_name = "vehicle"

@@ -2,7 +2,7 @@
 	name = "Zombie"
 	icobase = 'icons/mob/human_races/r_husk.dmi'
 	total_health = 125
-	species_flags = NO_BREATHE|NO_SCAN|NO_BLOOD|NO_POISON|NO_PAIN|NO_CHEM_METABOLIZATION|NO_STAMINA|HEALTH_HUD_ALWAYS_DEAD|PARALYSE_RESISTANT
+	species_flags = NO_BREATHE|NO_SCAN|NO_BLOOD|NO_POISON|NO_PAIN|NO_CHEM_METABOLIZATION|NO_STAMINA|HEALTH_HUD_ALWAYS_DEAD|PARALYSE_RESISTANT|SPECIES_NO_HUG
 	lighting_cutoff = LIGHTING_CUTOFF_HIGH
 	inherent_traits = TRAIT_CRIT_IS_DEATH //so they dont stay alive when downed ig.
 	blood_color = "#110a0a"
@@ -28,16 +28,27 @@
 	///How much burn and burn damage can you heal every Life tick (half a sec)
 	var/heal_rate = 10
 	var/faction = FACTION_ZOMBIE
+	var/hivenumber = FACTION_ZOMBIE
 	var/claw_type = /obj/item/weapon/zombie_claw
 	///Whether this zombie type can jump
 	var/can_jump = FALSE
 	///List of special actions given by this species
 	var/list/action_list
+	///Counting whether they are designated as unrevivable for stats
+	var/perma = FALSE
 
 /datum/species/zombie/on_species_gain(mob/living/carbon/human/H, datum/species/old_species)
 	. = ..()
+	for(var/datum/limb/limb AS in H.limbs)
+		if(!istype(limb, /datum/limb/head))
+			continue
+		limb.vital = FALSE
+		break
+
+	log_game("Marking [logdetails(H)] as undefibbable because they are rising as a zombie.")
 	H.set_undefibbable()
 	H.faction = faction
+	H.transfer_to_hive(hivenumber)
 	H.language_holder = new default_language_holder()
 	H.setOxyLoss(0)
 	H.setToxLoss(0)
@@ -45,6 +56,7 @@
 	H.dropItemToGround(H.r_hand, TRUE)
 	H.dropItemToGround(H.l_hand, TRUE)
 	H.dextrous = FALSE//Prevents from opening cades
+	ADD_TRAIT(H, TRAIT_NO_STUN_ATTACK, ZOMBIE_TRAIT)
 	if(SSticker.mode.zombie_ids)
 		if(istype(H.wear_id, /obj/item/card/id))
 			var/obj/item/card/id/id = H.wear_id
@@ -78,6 +90,12 @@
 
 /datum/species/zombie/post_species_loss(mob/living/carbon/human/H)
 	. = ..()
+	for(var/datum/limb/limb AS in H.limbs)
+		if(!istype(limb, /datum/limb/head))
+			continue
+		limb.vital = TRUE
+		break
+
 	var/datum/atom_hud/health_hud = GLOB.huds[DATA_HUD_MEDICAL_OBSERVER]
 	health_hud.remove_hud_from(H)
 	qdel(H.r_hand)
@@ -90,9 +108,6 @@
 /datum/species/zombie/handle_unique_behavior(mob/living/carbon/human/H)
 	if(prob(10))
 		playsound(get_turf(H), pick(sounds), 50)
-
-
-
 	if(SSticker.mode.zombies_regrow_limbs)
 		var/datum/limb/limb = pick(H.limbs) //small chance of regrowing a limb
 		if(limb.limb_status & LIMB_DESTROYED && !(limb.parent?.limb_status & LIMB_DESTROYED) && prob(1))
@@ -135,10 +150,11 @@
 	H.updatehealth()
 
 /datum/species/zombie/handle_death(mob/living/carbon/human/H)
+	var/datum/limb/head/head = H.get_limb("head")
 	if(H.on_fire)
 		addtimer(CALLBACK(src, PROC_REF(fade_out_and_qdel_in), H), 1 MINUTES)
 		return
-	if(!H.has_working_organs())
+	if(!H.has_working_organs() || (head.limb_status & LIMB_DESTROYED))
 		SSmobs.stop_processing(H) // stopping the processing extinguishes the fire that is already on, to stop from doubling up
 		addtimer(CALLBACK(src, PROC_REF(fade_out_and_qdel_in), H), 1 MINUTES)
 		return
@@ -154,7 +170,8 @@
 		return
 
 /datum/species/zombie/can_revive_to_crit(mob/living/carbon/human/human)
-	if((!SSticker.mode.zombie_rebirth) || human.on_fire || !human.has_working_organs() || isspaceturf(get_turf(human)))
+	var/datum/limb/head/head = human.get_limb("head")
+	if((!SSticker.mode?.zombie_rebirth) || human.on_fire || !human.has_working_organs() || (head.limb_status & LIMB_DESTROYED) || isspaceturf(get_turf(human)))
 		SSmobs.stop_processing(human)
 		addtimer(CALLBACK(src, PROC_REF(fade_out_and_qdel_in), human), 20 SECONDS)
 		return FALSE
@@ -162,6 +179,7 @@
 
 /// We start fading out the human and qdel them in set time
 /datum/species/zombie/proc/fade_out_and_qdel_in(mob/living/carbon/human/H, time = 5 SECONDS)
+	GLOB.round_statistics.zombies_permad++
 	fade_out(H)
 	QDEL_IN(H, time)
 
@@ -189,6 +207,7 @@
 	. = ..()
 	H.transform = matrix().Scale(1.2, 1.2)
 	ADD_TRAIT(H, TRAIT_STUNIMMUNE, ZOMBIE_TRAIT)
+	REMOVE_TRAIT(H, TRAIT_NO_STUN_ATTACK, ZOMBIE_TRAIT)//The boss of the gym
 	H.move_resist = MOVE_FORCE_EXCEPTIONALLY_STRONG
 
 /datum/species/zombie/tank/post_species_loss(mob/living/carbon/human/H)
@@ -218,6 +237,7 @@
 	heal_rate = 20
 	total_health = 200
 	faction = FACTION_SECTOIDS
+	hivenumber = FACTION_SECTOIDS
 	claw_type = /obj/item/weapon/zombie_claw/no_zombium
 
 /datum/species/zombie/smoker

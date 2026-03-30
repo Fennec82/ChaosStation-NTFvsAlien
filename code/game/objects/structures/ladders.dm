@@ -439,7 +439,7 @@
 /obj/structure/ladder/check_eye(mob/user)
 	//Are we capable of looking?
 	. = ..()
-	if(user.incapacitated() || get_dist(user, src) > 1 || is_blind(user) || user.lying_angle || !user.client)
+	if(user.incapacitated() || get_dist(user, src) > 1 || is_blind(user) || !user.client)
 		user.unset_interaction()
 
 /obj/structure/ladder/on_set_interaction(mob/user)
@@ -453,7 +453,7 @@
 /obj/structure/ladder/MouseDrop(over_object, src_location, over_location)
 	if(over_object != usr || !in_range(src, usr))
 		return
-	if(usr.incapacitated() || is_blind(usr) || usr.lying_angle)
+	if(usr.incapacitated() || is_blind(usr))
 		to_chat(usr, "You can't do that in your current state.")
 		return
 	if (!up && !down)
@@ -490,7 +490,6 @@
 /obj/structure/ladder/id_linked
 	name = "sturdy ladder"
 	desc = "An extremely sturdy metal ladder."
-	resistance_flags = INDESTRUCTIBLE
 	var/id
 	var/height = 0  // higher numbers are considered physically higher
 

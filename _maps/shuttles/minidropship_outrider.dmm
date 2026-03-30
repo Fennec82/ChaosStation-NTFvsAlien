@@ -21,7 +21,6 @@
 	},
 /obj/machinery/door_control/minidropship{
 	dir = 8;
-	id = "minidropship_podlock";
 	name = "inner door-control"
 	},
 /turf/open/floor/plating/plating_catwalk,
@@ -31,6 +30,10 @@
 	dir = 8
 	},
 /turf/open/floor/mainship/mono,
+/area/shuttle/minidropship)
+"h" = (
+/obj/item/weapon/gun/sentry/ads_system/premade,
+/turf/closed/wall/mainship/outer/canterbury,
 /area/shuttle/minidropship)
 "l" = (
 /obj/machinery/vending/nanomed/tadpolemed{
@@ -207,10 +210,6 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/shuttle/minidropship)
-"L" = (
-/obj/machinery/telecomms/relay/preset/telecomms/onboard,
-/turf/closed/wall/mainship/outer/canterbury,
-/area/shuttle/minidropship)
 "O" = (
 /obj/effect/turf_decal/warning_stripes/thick/corner{
 	dir = 8
@@ -293,7 +292,7 @@ c
 c
 c
 p
-a
+h
 o
 "}
 (4,1,1) = {"
@@ -305,7 +304,7 @@ D
 S
 I
 a
-L
+a
 "}
 (5,1,1) = {"
 n

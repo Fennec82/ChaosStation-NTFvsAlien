@@ -2,6 +2,7 @@
 	jobs_supported = list(SQUAD_SMARTGUNNER)
 
 /datum/loadout_item/suit_store/main_gun/smartgunner/role_post_equip(mob/living/carbon/human/wearer, datum/outfit/quick/loadout, datum/outfit_holder/holder)
+	. = ..()
 	wearer.equip_to_slot_or_del(new /obj/item/storage/box/MRE, SLOT_IN_ACCESSORY)
 	wearer.equip_to_slot_or_del(new /obj/item/tool/extinguisher/mini, SLOT_IN_ACCESSORY)
 
@@ -23,7 +24,8 @@
 	Requires special training and it cannot turn off IFF. It uses 10x26mm ammunition."
 	ui_icon = "sg29"
 	item_typepath = /obj/item/weapon/gun/rifle/standard_smartmachinegun/patrol
-	loadout_item_flags = LOADOUT_ITEM_ROUNDSTART_OPTION|LOADOUT_ITEM_DEFAULT_CHOICE
+	loadout_item_flags = LOADOUT_ITEM_ROUNDSTART_OPTION
+	jobs_supported = list(SQUAD_SMARTGUNNER, VANGUARD)
 
 /datum/loadout_item/suit_store/main_gun/smartgunner/smartmachinegun/post_equip(mob/living/carbon/human/wearer, datum/outfit/quick/loadout, datum/outfit_holder/holder)
 	. = ..()
@@ -61,6 +63,7 @@
 	It uses high velocity 10x27mm caseless ammunition and 12x66mm ammunition for the underslung rifle."
 	ui_icon = "smartgun"
 	item_typepath = /obj/item/weapon/gun/rifle/standard_smarttargetrifle/motion
+	jobs_supported = list(SQUAD_SMARTGUNNER, VANGUARD)
 
 /datum/loadout_item/suit_store/main_gun/smartgunner/smarttargetrifle/post_equip(mob/living/carbon/human/wearer, datum/outfit/quick/loadout, datum/outfit_holder/holder)
 	. = ..()
@@ -83,6 +86,7 @@
 		wearer.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/combat_advanced, SLOT_IN_BACKPACK)
 
 /datum/loadout_item/suit_store/main_gun/smartgunner/smarttargetrifle/role_post_equip(mob/living/carbon/human/wearer, datum/outfit/quick/loadout, datum/outfit_holder/holder)
+	. = ..()
 	wearer.equip_to_slot_or_del(new /obj/item/storage/box/MRE, SLOT_IN_ACCESSORY)
 	wearer.equip_to_slot_or_del(new /obj/item/tool/extinguisher/mini, SLOT_IN_ACCESSORY)
 

@@ -565,7 +565,7 @@
 	if(plasma_mod >= HIGN_THRESHOLD)
 		owner_xeno.AdjustImmobilized(KNOCKDOWN_DURATION)
 		ADD_TRAIT(owner_xeno, TRAIT_HANDS_BLOCKED, src)
-		target.AdjustKnockdown(KNOCKDOWN_DURATION)
+		target.AdjustParalyzed(KNOCKDOWN_DURATION)
 
 		if(do_after(owner_xeno, KNOCKDOWN_DURATION, FALSE, target, ignore_turf_checks = FALSE))
 			owner_xeno.gain_plasma(plasma_gain_on_hit)
@@ -687,8 +687,8 @@
 	var/innate_healing = FALSE
 
 /datum/status_effect/healing_infusion/on_creation(mob/living/new_owner, set_duration = HIVELORD_HEALING_INFUSION_DURATION, stacks_to_apply = HIVELORD_HEALING_INFUSION_TICKS, new_innate_healing)
-	if(!isxeno(new_owner))
-		CRASH("something applied [id] on a nonxeno, dont do that")
+	if(!iscarbon(new_owner))
+		CRASH("something applied [id] on a noncarbon, dont do that")
 
 	duration = set_duration
 	owner = new_owner
@@ -704,18 +704,20 @@
 	if(!.)
 		return
 	ADD_TRAIT(owner, TRAIT_HEALING_INFUSION, TRAIT_STATUS_EFFECT(id))
-	if(innate_healing)
-		ADD_TRAIT(owner, TRAIT_INNATE_HEALING, TRAIT_STATUS_EFFECT(id))
 	owner.add_filter("hivelord_healing_infusion_outline", 3, outline_filter(1, COLOR_VERY_PALE_LIME_GREEN)) //Set our cool aura; also confirmation we have the buff
-	RegisterSignal(owner, COMSIG_XENOMORPH_HEALTH_REGEN, PROC_REF(healing_infusion_regeneration)) //Register so we apply the effect whenever the target heals
-	RegisterSignal(owner, COMSIG_XENOMORPH_SUNDER_REGEN, PROC_REF(healing_infusion_sunder_regeneration)) //Register so we apply the effect whenever the target heals
+	if(isxeno(owner))
+		if(innate_healing)
+			ADD_TRAIT(owner, TRAIT_INNATE_HEALING, TRAIT_STATUS_EFFECT(id))
+		RegisterSignal(owner, COMSIG_XENOMORPH_HEALTH_REGEN, PROC_REF(healing_infusion_regeneration)) //Register so we apply the effect whenever the target heals
+		RegisterSignal(owner, COMSIG_XENOMORPH_SUNDER_REGEN, PROC_REF(healing_infusion_sunder_regeneration)) //Register so we apply the effect whenever the target heals
 
 /datum/status_effect/healing_infusion/on_remove()
 	REMOVE_TRAIT(owner, TRAIT_HEALING_INFUSION, TRAIT_STATUS_EFFECT(id))
-	if(innate_healing)
-		REMOVE_TRAIT(owner, TRAIT_INNATE_HEALING, TRAIT_STATUS_EFFECT(id))
 	owner.remove_filter("hivelord_healing_infusion_outline")
-	UnregisterSignal(owner, list(COMSIG_XENOMORPH_HEALTH_REGEN, COMSIG_XENOMORPH_SUNDER_REGEN))
+	if(isxeno(owner))
+		if(innate_healing)
+			REMOVE_TRAIT(owner, TRAIT_INNATE_HEALING, TRAIT_STATUS_EFFECT(id))
+		UnregisterSignal(owner, list(COMSIG_XENOMORPH_HEALTH_REGEN, COMSIG_XENOMORPH_SUNDER_REGEN))
 
 	new /obj/effect/temp_visual/telekinesis(get_turf(owner)) //Wearing off VFX
 	new /obj/effect/temp_visual/healing(get_turf(owner))
@@ -741,21 +743,19 @@
 	new /obj/effect/temp_visual/healing(get_turf(patient)) //Cool SFX
 
 	var/total_heal_amount = 6 + (patient.maxHealth * 0.03) * seconds_per_tick * XENO_PER_SECOND_LIFE_MOD //Base amount 6 HP plus 3% of max
-	if(patient.recovery_aura)
+	if(isxeno(patient) && patient.recovery_aura)
 		total_heal_amount *= (1 + patient.recovery_aura * 0.05) //Recovery aura multiplier; 5% bonus per full level
 
-	//Healing pool has been calculated; now to decrement it
-	var/brute_amount = min(patient.getBruteLoss(), total_heal_amount)
-	if(brute_amount)
-		patient.adjustBruteLoss(-brute_amount, updating_health = TRUE)
-		total_heal_amount = max(0, total_heal_amount - brute_amount) //Decrement from our heal pool the amount of brute healed
+	var/leftover_healing = total_heal_amount
+	HEAL_XENO_DAMAGE(patient, leftover_healing, FALSE)
+	GLOB.round_statistics.hivelord_healing_infusion += (total_heal_amount - leftover_healing)
+	heal_data[1] += leftover_healing
+	heal_data[2] += total_heal_amount
 
-	if(!total_heal_amount) //no healing left, no need to continue
-		return
-
-	var/burn_amount = min(patient.getFireLoss(), total_heal_amount)
-	if(burn_amount)
-		patient.adjustFireLoss(-burn_amount, updating_health = TRUE)
+/mob/living/carbon/human/Life(seconds_per_tick, times_fired)
+	. = ..()
+	if(HAS_TRAIT(src, TRAIT_HEALING_INFUSION))
+		src.heal_overall_damage(1.5, 1.5, TRUE, TRUE) // On par with 20u+ bica and kelo
 
 
 ///Called when the target xeno regains Sunder via heal_wounds in life.dm
@@ -773,7 +773,8 @@
 
 	new /obj/effect/temp_visual/telekinesis(get_turf(patient)) //Visual confirmation
 
-	patient.adjust_sunder(-1.5 * (1 + patient.recovery_aura * 0.05) * seconds_per_tick * XENO_PER_SECOND_LIFE_MOD) //5% bonus per rank of our recovery aura
+	var/restored_sunder = patient.adjust_sunder(-1.5 * (1 + patient.recovery_aura * 0.05) * seconds_per_tick * XENO_PER_SECOND_LIFE_MOD) //5% bonus per rank of our recovery aura
+	GLOB.round_statistics.hivelord_healing_infusion_sunder += -restored_sunder
 
 /atom/movable/screen/alert/status_effect/healing_infusion
 	name = "Healing Infusion"

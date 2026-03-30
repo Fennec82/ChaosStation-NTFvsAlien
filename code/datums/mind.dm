@@ -47,6 +47,9 @@
 	///List of learned recipe TYPES.
 	var/list/learned_recipes
 
+	///Have used a skill book.
+	var/skillbookused = FALSE
+
 /datum/mind/New(key)
 	src.key = key
 
@@ -91,11 +94,14 @@
 
 	current = new_character								//associate ourself with our new body
 	new_character.mind = src							//and associate our new body with ourself
+	new_character.ckey_history += key		//record this ckey as having controlled this mob, ntf addition.
 
 	if(active || force_key_move)
 		new_character.key = key		//now transfer the key to link the client to our new body
 		GLOB.mobs_by_ckey_list[ckey(key)] = new_character
 
+	if(!new_character.client)
+		return
 	new_character.client.init_verbs()
 	new_character.ooc_notes = new_character.client.prefs.metadata
 	new_character.ooc_notes_likes = new_character.client.prefs.metadata_likes

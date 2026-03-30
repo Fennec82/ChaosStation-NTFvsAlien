@@ -299,9 +299,9 @@
 	supplies = list(/obj/item/stack/sheet/plasteel/medium_stack = 2)
 
 /obj/structure/largecrate/supply/supplies/sandbags
-	name = "sandbag supply crate (x100)"
-	desc = "A supply crate containing four piles of twenty-five sandbags."
-	supplies = list(/obj/item/stack/sandbags/large_stack = 4)
+	name = "sandbag supply crate (x200)"
+	desc = "A supply crate containing eight piles of twenty-five sandbags."
+	supplies = list(/obj/item/stack/sandbags/large_stack = 8)
 
 /obj/structure/largecrate/supply/supplies/tables_racks
 	name = "storage solutions crate (x10, x10)"

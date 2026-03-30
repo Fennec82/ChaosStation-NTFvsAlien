@@ -13,9 +13,10 @@
 	appearance_flags = PIXEL_SCALE
 	pixel_x = -56
 	pixel_y = -48
-	max_integrity = 900
-	soft_armor = list(MELEE = 50, BULLET = 100 , LASER = 90, ENERGY = 60, BOMB = 60, BIO = 100, FIRE = 50, ACID = 50)
+	max_integrity = 1000
+	soft_armor = list(MELEE = 50, BULLET = 100, LASER = 90, ENERGY = 90, BOMB = 60, BIO = 100, FIRE = 100, ACID = 50)
 	hard_armor = list(MELEE = 0, BULLET = 20, LASER = 20, ENERGY = 20, BOMB = 0, BIO = 20, FIRE = 0, ACID = 0)
+	facing_modifiers = list(VEHICLE_FRONT_ARMOUR = 0.8, VEHICLE_SIDE_ARMOUR = 1, VEHICLE_BACK_ARMOUR = 1.2)
 	permitted_mods = list(
 		/obj/item/tank_module/overdrive,
 		/obj/item/tank_module/ability/zoom,
@@ -31,11 +32,12 @@
 		/obj/item/armored_weapon/secondary_flamer,
 		/obj/item/armored_weapon/tow,
 		/obj/item/armored_weapon/microrocket_pod,
+		/obj/item/armored_weapon/secondary_mlrs,
 	)
 	max_occupants = 4
 	move_delay = 0.6 SECONDS
 	glide_size = 2.5
-	ram_damage = 200
+	ram_damage = 300
 	easy_load_list = list(
 		/obj/item/ammo_magazine/tank,
 		/obj/structure/largecrate,
@@ -125,39 +127,23 @@
 	for(var/atom/movable/desant AS in hitbox?.tank_desants)
 		desant.Shake(pixelshiftx, pixelshifty, duration, shake_interval)
 
-///Puts the vehicle into a wrecked state
-/obj/vehicle/sealed/armored/multitile/proc/wreck_vehicle()
-	if(armored_flags & ARMORED_IS_WRECK)
+/obj/vehicle/sealed/armored/multitile/wreck_vehicle()
+	. = ..()
+	if(!.)
 		return
-	for(var/mob/occupant AS in occupants)
-		mob_exit(occupant, FALSE, TRUE)
-	armored_flags |= ARMORED_IS_WRECK
-	obj_integrity = max_integrity
-	update_appearance(UPDATE_ICON_STATE|UPDATE_DESC|UPDATE_NAME)
 	smoke_holder = new(src, /particles/tank_wreck_smoke)
 	smoke_del_timer = addtimer(CALLBACK(src, PROC_REF(del_smoke)), 10 MINUTES, TIMER_STOPPABLE)
 	if(turret_overlay)
 		RegisterSignal(turret_overlay, COMSIG_ATOM_DIR_CHANGE, PROC_REF(update_smoke_dir))
 		update_smoke_dir(newdir = turret_overlay.dir)
-		turret_overlay.icon_state += "_wreck"
-		turret_overlay?.primary_overlay?.icon_state += "_wreck"
-	update_minimap_icon()
 
-///Returns the vehicle to an unwrecked state
-/obj/vehicle/sealed/armored/multitile/proc/unwreck_vehicle(restore = FALSE)
-	if(!(armored_flags & ARMORED_IS_WRECK))
+/obj/vehicle/sealed/armored/multitile/unwreck_vehicle(restore = FALSE)
+	. = ..()
+	if(!.)
 		return
-	armored_flags &= ~ARMORED_IS_WRECK
-	obj_integrity = restore ? max_integrity : 50
-	update_appearance(UPDATE_ICON_STATE|UPDATE_DESC|UPDATE_NAME)
 	QDEL_NULL(smoke_holder)
 	deltimer(smoke_del_timer)
 	smoke_del_timer = null
-	if(turret_overlay)
-		UnregisterSignal(turret_overlay, COMSIG_ATOM_DIR_CHANGE)
-		turret_overlay.icon_state = turret_overlay.base_icon_state
-		turret_overlay?.primary_overlay?.icon_state = turret_overlay?.primary_overlay?.base_icon_state
-	update_minimap_icon()
 
 ///Updates the wreck smoke position
 /obj/vehicle/sealed/armored/multitile/proc/update_smoke_dir(datum/source, dir, newdir)

@@ -19,6 +19,7 @@
 	buckle_lying = 0
 	buckling_y = 0
 	max_integrity = 20
+	layer = BELOW_TABLE_LAYER
 	var/propelled = 0 //Check for fire-extinguisher-driven chairs
 
 //directional variants mostly used for random spawners
@@ -48,7 +49,7 @@
 	if(LAZYLEN(buckled_mobs) && dir == NORTH)
 		layer = FLY_LAYER
 	else
-		layer = OBJ_LAYER
+		layer = initial(layer)
 
 
 /obj/structure/bed/chair/post_buckle_mob(mob/buckling_mob)
@@ -371,6 +372,8 @@
 /obj/structure/bed/chair/dropship/passenger/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage * xeno_attacker.xeno_melee_damage_modifier, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return FALSE
+	if(xeno_attacker.handcuffed)
+		return FALSE
 	if(chair_state != DROPSHIP_CHAIR_BROKEN)
 		xeno_attacker.visible_message(span_warning("[xeno_attacker] smashes \the [src], shearing the bolts!"),
 		span_warning("We smash \the [src], shearing the bolts!"))
@@ -436,6 +439,8 @@
 
 /obj/structure/bed/chair/dropship/doublewide/attack_alien(mob/living/carbon/xenomorph/X, damage_amount = X.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = "", effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
 	if(X.status_flags & INCORPOREAL)
+		return FALSE
+	if(X.handcuffed)
 		return FALSE
 	if(LAZYLEN(buckled_mobs))
 		unbuckle_all_mobs(TRUE)

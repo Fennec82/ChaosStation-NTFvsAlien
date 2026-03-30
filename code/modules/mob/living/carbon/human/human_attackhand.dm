@@ -12,7 +12,7 @@
 		visible_message(span_danger("[user] attempted to touch [src]!"), null, null, 5)
 		return FALSE
 
-	human_user.changeNext_move(7)
+	human_user.changeNext_move(CLICK_CD_UNARMED)
 	switch(human_user.a_intent)
 		if(INTENT_HELP)
 			if(on_fire && human_user != src)
@@ -37,8 +37,11 @@
 					span_notice("You extinguished the fire on [src]."), null, 5)
 				return TRUE
 
-			if(istype(wear_mask, /obj/item/clothing/mask/facehugger) && human_user != src)
-				human_user.stripPanelUnequip(wear_mask, src, SLOT_WEAR_MASK)
+			if(istype(wear_mask, /obj/item/clothing/mask/facehugger) || istype(w_underwear, /obj/item/clothing/mask/facehugger) && human_user != src)
+				if(istype(wear_mask, /obj/item/clothing/mask/facehugger))
+					human_user.stripPanelUnequip(wear_mask, src, SLOT_WEAR_MASK)
+				if(istype(w_underwear, /obj/item/clothing/mask/facehugger))
+					human_user.stripPanelUnequip(w_underwear, src, SLOT_UNDERWEAR)
 				return TRUE
 
 			if(health >= get_crit_threshold())
@@ -131,7 +134,7 @@
 
 			visible_message(span_danger("[human_user] [attack_verb] [src]!"), null, null, 5)
 			var/list/hit_report = list()
-			if(damage >= 4 && prob(25))
+			if((damage >= 4 && prob(25)) && !HAS_TRAIT(human_user, TRAIT_NO_STUN_ATTACK))
 				visible_message(span_danger("[human_user] has weakened [src]!"), null, null, 5)
 				apply_effect(3 SECONDS, EFFECT_PARALYZE)
 				hit_report += "(KO)"
@@ -152,28 +155,14 @@
 
 			human_user.do_attack_animation(src, ATTACK_EFFECT_DISARM)
 
-			//Accidental gun discharge
-			if(human_user.skills.getRating(SKILL_UNARMED) < SKILL_UNARMED_MP)
-				if (istype(r_hand,/obj/item/weapon/gun) || istype(l_hand,/obj/item/weapon/gun))
-					var/obj/item/weapon/gun/W = null
-					var/chance = 0
-
-					if (istype(l_hand,/obj/item/weapon/gun))
-						W = l_hand
-						chance = hand ? 40 : 20
-
-					if (istype(r_hand,/obj/item/weapon/gun))
-						W = r_hand
-						chance = !hand ? 40 : 20
-
-					if(prob(chance))
-						visible_message("<span class='danger'>[src]'s [W.name] goes off during struggle!", null, null, 5)
-						log_combat(human_user, src, "disarmed", "making their [W.name] go off")
-						var/list/turfs = list()
-						for(var/turf/T in view())
-							turfs += T
-						var/turf/target = pick(turfs)
-						return W.afterattack(target,src)
+			// Accidental gun discharge!
+			var/obj/item/weapon/gun/gun_in_hand
+			if(isgun(r_hand))
+				gun_in_hand = r_hand
+			else if(isgun(l_hand))
+				gun_in_hand = l_hand
+			if(gun_in_hand?.handle_disarm_misfire(src, human_user))
+				return
 
 			var/randn = rand(1, 100) + skills.getRating(SKILL_UNARMED) * UNARMED_SKILL_DISARM_MOD - human_user.skills.getRating(SKILL_UNARMED) * UNARMED_SKILL_DISARM_MOD
 
