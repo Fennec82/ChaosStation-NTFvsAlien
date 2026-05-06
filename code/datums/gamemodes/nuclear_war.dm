@@ -86,8 +86,11 @@
 	if(round_finished)
 		return
 	if(round_stage == INFESTATION_MARINE_CRASHING)
+		priority_announce("The hive has collapsed due to lack of rulership.", "Orphan hivemind collapse", type = ANNOUNCEMENT_PRIORITY)
 		round_finished = MODE_INFESTATION_M_MINOR
 		return
+	priority_announce("The hive has collapsed due to lack of rulership.  Marines win!", "Orphan hivemind collapse", type = ANNOUNCEMENT_PRIORITY)
+	round_finished = MODE_INFESTATION_M_MAJOR
 
 ///Returns the time left before the hivemind collapses due to being orphaned
 /datum/game_mode/infestation/nuclear_war/get_hivemind_collapse_countdown()
@@ -109,17 +112,22 @@
 		if(siloless_hive_timer)
 			deltimer(siloless_hive_timer)
 			siloless_hive_timer = null
+			silo_owner.xeno_message("A new silo has been laid! Hive collapse has been averted. Defend it and recorrupt generators to prevent future collapse.", "xenoannounce", 6, TRUE)
+			priority_announce("A new silo has been laid! Destroy the new silo before generators are recorrupted to resume hive collapse.", "Hive Collapse Averted", type = ANNOUNCEMENT_PRIORITY)
 		return
 	if(GLOB.corrupted_generators)
 		if(siloless_hive_timer)
 			deltimer(siloless_hive_timer)
 			siloless_hive_timer = null
+			silo_owner.xeno_message("A generator has been corrupted! Hive collapse has been averted. Defend it and lay a new silo to prevent future collapse.", "xenoannounce", 6, TRUE)
+			priority_announce("A generator has been corrupted! Decorrupt the generators before a new silo is laid to resume hive collapse.", "Hive Collapse Averted", type = ANNOUNCEMENT_PRIORITY)
 		return
 	//handle starting
 	if(siloless_hive_timer)
 		return
 
 	silo_owner.xeno_message("We don't have any silos or corrupted generators! The hive will collapse if nothing is done.", "xenoannounce", 6, TRUE)
+	priority_announce("Psychic distress waves detected from the xenomorph hive, imminent hive collapse in [NUCLEAR_WAR_SILO_COLLAPSE/10] seconds. Prevent xenomorphs from laying a new silo or recorrupting generators.", "Imminent Hive Collapse Detected", type = ANNOUNCEMENT_PRIORITY)
 	siloless_hive_timer = addtimer(CALLBACK(src, PROC_REF(siloless_hive_collapse)), NUCLEAR_WAR_SILO_COLLAPSE, TIMER_STOPPABLE)
 	SEND_GLOBAL_SIGNAL(COMSIG_GLOB_SILOLESS_COLLAPSE)
 

@@ -180,6 +180,8 @@
 /// We start fading out the human and qdel them in set time
 /datum/species/zombie/proc/fade_out_and_qdel_in(mob/living/carbon/human/H, time = 5 SECONDS)
 	GLOB.round_statistics.zombies_permad++
+	if(H in GLOB.possessed_sentient_zombie_list)
+		GLOB.possessed_sentient_zombie_list -= H
 	fade_out(H)
 	QDEL_IN(H, time)
 
@@ -208,13 +210,13 @@
 	H.transform = matrix().Scale(1.2, 1.2)
 	ADD_TRAIT(H, TRAIT_STUNIMMUNE, ZOMBIE_TRAIT)
 	REMOVE_TRAIT(H, TRAIT_NO_STUN_ATTACK, ZOMBIE_TRAIT)//The boss of the gym
-	H.move_resist = MOVE_FORCE_EXCEPTIONALLY_STRONG
+	H.set_move_resist(MOVE_FORCE_EXCEPTIONALLY_STRONG)
 
 /datum/species/zombie/tank/post_species_loss(mob/living/carbon/human/H)
 	. = ..()
 	H.transform = matrix().Scale(1/(1.2), 1/(1.2))
 	REMOVE_TRAIT(H, TRAIT_STUNIMMUNE, ZOMBIE_TRAIT)
-	H.move_resist = initial(H.move_resist)
+	H.set_move_resist(H.get_initial_move_resist())
 
 /datum/species/zombie/strong
 	name = "Strong zombie" //These are zombies created from marines, they are stronger, but of course rarer

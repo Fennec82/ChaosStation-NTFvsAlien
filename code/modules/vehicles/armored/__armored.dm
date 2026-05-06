@@ -380,7 +380,6 @@
 	if(entering_mob.skills.getRating(SKILL_LARGE_VEHICLE) < required_entry_skill)
 		return FALSE
 	if(!loc_override && !(entering_mob.loc in enter_locations(entering_mob)))
-		balloon_alert(entering_mob, "not at entrance")
 		return FALSE
 	return ..()
 
@@ -704,7 +703,7 @@
 ///Rotates the cannon overlay
 /obj/vehicle/sealed/armored/proc/swivel_turret(atom/A, new_weapon_dir)
 	if(!new_weapon_dir)
-		new_weapon_dir = angle_to_cardinal_dir(Get_Angle(get_turf(src), get_turf(A)))
+		new_weapon_dir = angle2dir_cardinal(Get_Angle(get_turf(src), get_turf(A)))
 	if(turret_overlay.dir == new_weapon_dir)
 		return FALSE
 	if(TIMER_COOLDOWN_RUNNING(src, COOLDOWN_TANK_SWIVEL)) //Slight cooldown to avoid spam

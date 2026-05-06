@@ -3,7 +3,7 @@
 	config_tag = "Zombie Crash"
 	round_type_flags = MODE_ALLOW_MARINE_QUICKBUILD|MODE_XENO_GRAB_DEAD_ALLOWED|MODE_INFESTATION|MODE_PSY_POINTS|MODE_SILO_RESPAWN|MODE_MUTATIONS_OBTAINABLE
 	xeno_abilities_flags = ABILITY_ALL_GAMEMODE //Non pvp
-	round_type_flags2 = MODE_2_CHILL_RULES
+	round_type_flags2 = MODE_2_CAMPAIGN_LITE_SUPPORT|MODE_2_SINGLE_USE_NUKE_DISK_GENERATOR|MODE_2_CHILL_RULES
 	required_players = 1
 	valid_job_types = list(
 		/datum/job/terragov/squad/standard = -1,
@@ -57,6 +57,10 @@
 		new /obj/effect/ai_node/spawner/zombie(i)
 	for(var/i in GLOB.zombie_crash_vendor_landmarks)
 		new /obj/machinery/marine_selector/zombie_crash(get_turf(i))
+
+	for(var/obj/structure/xeno/silo/silossy in GLOB.xeno_resin_silos_by_hive)
+		if(istype(silossy, /obj/structure/xeno/silo))
+			qdel(silossy) //they are on top of zombie spawners and is loud
 
 	addtimer(CALLBACK(src, PROC_REF(balance_scales)), 1 SECONDS)
 	RegisterSignal(SSdcs, COMSIG_GLOB_ZOMBIE_TUNNEL_DESTROYED, PROC_REF(on_tunnel_destroyed))
@@ -135,6 +139,9 @@
 	var/list/living_player_list = count_humans_and_zombies(count_flags = COUNT_IGNORE_HUMAN_SSD)
 	var/num_humans = living_player_list[1]
 	var/num_zombies = living_player_list[2]
+
+	GLOB.maximum_allowed_possessed_zombies = floor(num_humans / ZOMBIE_SENTIENT_TO_HUMAN_RATIO)
+
 	if(num_zombies * 0.125 >= num_humans) // if there's too much zombies, don't spawn even more
 		for(var/obj/effect/ai_node/spawner/zombie/spawner AS in GLOB.zombie_spawners)
 			if(!spawner.threat_warning)
