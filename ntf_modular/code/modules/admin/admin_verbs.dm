@@ -38,6 +38,12 @@ ADMIN_VERB(play_warmode_action_music, R_FUN, "Quick-play War Music to Factions",
 	for(var/mob/M AS in GLOB.alive_living_list)
 		if(!M.client)
 			continue
+		if(!isnewplayer(M) && M.client.prefs.toggles_sound & SOUND_MIDI)
+			to_chat(M, span_danger("An admin is about to start war music for your faction, prepare for momentary freezing. It will begin in 10 seconds. This can toggled with toggle admin music in game preferences."))
+	sleep(10 SECONDS)
+	for(var/mob/M AS in GLOB.alive_living_list)
+		if(!M.client)
+			continue
 		switch(M.faction)
 			if(FACTION_TERRAGOV,FACTION_ICC)
 				sound_path = sound(ntmusic, channel = CHANNEL_MIDI, volume = 15)
@@ -64,11 +70,14 @@ ADMIN_VERB(command_report_to_faction, R_FUN, "Command Report to Faction", "Creat
 	var/customname = tgui_input_text(user, "Pick a title for the report.", "Title", "[faction_choice] Update", encode = FALSE)
 	if(!customname)
 		return
+	var/customsubtitle = tgui_input_text(user, "Pick a subtitle for the report.", "Subtitle", "", encode = FALSE)
+	if(!customsubtitle)
+		return
 	var/input = tgui_input_text(user, "Please enter anything you want. Anything. Serious.", "What?", "", multiline = TRUE, encode = FALSE)
 	if(!input)
 		return
 
-	faction_announce(input, customname, sound = 'sound/AI/commandreport.ogg', to_faction = faction_choice);
+	faction_announce(input, title = customname, subtitle = customsubtitle, sound = 'sound/AI/commandreport.ogg', to_faction = faction_choice);
 
 	log_admin("[key_name(user)] has created a command report for [faction_choice]: [input]")
 	message_admins("[ADMIN_TPMONTY(user.mob)] has created a command report for [faction_choice].")

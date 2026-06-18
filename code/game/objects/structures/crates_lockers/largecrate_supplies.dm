@@ -209,10 +209,10 @@
 	desc = "An ammunition case containing one box of each NTC brand ammo type."
 	icon_state = "chest"
 	supplies = list(
-		/obj/item/shotgunbox = 1,
-		/obj/item/shotgunbox/buckshot = 1,
-		/obj/item/shotgunbox/flechette = 1,
-		/obj/item/shotgunbox/tracker = 1,
+		/obj/item/big_ammo_box/shotgun = 1,
+		/obj/item/big_ammo_box/shotgun/buckshot = 1,
+		/obj/item/big_ammo_box/shotgun/flechette = 1,
+		/obj/item/big_ammo_box/shotgun/tracker = 1,
 		/obj/item/storage/box/visual/magazine/compact/standard_pistol/full = 1,
 		/obj/item/storage/box/visual/magazine/compact/standard_heavypistol/full = 1,
 		/obj/item/storage/box/visual/magazine/compact/standard_revolver/full = 1,
@@ -331,7 +331,7 @@
 /obj/structure/largecrate/supply/generator
 	name = "\improper P.A.C.M.A.N. crate"
 	desc = "A crate containing a P.A.C.M.A.N. generator, some fuel, and some cable coil to get your power up and going."
-	supplies = list(/obj/machinery/power/port_gen/pacman = 1, /obj/item/stack/sheet/mineral/phoron/medium_stack = 1, /obj/item/stack/cable_coil = 3)
+	supplies = list(/obj/machinery/power/port_gen/pacman = 1, /obj/item/stack/cable_coil = 3)
 
 /obj/structure/largecrate/supply/medicine
 	name = "medical crate"

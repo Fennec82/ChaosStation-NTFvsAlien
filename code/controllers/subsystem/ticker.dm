@@ -119,6 +119,8 @@ SUBSYSTEM_DEF(ticker)
 
 			if(!roundend_check_paused && mode.check_finished(force_ending) || force_ending)
 				current_state = GAME_STATE_FINISHED
+				SSblackbox.Seal()
+				seal_persistent_medals()
 				GLOB.ooc_allowed = TRUE
 				GLOB.dooc_allowed = TRUE
 				GLOB.round_statistics.round_length = (world.time - SSticker.round_start_time)

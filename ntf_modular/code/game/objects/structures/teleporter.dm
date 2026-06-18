@@ -139,3 +139,7 @@ GLOBAL_LIST_EMPTY(indestructible_teleporters)
 		balloon_alert(user, "unsuitable area!")
 		return FALSE
 	return TRUE
+
+/obj/machinery/deployable/teleporter/AIShiftClick()
+	. = ..()
+	attempt_teleport(usr)

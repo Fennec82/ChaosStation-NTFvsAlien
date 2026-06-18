@@ -3,16 +3,9 @@
 /obj/item/clothing/glasses/night
 	name = "night vision goggles"
 	desc = "You can totally see in the dark now!"
-	species_exception = list(/datum/species/robot)
-	sprite_sheets = list(
-		"Combat Robot" = 'icons/mob/species/robot/glasses.dmi',
-		"Sterling Combat Robot" = 'icons/mob/species/robot/glasses_bravada.dmi',
-		"Chilvaris Combat Robot" = 'icons/mob/species/robot/glasses_charlit.dmi',
-		"Hammerhead Combat Robot" = 'icons/mob/species/robot/glasses_alpharii.dmi',
-		"Ratcher Combat Robot" = 'icons/mob/species/robot/glasses_deltad.dmi',
-		"Synskin Combat Robot" = 'icons/mob/species/robot/glasses.dmi')
 	icon_state = "night"
 	worn_icon_state = "glasses"
+	worn_item_state_slots = list()
 	toggleable = TRUE
 	// deactive_state = "night_vision_off" // gonna test what it does without a deactive_state
 	color_cutoffs = list(10, 30, 10)
@@ -49,7 +42,7 @@
 ///Info regarding battery status; separate proc so that it can be displayed when examining the parent object
 /obj/item/clothing/glasses/night/proc/battery_status()
 	if(battery)
-		return span_notice("Battery: [battery.charge]/[battery.maxcharge]")
+		return span_notice("Battery: [battery.charge]/[battery.maxcharge]([DisplayEnergyFrac(battery.charge * (2/GLOB.CELLRATE), battery.maxcharge * (2/GLOB.CELLRATE))])")
 	return span_warning("No battery installed!")
 
 /obj/item/clothing/glasses/night/attack_hand(mob/living/user)
@@ -222,14 +215,6 @@
 	deactive_state = "degoggles_optgoggles"
 	toggleable = TRUE
 	actions_types = list(/datum/action/item_action/toggle)
-	species_exception = list(/datum/species/robot)
-	sprite_sheets = list(
-		"Combat Robot" = 'icons/mob/species/robot/glasses.dmi',
-		"Sterling Combat Robot" = 'icons/mob/species/robot/glasses_bravada.dmi',
-		"Chilvaris Combat Robot" = 'icons/mob/species/robot/glasses_charlit.dmi',
-		"Hammerhead Combat Robot" = 'icons/mob/species/robot/glasses_alpharii.dmi',
-		"Ratcher Combat Robot" = 'icons/mob/species/robot/glasses_deltad.dmi',
-		"Synskin Combat Robot" = 'icons/mob/species/robot/glasses.dmi')
 	equip_slot_flags = ITEM_SLOT_EYES
 	goggles = TRUE
 

@@ -720,7 +720,7 @@
 
 
 
-//this one is for CLF
+//this one is for Cult
 /obj/item/clothing/suit/storage/faction/militia
 	name = "\improper colonial militia hauberk"
 	desc = "The hauberk of a colonist militia member, created from boiled leather and some modern armored plates. While primitive compared to most modern suits of armor, it gives the wearer almost perfect mobility, which suits the needs of the local colonists. "

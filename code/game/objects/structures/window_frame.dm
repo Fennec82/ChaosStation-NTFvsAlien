@@ -12,7 +12,7 @@
 	max_integrity = 150
 	soft_armor = list(MELEE = 0, BULLET = 70, LASER = 70, ENERGY = 70, BOMB = 50, BIO = 100, FIRE = 50, ACID = 0)
 	var/obj/item/stack/sheet/sheet_type = /obj/item/stack/sheet/glass/reinforced
-	var/obj/structure/window/framed/mainship/window_type = /obj/structure/window/framed/mainship
+	var/obj/structure/window/framed/window_type = /obj/structure/window/framed/mainship
 	var/basestate = "window"
 	var/junction = 0
 	var/reinforced = FALSE
@@ -61,8 +61,11 @@
 	if(.)
 		return
 
-	if(istype(I, sheet_type))
+	if(istype(I, /obj/item/stack/sheet))
 		var/obj/item/stack/sheet/sheet = I
+		if(sheet.merge_type != sheet_type)
+			to_chat(user, span_warning("This is not the right material to install a new window with."))
+			return
 		if(sheet.get_amount() < 2)
 			to_chat(user, span_warning("You need more [I] to install a new window."))
 			return
@@ -130,6 +133,8 @@
 	icon_state = "col_window_frame-0"
 	base_icon_state = "col_window_frame"
 	basestate = "col_window_frame"
+	window_type = /obj/structure/window/framed/colony
+	sheet_type = /obj/item/stack/sheet/glass/glass
 
 /obj/structure/window_frame/colony/reinforced
 	icon = 'icons/obj/smooth_objects/col_rwindow_frame.dmi'
@@ -138,6 +143,8 @@
 	base_icon_state = "col_rwindow_frame"
 	reinforced = TRUE
 	max_integrity = 300
+	window_type = /obj/structure/window/framed/colony/reinforced
+	sheet_type = /obj/item/stack/sheet/glass/reinforced
 
 /obj/structure/window_frame/colony/reinforced/weakened
 	max_integrity = 150

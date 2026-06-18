@@ -679,7 +679,6 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 
 
 /obj/item/radio/headset/distress/dutch
-	name = "colonist headset"
 	keyslot = /obj/item/encryptionkey/dutch
 	frequency = FREQ_COLONIST
 

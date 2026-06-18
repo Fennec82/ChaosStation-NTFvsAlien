@@ -35,6 +35,11 @@
 	var/msg = ""
 
 	msg += "<span class='infoplain'>"
+	if(HAS_TRAIT(src, TRAIT_CULTIST))
+		if(isxeno(user) && user.get_xeno_hivenumber() == XENO_HIVE_NORMAL)
+			msg += "[t_He] has friendly pheromones... [t_He] is in service of the queen.\n"
+		else if(HAS_TRAIT(user, TRAIT_CULTIST))
+			msg += "You can recognize [t_him] from your cult, \a [job.title].\n"
 	msg += separator_hr("Outfit")
 
 	//uniform
@@ -295,6 +300,10 @@
 		msg += "[t_He] look[p_s()] a little soaked.\n"
 	if(on_fire)
 		msg += "[span_boldwarning("[t_He] [t_is] on fire!")]\n"
+	if(has_status_effect(STATUS_EFFECT_AMBROSIA_RESIDUE))
+		msg += "[span_warning("A glossy amber resin clings to [t_his] recently mended wounds.")]\n"
+	if(has_status_effect(STATUS_EFFECT_AMBROSIA_BONE_MEND))
+		msg += "[span_warning("Thin amber threads shift beneath [t_his] skin, slowly knitting damaged bones.")]\n"
 
 	var/list/wound_flavor_text = list() //List mapping each limb's display_name to its wound description
 	var/list/is_destroyed = list()

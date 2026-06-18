@@ -1955,7 +1955,7 @@
 		/obj/item/explosive/grenade/som = 2,
 		/obj/item/storage/box/MRE/som = 1,
 		/obj/item/cell/lasgun/volkite/small = 1,
-		/obj/item/binoculars/fire_support/campaign/som = 1,
+		/obj/item/binoculars/fire_support/extended/som/sl = 1,
 	)
 
 /datum/outfit/quick/som/squad_leader/standard_smg
@@ -1977,7 +1977,7 @@
 	webbing_contents = list(
 		/obj/item/explosive/grenade/som = 3,
 		/obj/item/explosive/grenade/flashbang/stun = 1,
-		/obj/item/binoculars/fire_support/campaign/som = 1,
+		/obj/item/binoculars/fire_support/extended/som/sl = 1,
 	)
 
 
@@ -1998,7 +1998,7 @@
 
 	webbing_contents = list(
 		/obj/item/explosive/grenade/som = 2,
-		/obj/item/binoculars/fire_support/campaign/som = 1,
+		/obj/item/binoculars/fire_support/extended/som/sl = 1,
 		/obj/item/explosive/grenade/flashbang/stun = 1,
 		/obj/item/storage/box/MRE/som = 1,
 	)
@@ -2021,7 +2021,7 @@
 
 	webbing_contents = list(
 		/obj/item/explosive/grenade/som = 2,
-		/obj/item/binoculars/fire_support/campaign/som = 1,
+		/obj/item/binoculars/fire_support/extended/som/sl = 1,
 		/obj/item/explosive/grenade/flashbang/stun = 1,
 		/obj/item/storage/box/MRE/som = 1,
 	)
@@ -2045,7 +2045,7 @@
 
 	webbing_contents = list(
 		/obj/item/explosive/grenade/som = 4,
-		/obj/item/binoculars/fire_support/campaign/som = 1,
+		/obj/item/binoculars/fire_support/extended/som/sl = 1,
 	)
 
 //someone must update these below
@@ -3129,7 +3129,7 @@
 /datum/outfit/quick/vsd/spec/scout
 	name = "T73 'Spetsnaz' KZ Specialist"
 	desc = "Comb the forests with covert intent. Equipped with the rownin skeleton, supplied with valkyrie beta, an overclocked eshield, a Type 73 Commando, smoke grenades, and a UV-T skink for remote scouting."
-	glasses = /obj/item/clothing/glasses/night/vsd/alt
+	glasses = /obj/item/clothing/glasses/night/m56_goggles/vsd
 	w_uniform = /obj/item/clothing/under/vsd/webbing
 	shoes = /obj/item/clothing/shoes/marine/vsd/full
 	wear_suit = /obj/item/clothing/suit/modular/rownin/vsdelite
@@ -3236,7 +3236,7 @@
 	head = /obj/item/clothing/head/uppcap/beret
 	mask = /obj/item/clothing/mask/gas/vsd
 	suit_store = /obj/item/weapon/gun/clf_heavyrifle
-	back = /obj/item/shotgunbox/clf_heavyrifle
+	back = /obj/item/big_ammo_box/shotgun/clf_heavyrifle
 	l_pocket = /obj/item/storage/pouch/grenade
 	ears = /obj/item/radio/headset/mainship/vsd
 
@@ -3376,7 +3376,7 @@
 	name = "T73 'Komandir' KZ Squad Leader"
 	desc = "You're in charge and look the part, infiltrate and disrupt. Equipped with the rownin skeleton, supplied with valkyrie beta, an overclocked eshield, a Type 73 Commando, GL-81 grenade launcher, smoke and EMP grenades."
 	jobtype = "KZ Squad Leader"
-	glasses = /obj/item/clothing/glasses/night/vsd/alt
+	glasses = /obj/item/clothing/glasses/night/m56_goggles/vsd
 	w_uniform = /obj/item/clothing/under/vsd/webbing
 	shoes = /obj/item/clothing/shoes/marine/vsd/full
 	wear_suit = /obj/item/clothing/suit/modular/rownin/vsdelite
@@ -3813,21 +3813,20 @@
 	name = "CM Standard"
 	jobtype = "CM Standard"
 
-	w_uniform = /obj/item/clothing/under/icc/webbing
+	w_uniform = /obj/item/clothing/under/marine/veteran/cm
 	belt = /obj/item/storage/belt/marine/icc
-	w_uniform = /obj/item/clothing/under/icc/webbing
-	shoes = /obj/item/clothing/shoes/marine/icc/knife
-	wear_suit = /obj/item/clothing/suit/storage/marine/icc
-	gloves = /obj/item/clothing/gloves/marine/icc
-	head = /obj/item/clothing/head/helmet/marine/icc
-	mask = /obj/item/clothing/mask/gas/icc
+	w_uniform = /obj/item/clothing/under/marine/veteran/cm
+	shoes = /obj/item/clothing/shoes/marine/brown/full
+	wear_suit = /obj/item/clothing/suit/storage/marine/icc/guard
+	gloves = /obj/item/clothing/gloves/marine/veteran/pmc
+	head = /obj/item/clothing/head/modular/m10x/binocular
+	mask = /obj/item/clothing/mask/bandanna
 	r_pocket = /obj/item/storage/pouch/pistol/icc
 	l_pocket = /obj/item/storage/pouch/medical_injectors/icc/firstaid
-	back = /obj/item/storage/backpack/lightpack/icc
+	back = /obj/item/storage/backpack/lightpack/cm
 
 /datum/outfit/quick/icc/standard/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	. = ..()
-	H.equip_to_slot_or_del(new /obj/item/reagent_containers/food/snacks/wrapped/barcaridine, SLOT_IN_HEAD)
 	H.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/oxycodone, SLOT_IN_HEAD)
 	H.equip_to_slot_or_del(new /obj/item/stack/medical/heal_pack/gauze, SLOT_IN_BACKPACK)
 	H.equip_to_slot_or_del(new /obj/item/stack/medical/heal_pack/ointment, SLOT_IN_BACKPACK)
@@ -3906,16 +3905,16 @@
 	name = "CM Medic"
 	jobtype = "CM Medic"
 
-	w_uniform = /obj/item/clothing/under/icc/medic
+	w_uniform = /obj/item/clothing/under/marine/veteran/cm/medic
 	belt = /obj/item/storage/belt/lifesaver/icc/ert
-	shoes = /obj/item/clothing/shoes/marine/icc/guard/knife
-	wear_suit = /obj/item/clothing/suit/storage/marine/icc/guard
-	gloves = /obj/item/clothing/gloves/marine/icc/guard
-	head = /obj/item/clothing/head/helmet/marine/icc/guard
-	mask = /obj/item/clothing/mask/gas/icc
+	shoes = /obj/item/clothing/shoes/marine/brown/full
+	wear_suit = /obj/item/clothing/suit/storage/marine/vsd_two/plate_carrier
+	gloves = /obj/item/clothing/gloves/marine/veteran/pmc
+	head = /obj/item/clothing/head/modular/m10x/binocular
+	mask = /obj/item/clothing/mask/bandanna
 	r_pocket = /obj/item/storage/pouch/pistol/icc
 	l_pocket = /obj/item/storage/pouch/medical_injectors/icc/firstaid
-	back = /obj/item/storage/backpack/lightpack/icc
+	back = /obj/item/storage/backpack/marine/corpsman/cm
 	glasses = /obj/item/clothing/glasses/hud/health
 
 /datum/outfit/quick/icc/medic/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
@@ -3959,17 +3958,17 @@
 	name = "CM Guardsman"
 	jobtype = "CM Guardsman"
 
-	w_uniform = /obj/item/clothing/under/icc/webbing
+	w_uniform = /obj/item/clothing/under/marine/veteran/cm
 	belt = /obj/item/storage/belt/marine/icc
-	w_uniform = /obj/item/clothing/under/icc/webbing
-	shoes = /obj/item/clothing/shoes/marine/icc/guard/knife
+	w_uniform = /obj/item/clothing/under/marine/veteran/cm
+	shoes = /obj/item/clothing/shoes/marine/brown/full
 	wear_suit = /obj/item/clothing/suit/storage/marine/icc/guard
-	gloves = /obj/item/clothing/gloves/marine/icc/guard
-	head = /obj/item/clothing/head/helmet/marine/icc/guard
-	mask = /obj/item/clothing/mask/gas/icc
+	gloves = /obj/item/clothing/gloves/marine/veteran/pmc
+	head = /obj/item/clothing/head/modular/m10x/binocular
+	mask = /obj/item/clothing/mask/bandanna
 	r_pocket = /obj/item/storage/pouch/pistol/icc
 	l_pocket = /obj/item/storage/pouch/medical_injectors/icc/firstaid
-	back = /obj/item/storage/backpack/lightpack/icc
+	back = /obj/item/storage/backpack/lightpack/cm
 
 /datum/outfit/quick/icc/guard/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	. = ..()
@@ -4046,14 +4045,14 @@
 	name = "CM Squad Leader"
 	jobtype = "CM Squad Leader"
 
-	w_uniform = /obj/item/clothing/under/icc/webbing
+	w_uniform = /obj/item/clothing/under/marine/veteran/cm
 	belt = /obj/item/storage/belt/marine/icc
-	mask = /obj/item/clothing/mask/gas/icc
-	shoes = /obj/item/clothing/shoes/marine/icc/knife
+	mask = /obj/item/clothing/mask/bandanna
+	shoes = /obj/item/clothing/shoes/marine/brown/full
 	wear_suit = /obj/item/clothing/suit/storage/marine/icc/guard
-	gloves = /obj/item/clothing/gloves/marine/icc/guard
-	head = /obj/item/clothing/head/helmet/marine/icc/guard
-	back = /obj/item/storage/backpack/lightpack/icc/guard
+	gloves = /obj/item/clothing/gloves/marine/veteran/pmc
+	head = /obj/item/clothing/head/modular/m10x/binocular
+	back = /obj/item/storage/backpack/lightpack/cm
 	l_pocket = /obj/item/storage/pouch/medical_injectors/icc/firstaid
 	r_pocket = /obj/item/storage/pouch/construction/icc/full
 

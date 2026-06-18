@@ -30,6 +30,8 @@
 	var/list/obj/structure/xeno/mutation_chamber/spur/spur_chambers = list()
 	/// List of veil mutation chambers.
 	var/list/obj/structure/xeno/mutation_chamber/veil/veil_chambers = list()
+	///List of hive ability blessings
+	var/list/datum/action/ability/hive_abilities = list()
 
 	///list of hivemind cores
 	var/list/obj/structure/xeno/hivemindcore/hivemindcores = list()
@@ -200,6 +202,7 @@
 	.["user_next_mat_level"] = isxeno(user) && xeno_user.upgrade_possible() ? xeno_user.xeno_caste.upgrade_threshold : 0
 	.["user_tracked"] = isxeno(user) && !isnull(xeno_user.tracked) ? REF(xeno_user.tracked) : ""
 	.["user_can_mutate"] = isxeno(user) && (xeno_user.xeno_caste.caste_flags & CASTE_MUTATIONS_ALLOWED) && ((SSticker.mode?.round_type_flags & MODE_MUTATIONS_OBTAINABLE) || HAS_TRAIT(xeno_user, TRAIT_VALHALLA_XENO))
+	.["user_hive_target_participation"] = isxeno(user) && xeno_user.hive_target_participation
 
 	.["user_show_empty"] = !!(user.client.prefs.status_toggle_flags & HIVE_STATUS_SHOW_EMPTY)
 	.["user_show_compact"] = !!(user.client.prefs.status_toggle_flags & HIVE_STATUS_COMPACT_MODE)
@@ -310,6 +313,11 @@
 			if(!isxeno(usr))
 				return
 			GLOB.mutation_selector.interact(usr)
+		if("ToggleHiveTargetParticipation")
+			if(!isxeno(usr) || xeno_target != usr)
+				return
+			xeno_target.hive_target_participation = !xeno_target.hive_target_participation
+			to_chat(xeno_target, span_xenonotice("We [xeno_target.hive_target_participation ? "open" : "close"] our mind to hive target directives."))
 		if("Compass")
 			var/atom/target = locate(params["target"])
 			if(isobserver(usr))
@@ -959,10 +967,6 @@ to_chat will check for valid clients itself already so no need to double check f
 /datum/hive_status/normal/New()
 	. = ..()
 	RegisterSignals(SSdcs, list(COMSIG_GLOB_SILOLESS_COLLAPSE), PROC_REF(setup_siloless_hud_timer))
-
-/datum/hive_status/normal/Destroy(force, ...)
-	. = ..()
-	UnregisterSignal(SSdcs, COMSIG_GLOB_SILOLESS_COLLAPSE)
 
 /datum/hive_status/normal/add_xeno(mob/living/carbon/xenomorph/X)
 	. = ..()

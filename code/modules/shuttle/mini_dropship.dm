@@ -101,7 +101,7 @@
 	networks = list(SOM_CAMERA_NETWORK)
 
 /obj/machinery/computer/camera_advanced/shuttle_docker/minidropship/clf
-	name = "CLF Van Controls"
+	name = "Cult Van Controls"
 	shuttleId = SHUTTLE_CLFTADPOLE
 	origin_port_id = SHUTTLE_CLFTADPOLE
 	req_access = null

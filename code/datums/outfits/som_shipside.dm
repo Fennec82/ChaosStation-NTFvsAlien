@@ -59,7 +59,7 @@
 
 /datum/outfit/job/som/command/staffofficer/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	. = ..()
-	H.equip_to_slot_or_hand(new /obj/item/binoculars/fire_support/extended/som/sl, SLOT_IN_R_POUCH)
+	H.equip_to_slot_or_hand(new /obj/item/binoculars/fire_support/extended/som, SLOT_IN_R_POUCH)
 
 /datum/outfit/job/som/command/pilot
 	name = SOM_PILOT_OFFICER
@@ -136,7 +136,7 @@
 
 	id = /obj/item/card/id/silver
 	belt = /obj/item/storage/belt/utility/full
-	ears = /obj/item/radio/headset/mainship/st
+	ears = /obj/item/radio/headset/mainship/mcom/som
 	w_uniform = /obj/item/clothing/under/marine/officer/engi
 	wear_suit = /obj/item/clothing/suit/storage/marine/ship_tech
 	shoes = /obj/item/clothing/shoes/marine/som/knife

@@ -188,7 +188,7 @@ GLOBAL_LIST_EMPTY(radio_packs)
 	phone_category = PHONE_KZ
 
 /obj/item/storage/backpack/marine/radiopack/clf_net
-	name = "\improper CLF radio operator Pack"
+	name = "\improper Cult radio operator Pack"
 	color = COLOR_PURPLE
 	networks_receive = list(FACTION_CLF)
 	networks_transmit = list(FACTION_CLF)

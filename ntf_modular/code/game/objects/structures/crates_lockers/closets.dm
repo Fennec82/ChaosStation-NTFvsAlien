@@ -102,8 +102,14 @@
 	if(length(contents))
 		return FALSE
 	if(ishuman(usr))
+		if(!opened)
+			to_chat(usr, span_warning("You must open [src] before packing it up"))
+			return
 		visible_message("[usr] begins to pack [src] up!")
 		if(do_after(usr, 2 SECONDS, TRUE, src, BUSY_ICON_FRIENDLY))
+			if(!opened)
+				to_chat(usr, span_warning("You must open [src] before packing it up"))
+				return
 			var/mob/living/carbon/human/huser = usr
 			var/thenade = new /obj/item/explosive/grenade/cagenade(loc)
 			huser.put_in_any_hand_if_possible(thenade)

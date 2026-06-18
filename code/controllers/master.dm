@@ -690,7 +690,7 @@ GLOBAL_VAR(runtimes_restarting_mc)
 				sleep_delta *= 2
 				current_ticklimit = TICK_LIMIT_RUNNING * 0.5
 				if(iteration < 3)
-					log_world("MC: High tick contention on iteration [iteration].  sleep_delta increased from [sleep_delta/2] to [sleep_delta].  current_ticklimit decreased from [current_ticklimit * 2] to current_ticklimit.  world.tick_lag = [world.tick_lag].  processing = [processing].  Master loop will now sleep for [world.tick_lag * (processing * sleep_delta)] deciseconds")
+					log_world("MC: High tick contention on iteration [iteration].  sleep_delta increased from [sleep_delta/2] to [sleep_delta].  current_ticklimit decreased from [current_ticklimit * 2] to [current_ticklimit].  world.tick_lag = [world.tick_lag].  processing = [processing].  Master loop will now sleep for [world.tick_lag * (processing * sleep_delta)] deciseconds")
 				sleep(world.tick_lag * (processing * sleep_delta))
 				continue
 

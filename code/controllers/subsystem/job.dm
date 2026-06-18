@@ -93,7 +93,7 @@ SUBSYSTEM_DEF(job)
 		JobDebug("AR job doesn't exist! Player: [player], Job: [job]")
 		return FALSE
 	JobDebug("Running AR, Player: [player], Job: [job.title], LJ: [latejoin]")
-	if(!player.IsJobAvailable(job))
+	if(!player.IsJobAvailable(job, latejoin))
 		return FALSE
 	if(is_banned_from(player.ckey, job.title))
 		JobDebug("AR isbanned failed, Player: [player], Job:[job.title]")
@@ -285,8 +285,14 @@ SUBSYSTEM_DEF(job)
 
 	job.after_spawn(new_character, player, joined_late) // note: this happens before new_character has a key!
 
-	return new_character
+	if(!isxenosjob(job))
+		// try to give them their medals
+		var/datum/medal_persistence/medals = get_medal_persistence_for_ckey(player.ckey)
+		ASYNC
+			medals.load_medals_from_db(player)
+			medals.give_medals_to(new_character)
 
+	return new_character
 
 /datum/controller/subsystem/job/proc/PopcapReached()
 	var/hpc = CONFIG_GET(number/hard_popcap)

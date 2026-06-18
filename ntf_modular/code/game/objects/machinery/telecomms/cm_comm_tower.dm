@@ -30,7 +30,7 @@
 	build_path = /obj/machinery/telecomms/relay/preset/tower/faction/som
 
 /obj/item/circuitboard/machine/telecomms/relay/tower/faction/clf
-	name = "\improper TC-4T Telecommunications CLF Circuit Board"
+	name = "\improper TC-4T Telecommunications Cult Circuit Board"
 	build_path = /obj/machinery/telecomms/relay/preset/tower/faction/clf
 
 /obj/item/circuitboard/machine/telecomms/relay/tower/faction/cm
@@ -57,21 +57,36 @@
 	new /obj/item/stock_parts/subspace/filter(src)
 
 
+/obj/item/storage/box/crate/loot/telecomm_tower_pack/ntc
+	name = parent_type::name +" (" + FACTION_TERRAGOV + ")"
+
 /obj/item/storage/box/crate/loot/telecomm_tower_pack/ntc/Initialize(mapload)
 	. = ..()
 	new /obj/item/circuitboard/machine/telecomms/relay/tower/faction(src)
+
+/obj/item/storage/box/crate/loot/telecomm_tower_pack/som
+	name = parent_type::name +" (" + FACTION_SOM + ")"
 
 /obj/item/storage/box/crate/loot/telecomm_tower_pack/som/Initialize(mapload)
 	. = ..()
 	new /obj/item/circuitboard/machine/telecomms/relay/tower/faction/som(src)
 
+/obj/item/storage/box/crate/loot/telecomm_tower_pack/clf
+	name = parent_type::name +" (" + FACTION_CLF + ")"
+
 /obj/item/storage/box/crate/loot/telecomm_tower_pack/clf/Initialize(mapload)
 	. = ..()
 	new /obj/item/circuitboard/machine/telecomms/relay/tower/faction/clf(src)
 
+/obj/item/storage/box/crate/loot/telecomm_tower_pack/cm
+	name = parent_type::name +" (" + FACTION_ICC + ")"
+
 /obj/item/storage/box/crate/loot/telecomm_tower_pack/cm/Initialize(mapload)
 	. = ..()
 	new /obj/item/circuitboard/machine/telecomms/relay/tower/faction/cm(src)
+
+/obj/item/storage/box/crate/loot/telecomm_tower_pack/kz
+	name = parent_type::name +" (" + FACTION_VSD + ")"
 
 /obj/item/storage/box/crate/loot/telecomm_tower_pack/kz/Initialize(mapload)
 	. = ..()
@@ -287,7 +302,7 @@
 
 /obj/machinery/telecomms/relay/preset/tower/faction/clf
 	freq_listening = CLF_FREQS
-	faction_shorthand = "CLF"
+	faction_shorthand = "Cult"
 
 /obj/machinery/telecomms/relay/preset/tower/faction/Initialize(mapload, ...)
 	if(faction_shorthand)
@@ -381,31 +396,33 @@
 			to_chat(user, span_warning("\The [src.name] needs repairs to have frequencies added to its software!"))
 			return
 		var/choice = tgui_input_list(user, "What do you wish to do?", "TC-3T comms tower", list("Wipe communication frequencies", "Add your faction's frequencies"))
-		if(choice == "Wipe communication frequencies")
-			freq_listening = list(FREQ_CIV_GENERAL)
-			to_chat(user, span_notice("You wipe the preexisting frequencies from \the [src]."))
-			return
-		else if(choice == "Add your faction's frequencies")
-			if(!do_after(user, 10, IGNORE_HAND|IGNORE_HELD_ITEM, BUSY_ICON_BUILD))
+		switch(choice)
+			if("Wipe communication frequencies")
+				freq_listening = list(FREQ_CIV_GENERAL)
+				to_chat(user, span_notice("You wipe the preexisting frequencies from \the [src]."))
 				return
-			if(user.faction in GLOB.faction_to_radio)
-				switch(user.faction)
-					if(FACTION_TERRAGOV,FACTION_NANOTRASEN,FACTION_ICC)
-						freq_listening -= NTC_SIDED_FREQS
-						freq_listening += NTC_SIDED_FREQS
-					if(FACTION_SOM)
-						freq_listening -= SOM_FREQS
-						freq_listening += SOM_FREQS
-					if(FACTION_VSD)
-						freq_listening -= KZ_FREQS
-						freq_listening += KZ_FREQS
-					if(FACTION_CLF)
-						freq_listening -= CLF_FREQS
-						freq_listening += CLF_FREQS
-				to_chat(user, span_notice("You add your faction's communication frequencies to \the [src]'s comm list."))
-			else
-				to_chat(user, span_notice("You don't have a fitting faction."))
-			return
+			if("Add your faction's frequencies")
+				if(!do_after(user, 10, IGNORE_HAND|IGNORE_HELD_ITEM, BUSY_ICON_BUILD))
+					return
+				if(user.faction in GLOB.faction_to_radio)
+					switch(user.faction)
+						if(FACTION_TERRAGOV,FACTION_NANOTRASEN,FACTION_ICC)
+							freq_listening -= NTC_SIDED_FREQS
+							freq_listening += NTC_SIDED_FREQS
+						if(FACTION_SOM)
+							freq_listening -= SOM_FREQS
+							freq_listening += SOM_FREQS
+						if(FACTION_VSD)
+							freq_listening -= KZ_FREQS
+							freq_listening += KZ_FREQS
+						if(FACTION_CLF)
+							freq_listening -= CLF_FREQS
+							freq_listening += CLF_FREQS
+					to_chat(user, span_notice("You add your faction's communication frequencies to \the [src]'s comm list."))
+					return
+				else
+					to_chat(user, span_notice("You don't have a fitting faction."))
+					return
 	. = ..()
 
 /obj/machinery/telecomms/relay/preset/tower/mapcomms/power_change()

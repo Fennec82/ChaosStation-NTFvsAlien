@@ -1,3 +1,4 @@
+#include "code\__DEFINES\accessories.dm"
 #include "code\__DEFINES\combat.dm"
 #include "code\__DEFINES\dcs\signals\signals.dm"
 #include "code\__DEFINES\dcs\signals\signals_keybinding.dm"
@@ -8,4 +9,5 @@
 #include "code\__DEFINES\mode.dm"
 #include "code\__DEFINES\sexcon.dm"
 #include "code\__DEFINES\span.dm"
+#include "code\__DEFINES\species.dm"
 #include "code\__DEFINES\traits.dm"

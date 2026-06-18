@@ -843,7 +843,7 @@
 						if(embyro)
 							for(embyro in occupant)
 								loop_in_time(HEMOSTAT_REMOVE_MAX_DURATION)
-								occupant.visible_message(span_warning("[src] defty extracts a wriggling parasite from [occupant]'s ribcage!"))
+								occupant.visible_message(span_warning("[src] defty extracts a wriggling parasite from [occupant]'s [embyro?.target_hole]!"))
 								var/mob/living/carbon/xenomorph/larva/live_larva = locate() in occupant // The larva was fully grown, ready to burst.
 								if(live_larva)
 									live_larva.forceMove(get_turf(src))

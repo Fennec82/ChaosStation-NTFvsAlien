@@ -5,9 +5,9 @@
 	round_type_flags = MODE_INFESTATION|MODE_PSY_POINTS|MODE_PSY_POINTS_ADVANCED|MODE_HIJACK_POSSIBLE|MODE_SILO_RESPAWN|MODE_ALLOW_XENO_QUICKBUILD|MODE_MUTATIONS_OBTAINABLE|MODE_XENO_GRAB_DEAD_ALLOWED|MODE_ALLOW_MARINE_QUICKBUILD
 	round_type_flags2 = MODE_2_CAMPAIGN_LITE_SUPPORT|MODE_2_NO_GHOSTS|MODE_2_NO_ABDUCT|MODE_2_SINGLE_USE_NUKE_DISK_GENERATOR|MODE_2_CHILL_RULES
 	shutters_drop_time = 15 MINUTES
-	xeno_abilities_flags = ABILITY_ALL_GAMEMODE
-	factions = list(FACTION_TERRAGOV, FACTION_SOM, FACTION_XENO, FACTION_CLF)
-	human_factions = list(FACTION_TERRAGOV, FACTION_SOM, FACTION_CLF)
+	xeno_abilities_flags = ABILITY_NUCLEARWAR|ABILITY_SOLMODE
+	factions = list(FACTION_TERRAGOV, FACTION_SOM, FACTION_XENO, FACTION_CLF, FACTION_ICC, FACTION_VSD, FACTION_NANOTRASEN)
+	human_factions = list(FACTION_TERRAGOV, FACTION_SOM, FACTION_CLF, FACTION_ICC, FACTION_VSD, FACTION_NANOTRASEN)
 	valid_job_types = list(
 		/datum/job/terragov/command/ceo = 1,
 		/datum/job/terragov/command/nm_ceo = 1,
@@ -80,7 +80,7 @@
 		/datum/job/som/squad/engineer = 2,
 		/datum/job/som/squad/leader = 2,
 		/datum/job/som/squad/veteran = 3,
-		/datum/job/other/prisonersom = 2,
+		/datum/job/other/prisonersom = 4,
 		/datum/job/clf/breeder = -1,
 		/datum/job/clf/standard = -1,
 		/datum/job/clf/medic = 2,
@@ -89,17 +89,34 @@
 		/datum/job/clf/leader = 2,
 		/datum/job/clf/silicon/synthetic/clf = 1,
 		/datum/job/clf/mo = 1,
-		/datum/job/other/prisonerclf = 2,
+		/datum/job/clf/messiah = 1,
+		/datum/job/other/prisonerclf = 4,
 		/datum/job/vsd_squad/standard = -1,
 		/datum/job/vsd_squad/medic = 1,
 		/datum/job/vsd_squad/engineer = 1,
 		/datum/job/vsd_squad/spec = 1,
 		/datum/job/vsd_squad/leader = 1,
+		/datum/job/icc_squad/standard = -1,
+		/datum/job/icc_squad/medic = 2,
+		/datum/job/icc_squad/tech = 2,
+		/datum/job/icc_squad/spec = 2,
+		/datum/job/icc_squad/leader = 2,
+		/datum/job/icc/commander = 1,
+		/datum/job/icc/fieldcommander = 1,
+		/datum/job/icc/administrator = 4,
+		/datum/job/terragov/civilian/liaison_archercorp = 1,
 		/datum/job/terragov/civilian/liaison_novamed = 1,
 		/datum/job/terragov/civilian/liaison_transco = 1,
+		/datum/job/icc/liaison_cm = 1,
 		/datum/job/clf/liaison_clf = 1,
 		/datum/job/som/civilian/liaison_som = 1,
 		/datum/job/vsd_squad/liaison_kaizoku = 1,
+		/datum/job/pmc/squad/standard = -1,
+		/datum/job/pmc/squad/medic = 2,
+		/datum/job/pmc/squad/engineer = 2,
+		/datum/job/pmc/squad/gunner = 1,
+		/datum/job/pmc/squad/sniper = 1,
+		/datum/job/pmc/squad/leader = 1,
 	)
 	enable_fun_tads = TRUE
 	xenorespawn_time = 2 MINUTES
@@ -119,6 +136,7 @@
 	max_larva_preg_at_once = MAX_LARVA_PREGNANCIES_SOL
 	time_between_round_group = 0
 	time_between_round_group_name = "GROUP_Extended"
+	spawn_xeno_shit = FALSE
 
 /datum/game_mode/infestation/secret_of_life/pre_setup()
 	. = ..()
@@ -225,9 +243,6 @@
 		SSpoints.add_tactical_psy_points(hivenumber, 300)
 		SSpoints.add_biomass_points(hivenumber, 0) // Solely to make sure it isn't null.
 
-	for(var/obj/effect/landmark/corpsespawner/corpse AS in GLOB.corpse_landmarks_list)
-		corpse.create_mob()
-
 //NTF addition start
 	if(randomize_miners)
 		if(length(GLOB.miner_list) > MINIMUM_MINERS)
@@ -266,6 +281,48 @@
 		xeno.evolution_stored = xeno.xeno_caste.evolution_threshold //Immediate roundstart evo for larva.
 
 	generate_nuke_disk_spawners()
+
+	if(!spawn_xeno_shit) //repair colony a bit
+		for(var/obj/machinery/power/apc/drained/apse in GLOB.apcs_list)
+			if(apse.cell) //charge apc cells
+				apse.cell.charge = apse.cell.maxcharge
+		//repair window frames
+		for(var/obj/structure/window_frame/colony/reinforced/frame in world)
+			if(!is_ground_level(frame.z))
+				continue
+			if(istype(frame, /obj/structure/window_frame/colony/reinforced))
+				var/obj/structure/window/framed/colony/reinforced/placed_thing = new /obj/structure/window/framed/colony/reinforced(frame.loc)
+				placed_thing.dir = frame.dir
+				qdel(frame)
+		for(var/obj/structure/window_frame/colony/frame in world)
+			if(!is_ground_level(frame.z))
+				continue
+			if(istype(frame, /obj/structure/window_frame/colony))
+				var/obj/structure/window/framed/colony/placed_thing = new /obj/structure/window/framed/colony(frame.loc)
+				placed_thing.dir = frame.dir
+				qdel(frame)
+		//clean blood
+		for(var/obj/effect/decal/cleanable/blood/splatter/blood_splatter in world)
+			if(!is_ground_level(blood_splatter.z))
+				continue
+			if(istype(blood_splatter, /obj/effect/decal/cleanable/blood/splatter))
+				qdel(blood_splatter)
+		for(var/obj/effect/decal/cleanable/blood/gibs in world)
+			if(!is_ground_level(gibs.z))
+				continue
+			if(istype(gibs, /obj/effect/decal/cleanable/blood/gibs))
+				qdel(gibs)
+		//make girders into basic walls?
+		for(var/obj/structure/girder/frame in world)
+			if(!is_ground_level(frame.z))
+				continue
+			if(istype(frame, /obj/structure/girder))
+				var/obj/structure/girder/placed_thing = new /turf/closed/wall(frame.loc)
+				placed_thing.dir = frame.dir
+				qdel(frame)
+	else //we got xeno bs all over colony
+		for(var/obj/effect/landmark/corpsespawner/corpse AS in GLOB.corpse_landmarks_list)
+			corpse.create_mob()
 
 	RegisterSignal(SSdcs, COMSIG_GLOB_NUKE_EXPLODED, PROC_REF(on_nuclear_explosion))
 	RegisterSignal(SSdcs, COMSIG_GLOB_NUKE_DEFUSED, PROC_REF(on_nuclear_defuse))
@@ -322,8 +379,8 @@ alt gamemodes
 /datum/game_mode/infestation/secret_of_life/nosub
 	name = "Secret of Life - No Subfactions"
 	config_tag = "Secret of Life - No Subfactions"
-	factions = list(FACTION_TERRAGOV, FACTION_XENO, FACTION_SOM)
-	human_factions = list(FACTION_TERRAGOV, FACTION_SOM)
+	factions = list(FACTION_TERRAGOV, FACTION_ICC, FACTION_XENO, FACTION_CLF, FACTION_SOM)
+	human_factions = list(FACTION_TERRAGOV, FACTION_ICC, FACTION_CLF, FACTION_SOM)
 	valid_job_types = list(
 		/datum/job/terragov/command/captain = 1,
 		/datum/job/terragov/command/fieldcommander = 1,
@@ -365,6 +422,7 @@ alt gamemodes
 		/datum/job/clf/mo = 1,
 		/datum/job/clf/standard = -1,
 		/datum/job/clf/breeder = -1,
+		/datum/job/clf/messiah = 1,
 		/datum/job/other/prisonerclf = 2,
 		/datum/job/som/silicon/synthetic/som = 1,
 		/datum/job/som/command/commander = 1,
@@ -434,6 +492,7 @@ alt gamemodes
 		/datum/job/other/prisoner = 4,
 		/datum/job/xenomorph = 5,
 		/datum/job/xenomorph/queen = 1,
+		/datum/job/clf/messiah = 1,
 		/datum/job/clf/leader = 2,
 		/datum/job/clf/specialist = 2,
 		/datum/job/clf/tech = 2,
@@ -511,10 +570,10 @@ alt gamemodes
 	)
 
 /datum/game_mode/infestation/secret_of_life/ntf_vs_clf
-	name = "Secret of Life - NTF vs CLF"
-	config_tag = "Secret of Life - NTF vs CLF"
-	factions = list(FACTION_TERRAGOV, FACTION_XENO, FACTION_CLF)
-	human_factions = list(FACTION_TERRAGOV, FACTION_CLF)
+	name = "Secret of Life - NTF vs Cult"
+	config_tag = "Secret of Life - NTF vs Cult"
+	factions = list(FACTION_TERRAGOV, FACTION_ICC, FACTION_XENO, FACTION_CLF)
+	human_factions = list(FACTION_TERRAGOV, FACTION_ICC, FACTION_CLF)
 	valid_job_types = list(
 		/datum/job/terragov/command/ceo = 1,
 		/datum/job/terragov/command/nm_ceo = 1,
@@ -583,117 +642,4 @@ alt gamemodes
 		/datum/job/terragov/civilian/liaison_novamed = 1,
 		/datum/job/terragov/civilian/liaison_transco = 1,
 		/datum/job/clf/liaison_clf = 1,
-	)
-
-//every fucking faction in existence
-/datum/game_mode/infestation/secret_of_life/factionchaos
-	name = "Secret of Life - Faction Chaos"
-	config_tag = "Secret of Life - Faction Chaos"
-	factions = list(FACTION_TERRAGOV, FACTION_SOM, FACTION_XENO, FACTION_CLF, FACTION_ICC, FACTION_VSD, FACTION_NANOTRASEN)
-	human_factions = list(FACTION_TERRAGOV, FACTION_SOM, FACTION_CLF, FACTION_ICC, FACTION_VSD, FACTION_NANOTRASEN)
-	valid_job_types = list(
-		/datum/job/terragov/command/ceo = 1,
-		/datum/job/terragov/command/nm_ceo = 1,
-		/datum/job/terragov/command/captain = 1,
-		/datum/job/terragov/command/fieldcommander = 1,
-		/datum/job/terragov/command/corpseccommander = 1,
-		/datum/job/terragov/command/staffofficer = 4,
-		/datum/job/terragov/command/vanguard = 2,
-		/datum/job/terragov/command/pilot = 1,
-		/datum/job/terragov/command/transportofficer = 2,
-		/datum/job/terragov/command/assault_crewman = 2,
-		/datum/job/terragov/command/transport_crewman = 2,
-		/datum/job/terragov/command/mech_pilot = 1,
-		/datum/job/terragov/engineering/chief = 1,
-		/datum/job/terragov/engineering/tech = 2,
-		/datum/job/terragov/requisitions/officer = 1,
-		/datum/job/terragov/medical/professor = 1,
-		/datum/job/terragov/medical/medicalofficer = 6,
-		/datum/job/terragov/security/security_officer = 6,
-		/datum/job/terragov/medical/researcher = 3,
-		/datum/job/terragov/civilian/liaison = 1,
-		/datum/job/terragov/silicon/synthetic = 4,
-		/datum/job/terragov/silicon/ai = 1,
-		/datum/job/terragov/squad/engineer = 8,
-		/datum/job/terragov/squad/corpsman = 8,
-		/datum/job/terragov/squad/leader = 4,
-		/datum/job/terragov/squad/specialist = 4,
-		/datum/job/terragov/squad/smartgunner = 4,
-		/datum/job/terragov/squad/standard = -1,
-		/datum/job/terragov/squad/slut = -1,
-		/datum/job/moraleofficer = -1,
-		/datum/job/worker = -1,
-		/datum/job/terragov/offduty = -1,
-		/datum/job/survivor/assistant = -1,
-		/datum/job/survivor/scientist = 2,
-		/datum/job/survivor/doctor = 6,
-		/datum/job/survivor/liaison = 1,
-		/datum/job/survivor/security = 6,
-		/datum/job/survivor/civilian = -1,
-		/datum/job/survivor/chef = 1,
-		/datum/job/survivor/botanist = 1,
-		/datum/job/survivor/atmos = 2,
-		/datum/job/survivor/chaplain = 1,
-		/datum/job/survivor/miner = 2,
-		/datum/job/survivor/salesman = 1,
-		/datum/job/survivor/marshal = 1,
-		/datum/job/survivor/non_deployed_operative = 2,
-		/datum/job/survivor/prisoner = 2,
-		/datum/job/survivor/stripper = -1,
-		/datum/job/survivor/maid = 3,
-		/datum/job/other/prisoner = 4,
-		/datum/job/survivor/synth = 2,
-		/datum/job/xenomorph = 8,
-		/datum/job/xenomorph/green = FREE_XENO_AT_START_CORRUPT,
-		/datum/job/xenomorph/queen = 1,
-		/datum/job/som/silicon/synthetic/som = 1,
-		/datum/job/som/command/commander = 1,
-		/datum/job/som/command/fieldcommander = 1,
-		/datum/job/som/command/staffofficer = 2,
-		/datum/job/som/command/pilot = 1,
-		/datum/job/som/command/assault_crewman = 2,
-		/datum/job/som/command/mech_pilot = 1,
-		/datum/job/som/requisitions/officer = 1,
-		/datum/job/som/engineering/chief = 1,
-		/datum/job/som/engineering/tech = 2,
-		/datum/job/som/medical/professor = 1,
-		/datum/job/som/medical/medicalofficer = 2,
-		/datum/job/som/squad/standard = -1,
-		/datum/job/som/squad/medic = 2,
-		/datum/job/som/squad/engineer = 2,
-		/datum/job/som/squad/leader = 2,
-		/datum/job/som/squad/veteran = 3,
-		/datum/job/other/prisonersom = 2,
-		/datum/job/clf/breeder = -1,
-		/datum/job/clf/standard = -1,
-		/datum/job/clf/medic = 2,
-		/datum/job/clf/specialist = 3,
-		/datum/job/clf/tech = 3,
-		/datum/job/clf/leader = 2,
-		/datum/job/clf/silicon/synthetic/clf = 1,
-		/datum/job/clf/mo = 1,
-		/datum/job/other/prisonerclf = 2,
-		/datum/job/vsd_squad/standard = -1,
-		/datum/job/vsd_squad/medic = 1,
-		/datum/job/vsd_squad/engineer = 1,
-		/datum/job/vsd_squad/spec = 1,
-		/datum/job/vsd_squad/leader = 1,
-		/datum/job/icc_squad/standard = -1,
-		/datum/job/icc_squad/medic = 2,
-		/datum/job/icc_squad/tech = 2,
-		/datum/job/icc_squad/spec = 2,
-		/datum/job/icc_squad/leader = 2,
-		/datum/job/terragov/civilian/liaison_archercorp = 1,
-		/datum/job/terragov/civilian/liaison_novamed = 1,
-		/datum/job/terragov/civilian/liaison_transco = 1,
-		/datum/job/icc/liaison_cm = 1,
-		/datum/job/clf/liaison_clf = 1,
-		/datum/job/som/civilian/liaison_som = 1,
-		/datum/job/vsd_squad/liaison_kaizoku = 1,
-		/datum/job/pmc/squad/standard = -1,
-		/datum/job/pmc/squad/medic = 2,
-		/datum/job/pmc/squad/engineer = 2,
-		/datum/job/pmc/squad/gunner = 1,
-		/datum/job/pmc/squad/sniper = 1,
-		/datum/job/pmc/squad/leader = 1,
 	)

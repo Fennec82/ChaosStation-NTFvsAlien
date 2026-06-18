@@ -1,6 +1,9 @@
-/proc/faction_announce(message, title = "Attention:", sound, list/receivers = GLOB.alive_human_list, should_play_sound = TRUE, to_faction = FACTION_TERRAGOV)
+/proc/faction_announce(message, title = null, subtitle = "", sound, list/receivers = GLOB.alive_human_list, should_play_sound = TRUE, to_faction = FACTION_TERRAGOV)
 	if(!message)
 		return
+
+	if(title == null)
+		title = "[to_faction] Announcement"
 
 	var/sound/sussy
 	if(!sound)
@@ -12,6 +15,7 @@
 		if(!isnewplayer(M) && !isdeaf(M) && M.faction == to_faction)
 			to_chat(M, assemble_alert(
 				title = title,
+				subtitle = subtitle,
 				message = message,
 				minor = TRUE
 			))

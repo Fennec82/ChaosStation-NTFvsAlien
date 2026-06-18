@@ -143,11 +143,11 @@
 	ears = /obj/item/radio/headset
 
 /datum/job/other/prisonerclf
-	title = "CLF Prisoner"
+	title = "Cult Prisoner"
 	paygrade = "Psnr"
 	comm_title = "Psnr"
 	outfit = /datum/outfit/job/prisonerclf
-	supervisors = "The CLF"
+	supervisors = "The Cult"
 	skills_type = /datum/skills/civilian
 	total_positions = -1
 	job_flags = JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_LATEJOINABLE|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_ADDTOMANIFEST

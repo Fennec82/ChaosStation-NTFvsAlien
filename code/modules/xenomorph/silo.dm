@@ -206,7 +206,7 @@
 			if(!do_after(user, 1 SECONDS, FALSE, victim, BUSY_ICON_DANGER) || QDELETED(src))
 				return
 
-			larba.ghostize(FALSE, FALSE, TRUE)
+			larba.ghostize(TRUE, FALSE, TRUE)
 			larba.burrow()
 			Shake(1,1, 2 SECONDS)
 
@@ -223,7 +223,7 @@
 
 /obj/structure/xeno/silo/update_minimap_icon()
 	SSminimaps.remove_marker(src)
-	SSminimaps.add_marker(src, GLOB.hivenumber_to_minimap_flag[hivenumber], image('icons/UI_icons/map_blips.dmi', null, "silo[threat_warning ? "_warn" : "_passive"]", MINIMAP_LABELS_LAYER))
+	SSminimaps.add_marker(src, GLOB.hivenumber_to_minimap_flag[hivenumber], image('icons/UI_icons/map_blips.dmi', null, "silo[threat_warning ? "_warn" : "_passive"]", MINIMAP_PRIORITY_LAYER))
 
 /obj/structure/xeno/silo/process()
 	//Regenerate if we're at less than max integrity

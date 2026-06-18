@@ -69,7 +69,7 @@ GLOBAL_VAR(restart_counter)
 	Profile(PROFILE_RESTART, type = "sendmaps")
 
 	// Write everything to this log file until we get to SetupLogs() later
-	_initialize_log_files("data/logs/config_error.[GUID()].log")
+	_initialize_log_files("data/logs/config_error.[time2text(world.timeofday, "YYYY-MM-DD", TIMEZONE_UTC)].[num2text(world.timeofday,100)].[GUID()].log")
 
 	// Init the debugger first so we can debug Master
 	init_debugger()
@@ -165,10 +165,10 @@ GLOBAL_VAR(restart_counter)
 /world/proc/SetupLogs()
 	var/override_dir = params[OVERRIDE_LOG_DIRECTORY_PARAMETER]
 	if(!override_dir)
-		var/realtime = world.realtime
+		var/real_time = world.realtime
 		if(world.byond_build > 1667  && world.byond_build < 1670)
-			realtime = world.timeofday // workaround for byond bug ID:2981407
-		var/texttime = time2text(realtime, "YYYY/MM/DD", TIMEZONE_UTC)
+			real_time = world.timeofday // workaround for byond bug ID:2981407
+		var/texttime = time2text(real_time, "YYYY/MM/DD", TIMEZONE_UTC)
 		GLOB.log_directory = "data/logs/[texttime]/round-"
 		GLOB.picture_logging_prefix = "L_[time2text(realtime, "YYYYMMDD", TIMEZONE_UTC)]_"
 		GLOB.picture_log_directory = "data/picture_logs/[texttime]/round-"

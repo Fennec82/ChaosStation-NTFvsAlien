@@ -105,7 +105,7 @@
 	attachable_offset = list("muzzle_x" = 41, "muzzle_y" = 20,"rail_x" = 15, "rail_y" = 20, "under_x" = 23, "under_y" = 12, "stock_x" = 11, "stock_y" = 14)
 	starting_attachment_types = list(/obj/item/attachable/stock/t39stock)
 
-	fire_delay = 1.2 SECONDS
+	fire_delay = 1.4 SECONDS
 	accuracy_mult = 1.05
 	accuracy_mult_unwielded = 0.65
 	scatter = 3
@@ -122,11 +122,11 @@
 
 /obj/item/weapon/gun/shotgun/combat/masterkey
 	name = "masterkey shotgun"
-	desc = "A weapon-mounted, three-shot shotgun. Reloadable with any normal 12 gauge shell. The short barrel reduces the ammo's effectiveness drastically in exchange for fitting as a attachment.."
+	desc = "A weapon-mounted, three-plus-one shot shotgun. Reloadable with any normal 12 gauge shell. The short barrel reduces the ammo's effectiveness drastically in exchange for fitting as a attachment.."
 	icon = 'ntf_modular/icons/obj/items/guns/attachments/gun.dmi'
 	icon_state = "masterkey"
 	cocked_sound = 'sound/weapons/guns/interact/trenchgun_pump.ogg'
-	max_chamber_items = 2
+	max_chamber_items = 3
 	attachable_allowed = list()
 	starting_attachment_types = list()
 	slot = ATTACHMENT_SLOT_UNDER
@@ -136,7 +136,7 @@
 	gun_features_flags = GUN_IS_ATTACHMENT|GUN_AMMO_COUNTER|GUN_ATTACHMENT_FIRE_ONLY|GUN_WIELDED_STABLE_FIRING_ONLY|GUN_CAN_POINTBLANK|GUN_WIELDED_FIRING_ONLY|GUN_SMOKE_PARTICLES
 	default_ammo_type = /datum/ammo/bullet/shotgun/buckshot
 	scatter = 3
-	damage_mult = 0.85
+	damage_mult = 1
 	cock_delay = 1.2 SECONDS
 	fire_delay = 1.5 SECONDS
 	pixel_shift_x = 14
@@ -189,7 +189,6 @@
 	attachable_allowed = list()
 	gun_features_flags = GUN_CAN_POINTBLANK|GUN_AMMO_COUNTER|GUN_SMOKE_PARTICLES
 	attachable_offset = list("muzzle_x" = 30, "muzzle_y" = 20,"rail_x" = 11, "rail_y" = 22, "under_x" = 18, "under_y" = 16, "stock_x" = 18, "stock_y" = 16)
-	damage_mult = 1
 	damage_falloff_mult = 2
 	fire_delay = 0.2 SECONDS
 	accuracy_mult = 0.9
@@ -226,7 +225,7 @@
 		/obj/item/attachable/scope/mini,
 	)
 
-	gun_features_flags = GUN_CAN_POINTBLANK|GUN_AMMO_COUNTER|GUN_WIELDED_FIRING_ONLY|GUN_SMOKE_PARTICLES
+	gun_features_flags = GUN_CAN_POINTBLANK|GUN_AMMO_COUNTER|GUN_SMOKE_PARTICLES
 	attachable_offset = list("muzzle_x" = 33, "muzzle_y" = 17,"rail_x" = 15, "rail_y" = 19, "under_x" = 21, "under_y" = 13, "stock_x" = 13, "stock_y" = 16)
 
 	fire_delay = 0.65 SECONDS
@@ -235,6 +234,7 @@
 	scatter_unwielded = 10
 	recoil = 0.5
 	recoil_unwielded = 3
+	damage_mult = 0.9
 
 
 //-------------------------------------------------------
@@ -378,7 +378,7 @@
 
 	fire_delay = 1.2 SECONDS
 	max_chamber_items = 5
-	damage_mult = 1
+	damage_mult = 1.1
 	accuracy_mult_unwielded = 1
 
 	scatter = 4
@@ -701,7 +701,7 @@
 	reload_sound = 'sound/weapons/guns/interact/mosin_reload.ogg'
 	caliber = CALIBER_44 //codex
 	load_method = SINGLE_CASING //codex
-	max_chamber_items = 9 //codex
+	max_chamber_items = 13 //codex
 	default_ammo_type = /datum/ammo/bullet/revolver/tp44
 	gun_skill_category = SKILL_RIFLES
 	cocked_sound = 'sound/weapons/guns/interact/ak47_cocked.ogg'//good enough for now.
@@ -711,21 +711,26 @@
 		/obj/item/attachable/reddot,
 		/obj/item/attachable/scope/mini,
 		/obj/item/attachable/scope,
+		/obj/item/attachable/scope/marine,
 		/obj/item/attachable/flashlight,
-		/obj/item/attachable/flashlight/under,
+		/obj/item/attachable/magnetic_harness,
+		/obj/item/attachable/compensator,
+		/obj/item/attachable/bayonet,
+		/obj/item/attachable/heavy_barrel,
+		/obj/item/attachable/extended_barrel,
 		/obj/item/attachable/bayonet/converted,
 	)
 	attachable_offset = list("muzzle_x" = 50, "muzzle_y" = 21,"rail_x" = 8, "rail_y" = 21, "under_x" = 37, "under_y" = 16, "stock_x" = 20, "stock_y" = 14)
 	gun_features_flags = GUN_CAN_POINTBLANK|GUN_AMMO_COUNTER|GUN_SMOKE_PARTICLES
 
-	fire_delay = 0.8 SECONDS
+	fire_delay = 0.4 SECONDS
 	accuracy_mult = 1.2
 	accuracy_mult_unwielded = 0.7
-	scatter = 2
+	scatter = 1
 	scatter_unwielded = 7
-	recoil = 2
-	recoil_unwielded = 4
-	cock_delay = 0.6 SECONDS
+	recoil = 0
+	recoil_unwielded = 3
+	cock_delay = 0.2 SECONDS
 
 
 // ***********************************************

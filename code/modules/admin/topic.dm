@@ -1842,7 +1842,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				var/list/valid_hairstyles = list()
 				for(var/hairstyle in GLOB.hair_styles_list)
 					var/datum/sprite_accessory/S = GLOB.hair_styles_list[hairstyle]
-					if(!(H.species.name in S.species_allowed))
+					if(!can_use_hair_accessory(S, H.species.name))
 						continue
 
 					valid_hairstyles += hairstyle
@@ -1913,6 +1913,11 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				if(!change || !istype(H))
 					return
 				H.set_species(change)
+			if("bloodcolor")
+				change = input("Select the blood color.", "Edit Appearance") as null|color
+				if(!change || !istype(H))
+					return
+				H.blood_color = change
 
 		H.update_hair()
 		H.update_body()

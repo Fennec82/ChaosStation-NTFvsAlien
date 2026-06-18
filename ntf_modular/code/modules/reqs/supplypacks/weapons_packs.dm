@@ -38,6 +38,15 @@
 	contains = list(/obj/item/ammo_magazine/rifle/boltclip/dragoon/pox)
 	cost = 100
 
+/datum/supply_packs/weapons/laserweapons
+	name = "Standard laser weapon bundle" // Since we can buy an xray laser rifle but not regular ones?
+	contains = list(/obj/item/weapon/gun/energy/lasgun/lasrifle/standard_marine_carbine,
+/obj/item/weapon/gun/energy/lasgun/lasrifle/standard_marine_rifle,
+/obj/item/weapon/gun/energy/lasgun/lasrifle/standard_marine_sniper,
+/obj/item/weapon/gun/energy/lasgun/lasrifle/standard_marine_mlaser,
+/obj/item/cell/lasgun/volkite/powerpack/marine,
+/obj/item/cell/lasgun/volkite/powerpack/marine/backpack,)
+	cost = 250
 
 //factional things down here
 /datum/supply_packs/weapons/unity

@@ -937,7 +937,7 @@ It is also recommended that you gear up like a regular marine, or your 'internsh
 	shadow_languages = list(/datum/language/xenocommon)
 	access = ALL_ACCESS
 	minimal_access = ALL_ACCESS
-	skills_type = /datum/skills/civilian
+	skills_type = /datum/skills/operations_officer
 	display_order = JOB_DISPLAY_ORDER_CORPORATE_LIAISON
 	outfit = /datum/outfit/job/civilian/liaison
 	job_flags = JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_ADDTOMANIFEST|JOB_FLAG_PROVIDES_SQUAD_HUD
@@ -1029,23 +1029,21 @@ Use your office fax machine to communicate with corporate headquarters or to acq
 /datum/job/terragov/silicon/synthetic/get_special_name(client/preference_source)
 	return preference_source.prefs.synthetic_name
 
+/datum/job/terragov/silicon/synthetic/special_check_latejoin(client/C)
+	. = ..()
+	if(!.)
+		return FALSE
+	for(var/mob/living/carbon/human/human AS in GLOB.alive_human_list)
+		if(human.job?.type == type)
+			to_chat(C, span_warning("The ship already has a Synthetic."))
+			return FALSE
+	return TRUE
+
 /datum/job/terragov/silicon/synthetic/return_spawn_type(datum/preferences/prefs)
 	if(prefs?.synthetic_type == "Early Synthetic")
 		return /mob/living/carbon/human/species/early_synthetic
 	if(prefs?.synthetic_type == "Robot")
-		switch(prefs?.robot_type)
-			if("Basic")
-				return /mob/living/carbon/human/species/robot
-			if("Hammerhead")
-				return /mob/living/carbon/human/species/robot/alpharii
-			if("Chilvaris")
-				return /mob/living/carbon/human/species/robot/charlit
-			if("Ratcher")
-				return /mob/living/carbon/human/species/robot/deltad
-			if("Sterling")
-				return /mob/living/carbon/human/species/robot/bravada
-			if("Synskin")
-				return /mob/living/carbon/human/species/robot/synskin
+		return /mob/living/carbon/human/species/robot
 	return /mob/living/carbon/human/species/synthetic
 
 /datum/job/terragov/silicon/synthetic/return_skills_type(datum/preferences/prefs)
@@ -1079,6 +1077,58 @@ Use your office fax machine to communicate with corporate headquarters or to acq
 	. += separator_hr("[span_role_header("<b>[title] Information</b>")]")
 	. += "Your primary job is to support and assist all NTC departments and personnel on-board. \
 		In addition, being a Synthetic gives you knowledge in every field and specialization possible on-board the ship."
+
+/datum/job/terragov/silicon/combat_robot
+	title = COMBAT_ROBOT
+	req_admin_notify = TRUE
+	comm_title = "CR"
+	paygrade = "Mk.I"
+	supervisors = "the acting command staff and squad leadership."
+	total_positions = -1
+	skills_type = /datum/skills/combat_robot
+	access = ALL_MARINE_ACCESS
+	minimal_access = ALL_MARINE_ACCESS
+	display_order = JOB_DISPLAY_ORDER_COMBAT_ROBOT
+	outfit = /datum/outfit/job/civilian/combat_robot
+	exp_requirements = XP_REQ_EXPERIENCED
+	exp_type = EXP_TYPE_REGULAR_ALL
+	job_flags = JOB_FLAG_SPECIALNAME|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_ADDTOMANIFEST|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_CAN_SEE_ORDERS|JOB_FLAG_ALWAYS_VISIBLE_ON_MINIMAP
+	jobworth = list(
+		/datum/job/xenomorph = LARVA_POINTS_REGULAR,
+		/datum/job/terragov/squad/smartgunner = SMARTIE_POINTS_REGULAR,
+		/datum/job/terragov/squad/specialist = SMARTIE_POINTS_REGULAR,
+	)
+	html_description = {"
+		<b>Difficulty</b>: Hard<br /><br />
+		<b>You answer to the</b> acting Command Staff and squad leadership<br /><br />
+		<b>Unlock Requirement</b>: Starting Role<br /><br />
+		<b>Gamemode Availability</b>: Crash, Nuclear War<br /><br /><br />
+		<b>Duty</b>: Fight as a dedicated Ninetails combat platform. This role is separate from the Synthetic support slot.
+	"}
+	minimap_icon = "private"
+
+/datum/job/terragov/silicon/combat_robot/get_special_name(client/preference_source)
+	return preference_source.prefs.synthetic_name
+
+/datum/job/terragov/silicon/combat_robot/return_spawn_type(datum/preferences/prefs)
+	switch(prefs?.robot_type)
+		if("Hammerhead")
+			return /mob/living/carbon/human/species/robot/alpharii
+		if("Chilvaris")
+			return /mob/living/carbon/human/species/robot/charlit
+		if("Ratcher")
+			return /mob/living/carbon/human/species/robot/deltad
+		if("Sterling")
+			return /mob/living/carbon/human/species/robot/bravada
+		if("Synskin")
+			return /mob/living/carbon/human/species/robot/synskin
+	return /mob/living/carbon/human/species/robot
+
+/datum/job/terragov/silicon/combat_robot/get_spawn_message_information(mob/M)
+	. = ..()
+	. += separator_hr("[span_role_header("<b>[title] Information</b>")]")
+	. += "You are a dedicated combat robot, not the ship's Synthetic. \
+		Support the NTC in combat operations and follow command directives."
 
 /datum/job/terragov/silicon/ai
 	title = SILICON_AI

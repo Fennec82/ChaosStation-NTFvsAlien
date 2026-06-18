@@ -8,6 +8,8 @@
 #define PINGID_SURVIVOR_HEAVY_PING "1476702539440324720"
 #define PINGID_CLASSIC_MODE_PING "1476702696697237567"
 #define PINGID_SOL_MODE_PING "1476703075640283408"
+#define PINGID_WHISKEY_OUTPOST "1494368863943655578"
+#define PINGID_ENCOUNTER "1507300968109445140"
 
 GLOBAL_LIST_INIT(mode_to_pingid, list(
 	"Crash" = PINGID_CRASH_ROUND_PING,
@@ -22,7 +24,10 @@ GLOBAL_LIST_INIT(mode_to_pingid, list(
 	"Secret of Life - Main" = PINGID_SOL_MODE_PING,
 	"Secret of Life - No Subfactions" = PINGID_SOL_MODE_PING,
 	"Secret of Life - NTF vs Alien only" = PINGID_SOL_MODE_PING,
-	"Secret of Life - NTF vs CLF" = PINGID_SOL_MODE_PING,
+	"Secret of Life - NTF vs Cult" = PINGID_SOL_MODE_PING,
+	"Secret of Life - Faction Chaos" = PINGID_SOL_MODE_PING,
+	"Whiskey Outpost" = PINGID_WHISKEY_OUTPOST,
+	"Encounter" = PINGID_ENCOUNTER,
 ))
 
 #define MAXIMUM_DISCORD_MESSAGE_LENGTH 1800 // actually 2000 but let's leave 10% safety buffer

@@ -243,7 +243,7 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 	melee_weapons = SKILL_MELEE_WEAK
 
 /datum/skills/civilian/survivor
-	name = "Survivor"
+	name = "Colonist"
 	engineer = SKILL_ENGINEER_ENGI //to hack airlocks so they're never stuck in a room.
 	combat = SKILL_COMBAT_DEFAULT
 	construction = SKILL_CONSTRUCTION_METAL
@@ -260,7 +260,7 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 	powerloader = SKILL_POWERLOADER_MASTER
 
 /datum/skills/civilian/survivor/master
-	name = "Survivor"
+	name = "Colonist"
 	combat = SKILL_COMBAT_DEFAULT
 	medical = SKILL_MEDICAL_PRACTICED
 	construction = SKILL_CONSTRUCTION_ADVANCED
@@ -409,6 +409,15 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 	pistols = SKILL_PISTOLS_TRAINED
 	police = SKILL_POLICE_MP
 	powerloader = SKILL_POWERLOADER_MASTER
+
+/datum/skills/combat_robot
+	name = COMBAT_ROBOT
+	engineer = SKILL_ENGINEER_METAL
+	construction = SKILL_CONSTRUCTION_METAL
+	combat = SKILL_COMBAT_TRAINED
+	medical = SKILL_MEDICAL_NOVICE
+	pistols = SKILL_PISTOLS_TRAINED
+	powerloader = SKILL_POWERLOADER_TRAINED
 
 /datum/skills/captain
 	name = CAPTAIN
@@ -581,7 +590,7 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 	surgery = SKILL_SURGERY_AMATEUR
 
 /datum/skills/sl/clf
-	name = "CLF leader"
+	name = "Cultist Sect Leader"
 	construction = SKILL_CONSTRUCTION_METAL
 	engineer = SKILL_ENGINEER_METAL
 	leadership = SKILL_LEAD_TRAINED
@@ -904,6 +913,7 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 	name = SECURITY_OFFICER
 
 	unarmed = SKILL_UNARMED_MP
+	medical = SKILL_MEDICAL_PRACTICED
 	combat = SKILL_COMBAT_DEFAULT
 	smgs = SKILL_SMGS_TRAINED
 	rifles = SKILL_RIFLES_TRAINED

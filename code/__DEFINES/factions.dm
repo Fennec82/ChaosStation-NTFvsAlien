@@ -2,7 +2,7 @@
 #define FACTION_TERRAGOV "Ninetails Corporation"
 #define FACTION_XENO "Xeno"
 #define FACTION_ZOMBIE "Zombie"
-#define FACTION_CLF "Colonial Liberation Force"
+#define FACTION_CLF "Cult of Evolution"
 #define FACTION_DEATHSQUAD "Deathsquad"
 #define FACTION_FREELANCERS "Freelancers"
 #define FACTION_IMP "Imperium of Mankind"
@@ -129,7 +129,7 @@ GLOBAL_LIST_INIT(faction_to_acronym, list(
 	FACTION_SPECFORCE = "SRF",
 	FACTION_NANOTRASEN = "ACAP",
 	FACTION_FREELANCERS = "FRE",
-	FACTION_CLF = "CLF",
+	FACTION_CLF = "Cult",
 	FACTION_DEATHSQUAD = "Deathsquad",
 	FACTION_IMP = "IMP",
 	FACTION_UNKN_MERCS = "Unknown",
@@ -191,6 +191,7 @@ GLOBAL_LIST_INIT(faction_to_squad_hud, list(
 GLOBAL_LIST_INIT(faction_to_portrait, list(
 	FACTION_TERRAGOV = /atom/movable/screen/text/screen_text/picture/potrait,
 	FACTION_SOM = /atom/movable/screen/text/screen_text/picture/potrait/som_over,
+	FACTION_XENO = /atom/movable/screen/text/screen_text/picture/potrait/queen_mother,
 ))
 
 GLOBAL_LIST_INIT(faction_to_mech_spawner, list(
@@ -204,4 +205,11 @@ GLOBAL_LIST_INIT(faction_to_mech_spawner, list(
 		"medium" = /obj/effect/landmark/campaign/vehicle_spawner/mech/som,
 		"light" = /obj/effect/landmark/campaign/vehicle_spawner/mech/som/light,
 	),
+))
+
+///Faction to formatted text for use in capture objectives
+GLOBAL_LIST_INIT(faction_to_formatted_text, list(
+	FACTION_TERRAGOV = "tgmc",
+	FACTION_SOM = "som",
+	FACTION_XENO = "xeno"
 ))

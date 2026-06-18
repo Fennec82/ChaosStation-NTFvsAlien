@@ -42,3 +42,9 @@
 
 /datum/effect_system/smoke_spread/debris
 	smoke_type = /obj/effect/particle_effect/smoke/debris
+
+/datum/effect_system/smoke_spread/xeno/neuro/alt
+	smoke_type = /obj/effect/particle_effect/smoke/xeno/neuro/alt
+
+/obj/effect/particle_effect/smoke/xeno/neuro/alt
+	strength = 0.2

@@ -364,11 +364,11 @@ GLOBAL_LIST_INIT(quick_loadouts, init_quick_loadouts())
 
 
 /obj/machinery/quick_vendor/clf
-	desc = "An advanced vendor used by the CLF to rapidly equip their devotees"
+	desc = "An advanced vendor used by the Cult to rapidly equip their devotees"
 	faction = VENDOR_FACTION_CLF
 	categories = list(
-		"CLF Standard",
-		"CLF Medic",
-		"CLF Breeder",
-		"CLF Leader",
+		"Cultist",
+		"Cultist Mender",
+		"Cult Offering",
+		"Cultist Sect Leader",
 	)
