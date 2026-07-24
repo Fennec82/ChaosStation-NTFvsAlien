@@ -25,12 +25,12 @@ Imports
 	contains = list(/obj/item/ammo_magazine/rifle)
 	cost = 3
 
-/datum/supply_packs/imports/m41a/ammo/extended
+/datum/supply_packs/imports/m41a2/ammo/extended
 	name = "PR-412 Pulse Rifle Ammo Extended Mag"
 	contains = list(/obj/item/ammo_magazine/rifle/extended)
 	cost = 6
 
-/datum/supply_packs/imports/m41a/ammo/incendiary
+/datum/supply_packs/imports/m41a2/ammo/incendiary
 	name = "PR-412 Pulse Rifle Ammo Incendiary Mag"
 	contains = list(/obj/item/ammo_magazine/rifle/incendiary)
 	cost = 18
@@ -200,10 +200,20 @@ Imports
 	contains = list(/obj/item/weapon/gun/rifle/lmg_d)
 	cost = 100
 
+/datum/supply_packs/imports/lmg_d/modern
+	name = "lMG-DM Tactical Light Machine Gun"
+	contains = list(/obj/item/weapon/gun/rifle/lmg_d/modern)
+	cost = 250
+
 /datum/supply_packs/imports/lmg_d/ammo
 	name = "lMG-D Light Machine Gun Drum Magazine"
 	contains = list(/obj/item/ammo_magazine/rifle/lmg_d)
 	cost = 10
+
+/datum/supply_packs/imports/lmg_d/ammo/belt
+	name = "lMG-D Light Machine Gun Belt Pack"
+	contains = list(/obj/item/ammo_magazine/rifle/lmg_d/belt)
+	cost = 50
 
 /datum/supply_packs/imports/dp27
 	name = "Degtyaryov 'RP' Machine Gun"

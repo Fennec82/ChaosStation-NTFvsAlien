@@ -121,10 +121,14 @@
 		can_hold_list = list(
 			/obj/item/explosive/grenade/flashbang,
 			/obj/item/explosive/grenade/chem_grenade/teargas,
+			/obj/item/explosive/grenade/bednade,
+			/obj/item/cell/lasgun/taser,
+			/obj/item/clothing/ears/earmuffs,
 			/obj/item/reagent_containers/spray/pepper,
 			/obj/item/restraints/handcuffs,
 			/obj/item/flash,
 			/obj/item/clothing/glasses,
+			/obj/item/ammo_magazine/rifle,
 			/obj/item/ammo_magazine/pistol,
 			/obj/item/ammo_magazine/handful,
 			/obj/item/reagent_containers/food/snacks/donut,
@@ -142,6 +146,7 @@
 			/obj/item/explosive/grenade/smokebomb/sleep,
 			/obj/item/roller/bedroll,
 			/obj/item/weapon/telebaton,
+			/obj/item/book/manual/marine_law
 		),
 	)
 

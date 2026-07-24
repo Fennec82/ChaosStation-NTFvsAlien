@@ -78,7 +78,7 @@
 	dat += "<hr>"
 
 	if(authenticated)
-		dat += "<b>Logged in to:</b> Ninetails Private Corporate Network<br><br>"
+		dat += "<b>Logged in to:</b> XF-69 Planetary Fax Network<br><br>"
 		if(message)
 			dat += "<a href='byond://?src=[text_ref(src)];remove=1'>Remove Paper</a><br><br>"
 			if(sendcooldown)
@@ -187,33 +187,44 @@
 
 /obj/machinery/faxmachine/liasion
 	department = CORPORATE_LIAISON
+	faction = FACTION_TERRAGOV
 
 /obj/machinery/faxmachine/cic
 	department = "Combat Information Center"
+	faction = FACTION_TERRAGOV
 
 /obj/machinery/faxmachine/cmp
 	department = "Corpsec Commander"
+	faction = FACTION_TERRAGOV
 
 /obj/machinery/faxmachine/brig
 	department = "Corpsec Brig"
+	faction = FACTION_TERRAGOV
 
 /obj/machinery/faxmachine/research
 	department = "NTC Research"
+	faction = FACTION_TERRAGOV
 
 /obj/machinery/faxmachine/warden //Prison Station
 	department = "Warden"
+	faction = FACTION_TERRAGOV
 
 /obj/machinery/faxmachine/som
 	department = "SOM"
+	faction = FACTION_SOM
 
 /obj/machinery/faxmachine/kz
 	department = "KZ"
+	faction = FACTION_VSD
 
 /obj/machinery/faxmachine/pmc
 	department = "pmc"
+	faction = FACTION_NANOTRASEN
 
 /obj/machinery/faxmachine/cm
 	department = "CM"
+	faction = FACTION_ICC
 
 /obj/machinery/faxmachine/clf
 	department = "Cult"
+	faction = FACTION_CLF

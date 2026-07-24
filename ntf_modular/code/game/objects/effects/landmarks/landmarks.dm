@@ -65,8 +65,12 @@
 	name = "barricade wire landmark"
 	color = "#848484"
 
-/obj/effect/landmark/autowire/Initialize(mapload)
+/obj/effect/landmark/autowire/LateInitialize()
 	. = ..()
+	autowire_begin()
+
+/obj/effect/landmark/autowire/proc/autowire_begin()
+	sleep(5 SECONDS) //let shit settle
 	for(var/obj/structure/barricade/cade in loc.contents)
 		if(!cade.is_wired && cade.can_wire)
 			cade.wire()

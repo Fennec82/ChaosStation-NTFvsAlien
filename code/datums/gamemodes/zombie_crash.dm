@@ -1,9 +1,9 @@
 /datum/game_mode/infestation/crash/zombie
 	name = "Zombie Crash"
 	config_tag = "Zombie Crash"
-	round_type_flags = MODE_ALLOW_MARINE_QUICKBUILD|MODE_XENO_GRAB_DEAD_ALLOWED|MODE_INFESTATION|MODE_PSY_POINTS|MODE_SILO_RESPAWN|MODE_MUTATIONS_OBTAINABLE
+	round_type_flags = MODE_ALLOW_MARINE_QUICKBUILD|MODE_XENO_GRAB_DEAD_ALLOWED|MODE_INFESTATION|MODE_PSY_POINTS|MODE_SILO_RESPAWN|MODE_MUTATIONS_OBTAINABLE|MODE_BUFFED_XENO_ABILITIES
 	xeno_abilities_flags = ABILITY_ALL_GAMEMODE //Non pvp
-	round_type_flags2 = MODE_2_CAMPAIGN_LITE_SUPPORT|MODE_2_SINGLE_USE_NUKE_DISK_GENERATOR|MODE_2_CHILL_RULES
+	round_type_flags2 = MODE_2_CAMPAIGN_LITE_SUPPORT|MODE_2_SINGLE_USE_NUKE_DISK_GENERATOR|MODE_2_CHILL_RULES|MODE_2_ALLOW_LOADOUTS
 	required_players = 1
 	valid_job_types = list(
 		/datum/job/terragov/squad/standard = -1,
@@ -15,8 +15,7 @@
 		/datum/job/terragov/medical/professor = 1,
 		/datum/job/terragov/silicon/synthetic = 1,
 		/datum/job/terragov/command/fieldcommander = 1,
-		/datum/job/xenomorph = 2,
-		/datum/job/xenomorph/queen = 1,
+		/datum/job/xenomorph/green = 3,
 	)
 	job_points_needed_by_job_type = list(
 		/datum/job/terragov/squad/smartgunner = 20,
@@ -58,9 +57,15 @@
 	for(var/i in GLOB.zombie_crash_vendor_landmarks)
 		new /obj/machinery/marine_selector/zombie_crash(get_turf(i))
 
-	for(var/obj/structure/xeno/silo/silossy in GLOB.xeno_resin_silos_by_hive)
-		if(istype(silossy, /obj/structure/xeno/silo))
-			qdel(silossy) //they are on top of zombie spawners and is loud
+	new /obj/structure/xeno/silo(get_turf(shuttle))
+
+	for(var/i in GLOB.alive_xeno_list_hive[XENO_HIVE_NORMAL])
+		if(isxenolarva(i)) // Larva
+			var/mob/living/carbon/xenomorph/larva/X = i
+			X.evolution_stored = X.xeno_caste.evolution_threshold //Immediate roundstart evo for larva.
+		else // Handles Shrike etc
+			var/mob/living/carbon/xenomorph/X = i
+			X.upgrade_stored = X.xeno_caste.upgrade_threshold
 
 	addtimer(CALLBACK(src, PROC_REF(balance_scales)), 1 SECONDS)
 	RegisterSignal(SSdcs, COMSIG_GLOB_ZOMBIE_TUNNEL_DESTROYED, PROC_REF(on_tunnel_destroyed))
@@ -108,17 +113,8 @@
 /datum/game_mode/infestation/crash/zombie/proc/count_humans_and_zombies(list/z_levels = SSmapping.levels_by_any_trait(list(ZTRAIT_MARINE_MAIN_SHIP, ZTRAIT_GROUND, ZTRAIT_RESERVED)), count_flags)
 	var/num_humans = 0
 	var/num_zombies = 0
-	var/num_xenos = 0
 
 	for(var/z in z_levels)
-		for(var/mob/living/carbon/xenomorph/beno in GLOB.alive_xeno_list)
-			if(!istype(beno))
-				continue
-			if(count_flags & COUNT_IGNORE_XENO_SSD && !beno.client && beno.afk_status == MOB_DISCONNECTED)
-				continue
-			if(isspaceturf(beno.loc))
-				continue
-			num_xenos++
 		for(var/mob/living/carbon/human/H  in GLOB.humans_by_zlevel["[z]"])
 			if(!istype(H)) // Small fix?
 				continue
@@ -130,7 +126,7 @@
 			if(isspaceturf(H.loc))
 				continue
 			num_humans++
-	return list(num_humans, num_zombies, num_xenos)
+	return list(num_humans, num_zombies)
 
 /datum/game_mode/infestation/crash/zombie/balance_scales()
 	if(GLOB.zombie_spawners == 0)
@@ -169,15 +165,14 @@
 		round_finished = MODE_INFESTATION_M_MAJOR
 		return TRUE
 
-	var/list/living_player_list = count_humans_and_xenos(count_flags = COUNT_IGNORE_HUMAN_SSD| COUNT_GREENOS_TOWARDS_MARINES )
+	var/list/living_player_list = count_humans_and_xenos(count_flags = COUNT_IGNORE_HUMAN_SSD| COUNT_GREENOS_TOWARDS_MARINES)
 	var/num_humans = living_player_list[1]
-	var/num_xenos = living_player_list[3]
 	if(num_humans && planet_nuked == INFESTATION_NUKE_NONE && marines_evac == CRASH_EVAC_NONE && !force_end)
 		return FALSE
 
 	switch(planet_nuked)
 		if(INFESTATION_NUKE_NONE)
-			if(!num_humans && !num_xenos)
+			if(!num_humans)
 				message_admins("Round finished: [MODE_ZOMBIE_Z_MAJOR]") //zombies wiped out ALL the marines
 				round_finished = MODE_ZOMBIE_Z_MAJOR
 				return TRUE
@@ -203,7 +198,7 @@
 
 /datum/game_mode/infestation/crash/zombie/announce()
 	to_chat(world, span_round_header("The current map is - [SSmapping.configs[GROUND_MAP].map_name]!"))
-	priority_announce("Scheduled for landing in T-10 Minutes. Prepare for landing. Phrenetic reports about an unidentified disease rapidly spreading throughout the site were received before it went silent. Your mission is to contain and destroy the source of the contagion by any means necessary, including use of the on-site antimatter device. Bio-warfare protocols active. Detonation Protocol Active.<br><br> Additionally, Xenomorphic lifeforms may be present in the AO, likely willing to cooperate due to the dire situation. But be prepared to eliminate them aswell if not.",
+	priority_announce("Scheduled for landing in T-10 Minutes. Prepare for landing. Phrenetic reports about a zombie outbreak rapidly spreading throughout the site were received before it went silent. Your mission is to contain and destroy the source of the contagion by any means necessary, including use of the on-site antimatter device. Bio-warfare protocols active. Detonation Protocol Active.<br><br> Additionally, Xenomorphic alliance was formed and are shipped with your shuttle pre-iff'd to the security systems. But be prepared to eliminate them aswell if they turn uncooperative.",
 	title = "Mission classification: TOP SECRET",
 	type = ANNOUNCEMENT_PRIORITY,
 	color_override = "red")
@@ -215,7 +210,7 @@
 			subtitle = "The Queen Mother reaches into your mind...",
 
 			message = "To my children and their Queen,<br> The situation regarding this location has became dire and we can not contain the diseased tall outbreak. \
-			I sense a metal bird is approaching in approximately ten minutes. Cooperate with the metal hive and eliminate the common enemy. Even if it means destroying the area.",
+			As you know, you departed with the talls from your remote hive not long ago, in agreement to cleanse this disease from our planet... In approximately ten minutes the bird will land. Cooperate with the metal hive and eliminate the common enemy...",
 
 			color_override = "purple"
 		))
@@ -261,3 +256,8 @@
 		if(hearer.client?.prefs?.toggles_sound & SOUND_NOENDOFROUND)
 			continue
 		SEND_SOUND(hearer, 'ntf_modular/sound/music/war_mode/adminmusic/zombies/round_switch.ogg')
+
+/mob/living/carbon/xenomorph/New()
+	. = ..()
+	if(iszombiecrashgamemode(SSticker.mode))
+		AddComponent(/datum/component/xeno_iff, TGMC_LOYALIST_IFF)

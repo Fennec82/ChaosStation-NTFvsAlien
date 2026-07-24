@@ -1,6 +1,6 @@
 /obj/item/weapon/baton
 	name = "stunbaton"
-	desc = "A stun baton for incapacitating people with."
+	desc = "A stun baton for incapacitating people with. It's a high tech tool with biometric lock, commonly used by Phantom City Judges to subdue people worthy of living even after defying a judge. More effective when used without harm intent."
 	icon_state = "stunbaton"
 	worn_icon_state = "baton"
 	icon = 'icons/obj/items/weapons/batons.dmi'
@@ -13,10 +13,10 @@
 	attack_verb = list("beats")
 	req_one_access = list(ACCESS_MARINE_BRIG, ACCESS_MARINE_ARMORY, ACCESS_MARINE_CAPTAIN, ACCESS_NT_CORPORATE, ACCESS_NT_PMC_GREEN)
 	var/stunforce = 10
-	var/agonyforce = 80
+	var/agonyforce = 40
 	var/status = 0		//whether the thing is on or not
 	var/obj/item/cell/bcell = null
-	var/hitcost = 1000	//oh god why do power cells carry so much charge? We probably need to make a distinction between "industrial" sized power cells for APCs and power cells for everything else.
+	var/hitcost = 500	//oh god why do power cells carry so much charge? We probably need to make a distinction between "industrial" sized power cells for APCs and power cells for everything else.
 	var/has_user_lock = TRUE //whether the baton prevents people without correct access from using it.
 
 /obj/item/weapon/baton/suicide_act(mob/user)
@@ -86,7 +86,7 @@
 	if(.)
 		return
 
-	if(istype(I, /obj/item/cell))
+	if(istype(I, /obj/item/cell) && I.w_class < WEIGHT_CLASS_NORMAL)
 		if(bcell)
 			to_chat(user, span_notice("[src] already has a cell."))
 			return
@@ -174,7 +174,7 @@
 	//stun effects
 	if(!HAS_TRAIT(L, TRAIT_BATONIMMUNE))
 		L.apply_effects(stun = stun_applied, stutter = stamloss_applied * 0.1, eye_blur = stamloss_applied * 0.1, stamloss = stamloss_applied)
-		L.ParalyzeNoChain(8 SECONDS)
+		L.ParalyzeNoChain(5 SECONDS)
 
 	playsound(loc, 'sound/weapons/egloves.ogg', 25, 1, 6)
 	log_combat(user, L, "stunned", src)
@@ -197,7 +197,7 @@
 	force = 3
 	throwforce = 5
 	stunforce = 0
-	agonyforce = 60	//same force as a stunbaton, but uses way more charge.
+	agonyforce = 40	//same force as a stunbaton, but uses way more charge.
 	hitcost = 2500
 	attack_verb = list("pokes")
 	equip_slot_flags = NONE
@@ -220,10 +220,7 @@
 	if(isxeno(user))
 		return
 
-	if(user.a_intent == INTENT_HARM)
-		return
-
-	else if(!status)
+	if(!status)
 		M.visible_message(span_warning("[M] has been poked with [src] whilst it's turned off by [user]."))
 		return
 
@@ -242,9 +239,6 @@
 		if(ishuman(L))
 			var/mob/living/carbon/human/H = M
 			H.apply_damage(50, STAMINA)
-			if(H.getStaminaLoss() > 150)
-				H.ParalyzeNoChain(50 SECONDS)
-				H.do_jitter_animation(50, 12 SECONDS)
 			H.visible_message(span_danger("[H] has been prodded with the [src] by [user]!"))
 
 		charges -= 1
@@ -270,3 +264,6 @@
 /obj/item/weapon/baton/stunprod/improved/examine(mob/user)
 	. = ..()
 	. += span_notice("It has [charges] charges left.")
+
+/obj/item/weapon/baton/nolock
+	has_user_lock = FALSE

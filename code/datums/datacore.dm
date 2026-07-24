@@ -24,6 +24,8 @@ GLOBAL_DATUM_INIT(datacore, /datum/datacore, new)
 	var/list/isactiveooc = list()
 	var/list/squads = list()
 	var/list/support = list()
+	var/list/cult = list()
+
 	ooc = TRUE
 
 	var/dat = {"
@@ -60,6 +62,7 @@ GLOBAL_DATUM_INIT(datacore, /datum/datacore, new)
 		var/mobfaction = null
 		var/active = FALSE
 		var/deceased = TRUE
+		var/datum/job/mobjob = null
 
 		for(var/mob/living/M in GLOB.mob_living_list)
 			if(M.real_name == name)
@@ -68,6 +71,7 @@ GLOBAL_DATUM_INIT(datacore, /datum/datacore, new)
 				if(ooc && M.client && M.client.inactivity <= 10 * 60 * 10)
 					active = TRUE
 				mobfaction = M.job?.faction
+				mobjob = M.job
 				break
 
 		/*if(ooc)
@@ -100,11 +104,19 @@ GLOBAL_DATUM_INIT(datacore, /datum/datacore, new)
 			non_empty_squad_exists = TRUE
 			department = 1
 		if(!department && !(name in heads))
-			if(rank in GLOB.jobs_regular_all)
-				misc[name] = rank
+			if(istype(mobjob, /datum/job/survivor))
+				if(viewfaction == FACTION_CLF)
+					misc[name] = rank
 			else
-				if(ooc || (!mobfaction) || (viewfaction && viewfaction == mobfaction))
-					other[name] = rank
+				if(mobfaction == FACTION_CLF)
+					if(viewfaction == FACTION_CLF)
+						cult[name] = rank
+				else
+					if(rank in GLOB.jobs_regular_all)
+						misc[name] = rank
+					else
+						if(ooc || (!mobfaction) || (viewfaction && viewfaction == mobfaction))
+							other[name] = rank
 
 	//Xenomorphs
 	if(ooc || viewfaction == FACTION_CLF || viewfaction == FACTION_TERRAGOV)
@@ -160,6 +172,11 @@ GLOBAL_DATUM_INIT(datacore, /datum/datacore, new)
 		dat += "<tr><th colspan=4>Medical</th></tr>"
 		for(var/name in med)
 			dat += "<tr[even ? " class='alt'" : ""]><td>[med[name]]</td><td>[name]</td><td>[isactive[name]]</td><td>[isactiveooc[name]]</td></tr>"
+			even = !even
+	if(length(cult) > 0)
+		dat += "<tr><th colspan=4>[FACTION_CLF]</th></tr>"
+		for(var/name in cult)
+			dat += "<tr[even ? " class='alt'" : ""]><td>[cult[name]]</td><td>[name]</td><td>[isactive[name]]</td><td>[isactiveooc[name]]</td></tr>"
 			even = !even
 	// misc guys
 	if(length(misc) > 0)

@@ -288,6 +288,9 @@
 	icon_state = "m240"
 	worn_icon_state = "m240"
 
+/obj/item/weapon/gun/flamer/big_flamer/cm
+	starting_attachment_types = list(/obj/item/attachable/magnetic_harness, /obj/item/attachable/flamer_nozzle/wide,)
+
 /obj/item/weapon/gun/flamer/big_flamer/vsd
 	starting_attachment_types = list(/obj/item/attachable/motiondetector, /obj/item/attachable/flamer_nozzle/wide,)
 
@@ -552,13 +555,13 @@ GLOBAL_LIST_EMPTY(flamer_particles)
 	icon = 'icons/obj/items/guns/special64.dmi'
 	icon_state = "c21"
 	worn_icon_state = "c21"
-	gun_features_flags = GUN_AMMO_COUNTER|GUN_WIELDED_FIRING_ONLY|GUN_WIELDED_STABLE_FIRING_ONLY|GUN_SHOWS_LOADED
 	worn_icon_list = list(
 		slot_s_store_str = 'ntf_modular/icons/mob/suit_slot.dmi',
 		slot_back_str = 'ntf_modular/icons/mob/clothing/back.dmi',
 		slot_l_hand_str = 'icons/mob/inhands/guns/special_left_1.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/guns/special_right_1.dmi',
 	)
+	gun_features_flags = GUN_AMMO_COUNTER|GUN_WIELDED_FIRING_ONLY|GUN_WIELDED_STABLE_FIRING_ONLY|GUN_SHOWS_LOADED
 	lit_overlay_icon_state = "c21_lit"
 	lit_overlay_offset_x = 0
 	flame_max_range = 8

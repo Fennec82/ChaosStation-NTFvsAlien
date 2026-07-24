@@ -122,7 +122,7 @@
 
 /obj/item/weapon/gun/shotgun/combat/masterkey
 	name = "masterkey shotgun"
-	desc = "A weapon-mounted, three-plus-one shot shotgun. Reloadable with any normal 12 gauge shell. The short barrel reduces the ammo's effectiveness drastically in exchange for fitting as a attachment.."
+	desc = "A weapon-mounted, three-plus-one shot shotgun. Reloadable with any normal 12 gauge shell. The short barrel reduces the ammo's effectiveness drastically in exchange for fitting as a attachment... Use the underrail unique action to cycle between shots while attached. (Shift+Space by default.)"
 	icon = 'ntf_modular/icons/obj/items/guns/attachments/gun.dmi'
 	icon_state = "masterkey"
 	cocked_sound = 'sound/weapons/guns/interact/trenchgun_pump.ogg'
@@ -421,21 +421,7 @@
 	cocked_sound = 'sound/weapons/guns/interact/ks23_pump.ogg'
 	max_chamber_items = 5
 	attachable_allowed = list(
-		/obj/item/attachable/bayonet/converted,
-		/obj/item/attachable/bayonet,
-		/obj/item/attachable/bayonet/som,
-		/obj/item/attachable/reddot,
-		/obj/item/attachable/verticalgrip,
-		/obj/item/attachable/angledgrip,
-		/obj/item/attachable/gyro,
-		/obj/item/attachable/flashlight,
-		/obj/item/attachable/flashlight/under,
-		/obj/item/attachable/extended_barrel,
-		/obj/item/attachable/heavy_barrel,
-		/obj/item/attachable/compensator,
-		/obj/item/attachable/magnetic_harness,
 		/obj/item/attachable/stock/icc_heavyshotgun,
-		/obj/item/attachable/motiondetector,
 	)
 
 	attachable_offset = list("muzzle_x" = 33, "muzzle_y" = 18,"rail_x" = 9, "rail_y" = 21, "under_x" = 18, "under_y" = 12, "stock_x" = 0, "stock_y" = 12)
@@ -457,8 +443,6 @@
 /obj/item/weapon/gun/shotgun/pump/icc_heavyshotgun/icc_leader
 	starting_attachment_types = list(
 		/obj/item/attachable/stock/icc_heavyshotgun,
-		/obj/item/attachable/magnetic_harness,
-		/obj/item/attachable/compensator,
 	)
 
 //------------------------------------------------------

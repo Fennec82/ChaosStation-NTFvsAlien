@@ -88,8 +88,10 @@ GLOBAL_LIST_INIT(hugger_images_list,  list(
 		if(!xeno_owner.huggers)
 			to_chat(xeno_owner, span_warning("We don't have any facehuggers to use!"))
 			return fail_activate()
-
-		F = new xeno_owner.selected_hugger_type(get_turf(xeno_owner), xeno_owner.hivenumber, xeno_owner)
+		var/huggerpath = xeno_owner.selected_hugger_type
+		if(HAS_TRAIT(owner, TRAIT_LATCHING_HUGGERS_ONLY))
+			huggerpath = GLOB.hugger_to_latching[huggerpath] || huggerpath
+		F = new huggerpath(get_turf(xeno_owner), xeno_owner.hivenumber, xeno_owner)
 		xeno_owner.huggers--
 
 		xeno_owner.put_in_active_hand(F)
@@ -134,6 +136,9 @@ GLOBAL_LIST_INIT(hugger_images_list,  list(
 	if(istype(F, /obj/item/clothing/mask/facehugger/combat/harmless))
 		to_chat(src, span_notice("This fakehugger is useless to absorb."))
 		return FALSE
+	if(HAS_TRAIT(src, TRAIT_LATCHING_HUGGERS_ONLY) && !(istype(F, /obj/item/clothing/mask/facehugger/latching)))
+		to_chat(src, span_notice("We are currently not capable of absorbing non-latching facehuggers."))
+		return FALSE
 	if(huggers < xeno_caste.huggers_max)
 		if(F.stat == DEAD && !forced)
 			to_chat(src, span_notice("This facehugger has already expired, we cannot salvage it."))
@@ -148,6 +153,32 @@ GLOBAL_LIST_INIT(hugger_images_list,  list(
 		to_chat(src, span_warning("We can't carry any more facehuggers!"))
 		return FALSE
 
+GLOBAL_LIST_INIT(ai_hugger_selection, list(
+		/obj/item/clothing/mask/facehugger/larval = 40,
+		/obj/item/clothing/mask/facehugger/combat/slash = 2,
+		/obj/item/clothing/mask/facehugger/combat/chem_injector/neuro = 5,
+		/obj/item/clothing/mask/facehugger/combat/chem_injector/ozelomelyn = 2,
+		/obj/item/clothing/mask/facehugger/combat/chem_injector/aphrotoxin = 5,
+		/obj/item/clothing/mask/facehugger/combat/acid = 1,
+		/obj/item/clothing/mask/facehugger/combat/resin = 30,
+		))
+
+/datum/action/ability/activable/xeno/throw_hugger/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/activable/xeno/throw_hugger/ai_should_use(target)
+	var/held = xeno_owner.get_active_held_item()
+	if(!held && can_use_ability(src, TRUE))
+		if(xeno_owner.huggers)
+			xeno_owner.selected_hugger_type = pickweight(GLOB.ai_hugger_selection)
+			held = new xeno_owner.selected_hugger_type(get_turf(xeno_owner), xeno_owner.hivenumber, xeno_owner)
+			xeno_owner.huggers--
+			xeno_owner.put_in_hands(held)
+	if(!ishuman(target))
+		return FALSE
+	if(!istype(held, /obj/item/clothing/mask/facehugger))
+		return FALSE
+	return TRUE
 // ***************************************
 // ********* Trap
 // ***************************************
@@ -238,6 +269,12 @@ GLOBAL_LIST_INIT(hugger_images_list,  list(
 		var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[owner.ckey]
 		personal_statistics.huggers_created++
 
+/datum/action/ability/xeno_action/spawn_hugger/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/xeno_action/spawn_hugger/ai_should_use(target)
+	return TRUE
+
 // ***************************************
 // *********** Drop all hugger, panic button
 // ***************************************
@@ -299,6 +336,12 @@ GLOBAL_LIST_INIT(hugger_images_list,  list(
 	if(succeed_cost > 0)
 		desc += (succeed_cost == 1 ? " Uses all remaining plasma!" : " Uses [PERCENT(succeed_cost)]% of your maximum plasma!")
 	return ..()
+
+/datum/action/ability/xeno_action/carrier_panic/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/xeno_action/carrier_panic/ai_should_use(target)
+	return TRUE
 
 // ***************************************
 // *********** Choose Hugger Type
@@ -489,3 +532,9 @@ GLOBAL_LIST_INIT(hugger_images_list,  list(
 
 	succeed_activate()
 	add_cooldown()
+
+/datum/action/ability/activable/xeno/call_younger/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/activable/xeno/call_younger/ai_should_use(target)
+	return ishuman(target)

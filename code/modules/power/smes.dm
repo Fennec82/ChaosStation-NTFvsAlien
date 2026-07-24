@@ -30,6 +30,12 @@
 	var/output_used = 0 //amount of power actually outputted. may be less than output_level if the powernet returns excess power
 
 	var/obj/machinery/power/terminal/terminal
+#ifdef POWERDEBUG
+	var/total_charge_added_chargescale = 0
+	var/total_charge_added_availscale = 0
+	var/total_charge_outputted_chargescale = 0
+	var/total_charge_outputted_availscale = 0
+#endif
 
 /obj/machinery/power/smes/examine(user)
 	. = ..()
@@ -37,6 +43,13 @@
 		. += span_warning("This SMES has no power terminal!")
 	if(CHECK_BITFIELD(machine_stat, PANEL_OPEN))
 		. += span_notice("The maintenance hatch is open.")
+#ifdef POWERDEBUG
+	. += span_notice("it contains [DisplayEnergyFrac(charge * (2 / SMESRATE), capacity * (2 / SMESRATE))] of electrical energy.")
+	. += span_notice("It has been charged by a total of [DisplayEnergy(total_charge_added_chargescale * (2 / SMESRATE))] (based on [total_charge_added_chargescale] charge units)")
+	. += span_notice("It has been charged by a total of [DisplayEnergy(total_charge_added_availscale * 2)] (based on [total_charge_added_availscale] avail charge units)")
+	. += span_notice("It has outputted a total of [DisplayEnergy(total_charge_outputted_chargescale * (2 / SMESRATE))] (based on [total_charge_outputted_chargescale] charge units)")
+	. += span_notice("It has outputted a total of [DisplayEnergy(total_charge_outputted_availscale * 2)] (based on [total_charge_outputted_availscale] avail charge units)")
+#endif
 
 /obj/machinery/power/smes/Initialize(mapload)
 	. = ..()
@@ -106,6 +119,12 @@
 			if(input_available > 0)		  // if there's power available, try to charge
 				var/load = min(min((capacity-charge)/SMESRATE, input_level), input_available)		// charge at set rate, limited to spare capacity
 				charge += load * SMESRATE // increase the charge
+				if(is_ground_level(z))
+					GLOB.round_statistics.smes_input_ground += load * 2  //avail is in watts, 1 avail for 1 tick is 2 watt-seconds = 2 joules
+#ifdef POWERDEBUG
+				total_charge_added_chargescale += load * SMESRATE
+				total_charge_added_availscale += load
+#endif
 				terminal.add_load(load)   // add the load to the terminal side network
 			else
 				inputting = FALSE		  // if not enough capacity, stop inputting
@@ -123,6 +142,12 @@
 
 			if (add_avail(output_used))				// add output to powernet if it exists (smes side)
 				charge -= output_used*SMESRATE		// reduce the storage (may be recovered in /restore() if excessive)
+				if(is_ground_level(z))
+					GLOB.round_statistics.smes_output_ground += output_used * 2  //avail is in watts, 1 avail for 1 tick is 2 watt-seconds = 2 joules
+#ifdef POWERDEBUG
+				total_charge_outputted_chargescale += output_used * SMESRATE
+				total_charge_outputted_availscale += output_used
+#endif
 			else
 				outputting = FALSE
 
@@ -159,6 +184,12 @@
 	var/clev = chargedisplay()
 
 	charge += excess * SMESRATE			// restore unused power
+	if(is_ground_level(z))
+		GLOB.round_statistics.smes_output_ground -= excess * 2 // avail is in watts, 1 avail for 1 tick is 2 watt-seconds = 2 joules
+#ifdef POWERDEBUG
+	total_charge_outputted_chargescale -= excess * SMESRATE
+	total_charge_outputted_availscale -= excess
+#endif
 	powernet.netexcess -= excess		// remove the excess from the powernet, so later SMESes don't try to use it
 
 	output_used -= excess

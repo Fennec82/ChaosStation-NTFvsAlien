@@ -20,7 +20,7 @@ map theseus
 	minplayers 600
 endmap
 
-map Container
+map container
         minplayers 0
 endmap
 
@@ -47,6 +47,9 @@ endmap
 
 map arachne
 	minplayers 600
+endmap
+
+map legacy_of_spring
 endmap
 
 map combat_patrol_base

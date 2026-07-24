@@ -92,7 +92,7 @@ and at the same time Kaizoku is pressured into playing along with SOM by their s
 	title = "KZ Specialist"
 	paygrade = "KZ4"
 	comm_title = "LT"
-	skills_type = /datum/skills/specialist
+	skills_type = /datum/skills/specialist_vsd
 	access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_SPECPREP, ACCESS_VSD_LEADPREP, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
 	minimal_access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_SPECPREP, ACCESS_VSD_LEADPREP, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
 	display_order = JOB_DISPLAY_ORDER_SQUAD_MARINE
@@ -115,8 +115,8 @@ and at the same time Kaizoku is pressured into playing along with SOM by their s
 /datum/job/vsd_squad/leader
 	title = "KZ Squad Leader"
 	paygrade = "KZ5"
-	comm_title = "COLGEN"
-	skills_type = /datum/skills/sl
+	comm_title = "KZCOMM"
+	skills_type = /datum/skills/sl/kz
 	access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_LEADPREP, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
 	minimal_access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_LEADPREP, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
 	display_order = JOB_DISPLAY_ORDER_SQUAD_MARINE
@@ -135,4 +135,208 @@ and at the same time Kaizoku is pressured into playing along with SOM by their s
 	id = /obj/item/card/id/dogtag/leader
 	ears = /obj/item/radio/headset/mainship/vsd
 
+//VSD Combat Escort
+/datum/job/vsd_squad/escort
+	title = "KZ Combat Escort"
+	paygrade = "KZ4"
+	comm_title = "LT"
+	skills_type = /datum/skills/specialist_vsdescort
+	access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_SPECPREP, ACCESS_VSD_LEADPREP, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
+	minimal_access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_SPECPREP, ACCESS_VSD_LEADPREP, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
+	display_order = JOB_DISPLAY_ORDER_SQUAD_MARINE
+	total_positions = 2
+	job_flags = JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_ADDTOMANIFEST|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_CAN_SEE_ORDERS|JOB_FLAG_OVERRIDELATEJOINSPAWN
+	outfit = /datum/outfit/job/vsd_squad/escort
+	jobworth = list(
+		/datum/job/xenomorph = LARVA_POINTS_REGULAR,
+		/datum/job/som/squad/veteran = VETERAN_POINTS_REGULAR,
+	)
 
+/datum/outfit/job/vsd_squad/escort
+	name = "KZ Combat Escort"
+	jobtype = /datum/job/vsd_squad/escort
+
+	id = /obj/item/card/id/dogtag/specialist
+	ears = /obj/item/radio/headset/mainship/vsd
+
+/datum/job/vsd_squad/escort/get_spawn_message_information(mob/M)
+	. = ..()
+	. += separator_hr("[span_role_header("<b>[title] Information</b>")]")
+	. += {"\nYou are a chosen elite of the Kaizoku Corporation, handpicked for your exceptional combat skills and unwavering loyalty. Protect Valuable Corporate Assets, Relieve pressure from the frontline troops deployed alongside you and broker deals with the factions planetside, especially if it means using your body!"}
+
+//KZ Synthetic
+
+/datum/job/vsd_squad/silicon/synthetic
+	title = "KZ Synthetic"
+	req_admin_notify = TRUE
+	comm_title = "Syn"
+	paygrade = "Mk.I"
+	supervisors = "The Squad Leader, Liaison, Kaizoku Zaibatsu."
+	total_positions = 1
+	skills_type = /datum/skills/synthetic
+	access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_SPECPREP, ACCESS_VSD_LEADPREP, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
+	minimal_access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_SPECPREP, ACCESS_VSD_LEADPREP, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
+	display_order = JOB_DISPLAY_ORDER_SYNTHETIC
+	outfit = /datum/outfit/job/civilian/synthetic
+	exp_requirements = XP_REQ_EXPERIENCED
+	exp_type = EXP_TYPE_REGULAR_ALL
+	job_flags = JOB_FLAG_SPECIALNAME|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_ADDTOMANIFEST|JOB_FLAG_ISCOMMAND|JOB_FLAG_BOLD_NAME_ON_SELECTION|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_CAN_SEE_ORDERS|JOB_FLAG_ALWAYS_VISIBLE_ON_MINIMAP|JOB_FLAG_OVERRIDELATEJOINSPAWN
+/* NTF removal
+	job_points_needed = 40
+*/
+	jobworth = list(
+		/datum/job/xenomorph = LARVA_POINTS_SHIPSIDE_STRONG,
+		/datum/job/terragov/squad/smartgunner = SMARTIE_POINTS_REGULAR,
+		/datum/job/terragov/squad/specialist = SMARTIE_POINTS_REGULAR,
+		/datum/job/terragov/command/mech_pilot = MECH_POINTS_REGULAR,
+	)
+	html_description = {"
+		<b>Difficulty</b>: Soul Crushing<br /><br />
+		<b>You answer to the</b> acting Command Staff and the human crew<br /><br />
+		<b>Unlock Requirement</b>: Starting Role<br /><br />
+		<b>Gamemode Availability</b>: Crash, Nuclear War<br /><br /><br />
+		<b>Duty</b>: Support and assist in every department of Kaizoku Zaibatsu, use your incredibly developed skills to help the mercenaries during their missions.
+	"}
+	minimap_icon = "synth"
+
+/datum/outfit/job/vsd_squad/silicon/synthetic
+	name = SYNTHETIC
+	jobtype = /datum/job/vsd_squad/silicon/synthetic
+
+	id = /obj/item/card/id/dogtag/specialist
+	belt = /obj/item/storage/belt/utility/full
+	ears = /obj/item/radio/headset/mainship/vsd
+	w_uniform = /obj/item/clothing/under/rank/synthetic
+	shoes = /obj/item/clothing/shoes/white
+	gloves = /obj/item/clothing/gloves/insulated
+	r_pocket = /obj/item/storage/pouch/general/medium
+	l_pocket = /obj/item/storage/pouch/general/medium
+
+/datum/job/vsd_squad/silicon/synthetic/get_special_name(client/preference_source)
+	return preference_source.prefs.synthetic_name
+
+/datum/job/vsd_squad/silicon/synthetic/special_check_latejoin(client/C)
+	. = ..()
+	if(!.)
+		return FALSE
+	for(var/mob/living/carbon/human/human AS in GLOB.alive_human_list)
+		if(human.job?.type == type)
+			to_chat(C, span_warning("The ship already has a Synthetic."))
+			return FALSE
+	return TRUE
+
+/datum/job/vsd_squad/silicon/synthetic/return_spawn_type(datum/preferences/prefs)
+	if(prefs?.synthetic_type == "Early Synthetic")
+		return /mob/living/carbon/human/species/early_synthetic
+	if(prefs?.synthetic_type == "Robot")
+		return /mob/living/carbon/human/species/robot
+	return /mob/living/carbon/human/species/synthetic
+
+/datum/job/vsd_squad/silicon/synthetic/return_skills_type(datum/preferences/prefs)
+	if(prefs?.synthetic_type == "Early Synthetic")
+		return /datum/skills/early_synthetic
+	return ..()
+
+/datum/job/vsd_squad/silicon/synthetic/after_spawn(mob/living/carbon/new_mob, mob/user, latejoin = FALSE)
+	. = ..()
+	ADD_TRAIT(new_mob, TRAIT_RESEARCHER, "[type]")
+	if(!ishuman(new_mob))
+		return
+	var/mob/living/carbon/human/new_human = new_mob
+	var/playtime_mins = user?.client?.get_exp(title)
+	if(!playtime_mins || playtime_mins < 1 )
+		return
+	switch(playtime_mins)
+		if(0 to 600) // starting
+			new_human.wear_id.paygrade = "Mk.I"
+		if(601 to 1500) // 10hrs
+			new_human.wear_id.paygrade = "Mk.II"
+		if(1501 to 6000) // 25 hrs
+			new_human.wear_id.paygrade = "Mk.III"
+		if(6001 to 18000) // 100 hrs
+			new_human.wear_id.paygrade = "Mk.IV"
+		if(18001 to INFINITY) // 300 hrs
+			new_human.wear_id.paygrade = "Mk.V"
+	new_human.wear_id.update_label()
+
+/datum/job/vsd_squad/silicon/synthetic/get_spawn_message_information(mob/M)
+	. = ..()
+	. += separator_hr("[span_role_header("<b>[title] Information</b>")]")
+	. += "Your primary job is to support and assist all KZ departments and personnel on-board. \
+		In addition, being a Synthetic gives you knowledge in every field and specialization possible on-board the ship."
+
+//ripperdoc, mix of tech and doc
+/datum/job/vsd_squad/medical/ripperdoc
+	title = "KZ Ripperdoc"
+	comm_title = "KMD"
+	paygrade = "MS"
+	total_positions = 1
+	supervisors = "Kaizoku Corporation."
+	access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_SPECPREP, ACCESS_VSD_LEADPREP, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
+	minimal_access = list (ACCESS_VSD_PREP, ACCESS_VSD_MEDPREP, ACCESS_VSD_ENGPREP, ACCESS_VSD_SPECPREP, ACCESS_VSD_LEADPREP, ACCESS_VSD_CARGO, ACCESS_VSD_TADPOLE, ACCESS_MARINE_MEDBAY, ACCESS_MARINE_CHEMISTRY, ACCESS_SOM_MEDICAL)
+	skills_type = /datum/skills/doctor/ripperdoc
+	display_order = JOB_DISPLAY_ORDER_DOCTOR
+	outfit = /datum/outfit/job/medical/ripperdoc
+	job_flags = JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_ADDTOMANIFEST|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_OVERRIDELATEJOINSPAWN
+	jobworth = list(
+		/datum/job/xenomorph = LARVA_POINTS_SHIPSIDE,
+		/datum/job/terragov/squad/smartgunner = SMARTIE_POINTS_REGULAR,
+		/datum/job/terragov/squad/specialist = SMARTIE_POINTS_REGULAR,
+		/datum/job/terragov/silicon/synthetic = SYNTH_POINTS_REGULAR,
+		/datum/job/terragov/command/mech_pilot = MECH_POINTS_REGULAR,
+	)
+	html_description = {"
+		<b>Difficulty</b>: Medium<br /><br />
+		<b>You answer to the</b> KZ Liason<br /><br />
+		<b>Unlock Requirement</b>: Starting Role<br /><br />
+		<b>Gamemode Availability</b>: Nuclear War<br /><br /><br />
+		<b>Duty</b>: Serve as a tech and doctor for KZ shuttle.
+	"}
+	minimap_icon = "medical"
+
+/datum/outfit/job/medical/ripperdoc
+	name = "KZ Ripperdoc"
+	jobtype = /datum/job/vsd_squad/medical/ripperdoc
+
+	id = /obj/item/card/id
+	belt = /obj/item/storage/belt/utility/full
+	ears = /obj/item/radio/headset/mainship/vsd
+	w_uniform = /obj/item/clothing/under/rank/medical/purple
+	wear_suit = /obj/item/clothing/suit/storage/labcoat
+	shoes = /obj/item/clothing/shoes/white
+	gloves = /obj/item/clothing/gloves/latex
+	glasses = /obj/item/clothing/glasses/hud/health
+	mask = /obj/item/clothing/mask/surgical
+	head = /obj/item/clothing/head/surgery/purple
+	r_pocket = /obj/item/storage/pouch/surgery
+	l_pocket = /obj/item/storage/pouch/medkit/doctor
+	r_hand = /obj/item/storage/belt/rig/medical
+	l_hand = /obj/item/reagent_containers/glass/bottle/lemoline/doctor
+
+/datum/job/vsd_squad/medical/ripperdoc/after_spawn(mob/living/carbon/new_mob, mob/user, latejoin = FALSE)
+	. = ..()
+	if(!ishuman(new_mob))
+		return
+	var/mob/living/carbon/human/new_human = new_mob
+	var/playtime_mins = user?.client?.get_exp(title)
+	if(!playtime_mins || playtime_mins < 1 )
+		return
+	switch(playtime_mins)
+		if(0 to 600) // starting
+			new_human.wear_id.paygrade = "MS"
+		if(601 to 1500) // 10hrs
+			new_human.wear_id.paygrade = "JR"
+		if(1501 to 6000) // 25 hrs
+			new_human.wear_id.paygrade = "SR"
+		if(6001 to 18000) // 100 hrs
+			new_human.wear_id.paygrade = "GP"
+		if(18001 to INFINITY) // 300 hrs
+			new_human.wear_id.paygrade = "AP"
+	new_human.wear_id.update_label()
+
+/datum/job/vsd_squad/medical/ripperdoc/get_spawn_message_information(mob/M)
+	. = ..()
+	. += separator_hr("[span_role_header("<b>[title] Information</b>")]")
+	. += {"You are a doctor stationed aboard the KZ ship.
+You are tasked with keeping the KZ operatives healthy and strong, usually in the form of surgery.
+You are also an expert when it comes to medication and treatment. If you do not know what you are doing, <b>mentorhelp</b> so a mentor can assist you... You are also sidetasked to keep the tech running"}

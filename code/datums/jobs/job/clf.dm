@@ -38,7 +38,7 @@ Your primary goal is to serve the hive, and ultimate goal is to liberate the col
 	paygrade = "CLT"
 	comm_title = "CLT"
 	outfit = /datum/outfit/job/clf/standard/uzi
-	job_flags = JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_PROVIDES_SQUAD_HUD
+	job_flags = JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_ADDTOMANIFEST
 	multiple_outfits = TRUE
 	outfits = list(
 		/datum/outfit/job/clf/standard/uzi,
@@ -56,7 +56,7 @@ Your primary goal is to serve the hive, and ultimate goal is to liberate the col
 	paygrade = "CLTM"
 	comm_title = "CLTM"
 	minimap_icon = "CLTM"
-	job_flags = JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_PROVIDES_SQUAD_HUD
+	job_flags = JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_ADDTOMANIFEST
 	skills_type = /datum/skills/combat_medic/crafty
 	outfit = /datum/outfit/job/clf/medic/uzi
 	multiple_outfits = TRUE
@@ -82,8 +82,8 @@ Your primary goal is to serve the hive, and ultimate goal is to liberate the col
 	paygrade = "CLTC"
 	comm_title = "CLTC"
 	minimap_icon = "CLTC"
-	skills_type = /datum/skills/specialist
-	job_flags = JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_PROVIDES_SQUAD_HUD
+	skills_type = /datum/skills/champion
+	job_flags = JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_ADDTOMANIFEST
 	outfit = /datum/outfit/job/clf/specialist
 	access = ALL_CLF_ACCESS
 	minimal_access = ALL_CLF_ACCESS
@@ -109,7 +109,7 @@ Your primary goal is to serve the hive, and ultimate goal is to liberate the col
 	paygrade = "CLTL"
 	comm_title = "CLTL"
 	minimap_icon = "CLTL"
-	job_flags = JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_PROVIDES_SQUAD_HUD
+	job_flags = JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_ADDTOMANIFEST
 	skills_type = /datum/skills/sl/clf
 	outfit = /datum/outfit/job/clf/leader/assault_rifle
 	multiple_outfits = TRUE
@@ -137,7 +137,7 @@ Your primary goal is to serve the hive, and ultimate goal is to liberate the col
 	minimap_icon = "CLTO"
 	outfit = /datum/outfit/job/clf/breeder
 	skills_type = /datum/skills/slut/clf
-	job_flags = JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_PROVIDES_SQUAD_HUD
+	job_flags = JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_ADDTOMANIFEST
 	multiple_outfits = FALSE
 
 /datum/job/clf/silicon
@@ -159,7 +159,7 @@ Your primary goal is to serve the hive, and ultimate goal is to liberate the col
 	outfit = /datum/outfit/job/civilian/synthetic/clf
 	exp_requirements = XP_REQ_EXPERIENCED
 	exp_type = EXP_TYPE_REGULAR_ALL
-	job_flags = JOB_FLAG_SPECIALNAME|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_ISCOMMAND|JOB_FLAG_BOLD_NAME_ON_SELECTION|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_CAN_SEE_ORDERS|JOB_FLAG_ALWAYS_VISIBLE_ON_MINIMAP
+	job_flags = JOB_FLAG_SPECIALNAME|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_ISCOMMAND|JOB_FLAG_BOLD_NAME_ON_SELECTION|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_CAN_SEE_ORDERS|JOB_FLAG_ALWAYS_VISIBLE_ON_MINIMAP|JOB_FLAG_ADDTOMANIFEST
 	jobworth = list(
 		/datum/job/xenomorph = LARVA_POINTS_SHIPSIDE_STRONG,
 		/datum/job/terragov/squad/smartgunner = SMARTIE_POINTS_REGULAR,
@@ -200,6 +200,7 @@ Your primary goal is to serve the hive, and ultimate goal is to liberate the col
 
 /datum/job/clf/silicon/synthetic/clf/after_spawn(mob/living/carbon/new_mob, mob/user, latejoin = FALSE)
 	. = ..()
+	ADD_TRAIT(new_mob, TRAIT_RESEARCHER, "[type]")
 	if(!ishuman(new_mob))
 		return
 	var/mob/living/carbon/human/new_human = new_mob
@@ -230,7 +231,7 @@ In addition, being a Synthetic gives you knowledge in every field and specializa
 	comm_title = "CLTW"
 	minimap_icon = "CLT4"
 	skills_type = /datum/skills/combat_engineer
-	job_flags = JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_PROVIDES_SQUAD_HUD
+	job_flags = JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_ADDTOMANIFEST
 	outfit = /datum/outfit/job/clf/tech
 	multiple_outfits = FALSE
 	jobworth = list(
@@ -245,7 +246,7 @@ In addition, being a Synthetic gives you knowledge in every field and specializa
 /datum/job/clf/mo
 	title = "Cultist Archmender"
 	paygrade = "MO"
-	comm_title = "CLTMO"
+	comm_title = "CLTAM"
 	minimap_icon = "CLT2"
 	supervisors = "The Hive."
 	total_positions = 1
@@ -253,7 +254,7 @@ In addition, being a Synthetic gives you knowledge in every field and specializa
 	outfit = /datum/outfit/job/clf/mo
 	exp_requirements = XP_REQ_EXPERT
 	exp_type = EXP_TYPE_REGULAR_ALL
-	job_flags = JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_ISCOMMAND|JOB_FLAG_BOLD_NAME_ON_SELECTION|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_OVERRIDELATEJOINSPAWN
+	job_flags = JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_ISCOMMAND|JOB_FLAG_BOLD_NAME_ON_SELECTION|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_ADDTOMANIFEST
 	access = ALL_CLF_ACCESS
 	minimal_access = ALL_CLF_ACCESS
 	jobworth = list(
@@ -265,6 +266,10 @@ In addition, being a Synthetic gives you knowledge in every field and specializa
 		/datum/job/terragov/command/mech_pilot = MECH_POINTS_REGULAR,
 	)
 
+/datum/job/clf/mo/after_spawn(mob/living/carbon/C, mob/M, latejoin = FALSE)
+	. = ..()
+	ADD_TRAIT(C, TRAIT_RESEARCHER, "[type]")
+
 //the bigus dickus leader of the cult
 /datum/job/clf/messiah
 	title = "Cult Messiah"
@@ -272,7 +277,7 @@ In addition, being a Synthetic gives you knowledge in every field and specializa
 	comm_title = "CLTMS"
 	minimap_icon = "CLTMS"
 	supervisors = "The Hive."
-	job_flags = JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_ISCOMMAND|JOB_FLAG_BOLD_NAME_ON_SELECTION|JOB_FLAG_PROVIDES_SQUAD_HUD
+	job_flags = JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_ISCOMMAND|JOB_FLAG_BOLD_NAME_ON_SELECTION|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_ADDTOMANIFEST
 	access = ALL_CLF_ACCESS
 	minimal_access = ALL_CLF_ACCESS
 	skills_type = /datum/skills/captain
@@ -293,3 +298,18 @@ In addition, being a Synthetic gives you knowledge in every field and specializa
 	. += separator_hr("[span_role_header("<b>[title] Information</b>")]")
 	. += {"You are the current great leader of the cult of evolution, lead your cult from safety and comfort, get them to kidnap people for breeding and probably sacrifice after,
 	or at the same time, whatever you want, you can do it. Well you are still below the queen and the queen mother of the hive."}
+
+//used for modes like colony fall
+/datum/job/clf/traitor
+	title = "Cultist Agent"
+	paygrade = "CLNST"
+	faction = FACTION_ICC //disguise ig
+	job_category = JOB_CAT_CLF
+	outfit = /datum/outfit/job/survivor/assistant/cultagent
+	job_flags = JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_LATEJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_PROVIDES_SQUAD_HUD
+	access = list(ALL_CLF_ACCESS, ACCESS_CIVILIAN_MEDICAL, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_RESEARCH)
+	minimal_access = list(ALL_CLF_ACCESS, ACCESS_CIVILIAN_MEDICAL, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_RESEARCH)
+	skills_type = /datum/skills/crafty
+
+/datum/outfit/job/survivor/assistant/cultagent
+	id = /obj/item/card/id/clf

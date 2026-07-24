@@ -89,6 +89,11 @@
 		return FALSE
 	if(target.get_xeno_hivenumber() == owner.get_xeno_hivenumber())
 		return FALSE
+	if(!ishuman(target))
+		xeno_owner.set_selected_reagent(/datum/reagent/toxin/acid)
+	var/mob/living/carbon/human/human_target = target
+	if(!(CHECK_BITFIELD(human_target.species.species_flags, NO_CHEM_METABOLIZATION)))
+		xeno_owner.set_selected_reagent(/datum/reagent/toxin/acid)
 	xeno_owner.set_selected_reagent(GLOB.baneling_chem_type_list[rand(1,length(GLOB.baneling_chem_type_list))])
 	return TRUE
 
@@ -167,6 +172,12 @@
 	X.balloon_alert(X, "YOUR POD IS DESTROYED")
 	to_chat(X, span_xenodanger("Our POD IS DESTROYED! Rebuild it if we can!"))
 
+/datum/action/ability/xeno_action/spawn_pod/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/xeno_action/spawn_pod/ai_should_use(atom/target)
+	return !the_pod
+
 // ***************************************
 // *********** Dash explosion
 // ***************************************
@@ -208,6 +219,26 @@
 	explode_action.handle_smoke(ability = TRUE)
 	X.record_tactical_unalive()
 	X.death(FALSE)
+
+/datum/action/ability/activable/xeno/dash_explosion/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/activable/xeno/dash_explosion/ai_should_use(atom/target)
+	if(!iscarbon(target))
+		return FALSE
+	if(get_dist(target, owner) > 6)
+		return FALSE
+	if(!line_of_sight(owner, target))
+		return FALSE
+	if(target.get_xeno_hivenumber() == owner.get_xeno_hivenumber())
+		return FALSE
+	if(!ishuman(target))
+		xeno_owner.set_selected_reagent(/datum/reagent/toxin/acid)
+	var/mob/living/carbon/human/human_target = target
+	if(!(CHECK_BITFIELD(human_target.species.species_flags, NO_CHEM_METABOLIZATION)))
+		xeno_owner.set_selected_reagent(/datum/reagent/toxin/acid)
+	xeno_owner.set_selected_reagent(GLOB.baneling_chem_type_list[rand(1,length(GLOB.baneling_chem_type_list))])
+	return TRUE
 
 /datum/action/ability/xeno_action/watch_xeno/baneling
 	use_state_flags = ABILITY_USE_LYING|ABILITY_USE_NOTTURF|ABILITY_USE_INCAP

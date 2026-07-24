@@ -26,6 +26,13 @@
 	var/static/regex/regex = regex(@"[\t]", "g")
 	return html_encode(regex.Replace(text, "#"))
 
+/proc/sanitize_multiline_alt(text)
+	var/static/regex/regex1 = regex(@"[\t]", "g")
+	text = regex1.Replace(text, "#")
+	var/static/regex/regex2 = regex(@"[\n]", "g")
+	text = regex2.Replace(text, "\n>>")
+	return html_encode(text)
+
 /// Runs STRIP_HTML_SIMPLE and sanitize.
 /proc/strip_html(text, limit = MAX_MESSAGE_LEN)
 	return sanitize(STRIP_HTML_SIMPLE(text, limit))

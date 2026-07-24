@@ -1,8 +1,10 @@
 //nest overrides
 /obj/structure/bed/nest/post_buckle_mob(mob/living/buckling_mob)
 	. = ..()
-	if(buckling_mob.client && ishuman(buckling_mob))
+	if(buckling_mob.client && ishuman(buckling_mob) && welder_needed_unbuckle)
 		INVOKE_ASYNC(buckling_mob.client, TYPE_PROC_REF(/client, ask_reclone)) //pops up the prompt
+	else if(buckling_mob.client && ishuman(buckling_mob) && !welder_needed_unbuckle)
+		to_chat(buckling_mob, span_warning("You can resist out of this nest, but if you must, you can use 'ghost' verb to reclone etc!"))
 
 /obj/structure/bed/nest/welder_act(mob/living/user, obj/item/I)
 	if(!welder_needed_unbuckle)
@@ -35,7 +37,8 @@
 	var/list/mob/living/carbon/human/grabbing = null
 	COOLDOWN_DECLARE(tentacle_cooldown)
 	COOLDOWN_DECLARE(cum_cooldown)
-	resist_time = 4 SECONDS //gotta be able to resist quick in case this is used in combat, with the quick capture power, you WILL die so fast.
+	max_integrity = 10
+	resist_time = 3 SECONDS //gotta be able to resist quick in case this is used in combat, with the quick capture power, you WILL die so fast.
 	var/capture_time = 1 SECONDS
 	var/cooldown_time = 5 SECONDS
 	var/cum_time = 29.9 SECONDS
@@ -315,7 +318,7 @@
 				victim.reagents.add_reagent(/datum/reagent/medicine/dexalin, 10)
 			if(victim.reagents.get_reagent_amount(/datum/reagent/medicine/spaceacillin) < 5)
 				victim.reagents.add_reagent(/datum/reagent/medicine/spaceacillin, 2)
-		victim.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno, 10)
+		victim.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno, 10) //to not generate genetic material reward on auto
 		victim.reagents.add_reagent(/datum/reagent/toxin/acid/xeno_cum, 2) //need to make xenos not leave people in here unattended instead of using regular nests.
 	else
 		victim.visible_message(span_love("[src] roughly thrusts a tentacle into [victim]'s [target_hole]!"),
@@ -357,32 +360,44 @@
 	resist_time = 15 SECONDS
 	capture_time = 10 SECONDS
 	cooldown_time = 6 SECONDS
-	max_integrity = 80
+	max_integrity = 40
 
 //wall nest
 /turf/closed/wall/attackby(obj/item/attacking_item, mob/living/user)
 	if(isxeno(user) && istype(attacking_item, /obj/item/grab))
 		var/obj/item/grab/attacker_grab = attacking_item
 		var/mob/living/carbon/xenomorph/user_as_xenomorph = user
-		user_as_xenomorph.do_nesting_host(attacker_grab.grabbed_thing, src)
-		return
+		if(user_as_xenomorph.can_wall_nest_with_intent())
+			user_as_xenomorph.do_nesting_host(attacker_grab.grabbed_thing, src)
+			return TRUE
+		if(user_as_xenomorph.a_intent != INTENT_HARM)
+			return TRUE
 	. = ..()
 
 /obj/alien/weeds/weedwall/attackby(obj/item/attacking_item, mob/living/user, params)
 	if(isxeno(user) && istype(attacking_item, /obj/item/grab))
 		var/obj/item/grab/attacking_grab = attacking_item
 		var/mob/living/carbon/xenomorph/user_as_xenomorph = user
-		user_as_xenomorph.do_nesting_host(attacking_grab.grabbed_thing, src)
-		return
+		if(user_as_xenomorph.can_wall_nest_with_intent())
+			user_as_xenomorph.do_nesting_host(attacking_grab.grabbed_thing, src)
+			return TRUE
+		if(user_as_xenomorph.a_intent != INTENT_HARM)
+			return TRUE
 	. = ..()
 
 /turf/closed/wall/resin/attackby(obj/item/attacking_item, mob/living/user, params)
 	if(isxeno(user) && istype(attacking_item, /obj/item/grab))
 		var/obj/item/grab/attacking_grab = attacking_item
 		var/mob/living/carbon/xenomorph/user_as_xenomorph = user
-		user_as_xenomorph.do_nesting_host(attacking_grab.grabbed_thing, src)
-		return
+		if(user_as_xenomorph.can_wall_nest_with_intent())
+			user_as_xenomorph.do_nesting_host(attacking_grab.grabbed_thing, src)
+			return TRUE
+		if(user_as_xenomorph.a_intent != INTENT_HARM)
+			return TRUE
 	. = ..()
+
+/mob/living/carbon/xenomorph/proc/can_wall_nest_with_intent()
+	return a_intent == INTENT_HELP || a_intent == INTENT_GRAB
 
 /mob/living/carbon/xenomorph/proc/do_nesting_host(mob/current_mob, nest_structural_base)
 	var/list/xeno_hands = list(get_active_held_item(), get_inactive_held_item())

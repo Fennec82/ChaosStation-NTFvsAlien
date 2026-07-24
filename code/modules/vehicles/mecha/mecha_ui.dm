@@ -185,9 +185,14 @@
 					return FALSE
 				if(construction_state == MECHA_LOCKED)
 					construction_state = MECHA_SECURE_BOLTS
-					to_chat(usr, span_notice("The securing bolts are now exposed."))
+					if(can_be_moved_in_maints) // NTF Edit: Allows mechs to be moved by hand in maints mode
+						move_resist = MOVE_FORCE_NORMAL
+						to_chat(usr, span_notice("The securing bolts are now exposed, and the exosuit can be moved by hand."))
+					else
+						to_chat(usr, span_notice("The securing bolts are now exposed."))
 				else if(construction_state == MECHA_SECURE_BOLTS)
 					construction_state = MECHA_LOCKED
+					move_resist = initial(move_resist) // NTF Edit: Allows mechs to be moved by hand in maints mode
 					to_chat(usr, span_notice("The securing bolts are now hidden."))
 			if("drop_cell")
 				if(construction_state != MECHA_OPEN_HATCH)
@@ -246,6 +251,9 @@
 			var/mob/living/carbon/user = usr
 			if(!istype(user))
 				to_chat(user, "[icon2html(src, occupants)][span_notice("You can't create a DNA lock with no DNA!.")]")
+				return
+			if(!can_dna_lock)
+				to_chat(user, "[icon2html(src, occupants)][span_notice("This exosuit can't be DNA locked.")]")
 				return
 			dna_lock = md5(REF(user))
 			to_chat(user, "[icon2html(src, occupants)][span_notice("You feel a prick as the needle takes your DNA sample.")]")

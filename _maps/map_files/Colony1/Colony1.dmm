@@ -129,11 +129,11 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/squads/req)
 "afR" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
-	dir = 4
-	},
-/turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/obj/structure/cable,
+/turf/closed/wall/mainship,
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "afY" = (
 /obj/structure/cable,
 /obj/structure/disposalpipe/segment{
@@ -174,7 +174,7 @@
 	name = "HQ Northwest Hallways"
 	})
 "ajI" = (
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/aft_hallway{
@@ -279,8 +279,8 @@
 	name = "Ground CEO Office"
 	})
 "ane" = (
-/obj/structure/mineral_door/wood,
 /obj/structure/cable,
+/obj/machinery/door/airlock/mainship/medical/glass/free_access,
 /turf/open/floor/mainship/sterile/dark,
 /area/centcom/practice/medical{
 	outside = 0;
@@ -295,6 +295,9 @@
 	},
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/living/chapel)
+"anD" = (
+/turf/closed/wall,
+/area/mainship/groundhq/ntf/command/telecomms)
 "anO" = (
 /obj/structure/disposalpipe/segment,
 /turf/open/floor/mainship/mono,
@@ -330,12 +333,12 @@
 	name = "Worker Preperations"
 	})
 "aqG" = (
-/obj/structure/mineral_door/wood,
 /obj/machinery/door/firedoor/mainship,
 /obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
 	},
+/obj/machinery/door/airlock/colony/engineering,
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/engineering/ce_room)
 "arc" = (
@@ -408,10 +411,25 @@
 	})
 "ayg" = (
 /obj/structure/window/framed/colony,
+/obj/machinery/door/poddoor/shutters/opened{
+	dir = 1;
+	id = "clfbase"
+	},
 /turf/open/floor/plating,
 /area/lv624/lazarus/security)
+"azA" = (
+/obj/structure/transmitter/colony_net{
+	phone_id = "Brig";
+	pixel_y = 23;
+	phone_category = "Security"
+	},
+/turf/open/floor/prison/darkyellow{
+	dir = 1
+	},
+/area/mainship/groundhq/ntf/shipboard/brig_cells)
 "azO" = (
 /obj/structure/cable,
+/obj/alien/egg/hugger,
 /turf/open/floor/plating/asteroidwarning{
 	dir = 8
 	},
@@ -518,7 +536,6 @@
 	id = "insidedorm3";
 	name = "\improper Quarters Privacy Shutters"
 	},
-/obj/structure/mineral_door/wood,
 /turf/open/floor/wood,
 /area/mainship/hallways/ntf/dorm2)
 "aEY" = (
@@ -618,7 +635,9 @@
 "aMn" = (
 /obj/machinery/atmospherics/components/unary/vent_pump/layer1,
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "aMp" = (
 /obj/structure/cable,
 /obj/structure/disposalpipe/segment/corner{
@@ -675,7 +694,7 @@
 	},
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "aRh" = (
 /obj/structure/window/framed/mainship/toughened{
@@ -709,16 +728,10 @@
 	base_lighting_alpha = 0;
 	static_lighting = 1
 	})
-"aRY" = (
-/obj/structure/xeno/pherotower,
-/turf/open/floor/plating/ground/snow/layer0,
-/area/lv624/ground/caves{
-	ceiling = 2;
-	name = "HQ Tunnels";
-	always_unpowered = 0
-	})
 "aSF" = (
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/mainship/command/free_access{
+	dir = 1
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/command/corporateliaison)
 "aTP" = (
@@ -740,7 +753,7 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/grunt_rnr)
 "aVg" = (
-/obj/effect/landmark/weed_node,
+/obj/structure/xeno/tunnel,
 /turf/open/floor/plating/ground/snow/layer0,
 /area/lv624/lazarus/armory)
 "aWb" = (
@@ -756,7 +769,7 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "aWR" = (
 /obj/structure/bed/stool,
@@ -771,7 +784,9 @@
 	},
 /obj/effect/ai_node,
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "aXH" = (
 /obj/structure/bed,
 /obj/item/clothing/suit/straight_jacket,
@@ -840,13 +855,18 @@
 /area/mainship/groundhq/ntf/living/officer_study)
 "bcT" = (
 /obj/structure/cable,
-/obj/machinery/power/port_gen/pacman,
 /obj/item/stack/sheet/mineral/phoron/medium_stack,
 /obj/item/stack/sheet/mineral/phoron/medium_stack,
+/obj/structure/rack,
 /turf/open/floor/mainship/orange/corner,
 /area/mainship/engineering/engineering_workshop)
 "bcV" = (
 /obj/machinery/computer/body_scanconsole,
+/obj/structure/transmitter/colony_net{
+	phone_category = "Novamed";
+	phone_id = "First Aid Room";
+	pixel_y = 23
+	},
 /turf/open/floor/mainship/sterile/side{
 	dir = 1
 	},
@@ -945,20 +965,25 @@
 	},
 /area/mainship/groundhq/ntf/shipboard/brig)
 "bkS" = (
-/obj/structure/mineral_door/wood,
 /obj/machinery/door/firedoor/mainship{
 	dir = 2
 	},
 /obj/structure/cable,
+/obj/machinery/door/airlock/mainship/security{
+	dir = 1;
+	req_access = list(105)
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/shipboard/sensors)
 "bla" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 1
 	},
-/obj/structure/mineral_door/wood,
 /obj/structure/disposalpipe/segment,
 /obj/structure/cable,
+/obj/machinery/door/airlock/mainship/command/free_access{
+	dir = 1
+	},
 /turf/open/floor/wood,
 /area/mainship/command/corporateliaison{
 	name = "Ground CEO Office"
@@ -977,9 +1002,9 @@
 /turf/open/floor/mainship/sterile/dark,
 /area/mainship/groundhq/ntf/shipboard/brig_cells)
 "bns" = (
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/colony/engineering,
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/hallways/hangar2)
 "bnM" = (
 /obj/machinery/door/poddoor/four_tile_hor/secure,
 /turf/open/floor/plating/ground/snow/layer0,
@@ -1001,7 +1026,7 @@
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "bqH" = (
 /obj/structure/cable,
@@ -1185,7 +1210,7 @@
 	name = "HQ Northwest Hallways"
 	})
 "bEe" = (
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
 /obj/effect/landmark/start/job/synthetic,
 /turf/open/floor/mainship/mono,
@@ -1215,7 +1240,9 @@
 /turf/open/floor/plating,
 /area/mainship/living/grunt_rnr)
 "bGC" = (
-/obj/machinery/door/airlock/mainship/security,
+/obj/machinery/door/airlock/mainship/security{
+	req_access = list(105)
+	},
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/shipboard/brig_cells)
 "bHy" = (
@@ -1329,15 +1356,14 @@
 	dir = 8
 	},
 /obj/effect/landmark/start/job/security_officer,
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/shipboard/brig)
 "bNI" = (
 /obj/machinery/computer/supplycomp{
 	home_id = "supply_hq";
-	shuttle_id = "supplyhq";
-	req_access = null
+	shuttle_id = "supplyhq"
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/squads/req)
@@ -1370,7 +1396,7 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "bQQ" = (
 /obj/structure/cable,
@@ -1390,17 +1416,13 @@
 /turf/open/floor/wood,
 /area/mainship/hallways/ntf/dorm1)
 "bRV" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
-	dir = 4
-	},
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
 /obj/structure/cable,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
-	dir = 4
+/obj/machinery/door/airlock/colony/engineering{
+	name = "mining"
 	},
-/obj/structure/mineral_door/wood,
 /turf/open/floor/mainship/mono,
 /area/lv624/ground/caves{
 	ceiling = 2;
@@ -1445,6 +1467,16 @@
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/engineering/upper_engineering)
+"bTn" = (
+/obj/structure/cable,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
+	dir = 1
+	},
+/obj/structure/disposalpipe/segment,
+/turf/open/floor/mainship/cargo,
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "bTJ" = (
 /obj/structure/cable,
 /turf/open/floor/prison/kitchen,
@@ -1538,7 +1570,7 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/squads/req)
 "caw" = (
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/mainship/security/free_access,
 /turf/open/floor/mainship/mono,
 /area/lv624/lazarus/security)
 "ccj" = (
@@ -1564,7 +1596,7 @@
 	},
 /obj/structure/cable,
 /obj/machinery/door/firedoor/mainship,
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/colony/engineering,
 /turf/open/floor/mainship/orange,
 /area/mainship/groundhq/ntf/engineering/engine_core)
 "ceK" = (
@@ -1600,26 +1632,21 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/grunt_rnr)
 "chI" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
-	dir = 4
-	},
-/obj/structure/cable,
-/obj/structure/disposalpipe/segment{
-	dir = 4
-	},
-/turf/open/floor/mainship/stripesquare,
+/turf/closed/wall,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "ciN" = (
-/obj/structure/mineral_door/wood,
 /obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 1
 	},
+/obj/machinery/door/airlock/mainship/research/glass/free_access{
+	dir = 1
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "ciW" = (
 /obj/structure/cable,
@@ -1634,7 +1661,7 @@
 /area/mainship/engineering/engineering_workshop)
 "cjZ" = (
 /obj/structure/cable,
-/obj/machinery/power/apc/hyper{
+/obj/machinery/power/apc{
 	dir = 1
 	},
 /obj/item/clothing/suit/bio_suit/janitor,
@@ -1661,8 +1688,8 @@
 "ckY" = (
 /obj/machinery/vending/nanomed,
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "clp" = (
 /obj/machinery/conveyor{
@@ -1676,16 +1703,14 @@
 /obj/machinery/light{
 	dir = 8
 	},
-/obj/machinery/power/smes/preset{
-	output_level = 1000;
-	input_level = 5000;
-	output_attempt = 0
-	},
+/obj/machinery/power/smes/buildable/empty/backup,
 /turf/open/floor/mainship/tcomms,
 /area/mainship/engineering/engine_core)
 "cnk" = (
 /obj/structure/rack,
 /obj/structure/cable,
+/obj/item/storage/toolbox/mechanical,
+/obj/item/clothing/glasses/welding,
 /turf/open/floor/marking/asteroidwarning{
 	dir = 8
 	},
@@ -1704,18 +1729,13 @@
 	},
 /obj/effect/ai_node,
 /turf/open/floor/plating/plating_catwalk,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "cnH" = (
-/obj/structure/mineral_door/wood,
-/obj/structure/cable,
-/turf/open/floor/plating/plating_catwalk,
-/area/centcom/practice/medical{
-	outside = 0;
-	base_lighting_alpha = 0;
-	static_lighting = 1
-	})
+/obj/machinery/door/airlock/mainship/command/free_access,
+/turf/open/floor/wood,
+/area/mainship/groundhq/ntf/command/corporateliaison)
 "cnM" = (
 /obj/machinery/door/poddoor/shutters/opened{
 	id = "mfsouterhallwayshutters";
@@ -1845,10 +1865,29 @@
 /obj/structure/bed/stool,
 /turf/open/floor/mainship,
 /area/mainship/living/grunt_rnr)
+"cuX" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
+	dir = 4
+	},
+/obj/structure/cable,
+/obj/machinery/firealarm,
+/turf/open/floor/mainship/orange,
+/area/mainship/groundhq/ntf/engineering/engine_core)
 "cvc" = (
-/obj/structure/closet/cabinet,
-/turf/open/floor/mainship,
-/area/lv624/lazarus/armory)
+/obj/structure/cable,
+/obj/machinery/door/poddoor/shutters/mainship/open/checkpoint{
+	dir = 2;
+	id = "Medbaycheckpoint"
+	},
+/obj/machinery/door/airlock/mainship/medical/free_access{
+	dir = 1
+	},
+/turf/open/floor/plating/plating_catwalk,
+/area/centcom/practice/medical{
+	outside = 0;
+	base_lighting_alpha = 0;
+	static_lighting = 1
+	})
 "cvI" = (
 /obj/structure/table/wood,
 /obj/item/storage/fancy/cigarettes/dromedaryco,
@@ -1928,8 +1967,8 @@
 	dir = 1
 	},
 /turf/open/floor/plating/plating_catwalk,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "cBa" = (
 /obj/structure/cable,
@@ -1946,7 +1985,6 @@
 /turf/open/floor/mainship/sterile/purple,
 /area/mainship/groundhq/ntf/medical/medical_science)
 "cBh" = (
-/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 1
 	},
@@ -1958,7 +1996,9 @@
 	dir = 4
 	},
 /turf/closed/wall/mainship,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "cCv" = (
 /obj/structure/toilet{
 	dir = 4
@@ -1999,7 +2039,7 @@
 	dir = 9
 	},
 /obj/item/weapon/baton/stunprod,
-/obj/item/storage/box/flashbangs,
+/obj/item/storage/box/stuns,
 /obj/item/flash,
 /obj/machinery/light{
 	dir = 8
@@ -2040,7 +2080,9 @@
 /obj/machinery/door/firedoor/mainship,
 /obj/structure/mineral_door/wood,
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "cHn" = (
 /obj/machinery/light/small{
 	dir = 8
@@ -2205,10 +2247,8 @@
 /area/mainship/groundhq/ntf/command/cic)
 "cQB" = (
 /obj/machinery/light,
-/obj/structure/table/reinforced,
-/obj/machinery/door_control/old{
-	name = "Checkpoint lockdown";
-	id = "Medbaycheckpoint"
+/obj/structure/bed/chair/office/dark{
+	dir = 1
 	},
 /turf/open/floor/mainship/red,
 /area/deltastation/security/checkpoint/medical/medsci{
@@ -2300,15 +2340,20 @@
 /obj/structure/table/wood,
 /obj/item/camera_film,
 /obj/item/camera,
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "Corporate";
+	phone_id = "Liason Office";
+	pixel_x = -12
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/command/corporateliaison)
 "cZf" = (
-/obj/effect/landmark/lv624/fog_blocker/xeno_spawn,
-/turf/open/floor/plating/ground/snow/layer0,
-/area/lv624/ground/caves{
-	ceiling = 2;
-	name = "HQ Tunnels";
-	always_unpowered = 0
+/obj/machinery/computer/cloning_console/vats,
+/turf/open/floor/mainship/sterile,
+/area/centcom/practice/medical{
+	outside = 0;
+	base_lighting_alpha = 0;
+	static_lighting = 1
 	})
 "cZU" = (
 /obj/machinery/camera/autoname/mainship{
@@ -2360,6 +2405,11 @@
 /obj/item/folder/black,
 /obj/machinery/camera/autoname/mainship{
 	dir = 8
+	},
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "TransCO";
+	phone_id = "Chief Engineer";
+	pixel_x = -12
 	},
 /turf/open/floor/mainship/orange{
 	dir = 4
@@ -2420,7 +2470,6 @@
 	id = "insidedorm2";
 	name = "\improper Quarters Privacy Shutters"
 	},
-/obj/structure/mineral_door/wood,
 /turf/open/floor/wood,
 /area/mainship/hallways/ntf/dorm2)
 "dej" = (
@@ -2476,8 +2525,9 @@
 	})
 "djt" = (
 /obj/structure/table/mainship,
-/obj/item/storage/fancy/cigarettes,
-/obj/item/tool/lighter,
+/obj/machinery/button{
+	id = "clfbase"
+	},
 /turf/open/floor/mainship/red,
 /area/lv624/lazarus/security)
 "dkl" = (
@@ -2631,13 +2681,9 @@
 	})
 "duV" = (
 /obj/structure/cable,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
-	dir = 1
-	},
-/obj/structure/disposalpipe/segment,
 /turf/open/floor/plating/plating_catwalk,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "dvM" = (
 /obj/structure/bed/chair/office/dark{
@@ -2650,8 +2696,12 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/officer_study)
 "dvN" = (
-/obj/structure/bed/chair/office/dark,
 /obj/structure/cable,
+/obj/structure/table/reinforced,
+/obj/machinery/door_control/old{
+	name = "Checkpoint lockdown";
+	id = "Medbaycheckpoint"
+	},
 /turf/open/floor/mainship/red{
 	dir = 1
 	},
@@ -2725,7 +2775,7 @@
 "dCB" = (
 /obj/machinery/door/airlock/mainship/security{
 	dir = 1;
-	req_access = null
+	req_access = list(105)
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/shipboard/brig)
@@ -2755,6 +2805,11 @@
 	dir = 6
 	},
 /area/mainship/groundhq/ntf/shipboard/brig)
+"dFL" = (
+/obj/structure/cable,
+/obj/machinery/door/airlock/colony/engineering,
+/turf/open/floor/mainship/tcomms,
+/area/mainship/groundhq/ntf/command/telecomms)
 "dGt" = (
 /turf/open/floor/mainship/red{
 	dir = 4
@@ -2791,7 +2846,7 @@
 	},
 /obj/structure/cable,
 /obj/effect/ai_node,
-/turf/open/floor/mainship/mono,
+/turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/hallways/aft_hallway{
 	name = "HQ Northwest Hallways"
 	})
@@ -2813,8 +2868,15 @@
 /obj/structure/table/mainship,
 /obj/item/storage/firstaid/regular,
 /obj/item/storage/box/MRE,
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "TransCO";
+	phone_id = "Air Traffic Office";
+	pixel_x = -12
+	},
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "dKv" = (
 /obj/structure/bed/chair/comfy{
 	dir = 4
@@ -2886,11 +2948,11 @@
 	static_lighting = 1
 	})
 "dNO" = (
-/obj/structure/mineral_door/wood,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
 	},
 /obj/structure/cable,
+/obj/machinery/door/airlock/mainship/medical/glass/free_access,
 /turf/open/floor/mainship/sterile/dark,
 /area/centcom/practice/medical{
 	outside = 0;
@@ -2953,6 +3015,9 @@
 "dPH" = (
 /obj/machinery/door/poddoor/shutters/mainship/cic/armory{
 	id = "brig_armory"
+	},
+/obj/machinery/door/airlock/mainship/security{
+	req_access = list(105)
 	},
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/shipboard/brig)
@@ -3063,7 +3128,9 @@
 /obj/structure/disposalpipe/segment,
 /obj/structure/largecrate/supply/supplies/tables_racks,
 /turf/open/floor/mainship/cargo,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "dXA" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
 /obj/effect/ai_node,
@@ -3123,7 +3190,7 @@
 	name = "HQ Central Hallways"
 	})
 "dZs" = (
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/shipboard/brig_cells)
@@ -3204,7 +3271,7 @@
 	})
 "efN" = (
 /obj/structure/cable,
-/obj/structure/mineral_door/wood,
+/obj/structure/inflatable/door,
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/hallways/starboard_hallway{
 	name = "HQ Central Hallways"
@@ -3293,7 +3360,7 @@
 /turf/open/floor/plating,
 /area/mainship/living/grunt_rnr)
 "eol" = (
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
 /obj/structure/disposalpipe/segment/corner,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
@@ -3301,7 +3368,7 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "ept" = (
 /obj/structure/bed/chair/sofa/right{
@@ -3338,16 +3405,14 @@
 /area/mainship/ntf/fcroom)
 "eqt" = (
 /obj/machinery/door/airlock/mainship/security{
-	req_access = null
+	req_access = list(105)
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/shipboard/brig)
 "eqO" = (
-/obj/structure/mineral_door/iron,
-/turf/open/floor/plating/plating_catwalk,
-/area/mainship/groundhq/ntf/hallways/aft_hallway{
-	name = "HQ Northeast Hallways"
-	})
+/obj/machinery/firealarm,
+/turf/open/floor/mainship/mono,
+/area/mainship/groundhq/ntf/engineering/upper_engineering)
 "erf" = (
 /obj/structure/mineral_door/wood,
 /turf/open/floor/mainship/sterile/dark,
@@ -3359,9 +3424,12 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/engineering/engineering_workshop)
 "esh" = (
-/obj/structure/closet/secure_closet/guncabinet/mp_armory,
-/obj/machinery/power/apc/hyper,
 /obj/structure/cable,
+/obj/structure/bed/chair{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/blood,
+/obj/item/restraints/handcuffs,
 /turf/open/floor/mainship,
 /area/lv624/lazarus/armory)
 "esl" = (
@@ -3369,17 +3437,10 @@
 /turf/open/floor/wood,
 /area/mainship/hallways/ntf/dorm1)
 "etd" = (
-/obj/structure/disposalpipe/segment/corner{
-	dir = 4
-	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
-	dir = 6
-	},
-/obj/structure/cable,
-/obj/effect/ai_node,
-/turf/open/floor/plating/plating_catwalk,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/obj/item/storage/box/crate/loot/telecomm_tower_pack/cm,
+/turf/open/floor/mainship/tcomms,
+/area/mainship/groundhq/ntf/command/telecomms{
+	ceiling = 0
 	})
 "ety" = (
 /obj/structure/cable,
@@ -3456,6 +3517,14 @@
 	},
 /area/mainship/command/corporateliaison{
 	name = "Ground CEO Office"
+	})
+"ezu" = (
+/obj/structure/xeno/xeno_turret,
+/turf/open/floor/plating/ground/snow/layer0,
+/area/lv624/ground/caves{
+	ceiling = 2;
+	name = "HQ Tunnels";
+	always_unpowered = 0
 	})
 "ezw" = (
 /obj/structure/rack,
@@ -3571,6 +3640,7 @@
 	})
 "eJu" = (
 /obj/structure/window/framed/mainship,
+/obj/structure/curtain/temple,
 /turf/open/floor/plating,
 /area/mainship/groundhq/ntf/living/officer_study)
 "eKk" = (
@@ -3688,17 +3758,17 @@
 	},
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "eOa" = (
 /obj/structure/table/wood,
 /obj/item/tool/pickaxe,
 /obj/item/tool/pickaxe/drill,
 /obj/item/tool/hatchet,
-/obj/item/clothing/glasses/material,
+/obj/item/clothing/glasses/meson,
 /obj/item/clothing/head/hardhat/orange,
 /obj/item/clothing/head/hardhat/orange,
-/obj/item/clothing/glasses/material,
+/obj/item/clothing/glasses/meson,
 /obj/item/clothing/suit/storage/hazardvest,
 /obj/item/clothing/suit/storage/hazardvest,
 /turf/open/floor/plating/ground/snow/layer1,
@@ -3723,7 +3793,9 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/engineering/engine_core)
 "ePJ" = (
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/colony/medical/hydroponics{
+	dir = 1
+	},
 /turf/open/floor/plating/platebotc,
 /area/sulaco/hydro{
 	outside = 0
@@ -3744,6 +3816,7 @@
 /area/mainship/groundhq/ntf/living/grunt_rnr)
 "eRG" = (
 /obj/effect/ai_node,
+/obj/item/storage/firstaid/adv,
 /turf/open/floor/mainship/sterile/dark,
 /area/mainship/medical/lower_medical)
 "eRO" = (
@@ -3800,7 +3873,9 @@
 	dir = 2
 	},
 /turf/open/floor/plating/plating_catwalk,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "eXX" = (
 /turf/open/floor/wood,
 /area/mainship/living/grunt_rnr)
@@ -3961,16 +4036,14 @@
 /turf/open/floor/plating/ground/snow/layer1,
 /area/desert_dam/exterior/valley/valley_wilderness)
 "fgD" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
-	dir = 4
+/obj/item/reagent_containers/glass/beaker/biomass{
+	name = "biomass beaker"
 	},
-/obj/structure/cable,
-/obj/structure/disposalpipe/segment{
-	dir = 4
-	},
-/turf/open/floor/plating/plating_catwalk,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/turf/open/floor/mainship/sterile,
+/area/centcom/practice/medical{
+	outside = 0;
+	base_lighting_alpha = 0;
+	static_lighting = 1
 	})
 "fhT" = (
 /obj/machinery/recycler{
@@ -4001,8 +4074,10 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/engineering/engineering_workshop)
 "fkM" = (
-/obj/machinery/computer/cloning_console/vats,
 /obj/effect/ai_node,
+/obj/machinery/shower{
+	dir = 8
+	},
 /turf/open/floor/mainship/sterile,
 /area/centcom/practice/medical{
 	outside = 0;
@@ -4183,6 +4258,15 @@
 /obj/structure/closet/radiation,
 /turf/open/floor/mainship/cargo,
 /area/mainship/groundhq/ntf/engineering/upper_engineering)
+"fyT" = (
+/obj/structure/transmitter/colony_net{
+	phone_id = "Northeast Dorms Hallway";
+	pixel_y = 23
+	},
+/turf/open/floor/mainship/mono,
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northeast Hallways"
+	})
 "fzN" = (
 /obj/structure/table/wood,
 /obj/machinery/computer/camera_advanced,
@@ -4208,13 +4292,13 @@
 /turf/open/floor/wood,
 /area/mainship/hallways/ntf/dorm1)
 "fAR" = (
-/obj/structure/cable,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
-	dir = 1
-	},
-/obj/structure/disposalpipe/segment,
-/turf/open/floor/plating/plating_catwalk,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/obj/machinery/door/airlock/mainship/medical/free_access,
+/turf/open/floor/mainship/sterile/dark,
+/area/centcom/practice/medical{
+	outside = 0;
+	base_lighting_alpha = 0;
+	static_lighting = 1
+	})
 "fBc" = (
 /obj/machinery/light{
 	dir = 4
@@ -4222,10 +4306,12 @@
 /obj/structure/cable,
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "fBh" = (
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/colony/medical{
+	dir = 1
+	},
 /turf/open/floor/wood,
 /area/centcom/practice/medical{
 	outside = 0;
@@ -4281,10 +4367,11 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "fFH" = (
 /obj/structure/cable,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/engineering/lower_engineering)
 "fGf" = (
@@ -4369,7 +4456,7 @@
 /obj/structure/cable,
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "fLb" = (
 /obj/item/toy/bikehorn/rubberducky,
@@ -4397,7 +4484,7 @@
 /area/mainship/groundhq/ntf/living/commandbunks)
 "fLI" = (
 /obj/structure/flora/pottedplant/ten,
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
 /turf/open/floor/wood,
 /area/mainship/groundhq/ntf/living/commandbunks)
@@ -4419,8 +4506,8 @@
 	},
 /obj/machinery/door/poddoor/mainship/open/cic,
 /turf/open/floor/plating/plating_catwalk,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "fOs" = (
 /obj/machinery/computer/crew,
@@ -4449,6 +4536,10 @@
 /obj/structure/table/mainship,
 /obj/item/storage/box/donkpockets,
 /obj/item/toy/deck,
+/obj/item/radio,
+/obj/item/radio,
+/obj/item/radio,
+/obj/item/radio,
 /turf/open/floor/mainship/red/full,
 /area/lv624/lazarus/armory)
 "fRb" = (
@@ -4525,6 +4616,10 @@
 /area/mainship/squads/req)
 "gaG" = (
 /obj/structure/table/mainship,
+/obj/machinery/computer/communications/cm{
+	req_access = null;
+	dir = 8
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/ntf/fcroom)
 "gaS" = (
@@ -4543,7 +4638,9 @@
 	name = "HQ Western hallways"
 	})
 "gbv" = (
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/colony/research{
+	dir = 1
+	},
 /turf/open/floor/mainship/sterile/dark,
 /area/mainship/groundhq/ntf/medical/medical_science)
 "gcg" = (
@@ -4658,7 +4755,8 @@
 "gkw" = (
 /obj/structure/cable,
 /obj/machinery/door/airlock/mainship/security{
-	dir = 1
+	dir = 1;
+	req_access = list(105)
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/shipboard/brig)
@@ -4685,13 +4783,11 @@
 /turf/closed/wall,
 /area/mainship/groundhq/ntf/living/chapel)
 "gmE" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
-	dir = 1
-	},
-/turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
-	})
+/obj/item/clothing/head/head_sack,
+/obj/item/clothing/head/head_sack,
+/obj/item/clothing/head/head_sack,
+/turf/open/floor/plating/ground/snow/layer0,
+/area/lv624/lazarus/armory)
 "goX" = (
 /obj/structure/table/wood,
 /obj/item/reagent_containers/food/drinks/bottle/whiskey,
@@ -4816,8 +4912,8 @@
 "gxz" = (
 /obj/structure/table/mainship,
 /obj/machinery/recharger,
-/obj/item/storage/box/flashbangs,
-/obj/item/storage/box/flashbangs{
+/obj/item/storage/box/stuns,
+/obj/item/storage/box/stuns{
 	pixel_y = 10
 	},
 /obj/item/storage/box/handcuffs,
@@ -4827,6 +4923,10 @@
 	},
 /obj/item/detective_scanner,
 /obj/item/reagent_scanner/adv,
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "Security";
+	phone_id = "Central Checkpoint"
+	},
 /turf/open/floor/mainship/red{
 	dir = 4
 	},
@@ -4914,9 +5014,6 @@
 /turf/open/floor/mainship/cargo,
 /area/mainship/groundhq/ntf/engineering/engineering_workshop)
 "gHM" = (
-/obj/structure/cable,
-/obj/machinery/atmospherics/pipe/manifold4w/supply/hidden,
-/obj/machinery/atmospherics/pipe/manifold4w/supply/hidden,
 /obj/machinery/atmospherics/pipe/manifold4w/supply/hidden/layer1,
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/engineering/engine_core)
@@ -5132,7 +5229,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
 	},
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/mainship/research/glass/free_access,
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/hallways/aft_hallway{
 	name = "HQ Northeast Hallways"
@@ -5188,6 +5285,16 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/shipboard/brig)
+"gZH" = (
+/obj/structure/mineral_door/resin/thick{
+	dir = 1
+	},
+/turf/open/floor/plating/ground/snow/layer0,
+/area/lv624/ground/caves{
+	ceiling = 2;
+	name = "HQ Tunnels";
+	always_unpowered = 0
+	})
 "gZP" = (
 /obj/machinery/light,
 /turf/open/floor/mainship/sterile/dark,
@@ -5319,7 +5426,7 @@
 /obj/effect/ai_node,
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "hkE" = (
 /obj/machinery/light{
@@ -5351,7 +5458,11 @@
 	name = "HQ Western hallways"
 	})
 "hmR" = (
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/colony/engineering{
+	dir = 1;
+	name = "logistics";
+	req_access = list(101)
+	},
 /turf/open/floor/plating,
 /area/mainship/squads/req)
 "hnc" = (
@@ -5416,6 +5527,11 @@
 "hst" = (
 /obj/structure/table/wood,
 /obj/effect/ai_node,
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "Security";
+	phone_id = "Security Commander";
+	pixel_x = -8
+	},
 /turf/open/floor/wood,
 /area/outpost/brig/wardens_office{
 	name = "CC Office"
@@ -5487,18 +5603,11 @@
 /obj/structure/disposalpipe/segment/corner{
 	dir = 4
 	},
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layer1{
-	dir = 8
-	},
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layer1{
-	dir = 8
-	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layer1,
 /turf/open/floor/mainship/sterile/dark,
 /area/mainship/groundhq/ntf/medical/medical_science)
 "hyi" = (
-/obj/machinery/door/airlock/mainship/security/checkpoint{
-	req_access = list(5)
-	},
+/obj/machinery/door/airlock/mainship/security/checkpoint,
 /turf/open/floor/mainship/mono,
 /area/deltastation/security/checkpoint/medical/medsci{
 	outside = 0
@@ -5587,6 +5696,10 @@
 	},
 /obj/item/clipboard,
 /obj/item/tool/pen,
+/obj/item/storage/box/MRE{
+	pixel_x = 3;
+	pixel_y = 3
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/squads/req)
 "hDZ" = (
@@ -5699,8 +5812,11 @@
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/hallways/hangar)
 "hJM" = (
-/turf/closed/wall/mainship,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/obj/structure/cable,
+/turf/open/floor/plating/plating_catwalk,
+/area/mainship/groundhq/ntf/hallways/stern_hallway{
+	name = "HQ Eastern hallways"
+	})
 "hKj" = (
 /turf/closed/mineral/smooth/indestructible,
 /area/lv624/ground/caves{
@@ -5725,8 +5841,8 @@
 /obj/machinery/power/apc,
 /obj/structure/cable,
 /turf/open/floor/mainship/stripesquare,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "hLV" = (
 /turf/closed/wall/mainship,
@@ -5804,6 +5920,9 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 1
 	},
+/obj/machinery/door/firedoor/mainship{
+	dir = 2
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/aft_hallway{
 	name = "HQ Northwest Hallways"
@@ -5833,6 +5952,11 @@
 /obj/structure/disposalpipe/segment/corner{
 	dir = 8
 	},
+/obj/structure/transmitter/colony_net{
+	phone_id = "Kitchen";
+	pixel_x = 15;
+	dir = 8
+	},
 /turf/open/floor/prison/kitchen,
 /area/mainship/groundhq/ntf/living/captain_mess{
 	name = "Kitchen"
@@ -5857,9 +5981,6 @@
 /turf/open/floor/wood,
 /area/mainship/ntf/fcroom)
 "hTX" = (
-/obj/machinery/vending/security{
-	req_access = null
-	},
 /turf/open/floor/mainship/red{
 	dir = 6
 	},
@@ -5871,6 +5992,15 @@
 /obj/effect/landmark/start/latejoinsurvivor,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/chapel)
+"hUG" = (
+/obj/structure/cable,
+/obj/structure/reagent_dispensers/water_cooler,
+/turf/open/floor/mainship/red{
+	dir = 1
+	},
+/area/deltastation/security/checkpoint/medical/medsci{
+	outside = 0
+	})
 "hUR" = (
 /obj/structure/disposalpipe/junction/flipped{
 	dir = 8
@@ -5880,11 +6010,12 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "hVI" = (
 /obj/machinery/door/airlock/mainship/security{
-	dir = 1
+	dir = 1;
+	req_access = list(105)
 	},
 /turf/open/floor/mainship/red{
 	dir = 4
@@ -5895,6 +6026,11 @@
 /obj/item/folder/white,
 /obj/item/folder/white,
 /obj/structure/paper_bin,
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "Novamed";
+	phone_id = "Research";
+	pixel_x = -10
+	},
 /turf/open/floor/mainship/sterile/dark,
 /area/mainship/groundhq/ntf/medical/medical_science)
 "hWa" = (
@@ -5956,12 +6092,14 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/bridgebunks)
 "iai" = (
-/obj/machinery/power/apc/hyper{
+/obj/machinery/power/apc{
 	dir = 4
 	},
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "iaI" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden/layer1{
 	dir = 8
@@ -5977,7 +6115,7 @@
 	})
 "iaZ" = (
 /obj/structure/cable,
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/closet/secure_closet/engineering_personal{
 	req_access = null
 	},
@@ -6005,17 +6143,19 @@
 	},
 /area/mainship/groundhq/ntf/command/corporateliaison)
 "icW" = (
-/obj/structure/mineral_door/wood,
 /obj/machinery/door/firedoor/mainship,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
 	},
 /obj/structure/cable,
+/obj/machinery/door/airlock/mainship/command/free_access,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/bridgebunks)
 "ide" = (
 /obj/structure/table/wood,
-/obj/machinery/computer/skills,
+/obj/machinery/computer/communications/cm{
+	req_access = null
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/command/corporateliaison)
 "idZ" = (
@@ -6036,7 +6176,9 @@
 /obj/structure/disposalpipe/segment{
 	dir = 1
 	},
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/colony/engineering{
+	dir = 1
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar2)
 "igT" = (
@@ -6054,7 +6196,7 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "ihv" = (
 /turf/open/floor/tile/hydro,
@@ -6180,9 +6322,9 @@
 /area/mainship/squads/req)
 "ipy" = (
 /obj/structure/table/mainship,
-/obj/item/storage/box/MRE{
-	pixel_x = 3;
-	pixel_y = 3
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "TransCO";
+	phone_id = "Requisitions"
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/squads/req)
@@ -6257,6 +6399,15 @@
 /obj/effect/ai_node,
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/engineering/engine_core)
+"iwj" = (
+/obj/structure/transmitter/colony_net{
+	phone_id = "Northwest Hallway North";
+	pixel_y = 23
+	},
+/turf/open/floor/mainship/mono,
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "iwN" = (
 /obj/structure/closet/firecloset,
 /turf/open/floor/mainship/cargo,
@@ -6274,11 +6425,10 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/engineering/upper_engineering)
 "ixP" = (
-/obj/structure/mineral_door/wood,
 /obj/structure/cable,
-/obj/machinery/door/poddoor/shutters/mainship/open/checkpoint{
-	dir = 2;
-	id = "Medbaycheckpoint"
+/obj/machinery/door/airlock/mainship/medical/glass/free_access{
+	dir = 1;
+	name = "Animal Control Closet"
 	},
 /turf/open/floor/mainship/sterile/dark,
 /area/centcom/practice/medical{
@@ -6356,7 +6506,7 @@
 	},
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "iBW" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
@@ -6420,7 +6570,9 @@
 /obj/structure/window/framed/mainship,
 /obj/machinery/door/firedoor/mainship,
 /turf/open/floor/plating,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "iEG" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
@@ -6448,9 +6600,17 @@
 /turf/open/floor/wood,
 /area/mainship/living/grunt_rnr)
 "iHo" = (
-/obj/machinery/light,
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/obj/structure/cable,
+/obj/structure/transmitter/colony_net{
+	phone_id = "Security Department";
+	pixel_y = 23;
+	phone_category = "Security"
+	},
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/groundhq/ntf/shipboard/brig)
 "iHT" = (
 /obj/structure/table/wood,
 /obj/item/storage/bible,
@@ -6474,7 +6634,10 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
 	},
-/obj/structure/mineral_door/wood,
+/obj/structure/inflatable/door,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
+	dir = 4
+	},
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/hallways/starboard_hallway{
 	name = "HQ Central Hallways"
@@ -6507,7 +6670,7 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "iJW" = (
 /obj/machinery/camera/autoname{
@@ -6549,6 +6712,11 @@
 /obj/item/folder/white,
 /obj/item/folder/white,
 /obj/item/folder/white,
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "Novamed";
+	phone_id = "Head of Medicine";
+	pixel_x = -8
+	},
 /turf/open/floor/wood,
 /area/centcom/practice/medical{
 	outside = 0;
@@ -6591,7 +6759,7 @@
 /obj/machinery/light{
 	dir = 1
 	},
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /turf/open/floor/mainship/office,
 /area/mainship/command/corporateliaison{
 	name = "Ground CEO Office"
@@ -6611,6 +6779,15 @@
 /turf/open/floor/tile/hydro,
 /area/sulaco/hydro{
 	outside = 0
+	})
+"iQO" = (
+/obj/machinery/atmospherics/components/unary/vent_pump/layer1{
+	dir = 8;
+	on = 1
+	},
+/turf/open/floor/plating/plating_catwalk,
+/area/mainship/groundhq/ntf/hallways/starboard_hallway{
+	name = "HQ Central Hallways"
 	})
 "iQZ" = (
 /obj/structure/cable,
@@ -6633,11 +6810,11 @@
 /turf/open/floor/wood,
 /area/mainship/living/grunt_rnr)
 "iSR" = (
-/obj/structure/mineral_door/wood,
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
 /obj/structure/cable,
+/obj/machinery/door/airlock/mainship/command/free_access,
 /turf/open/floor/mainship/office,
 /area/mainship/command/corporateliaison{
 	name = "Ground CEO Office"
@@ -6761,7 +6938,9 @@
 	dir = 1
 	},
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "jbf" = (
 /obj/machinery/light{
 	dir = 4
@@ -6805,7 +6984,7 @@
 /obj/effect/ai_node,
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "jeo" = (
 /obj/structure/disposalpipe/segment/corner{
@@ -6828,7 +7007,9 @@
 	})
 "jeW" = (
 /obj/structure/table/mainship,
-/obj/machinery/computer/station_alert,
+/obj/machinery/computer/station_alert{
+	dir = 1
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/engineering/upper_engine_monitoring)
 "jfc" = (
@@ -6840,7 +7021,7 @@
 	name = "HQ Central Hallways"
 	})
 "jfw" = (
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/mainship/medical/free_access,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/starboard_hallway{
 	name = "HQ Central Hallways"
@@ -6884,10 +7065,6 @@
 "jiG" = (
 /obj/structure/table/reinforced,
 /obj/structure/table/reinforced,
-/obj/structure/window/reinforced/tinted{
-	dir = 1;
-	layer = 2
-	},
 /obj/machinery/faxmachine/warden,
 /obj/machinery/light{
 	dir = 1
@@ -6920,8 +7097,10 @@
 	name = "Kitchen"
 	})
 "jmx" = (
-/obj/structure/mineral_door/wood,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
+	dir = 1
+	},
+/obj/machinery/door/airlock/mainship/medical/free_access{
 	dir = 1
 	},
 /turf/open/floor/freezer,
@@ -7009,6 +7188,12 @@
 /obj/structure/disposalpipe/segment/corner,
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/living/grunt_rnr)
+"jsz" = (
+/obj/effect/ai_node,
+/turf/open/floor/mainship/mono,
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "jsE" = (
 /obj/machinery/camera/autoname/mainship,
 /turf/open/floor/mainship/mono,
@@ -7044,7 +7229,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
 	},
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/bridgebunks)
@@ -7083,9 +7268,8 @@
 /area/mainship/groundhq/ntf/engineering/ce_room)
 "jwz" = (
 /obj/structure/cable,
-/obj/structure/mineral_door/wood,
-/turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/turf/open/floor/plating/plating_catwalk,
+/area/mainship/hallways/hangar2)
 "jwK" = (
 /obj/machinery/gear{
 	id = "supply_elevator_gear"
@@ -7322,7 +7506,9 @@
 	always_unpowered = 0
 	})
 "jJL" = (
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/mainship/command/free_access{
+	dir = 1
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/officer_study)
 "jJT" = (
@@ -7340,6 +7526,12 @@
 /obj/item/book/manual/barman_recipes,
 /turf/open/floor/wood,
 /area/mainship/living/grunt_rnr)
+"jMl" = (
+/obj/item/clothing/head/head_sack/light,
+/obj/item/clothing/head/head_sack/light,
+/obj/item/clothing/head/head_sack/light,
+/turf/open/floor/plating/ground/snow/layer0,
+/area/lv624/lazarus/armory)
 "jMq" = (
 /obj/item/ore/osmium,
 /turf/closed/mineral/smooth,
@@ -7358,8 +7550,8 @@
 	dir = 1
 	},
 /turf/open/floor/plating/plating_catwalk,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "jNf" = (
 /obj/machinery/vending/snack,
@@ -7395,6 +7587,31 @@
 	},
 /turf/open/floor/mainship/cargo,
 /area/mainship/groundhq/ntf/hallways/hangar)
+"jPO" = (
+/obj/structure/cable,
+/obj/machinery/door/airlock/mainship/research/glass/free_access{
+	dir = 1
+	},
+/turf/open/floor/mainship/mono,
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northeast Hallways"
+	})
+"jQj" = (
+/obj/item/explosive/grenade/smokebomb/sleep,
+/obj/item/explosive/grenade/smokebomb/sleep,
+/obj/item/explosive/grenade/smokebomb/sleep,
+/obj/item/explosive/grenade/smokebomb/sleep,
+/obj/item/explosive/grenade/smokebomb/sleep,
+/obj/item/explosive/grenade/smokebomb/sleep,
+/obj/item/explosive/grenade/smokebomb/sleep,
+/obj/item/explosive/grenade/smokebomb/sleep,
+/obj/item/explosive/grenade/smokebomb/sleep,
+/turf/open/floor/wood,
+/area/lv624/ground/caves{
+	ceiling = 2;
+	name = "HQ Tunnels";
+	always_unpowered = 0
+	})
 "jQE" = (
 /obj/structure/cable,
 /obj/machinery/power/terminal{
@@ -7459,10 +7676,6 @@
 /area/mainship/groundhq/ntf/medical/medical_science)
 "jST" = (
 /obj/machinery/computer/camera_advanced,
-/obj/structure/window/reinforced/tinted{
-	dir = 1;
-	layer = 2
-	},
 /obj/structure/table/reinforced,
 /turf/open/floor/wood,
 /area/mainship/groundhq/ntf/shipboard/brig)
@@ -7515,7 +7728,7 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "jXq" = (
 /obj/machinery/door/poddoor/shutters/mainship/open/checkpoint{
@@ -7546,7 +7759,9 @@
 	})
 "kaD" = (
 /obj/structure/cable,
-/obj/structure/mineral_door/iron,
+/obj/machinery/door/airlock/mainship/maint/free_access{
+	req_one_access = null
+	},
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/hallways/aft_hallway{
 	name = "HQ Northeast Hallways"
@@ -7606,15 +7821,15 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/command/cic)
 "kdO" = (
-/obj/structure/mineral_door/wood,
 /obj/machinery/door/firedoor/mainship,
+/obj/machinery/door/airlock/mainship/command/free_access,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/commandbunks)
 "keq" = (
-/obj/machinery/door/airlock/mainship/security/checkpoint{
-	req_access = list(5)
-	},
 /obj/structure/cable,
+/obj/structure/window/framed/mainship/white/toughened{
+	name = "kevlar-weave infused bulletproof window"
+	},
 /turf/open/floor/mainship/mono,
 /area/deltastation/security/checkpoint/medical/medsci{
 	outside = 0
@@ -7658,11 +7873,6 @@
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/hallways/hangar)
 "kjx" = (
-/obj/structure/rack,
-/obj/item/storage/box/MRE,
-/obj/item/storage/box/MRE,
-/obj/item/storage/box/MRE,
-/obj/item/storage/box/MRE,
 /turf/open/floor/mainship,
 /area/lv624/lazarus/armory)
 "kkk" = (
@@ -7690,6 +7900,11 @@
 	dir = 4
 	},
 /obj/item/tool/pen,
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "Command";
+	phone_id = "Commander";
+	pixel_x = -12
+	},
 /turf/open/floor/wood,
 /area/mainship/groundhq/ntf/living/commandbunks)
 "klN" = (
@@ -7753,7 +7968,7 @@
 /obj/structure/cable,
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "kso" = (
 /obj/machinery/camera/autoname{
@@ -7781,11 +7996,11 @@
 /turf/open/floor/wood,
 /area/mainship/hallways/ntf/dorm1)
 "kuc" = (
-/obj/structure/mineral_door/wood,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
 	},
 /obj/structure/cable,
+/obj/structure/mineral_door/wood,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/chapel)
 "kvz" = (
@@ -7801,6 +8016,14 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/grunt_rnr)
+"kws" = (
+/obj/structure/inflatable/door,
+/turf/open/floor/plating/ground/snow/layer1,
+/area/lv624/ground/caves{
+	ceiling = 2;
+	name = "HQ Tunnels";
+	always_unpowered = 0
+	})
 "kwM" = (
 /obj/structure/cable,
 /obj/effect/spawner/random/misc/structure/supplycrate,
@@ -7896,9 +8119,9 @@
 /turf/open/floor/wood,
 /area/mainship/groundhq/ntf/living/grunt_rnr)
 "kEK" = (
-/obj/structure/cable,
-/turf/open/floor/mainship/tcomms,
-/area/mainship/groundhq/ntf/command/telecomms)
+/obj/item/tool/wirecutters,
+/turf/open/floor/plating/ground/snow/layer3,
+/area/desert_dam/exterior/valley/valley_wilderness)
 "kFd" = (
 /obj/machinery/shower{
 	dir = 1
@@ -7908,7 +8131,10 @@
 /area/mainship/groundhq/ntf/shipboard/brig_cells)
 "kHH" = (
 /obj/structure/table/mainship,
-/obj/item/storage/donut_box,
+/obj/machinery/computer/communications/cm{
+	req_access = null;
+	dir = 1
+	},
 /turf/open/floor/wood,
 /area/mainship/groundhq/ntf/living/commandbunks)
 "kHS" = (
@@ -8034,7 +8260,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
 	},
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/colony/research,
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/medical/medical_science)
 "kOx" = (
@@ -8116,7 +8342,9 @@
 	dir = 9
 	},
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "kVe" = (
 /obj/machinery/light{
 	dir = 4
@@ -8175,6 +8403,11 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "Command";
+	phone_id = "FC";
+	pixel_x = -12
+	},
 /turf/open/floor/wood,
 /area/mainship/ntf/fcroom)
 "kYW" = (
@@ -8194,7 +8427,7 @@
 /turf/open/floor/mainship/cargo,
 /area/mainship/groundhq/ntf/engineering/upper_engineering)
 "kZa" = (
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/ntf/dorm2)
@@ -8213,7 +8446,7 @@
 /obj/effect/ai_node,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "lbm" = (
 /obj/structure/closet/secure_closet/engineering_chief,
@@ -8256,7 +8489,9 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/bridgebunks)
 "lcw" = (
-/obj/machinery/marine_selector/clothes/synth,
+/obj/machinery/marine_selector/clothes/synth{
+	vendor_role = /datum/job/survivor/synth
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/engineering/engineering_workshop)
 "lcI" = (
@@ -8288,8 +8523,8 @@
 	dir = 4
 	},
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "lfM" = (
 /obj/machinery/shower{
@@ -8313,14 +8548,14 @@
 	})
 "liW" = (
 /obj/structure/disposalpipe/segment,
-/obj/machinery/power/apc/hyper{
+/obj/machinery/power/apc{
 	dir = 8
 	},
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/officer_study)
 "ljw" = (
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/colony/engineering,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/engineering/upper_engineering)
 "llv" = (
@@ -8372,7 +8607,7 @@
 	dir = 9
 	},
 /obj/item/weapon/baton/stunprod,
-/obj/item/storage/box/flashbangs,
+/obj/item/storage/box/stuns,
 /obj/item/flash,
 /turf/open/floor/mainship/cargo,
 /area/mainship/groundhq/ntf/shipboard/brig)
@@ -8388,6 +8623,15 @@
 	},
 /turf/open/floor/wood,
 /area/mainship/living/grunt_rnr)
+"lpU" = (
+/obj/item/attachable/suppressor,
+/obj/item/storage/holster/belt/pistol/g22_tranq,
+/turf/open/floor/wood,
+/area/lv624/ground/caves{
+	ceiling = 2;
+	name = "HQ Tunnels";
+	always_unpowered = 0
+	})
 "lqg" = (
 /obj/structure/mineral_door/wood,
 /obj/structure/cable,
@@ -8403,15 +8647,20 @@
 /turf/open/floor/wood,
 /area/mainship/hallways/ntf/dorm1)
 "lqi" = (
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/colony/medical/hydroponics{
+	dir = 1
+	},
 /turf/open/floor/tile/hydro,
 /area/sulaco/hydro{
 	outside = 0
 	})
 "lqx" = (
 /obj/structure/cable,
+/obj/machinery/vending/security{
+	req_access = null
+	},
 /turf/open/floor/mainship/red{
-	dir = 1
+	dir = 5
 	},
 /area/deltastation/security/checkpoint/medical/medsci{
 	outside = 0
@@ -8437,9 +8686,12 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/grunt_rnr)
 "lti" = (
-/obj/machinery/telecomms/relay/preset/telecomms,
-/turf/open/floor/mainship/tcomms,
-/area/mainship/groundhq/ntf/command/telecomms)
+/obj/machinery/door/airlock/multi_tile/mainship/generic,
+/obj/structure/cable,
+/turf/open/floor/mainship/mono,
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "ltx" = (
 /obj/structure/cable,
 /obj/machinery/camera/autoname,
@@ -8459,10 +8711,14 @@
 	static_lighting = 1
 	})
 "lul" = (
-/obj/structure/mineral_door/wood,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
 /obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
+/obj/machinery/door/airlock/colony/engineering{
+	dir = 1;
+	name = "logistics";
+	req_access = list(101)
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/squads/req)
 "lup" = (
@@ -8485,7 +8741,8 @@
 	})
 "luX" = (
 /obj/structure/table/wood,
-/obj/machinery/computer/communications{
+/obj/machinery/computer/communications/cm{
+	req_access = null;
 	dir = 4
 	},
 /turf/open/floor/wood,
@@ -8516,7 +8773,7 @@
 /obj/structure/window/framed/colony,
 /turf/open/floor/plating,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "lxp" = (
 /turf/open/floor/plating/plating_catwalk,
@@ -8540,8 +8797,8 @@
 	},
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "lAc" = (
 /obj/machinery/vending/snack,
@@ -8665,6 +8922,11 @@
 /obj/item/tweezers,
 /obj/item/tweezers,
 /obj/item/tweezers,
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "Novamed";
+	phone_id = "First Aid Room Office";
+	pixel_x = -8
+	},
 /turf/open/floor/mainship/sterile{
 	dir = 8
 	},
@@ -8699,7 +8961,7 @@
 /obj/structure/cable,
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "lNP" = (
 /obj/structure/table/wood,
@@ -8723,7 +8985,9 @@
 	},
 /area/mainship/groundhq/ntf/shipboard/brig_cells)
 "lPX" = (
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/colony/medical{
+	dir = 1
+	},
 /turf/open/floor/mainship/sterile/dark,
 /area/centcom/practice/medical{
 	outside = 0;
@@ -8786,7 +9050,9 @@
 	dir = 6
 	},
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "lTb" = (
 /obj/structure/curtain/medical,
 /obj/structure/cable,
@@ -8844,7 +9110,9 @@
 /area/mainship/groundhq/ntf/command/cic)
 "lZf" = (
 /obj/structure/cable,
-/obj/machinery/door/airlock/mainship/security,
+/obj/machinery/door/airlock/mainship/security{
+	req_access = list(105)
+	},
 /turf/open/floor/plating/plating_catwalk,
 /area/outpost/brig/wardens_office{
 	name = "CC Office"
@@ -8923,7 +9191,7 @@
 	static_lighting = 1
 	})
 "mfo" = (
-/obj/machinery/gibber,
+/obj/machinery/gibber/apc,
 /turf/open/floor/freezer,
 /area/mainship/groundhq/ntf/living/captain_mess{
 	name = "Kitchen"
@@ -8979,9 +9247,19 @@
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/engineering/ce_room)
 "miU" = (
-/turf/open/floor/mainship/stripesquare,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/obj/item/restraints/handcuffs,
+/obj/item/restraints/handcuffs,
+/obj/item/restraints/handcuffs,
+/obj/item/restraints/handcuffs,
+/obj/item/restraints/handcuffs,
+/obj/item/restraints/handcuffs,
+/obj/item/restraints/handcuffs,
+/obj/item/binoculars,
+/turf/open/floor/wood,
+/area/lv624/ground/caves{
+	ceiling = 2;
+	name = "HQ Tunnels";
+	always_unpowered = 0
 	})
 "mlx" = (
 /obj/structure/mineral_door/wood,
@@ -9040,7 +9318,7 @@
 /obj/effect/ai_node,
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "mqa" = (
 /obj/structure/cable,
@@ -9112,6 +9390,16 @@
 /obj/structure/window/framed/colony,
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/living/grunt_rnr)
+"mtI" = (
+/obj/machinery/door/poddoor/shutters/mainship/open/checkpoint{
+	id = "Medbaycheckpoint"
+	},
+/turf/open/floor/mainship/sterile/dark,
+/area/centcom/practice/medical{
+	outside = 0;
+	base_lighting_alpha = 0;
+	static_lighting = 1
+	})
 "mtP" = (
 /obj/structure/mineral_door/wood,
 /turf/open/floor/wood,
@@ -9129,7 +9417,7 @@
 /area/desert_dam/exterior/valley/valley_wilderness)
 "muy" = (
 /obj/structure/cable,
-/obj/machinery/power/apc/hyper{
+/obj/machinery/power/apc{
 	dir = 4
 	},
 /turf/open/floor/mainship/red{
@@ -9169,7 +9457,7 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/engineering/engineering_workshop)
 "mxR" = (
-/obj/machinery/miner/damaged,
+/obj/machinery/miner/damaged/platinum,
 /turf/open/floor/plating/ground/snow/layer3,
 /area/desert_dam/exterior/valley/valley_wilderness)
 "mxU" = (
@@ -9251,6 +9539,18 @@
 	base_lighting_alpha = 0;
 	static_lighting = 1
 	})
+"mGa" = (
+/obj/structure/window/framed/mainship/white/toughened{
+	name = "kevlar-weave infused bulletproof window"
+	},
+/obj/machinery/door/poddoor/shutters/mainship/open/checkpoint{
+	dir = 2;
+	id = "Medbaycheckpoint"
+	},
+/turf/open/floor/mainship/mono,
+/area/deltastation/security/checkpoint/medical/medsci{
+	outside = 0
+	})
 "mGi" = (
 /obj/structure/bed/chair{
 	dir = 8
@@ -9264,7 +9564,7 @@
 	},
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "mGA" = (
 /turf/closed/wall,
@@ -9341,6 +9641,9 @@
 /obj/structure/inflatable/wall,
 /turf/open/floor/plating/ground/snow/layer3,
 /area/desert_dam/exterior/valley/valley_wilderness)
+"mMv" = (
+/turf/open/floor/mainship/mono,
+/area/desert_dam/exterior/valley/valley_wilderness)
 "mNn" = (
 /obj/machinery/disposal,
 /obj/structure/disposalpipe/trunk,
@@ -9351,9 +9654,7 @@
 /turf/open/floor/plating/ground/snow/layer3,
 /area/desert_dam/exterior/valley/valley_wilderness)
 "mNK" = (
-/obj/machinery/autodoc{
-	active_power_usage = 20000
-	},
+/obj/structure/bed/urban/hospitalbeds/hospitalbed3,
 /turf/open/floor/mainship/sterile/corner{
 	dir = 8
 	},
@@ -9407,13 +9708,6 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/officer_study)
 "mQZ" = (
-/obj/structure/window/reinforced/tinted{
-	dir = 1
-	},
-/obj/structure/window/reinforced/tinted{
-	dir = 1;
-	layer = 2
-	},
 /obj/machinery/computer/prisoner,
 /turf/open/floor/wood,
 /area/mainship/groundhq/ntf/shipboard/brig)
@@ -9473,7 +9767,6 @@
 	static_lighting = 1
 	})
 "mUY" = (
-/obj/structure/reagent_dispensers/water_cooler,
 /turf/open/floor/mainship/red,
 /area/deltastation/security/checkpoint/medical/medsci{
 	outside = 0
@@ -9513,6 +9806,7 @@
 	},
 /obj/item/binoculars,
 /obj/item/megaphone,
+/obj/item/storage/donut_box,
 /turf/open/floor/wood,
 /area/mainship/groundhq/ntf/living/commandbunks)
 "mXc" = (
@@ -9619,8 +9913,20 @@
 "neG" = (
 /obj/structure/table/mainship,
 /obj/machinery/computer/atmos_alert,
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "TransCO";
+	phone_id = "Reactor Monitoring";
+	pixel_x = -12
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/engineering/upper_engine_monitoring)
+"nfj" = (
+/obj/structure/cable,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
+	dir = 4
+	},
+/turf/open/floor/mainship/sterile/dark,
+/area/mainship/groundhq/ntf/medical/medical_science)
 "nfL" = (
 /obj/machinery/power/monitor/core,
 /obj/structure/cable,
@@ -9649,12 +9955,20 @@
 /obj/effect/ai_node,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "niK" = (
 /obj/machinery/vending/cigarette,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/command/corporateliaison)
+"njB" = (
+/obj/alien/weeds/node/sticky,
+/turf/open/floor/plating/ground/snow/layer0,
+/area/lv624/ground/caves{
+	ceiling = 2;
+	name = "HQ Tunnels";
+	always_unpowered = 0
+	})
 "njI" = (
 /obj/machinery/atmospherics/components/unary/vent_pump/layer1,
 /turf/open/floor/mainship/sterile/side{
@@ -9684,8 +9998,8 @@
 	},
 /obj/effect/ai_node,
 /turf/open/floor/plating/plating_catwalk,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "nlB" = (
 /obj/item/ore/phoron,
@@ -9700,7 +10014,7 @@
 /turf/open/floor/wood,
 /area/mainship/groundhq/ntf/living/bridgebunks)
 "nnB" = (
-/obj/machinery/power/apc/hyper{
+/obj/machinery/power/apc{
 	dir = 4
 	},
 /obj/structure/cable,
@@ -9821,7 +10135,6 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 10
 	},
-/obj/machinery/telecomms/relay/preset/tower/mapcomms,
 /turf/open/floor/mainship,
 /area/mainship/hallways/hangar2)
 "nvR" = (
@@ -9869,11 +10182,9 @@
 	static_lighting = 1
 	})
 "nyK" = (
-/obj/machinery/light{
-	dir = 8
-	},
-/turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/obj/structure/window/framed/colony/reinforced,
+/turf/open/floor/mainship,
+/area/mainship/hallways/hangar2)
 "nyT" = (
 /obj/structure/cable,
 /obj/structure/disposalpipe/segment/corner{
@@ -9881,7 +10192,7 @@
 	},
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "nyU" = (
 /obj/structure/table/reinforced,
@@ -9901,20 +10212,22 @@
 /obj/structure/cable,
 /obj/machinery/door/airlock/mainship/security{
 	dir = 1;
-	req_access = null
+	req_access = list(105)
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
 	name = "HQ Western hallways"
 	})
 "nzQ" = (
-/obj/structure/mineral_door/wood,
 /obj/machinery/door/firedoor,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 1
 	},
 /obj/structure/disposalpipe/segment,
 /obj/structure/cable,
+/obj/machinery/door/airlock/mainship/command/free_access{
+	dir = 1
+	},
 /turf/open/floor/wood,
 /area/mainship/command/corporateliaison{
 	name = "Ground CEO Office"
@@ -9983,6 +10296,7 @@
 	dir = 2
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
+/obj/machinery/door/airlock/multi_tile/mainship/comdoor/free_access,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/command/cic)
 "nGS" = (
@@ -9995,6 +10309,9 @@
 "nHg" = (
 /obj/machinery/light{
 	dir = 8
+	},
+/obj/machinery/camera/autoname/mainship{
+	dir = 4
 	},
 /turf/open/floor/mainship/sterile/dark,
 /area/mainship/groundhq/ntf/medical/medical_science)
@@ -10090,7 +10407,10 @@
 	name = "Kitchen"
 	})
 "nNu" = (
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/colony/engineering{
+	dir = 1;
+	name = "mining"
+	},
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/hallways/starboard_hallway{
 	name = "HQ Central Hallways"
@@ -10105,11 +10425,13 @@
 /turf/closed/wall,
 /area/mainship/shipboard/sensors)
 "nOl" = (
-/obj/structure/mineral_door/wood,
 /obj/machinery/door/firedoor/mainship{
 	dir = 2
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
+/obj/machinery/door/airlock/mainship/command/free_access{
+	dir = 1
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/ntf/fcroom)
 "nOs" = (
@@ -10215,7 +10537,7 @@
 	name = "HQ Western hallways"
 	})
 "nUZ" = (
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
 /turf/open/floor/plating/ground/snow/layer0,
 /area/mainship/groundhq/ntf/engineering/lower_engineering)
@@ -10254,7 +10576,7 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "nWO" = (
 /obj/structure/cable,
@@ -10451,7 +10773,9 @@
 /obj/item/paper,
 /obj/item/tool/pen,
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "omc" = (
 /obj/structure/cable,
 /obj/machinery/atmospherics/components/unary/vent_pump/layer1{
@@ -10478,6 +10802,14 @@
 /obj/effect/landmark/start/job/squadsmartgunner,
 /turf/open/floor/wood,
 /area/mainship/hallways/ntf/dorm1)
+"oqe" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
+	dir = 4
+	},
+/turf/open/floor/plating/plating_catwalk,
+/area/mainship/groundhq/ntf/hallways/starboard_hallway{
+	name = "HQ Central Hallways"
+	})
 "oqJ" = (
 /obj/structure/table/wood,
 /obj/item/reagent_containers/food/drinks/bottle/vodka,
@@ -10509,7 +10841,8 @@
 "orH" = (
 /obj/structure/cable,
 /obj/machinery/door/airlock/mainship/security{
-	dir = 1
+	dir = 1;
+	req_access = list(105)
 	},
 /turf/open/floor/mainship/mono,
 /area/outpost/brig/wardens_office{
@@ -10517,6 +10850,9 @@
 	})
 "osj" = (
 /obj/structure/window/framed/mainship,
+/obj/machinery/door/firedoor/mainship{
+	dir = 2
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/aft_hallway{
 	name = "HQ Northwest Hallways"
@@ -10555,9 +10891,19 @@
 	name = "HQ Central Hallways"
 	})
 "ouS" = (
-/obj/machinery/power/port_gen/pacman,
-/turf/open/floor/plating/ground/snow/layer2,
-/area/desert_dam/exterior/valley/valley_wilderness)
+/obj/machinery/door/poddoor/shutters/mainship/open/checkpoint{
+	dir = 2;
+	id = "Medbaycheckpoint"
+	},
+/obj/machinery/door/airlock/mainship/medical/free_access{
+	dir = 1
+	},
+/turf/open/floor/mainship/sterile/dark,
+/area/centcom/practice/medical{
+	outside = 0;
+	base_lighting_alpha = 0;
+	static_lighting = 1
+	})
 "ovm" = (
 /turf/open/floor/mainship/sterile/side{
 	dir = 1
@@ -10566,6 +10912,12 @@
 	outside = 0;
 	base_lighting_alpha = 0;
 	static_lighting = 1
+	})
+"ovr" = (
+/obj/structure/mineral_door/wood,
+/turf/open/floor/mainship/mono,
+/area/mainship/groundhq/ntf/hallways/stern_hallway{
+	name = "HQ Eastern hallways"
 	})
 "owj" = (
 /obj/structure/window/reinforced/tinted/frosted{
@@ -10680,15 +11032,14 @@
 	name = "HQ Central Hallways"
 	})
 "oBt" = (
-/obj/item/reagent_containers/glass/beaker/biomass{
-	name = "biomass beaker"
+/obj/structure/cable,
+/obj/structure/transmitter/colony_net{
+	phone_id = "Dining Area";
+	pixel_y = -23;
+	dir = 1
 	},
-/turf/open/floor/mainship/sterile/dark,
-/area/centcom/practice/medical{
-	outside = 0;
-	base_lighting_alpha = 0;
-	static_lighting = 1
-	})
+/turf/open/floor/mainship/mono,
+/area/mainship/groundhq/ntf/living/grunt_rnr)
 "oCx" = (
 /obj/structure/table/reinforced,
 /obj/machinery/computer/secure_data,
@@ -10719,20 +11070,32 @@
 	outside = 0
 	})
 "oDC" = (
-/obj/structure/cable,
-/obj/machinery/power/apc,
-/turf/open/floor/mainship/tcomms,
-/area/mainship/groundhq/ntf/command/telecomms)
+/obj/machinery/vending/uniform_supply,
+/turf/open/floor/mainship/mono,
+/area/mainship/hallways/hangar2)
 "oDO" = (
 /obj/structure/bookcase,
 /turf/open/floor/wood,
 /area/mainship/groundhq/ntf/living/commandbunks)
 "oEa" = (
-/obj/structure/inflatable/wall,
-/turf/open/floor/plating/ground/snow/layer3,
-/area/mainship/groundhq/ntf/medical/medical_science)
+/obj/structure/cable,
+/obj/structure/disposalpipe/segment,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
+	dir = 1
+	},
+/obj/machinery/door/airlock/mainship/medical/free_access{
+	dir = 1
+	},
+/turf/open/floor/mainship/mono,
+/area/centcom/practice/medical{
+	outside = 0;
+	base_lighting_alpha = 0;
+	static_lighting = 1
+	})
 "oEt" = (
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/mainship/medical/free_access{
+	dir = 1
+	},
 /turf/open/floor/mainship/mono,
 /area/centcom/practice/medical{
 	outside = 0;
@@ -10782,7 +11145,9 @@
 	name = "HQ Western hallways"
 	})
 "oIp" = (
-/obj/machinery/door/airlock/mainship/security,
+/obj/machinery/door/airlock/mainship/security{
+	req_access = list(105)
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/shipboard/brig_cells)
 "oIR" = (
@@ -10882,11 +11247,10 @@
 /area/mainship/groundhq/ntf/living/officer_study)
 "oSA" = (
 /obj/structure/cable,
-/obj/structure/mineral_door/wood,
-/obj/machinery/door/firedoor/mainship,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
 	},
+/obj/machinery/door/airlock/colony/engineering,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
 	name = "HQ Western hallways"
@@ -10940,7 +11304,7 @@
 /turf/open/floor/mainship/sterile/dark,
 /area/mainship/groundhq/ntf/hallways/bathroom)
 "oVK" = (
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
 /obj/structure/disposalpipe/segment{
 	dir = 4
@@ -10960,8 +11324,11 @@
 /turf/open/floor/mainship/sterile/dark,
 /area/mainship/groundhq/ntf/medical/medical_science)
 "oWb" = (
-/obj/structure/mineral_door/iron,
 /obj/structure/cable,
+/obj/machinery/door/airlock/mainship/maint/free_access{
+	dir = 1;
+	req_one_access = null
+	},
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/hallways/aft_hallway{
 	name = "HQ Northeast Hallways"
@@ -10996,7 +11363,7 @@
 /obj/structure/catwalk,
 /turf/open/floor/plating/ground/snow/layer2,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "oYg" = (
 /obj/machinery/light{
@@ -11059,7 +11426,7 @@
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/living/grunt_rnr)
 "pbA" = (
-/obj/machinery/computer/autodoc_console,
+/obj/item/storage/firstaid/adv,
 /turf/open/floor/mainship/sterile/side,
 /area/mainship/medical/lower_medical)
 "pbM" = (
@@ -11163,10 +11530,14 @@
 "pjO" = (
 /obj/structure/window/framed/mainship,
 /obj/machinery/door/firedoor/mainship,
+/obj/structure/curtain/temple,
 /turf/open/floor/plating,
 /area/mainship/groundhq/ntf/living/officer_study)
 "pkj" = (
 /obj/structure/window/framed/mainship,
+/obj/machinery/door/firedoor/mainship{
+	dir = 2
+	},
 /turf/open/floor/plating,
 /area/mainship/groundhq/ntf/engineering/engine_core)
 "pls" = (
@@ -11211,11 +11582,17 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/officer_study)
 "pmL" = (
+/obj/effect/ai_node,
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "Novamed";
+	phone_id = "Medbay"
+	},
 /obj/structure/table/reinforced,
-/obj/machinery/recharger,
-/turf/open/floor/mainship/red,
-/area/deltastation/security/checkpoint/medical/medsci{
-	outside = 0
+/turf/open/floor/mainship/sterile,
+/area/centcom/practice/medical{
+	outside = 0;
+	base_lighting_alpha = 0;
+	static_lighting = 1
 	})
 "pmP" = (
 /obj/machinery/disposal,
@@ -11253,7 +11630,9 @@
 	},
 /obj/structure/table/mainship,
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "ppQ" = (
 /obj/structure/morgue/crematorium,
 /turf/open/floor/mainship/mono,
@@ -11362,19 +11741,8 @@
 	})
 "pvr" = (
 /obj/structure/cable,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
-	dir = 1
-	},
-/obj/machinery/door/poddoor/shutters/mainship/open/checkpoint{
-	dir = 2;
-	id = "Medbaycheckpoint"
-	},
-/turf/open/floor/plating/plating_catwalk,
-/area/centcom/practice/medical{
-	outside = 0;
-	base_lighting_alpha = 0;
-	static_lighting = 1
-	})
+/turf/open/floor/mainship,
+/area/desert_dam/exterior/valley/valley_wilderness)
 "pvz" = (
 /obj/structure/rack,
 /turf/open/floor/mainship/mono,
@@ -11395,7 +11763,14 @@
 	},
 /area/mainship/shipboard/sensors)
 "pwK" = (
-/obj/machinery/vending/weapon/clf,
+/obj/structure/rack/nometal,
+/obj/item/weapon/gun/rifle/m16,
+/obj/item/ammo_magazine/rifle/m16,
+/obj/item/ammo_magazine/rifle/m16,
+/obj/item/ammo_magazine/rifle/m16,
+/obj/item/ammo_magazine/rifle/m16,
+/obj/item/ammo_magazine/rifle/m16,
+/obj/item/ammo_magazine/rifle/m16,
 /turf/open/floor/plating/ground/snow/layer0,
 /area/lv624/lazarus/armory)
 "pwP" = (
@@ -11442,7 +11817,7 @@
 	},
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "pzV" = (
 /obj/structure/window/framed/mainship/toughened{
@@ -11505,11 +11880,10 @@
 /turf/open/floor/mainship/sterile/dark,
 /area/mainship/groundhq/ntf/hallways/bathroom)
 "pBf" = (
-/obj/machinery/camera/autoname/mainship{
-	dir = 4
-	},
-/turf/open/floor/mainship/sterile/purple,
-/area/mainship/groundhq/ntf/medical/medical_science)
+/turf/open/floor/mainship/mono,
+/area/mainship/groundhq/ntf/hallways/stern_hallway{
+	name = "HQ Eastern hallways"
+	})
 "pBn" = (
 /turf/open/floor/carpet{
 	dir = 9;
@@ -11556,6 +11930,9 @@
 /obj/machinery/computer/autodoc_console,
 /turf/open/floor/plating/ground/snow/layer0,
 /area/lv624/lazarus/armory)
+"pFN" = (
+/turf/open/floor/mainship,
+/area/desert_dam/exterior/valley/valley_wilderness)
 "pGc" = (
 /obj/structure/xeno/evotower,
 /turf/open/floor/plating/ground/snow/layer0,
@@ -11611,11 +11988,13 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/grunt_rnr)
 "pMz" = (
-/obj/structure/mineral_door/iron,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 1
 	},
 /obj/structure/cable,
+/obj/machinery/door/airlock/colony/medical{
+	dir = 1
+	},
 /turf/open/floor/plating/plating_catwalk,
 /area/centcom/practice/medical{
 	outside = 0;
@@ -11721,7 +12100,7 @@
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "pTn" = (
 /obj/structure/bed/chair,
@@ -11775,7 +12154,7 @@
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/shipboard/brig_cells)
 "pWb" = (
-/obj/machinery/power/apc/hyper{
+/obj/machinery/power/apc{
 	dir = 4
 	},
 /obj/structure/cable,
@@ -11897,6 +12276,11 @@
 	pixel_x = 5
 	},
 /obj/item/tool/pen,
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "Command";
+	phone_id = "Meeting Room";
+	pixel_x = -12
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/officer_study)
 "qfE" = (
@@ -11921,7 +12305,7 @@
 	dir = 1
 	},
 /obj/structure/cable,
-/obj/machinery/power/apc/hyper{
+/obj/machinery/power/apc{
 	dir = 1
 	},
 /turf/open/floor/mainship/sterile/dark,
@@ -11936,8 +12320,10 @@
 	},
 /area/mainship/ntf/fcroom)
 "qip" = (
-/obj/structure/mineral_door/wood,
 /obj/structure/cable,
+/obj/machinery/door/airlock/colony/engineering{
+	dir = 1
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/engineering/upper_engineering)
 "qjy" = (
@@ -11963,7 +12349,7 @@
 "qmp" = (
 /obj/structure/cable,
 /obj/effect/ai_node,
-/obj/machinery/power/apc/hyper{
+/obj/machinery/power/apc{
 	dir = 1
 	},
 /turf/open/floor/mainship/mono,
@@ -11987,7 +12373,7 @@
 /obj/structure/bed/chair/comfy{
 	dir = 8
 	},
-/obj/machinery/power/apc/hyper{
+/obj/machinery/power/apc{
 	dir = 1
 	},
 /obj/structure/cable,
@@ -12003,8 +12389,10 @@
 /turf/open/floor/mainship/cargo,
 /area/mainship/squads/req)
 "qnV" = (
-/obj/structure/mineral_door/wood,
 /obj/structure/cable,
+/obj/machinery/door/airlock/colony/medical/hydroponics{
+	dir = 1
+	},
 /turf/open/floor/prison/bright_clean,
 /area/sulaco/hydro{
 	outside = 0
@@ -12143,7 +12531,7 @@
 /obj/machinery/light,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "qtT" = (
 /obj/machinery/door/firedoor/mainship,
@@ -12166,7 +12554,7 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/grunt_rnr)
 "qwM" = (
-/obj/machinery/miner/damaged,
+/obj/machinery/miner/damaged/platinum,
 /turf/open/floor/plating/ground/snow/layer1,
 /area/desert_dam/exterior/valley/valley_wilderness)
 "qxo" = (
@@ -12230,7 +12618,6 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
 	},
-/obj/machinery/firealarm,
 /obj/structure/cable,
 /turf/open/floor/mainship/orange{
 	dir = 5
@@ -12259,7 +12646,7 @@
 	static_lighting = 1
 	})
 "qBq" = (
-/obj/machinery/power/apc/hyper{
+/obj/machinery/power/apc{
 	dir = 8
 	},
 /obj/structure/cable,
@@ -12317,6 +12704,14 @@
 /obj/machinery/computer/emails,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/command/corporateliaison)
+"qHl" = (
+/obj/machinery/door/airlock/colony/medical,
+/turf/open/floor/mainship/sterile/dark,
+/area/centcom/practice/medical{
+	outside = 0;
+	base_lighting_alpha = 0;
+	static_lighting = 1
+	})
 "qIm" = (
 /turf/closed/wall/mainship/outer,
 /area/mainship/groundhq/ntf/command/cic)
@@ -12415,7 +12810,7 @@
 /obj/structure/cable,
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "qPb" = (
 /obj/effect/ai_node,
@@ -12431,7 +12826,7 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "qQy" = (
 /obj/structure/closet/emcloset,
@@ -12553,10 +12948,10 @@
 /obj/item/tool/pickaxe/jackhammer,
 /obj/item/tool/shovel,
 /obj/item/tool/shovel/spade,
-/obj/item/clothing/glasses/material,
+/obj/item/clothing/glasses/meson,
 /obj/item/clothing/head/hardhat/orange,
 /obj/item/clothing/head/hardhat/orange,
-/obj/item/clothing/glasses/material,
+/obj/item/clothing/glasses/meson,
 /obj/item/clothing/suit/storage/hazardvest,
 /turf/open/floor/plating/ground/snow/layer1,
 /area/desert_dam/exterior/valley/valley_wilderness)
@@ -12594,8 +12989,8 @@
 	},
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "qXD" = (
 /obj/structure/reagent_dispensers/watertank,
@@ -12660,7 +13055,6 @@
 	id = "insidedorm1";
 	name = "\improper Quarters Privacy Shutters"
 	},
-/obj/structure/mineral_door/wood,
 /turf/open/floor/wood,
 /area/mainship/hallways/ntf/dorm2)
 "rdb" = (
@@ -12670,13 +13064,13 @@
 /obj/machinery/atmospherics/pipe/simple/cyan/hidden/layer1{
 	dir = 4
 	},
-/obj/structure/mineral_door/wood,
 /obj/machinery/door/firedoor,
 /obj/machinery/door/poddoor/shutters/opened{
 	id = "mfshydroponics";
 	name = "Hydropnics Lockdown"
 	},
 /obj/structure/cable,
+/obj/machinery/door/airlock/colony/medical/hydroponics,
 /turf/open/floor/prison/bright_clean,
 /area/sulaco/hydro{
 	outside = 0
@@ -12694,7 +13088,7 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/chapel)
 "rfp" = (
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/mainship/command/free_access,
 /turf/open/floor/wood,
 /area/mainship/command/corporateliaison{
 	name = "Ground CEO Office"
@@ -12702,6 +13096,9 @@
 "rfq" = (
 /obj/structure/window/framed/mainship,
 /obj/structure/cable,
+/obj/machinery/door/firedoor/mainship{
+	dir = 2
+	},
 /turf/open/floor/plating,
 /area/mainship/groundhq/ntf/engineering/engine_core)
 "rfw" = (
@@ -12772,10 +13169,6 @@
 	dir = 8
 	},
 /obj/effect/ai_node,
-/obj/machinery/door/poddoor/shutters/mainship/open/checkpoint{
-	dir = 2;
-	id = "Medbaycheckpoint"
-	},
 /turf/open/floor/prison/rampbottom{
 	dir = 1
 	},
@@ -12874,6 +13267,11 @@
 	pixel_x = 5;
 	pixel_y = 9
 	},
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "TransCO";
+	phone_id = "Botany";
+	pixel_x = -8
+	},
 /turf/open/floor/prison/bright_clean,
 /area/sulaco/hydro{
 	outside = 0
@@ -12913,7 +13311,7 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/engineering/engine_core)
 "roG" = (
-/obj/machinery/power/apc/hyper{
+/obj/machinery/power/apc{
 	dir = 1
 	},
 /obj/structure/cable,
@@ -12933,7 +13331,7 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "rpJ" = (
 /obj/structure/table/mainship,
@@ -12982,13 +13380,15 @@
 /turf/open/floor/wood,
 /area/mainship/living/grunt_rnr)
 "rrk" = (
-/obj/structure/mineral_door/wood,
 /obj/machinery/door/firedoor/mainship{
 	dir = 2
 	},
 /obj/structure/disposalpipe/segment,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
 /obj/structure/cable,
+/obj/machinery/door/airlock/mainship/command/free_access{
+	dir = 1
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/commandbunks)
 "rrv" = (
@@ -13013,6 +13413,15 @@
 /obj/structure/bed/chair/sofa/right,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/command/cic)
+"rsD" = (
+/obj/structure/transmitter/colony_net{
+	phone_id = "Northwest Hallway South";
+	pixel_y = 23
+	},
+/turf/open/floor/mainship/mono,
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "rsE" = (
 /obj/machinery/vending/medical/clf,
 /turf/open/floor/plating/ground/snow/layer0,
@@ -13032,7 +13441,7 @@
 	},
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "ruY" = (
 /obj/structure/closet/secure_closet/CMO,
@@ -13131,8 +13540,8 @@
 "rAO" = (
 /obj/structure/cable,
 /turf/open/floor/mainship/stripesquare,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "rBY" = (
 /obj/structure/cable,
@@ -13153,7 +13562,7 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "rCz" = (
 /obj/machinery/light{
@@ -13244,7 +13653,6 @@
 	static_lighting = 1
 	})
 "rMi" = (
-/obj/structure/mineral_door/wood,
 /obj/machinery/door/firedoor/mainship,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
@@ -13253,6 +13661,7 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/machinery/door/airlock/mainship/command/free_access,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/officer_study)
 "rNs" = (
@@ -13333,7 +13742,9 @@
 	})
 "rVw" = (
 /obj/structure/table/mainship,
-/obj/machinery/computer/med_data/laptop,
+/obj/machinery/computer/med_data/laptop{
+	dir = 8
+	},
 /turf/open/floor/mainship/sterile{
 	dir = 8
 	},
@@ -13413,10 +13824,8 @@
 	},
 /area/mainship/groundhq/ntf/shipboard/brig)
 "rZn" = (
-/obj/structure/rack,
-/obj/item/clothing/glasses/welding,
-/obj/item/tool/weldpack,
 /obj/structure/cable,
+/obj/alien/egg/hugger,
 /turf/open/floor/marking/asteroidwarning{
 	dir = 8
 	},
@@ -13431,8 +13840,17 @@
 /turf/open/floor/wood,
 /area/mainship/living/grunt_rnr)
 "saW" = (
+/obj/machinery/firealarm/directional/east,
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
+"sbr" = (
+/obj/machinery/door/airlock/mainship/research/glass/free_access,
+/turf/open/floor/mainship/mono,
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northeast Hallways"
+	})
 "sbQ" = (
 /obj/structure/table,
 /obj/item/pizzabox/meat{
@@ -13443,9 +13861,6 @@
 "scJ" = (
 /obj/structure/cable,
 /obj/structure/disposalpipe/segment,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
-	dir = 1
-	},
 /turf/open/floor/mainship/sterile/dark,
 /area/mainship/groundhq/ntf/medical/medical_science)
 "scO" = (
@@ -13516,6 +13931,7 @@
 /obj/item/bodybag/cryobag,
 /obj/item/bodybag/cryobag,
 /obj/item/bodybag/cryobag,
+/obj/structure/bed/urban/hospitalbeds/hospitalbed3,
 /turf/open/floor/mainship/sterile/side{
 	dir = 8
 	},
@@ -13539,8 +13955,18 @@
 /area/mainship/groundhq/ntf/hallways/aft_hallway{
 	name = "HQ Northwest Hallways"
 	})
+"sju" = (
+/obj/machinery/camera/autoname/mainship{
+	dir = 1
+	},
+/turf/open/floor/mainship/mono,
+/area/mainship/groundhq/ntf/hallways/stern_hallway{
+	name = "HQ Eastern hallways"
+	})
 "sjA" = (
-/obj/structure/mineral_door/iron,
+/obj/machinery/door/airlock/mainship/maint/free_access{
+	req_one_access = null
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/aft_hallway{
 	name = "HQ Northeast Hallways"
@@ -13698,8 +14124,8 @@
 "syg" = (
 /obj/machinery/door/poddoor/mainship/open/cic,
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "sym" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
@@ -13740,7 +14166,7 @@
 "szV" = (
 /obj/machinery/door/firedoor/mainship,
 /obj/structure/cable,
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/colony/engineering,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/engineering/upper_engine_monitoring)
 "sAc" = (
@@ -13750,10 +14176,12 @@
 /turf/open/floor/mainship/orange,
 /area/mainship/groundhq/ntf/engineering/ce_room)
 "sAW" = (
-/obj/structure/mineral_door/wood,
 /obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
 /obj/structure/cable,
+/obj/machinery/door/airlock/colony/engineering{
+	dir = 1
+	},
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/engineering/engineering_workshop)
 "sCm" = (
@@ -13786,7 +14214,9 @@
 	},
 /obj/structure/disposalpipe/segment,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/mainship/command/free_access{
+	dir = 1
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/command/corporateliaison)
 "sED" = (
@@ -13802,9 +14232,11 @@
 	name = "HQ Northeast Hallways"
 	})
 "sFr" = (
-/obj/structure/mineral_door/wood,
 /obj/structure/cable,
 /obj/structure/disposalpipe/segment,
+/obj/machinery/door/airlock/mainship/command/free_access{
+	dir = 1
+	},
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/command/corporateliaison{
 	name = "Ground CEO Office"
@@ -13821,13 +14253,12 @@
 /obj/structure/mineral_door/wood,
 /obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
-	dir = 4
+	dir = 1
 	},
-/obj/structure/disposalpipe/segment{
-	dir = 4
-	},
-/turf/open/floor/plating/plating_catwalk,
-/area/mainship/groundhq/ntf/engineering/engineering_workshop)
+/turf/open/floor/mainship/mono,
+/area/mainship/groundhq/ntf/hallways/stern_hallway{
+	name = "HQ Eastern hallways"
+	})
 "sGa" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 1
@@ -13923,7 +14354,9 @@
 	possible_destinations = "lz1;lz2;hqlz1;hqlz2;normandy;alamo"
 	},
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "sMk" = (
 /obj/structure/reagent_dispensers/water_cooler,
 /turf/open/floor/mainship,
@@ -13962,7 +14395,6 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/command/corporateliaison)
 "sOs" = (
-/obj/structure/mineral_door/wood,
 /obj/machinery/door/firedoor/mainship,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
@@ -13971,6 +14403,7 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/machinery/door/airlock/mainship/command/free_access,
 /turf/open/floor/mainship/mono,
 /area/mainship/ntf/fcroom)
 "sPG" = (
@@ -14001,8 +14434,8 @@
 	},
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "sUb" = (
 /obj/structure/cable,
@@ -14051,6 +14484,10 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
+/obj/machinery/door/airlock/mainship/maint/free_access{
+	dir = 1;
+	req_one_access = null
+	},
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
 	name = "HQ Western hallways"
@@ -14095,7 +14532,7 @@
 	},
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "tad" = (
 /turf/closed/wall/mainship/white,
@@ -14111,6 +14548,10 @@
 "tby" = (
 /obj/structure/table/wood,
 /obj/item/toy/deck,
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "Novamed";
+	phone_id = "Medbay Staffroom"
+	},
 /turf/open/floor/wood,
 /area/centcom/practice/medical{
 	outside = 0;
@@ -14197,7 +14638,8 @@
 	})
 "ten" = (
 /obj/machinery/door/airlock/mainship/security{
-	dir = 1
+	dir = 1;
+	req_access = list(105)
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/shipboard/brig_cells)
@@ -14208,7 +14650,7 @@
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "tfV" = (
 /turf/closed/wall,
@@ -14221,11 +14663,11 @@
 /turf/open/floor/mainship,
 /area/mainship/hallways/hangar2)
 "tgR" = (
-/obj/structure/mineral_door/wood,
 /obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
 	},
+/obj/machinery/door/airlock/mainship/medical/glass/free_access,
 /turf/open/floor/mainship/sterile/dark,
 /area/centcom/practice/medical{
 	outside = 0;
@@ -14300,6 +14742,14 @@
 	dir = 8
 	},
 /area/mainship/groundhq/ntf/medical/medical_science)
+"tqZ" = (
+/obj/machinery/light/small{
+	dir = 8
+	},
+/obj/structure/cable,
+/obj/machinery/power/apc,
+/turf/open/floor/mainship/tcomms,
+/area/mainship/groundhq/ntf/command/telecomms)
 "trg" = (
 /obj/structure/kitchenspike,
 /turf/open/floor/freezer,
@@ -14361,7 +14811,7 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "ttX" = (
 /obj/machinery/chem_master,
@@ -14373,7 +14823,7 @@
 /area/mainship/groundhq/ntf/engineering/engineering_workshop)
 "tut" = (
 /obj/structure/cable,
-/obj/machinery/power/apc/hyper{
+/obj/machinery/power/apc{
 	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
@@ -14396,7 +14846,7 @@
 /obj/structure/disposalpipe/segment/corner,
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "tvF" = (
 /obj/machinery/vending/boozeomat,
@@ -14408,10 +14858,10 @@
 /area/mainship/groundhq/ntf/living/grunt_rnr)
 "tyx" = (
 /obj/structure/rack,
-/obj/item/storage/box/flashbangs,
-/obj/item/storage/box/flashbangs,
-/obj/item/storage/box/flashbangs,
-/obj/item/storage/box/flashbangs,
+/obj/item/storage/box/stuns,
+/obj/item/storage/box/stuns,
+/obj/item/storage/box/stuns,
+/obj/item/storage/box/stuns,
 /turf/open/floor/mainship/red,
 /area/mainship/groundhq/ntf/shipboard/brig)
 "tyQ" = (
@@ -14445,7 +14895,7 @@
 /turf/open/floor/plating/mainship,
 /area/mainship/groundhq/ntf/command/cic)
 "tCv" = (
-/obj/machinery/power/apc/hyper{
+/obj/machinery/power/apc{
 	dir = 4
 	},
 /obj/structure/cable,
@@ -14464,7 +14914,7 @@
 /obj/item/clothing/suit/storage/hazardvest,
 /obj/item/tool/shovel/etool,
 /obj/item/tool/taperoll/engineering,
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
 /obj/machinery/light{
 	dir = 1
@@ -14473,7 +14923,9 @@
 /area/mainship/groundhq/ntf/engineering/engineering_workshop)
 "tEK" = (
 /turf/open/floor/mainship/cargo/arrow,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "tEW" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
@@ -14599,10 +15051,10 @@
 /turf/open/floor/mainship/red/full,
 /area/lv624/lazarus/armory)
 "tRx" = (
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
 /turf/open/floor/mainship/red{
-	dir = 1
+	dir = 9
 	},
 /area/deltastation/security/checkpoint/medical/medsci{
 	outside = 0
@@ -14610,8 +15062,8 @@
 "tRy" = (
 /obj/machinery/firealarm,
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "tRS" = (
 /obj/effect/spawner/random/misc/structure/supplycrate,
@@ -14676,6 +15128,14 @@
 /area/mainship/groundhq/ntf/hallways/starboard_hallway{
 	name = "HQ Central Hallways"
 	})
+"tYu" = (
+/obj/machinery/power/apc{
+	dir = 4
+	},
+/obj/item/reagent_containers/glass/bucket,
+/obj/effect/decal/cleanable/blood/splatter/cum,
+/turf/open/floor/mainship,
+/area/lv624/lazarus/armory)
 "tYD" = (
 /obj/structure/table/wood,
 /obj/item/clipboard,
@@ -14700,8 +15160,11 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar2)
 "tZQ" = (
-/obj/structure/mineral_door/iron,
 /obj/structure/cable,
+/obj/machinery/door/airlock/mainship/maint/free_access{
+	dir = 1;
+	req_one_access = null
+	},
 /turf/open/floor/plating/plating_catwalk,
 /area/centcom/practice/medical{
 	outside = 0;
@@ -14752,7 +15215,7 @@
 /area/mainship/medical/lower_medical)
 "udF" = (
 /obj/structure/cable,
-/obj/machinery/power/apc/hyper{
+/obj/machinery/power/apc{
 	dir = 8
 	},
 /turf/open/floor/tile/hydro,
@@ -14776,6 +15239,7 @@
 /area/mainship/hallways/hangar2)
 "ufL" = (
 /obj/structure/largecrate/supply/supplies/mre,
+/obj/item/storage/box/MRE,
 /turf/open/floor/wood,
 /area/lv624/ground/caves{
 	ceiling = 2;
@@ -14831,6 +15295,11 @@
 /obj/machinery/light{
 	dir = 1
 	},
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "Command";
+	phone_id = "CIC";
+	pixel_x = 8
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/command/cic)
 "ujH" = (
@@ -14845,7 +15314,7 @@
 /obj/structure/window_frame,
 /turf/open/floor/plating,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "ulU" = (
 /obj/machinery/vending/security{
@@ -14877,6 +15346,13 @@
 	base_lighting_alpha = 0;
 	static_lighting = 1
 	})
+"uoe" = (
+/obj/structure/transmitter/colony_net{
+	phone_id = "Bar";
+	pixel_y = 23
+	},
+/turf/open/floor/wood,
+/area/mainship/living/grunt_rnr)
 "uoh" = (
 /obj/structure/bed/chair{
 	dir = 8
@@ -14930,10 +15406,10 @@
 	static_lighting = 1
 	})
 "upr" = (
-/obj/structure/mineral_door/iron,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
 	},
+/obj/machinery/door/airlock/mainship/medical/free_access,
 /turf/open/floor/mainship/mono,
 /area/centcom/practice/medical{
 	outside = 0;
@@ -14942,7 +15418,7 @@
 	})
 "upD" = (
 /obj/structure/cable,
-/obj/machinery/power/apc/hyper{
+/obj/machinery/power/apc{
 	dir = 8
 	},
 /turf/open/floor/mainship/mono,
@@ -14954,10 +15430,9 @@
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/squads/req)
 "uqK" = (
-/obj/structure/mineral_door/wood,
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/living/chapel)
+/area/desert_dam/exterior/valley/valley_wilderness)
 "urB" = (
 /obj/machinery/door/firedoor/mainship,
 /obj/machinery/door/poddoor/mainship/open/cic,
@@ -15050,14 +15525,14 @@
 /obj/structure/disposalpipe/segment,
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "uxN" = (
 /obj/machinery/light,
 /turf/open/floor/mainship/stripesquare,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "uyb" = (
 /obj/structure/cable,
@@ -15071,8 +15546,8 @@
 /turf/open/floor/plating,
 /area/mainship/groundhq/ntf/living/grunt_rnr)
 "uAC" = (
-/obj/structure/mineral_door/wood,
 /obj/structure/cable,
+/obj/machinery/door/airlock/mainship/research/glass/free_access,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/aft_hallway{
 	name = "HQ Northeast Hallways"
@@ -15088,7 +15563,7 @@
 	static_lighting = 1
 	})
 "uEd" = (
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/mainship/command/free_access,
 /turf/open/floor/mainship/office,
 /area/mainship/command/corporateliaison{
 	name = "Ground CEO Office"
@@ -15098,12 +15573,14 @@
 /turf/open/floor/plating/ground/snow/layer3,
 /area/mainship/groundhq/ntf/living/grunt_rnr)
 "uEO" = (
-/obj/structure/mineral_door/wood,
 /obj/machinery/door/firedoor/mainship{
 	dir = 2
 	},
 /obj/structure/disposalpipe/segment,
 /obj/structure/cable,
+/obj/machinery/door/airlock/mainship/command/free_access{
+	dir = 1
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/command/cic)
 "uFb" = (
@@ -15119,13 +15596,19 @@
 /area/mainship/groundhq/ntf/hallways/aft_hallway{
 	name = "HQ Northwest Hallways"
 	})
+"uFo" = (
+/obj/machinery/door/airlock/mainship/security{
+	req_access = list(105)
+	},
+/turf/open/floor/prison,
+/area/mainship/groundhq/ntf/shipboard/brig_cells)
 "uHf" = (
 /obj/machinery/camera/autoname/mainship{
 	dir = 1
 	},
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "uHk" = (
 /obj/structure/cable,
@@ -15208,7 +15691,7 @@
 /turf/open/floor/wood,
 /area/mainship/groundhq/ntf/living/grunt_rnr)
 "uPD" = (
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
 /obj/structure/table/reinforced,
 /obj/item/healthanalyzer,
@@ -15323,6 +15806,16 @@
 	dir = 8
 	},
 /area/mainship/shipboard/sensors)
+"uTL" = (
+/obj/structure/cable,
+/obj/structure/table/reinforced,
+/obj/machinery/recharger,
+/turf/open/floor/mainship/red{
+	dir = 1
+	},
+/area/deltastation/security/checkpoint/medical/medsci{
+	outside = 0
+	})
 "uUL" = (
 /obj/structure/cable,
 /obj/structure/disposalpipe/segment{
@@ -15384,15 +15877,23 @@
 /obj/structure/cable,
 /turf/closed/wall,
 /area/mainship/engineering/engineering_workshop)
+"uXt" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
+	dir = 4
+	},
+/obj/structure/transmitter/colony_net{
+	phone_id = "Dorms Hallway";
+	pixel_y = 23
+	},
+/turf/open/floor/mainship/mono,
+/area/mainship/groundhq/ntf/hallways/stern_hallway{
+	name = "HQ Eastern hallways"
+	})
 "uXv" = (
 /obj/machinery/vending/nanomed,
 /turf/closed/wall/mainship,
 /area/mainship/groundhq/ntf/engineering/engine_core)
 "uYi" = (
-/obj/item/weapon/gun/pistol/g22,
-/obj/item/ammo_magazine/pistol/g22,
-/obj/item/ammo_magazine/pistol/g22,
-/obj/item/ammo_magazine/pistol/g22,
 /obj/item/reagent_containers/hypospray/autoinjector/sleeptoxin,
 /obj/item/reagent_containers/hypospray/autoinjector/sleeptoxin,
 /turf/open/floor/wood,
@@ -15478,7 +15979,7 @@
 /turf/open/floor/wood,
 /area/mainship/hallways/ntf/dorm1)
 "vdy" = (
-/obj/machinery/power/apc/hyper{
+/obj/machinery/power/apc{
 	dir = 8
 	},
 /obj/structure/cable,
@@ -15494,12 +15995,17 @@
 /turf/open/floor/mainship/sterile/dark,
 /area/mainship/groundhq/ntf/hallways/bathroom)
 "vgV" = (
-/obj/structure/cable,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
-/obj/structure/disposalpipe/segment,
-/turf/open/floor/plating/plating_catwalk,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/obj/item/explosive/plastique,
+/obj/item/explosive/plastique,
+/obj/item/explosive/plastique,
+/obj/item/explosive/plastique,
+/obj/item/explosive/plastique,
+/obj/item/explosive/plastique,
+/turf/open/floor/wood,
+/area/lv624/ground/caves{
+	ceiling = 2;
+	name = "HQ Tunnels";
+	always_unpowered = 0
 	})
 "vgW" = (
 /obj/structure/bed/chair/wood/wings{
@@ -15556,7 +16062,7 @@
 /turf/open/floor/wood,
 /area/mainship/groundhq/ntf/living/commandbunks)
 "vkv" = (
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/living/chapel)
@@ -15659,6 +16165,11 @@
 /obj/structure/paper_bin,
 /obj/item/clipboard,
 /obj/item/tool/pen,
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "Security";
+	phone_id = "Southeast Checkpoint";
+	pixel_x = -8
+	},
 /turf/open/floor/mainship/red,
 /area/lv624/lazarus/security)
 "vta" = (
@@ -15717,7 +16228,7 @@
 /obj/structure/cable,
 /obj/machinery/door/airlock/mainship/security{
 	dir = 1;
-	req_access = null
+	req_access = list(105)
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/shipboard/brig)
@@ -15896,7 +16407,9 @@
 	always_unpowered = 0
 	})
 "vHj" = (
-/obj/machinery/vending/MarineMed/Blood,
+/obj/machinery/vending/MarineMed/Blood{
+	req_one_access = null
+	},
 /turf/open/floor/mainship/sterile,
 /area/centcom/practice/medical{
 	outside = 0;
@@ -15909,8 +16422,11 @@
 /area/mainship/groundhq/ntf/medical/medical_science)
 "vHH" = (
 /obj/structure/cable,
-/obj/structure/mineral_door/wood,
 /obj/structure/cable,
+/obj/machinery/door/airlock/colony/engineering{
+	name = "logistics";
+	req_access = list(101)
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/squads/req)
 "vHJ" = (
@@ -15950,7 +16466,7 @@
 /obj/structure/cable,
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "vJA" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
@@ -16024,14 +16540,14 @@
 	dir = 4
 	},
 /turf/open/floor/plating/plating_catwalk,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "vNs" = (
 /obj/structure/catwalk,
 /turf/open/floor/plating/ground/ice,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "vNz" = (
 /turf/open/floor/mainship/sterile/dark,
@@ -16040,18 +16556,17 @@
 /turf/closed/wall/r_wall,
 /area/desert_dam/exterior/valley/valley_wilderness)
 "vPl" = (
-/obj/machinery/door/poddoor/shutters/mainship/open/checkpoint{
-	dir = 2;
-	id = "Medbaycheckpoint"
+/obj/machinery/door/airlock/mainship/command/free_access{
+	dir = 1
 	},
-/turf/open/floor/mainship/sterile/dark,
-/area/centcom/practice/medical{
-	outside = 0;
-	base_lighting_alpha = 0;
-	static_lighting = 1
+/turf/open/floor/wood,
+/area/mainship/command/corporateliaison{
+	name = "Ground CEO Office"
 	})
 "vPG" = (
-/obj/machinery/vending/MarineMed/Blood,
+/obj/machinery/vending/MarineMed/Blood{
+	req_one_access = null
+	},
 /turf/open/floor/mainship/sterile/dark,
 /area/mainship/medical/lower_medical)
 "vPS" = (
@@ -16141,7 +16656,7 @@
 	pixel_x = 5
 	},
 /obj/item/tool/pen,
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
 /obj/machinery/firealarm{
 	dir = 4
@@ -16191,9 +16706,11 @@
 /area/mainship/living/grunt_rnr)
 "vZT" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
-/obj/structure/mineral_door/wood,
 /obj/machinery/door/firedoor/mainship{
 	dir = 2
+	},
+/obj/machinery/door/airlock/mainship/command/free_access{
+	dir = 1
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/bridgebunks)
@@ -16215,17 +16732,24 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/grunt_rnr)
 "waG" = (
-/obj/structure/mineral_door/wood,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
 	},
 /obj/structure/cable,
+/obj/machinery/door/airlock/colony/engineering{
+	name = "logistics";
+	req_access = list(101)
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/squads/req)
 "waU" = (
 /obj/structure/table/mainship,
 /obj/machinery/light{
 	dir = 4
+	},
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "TransCO";
+	phone_id = "Reactor Room"
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/engineering/engine_core)
@@ -16240,7 +16764,9 @@
 /turf/open/floor/plating/ground/snow/layer3,
 /area/desert_dam/exterior/valley/valley_wilderness)
 "wbW" = (
-/obj/machinery/vending/MarineMed/Blood,
+/obj/machinery/vending/MarineMed/Blood{
+	req_one_access = null
+	},
 /turf/open/floor/mainship/sterile/corner,
 /area/centcom/practice/medical{
 	outside = 0;
@@ -16280,7 +16806,7 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/living/chapel)
 "wdG" = (
-/obj/structure/closet/secure_closet/guncabinet/riot_control,
+/obj/item/tool/surgery/scalpel,
 /turf/open/floor/mainship,
 /area/lv624/lazarus/security)
 "wen" = (
@@ -16315,12 +16841,12 @@
 	name = "CC Office"
 	})
 "wgH" = (
-/obj/machinery/light/small{
+/obj/machinery/light{
 	dir = 8
 	},
-/obj/structure/cable,
-/turf/open/floor/mainship/tcomms,
-/area/mainship/groundhq/ntf/command/telecomms)
+/obj/machinery/vending/uniform_supply,
+/turf/open/floor/mainship/mono,
+/area/mainship/hallways/hangar2)
 "wgO" = (
 /obj/machinery/camera/autoname/mainship{
 	dir = 1
@@ -16333,6 +16859,16 @@
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
 	name = "HQ Western hallways"
+	})
+"wht" = (
+/obj/machinery/door/airlock/mainship/medical/free_access{
+	dir = 1
+	},
+/turf/open/floor/mainship/sterile/dark,
+/area/centcom/practice/medical{
+	outside = 0;
+	base_lighting_alpha = 0;
+	static_lighting = 1
 	})
 "whF" = (
 /obj/machinery/light/small{
@@ -16416,6 +16952,13 @@
 /turf/open/floor/prison/kitchen,
 /area/mainship/groundhq/ntf/living/captain_mess{
 	name = "Kitchen"
+	})
+"wnV" = (
+/turf/closed/mineral/smooth/resin_hard/indestructible,
+/area/lv624/ground/caves{
+	ceiling = 2;
+	name = "HQ Tunnels";
+	always_unpowered = 0
 	})
 "wpe" = (
 /obj/machinery/atmospherics/components/unary/vent_pump/layer1{
@@ -16573,8 +17116,10 @@
 	name = "HQ Northwest Hallways"
 	})
 "wxa" = (
-/obj/structure/mineral_door/wood,
 /obj/structure/cable,
+/obj/machinery/door/airlock/mainship/security/glass/free_access{
+	dir = 1
+	},
 /turf/open/floor/mainship/mono,
 /area/lv624/lazarus/security)
 "wyp" = (
@@ -16602,10 +17147,21 @@
 	dir = 4
 	},
 /area/mainship/groundhq/ntf/medical/medical_science)
+"wBN" = (
+/obj/structure/transmitter/colony_net{
+	phone_id = "Omnichurch";
+	pixel_y = -23;
+	dir = 1
+	},
+/turf/open/floor/mainship/mono,
+/area/mainship/groundhq/ntf/living/chapel)
 "wBQ" = (
-/obj/machinery/loadout_vendor/clf,
-/turf/open/floor/plating/ground/snow/layer0,
-/area/lv624/lazarus/armory)
+/obj/structure/transmitter/colony_net{
+	phone_id = "Canteen";
+	pixel_y = 23
+	},
+/turf/open/floor/wood,
+/area/mainship/groundhq/ntf/living/grunt_rnr)
 "wBV" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 1
@@ -16614,7 +17170,10 @@
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/living/grunt_rnr)
 "wCr" = (
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/airlock/colony/engineering{
+	name = "logistics";
+	req_access = list(101)
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/squads/req)
 "wCI" = (
@@ -16662,7 +17221,7 @@
 /turf/open/floor/wood,
 /area/mainship/hallways/ntf/dorm1)
 "wFg" = (
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
 /turf/open/floor/mainship/orange{
 	dir = 4
@@ -16673,10 +17232,15 @@
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/shipboard/brig)
 "wFF" = (
-/obj/structure/mineral_door/wood,
 /obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 1
+	},
+/obj/machinery/door/airlock/colony/engineering{
+	dir = 1
+	},
+/obj/machinery/door/firedoor/mainship{
+	dir = 2
 	},
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/engineering/engine_core)
@@ -16757,7 +17321,7 @@
 	},
 /area/mainship/engineering/engineering_workshop)
 "wKy" = (
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 1
@@ -16779,8 +17343,8 @@
 	dir = 1
 	},
 /turf/open/floor/plating/plating_catwalk,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "wKS" = (
 /turf/open/floor/wood,
@@ -16830,8 +17394,8 @@
 	},
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "wOF" = (
 /obj/item/tool/pickaxe,
@@ -16842,9 +17406,14 @@
 	always_unpowered = 0
 	})
 "wPH" = (
-/obj/structure/mineral_door/wood,
 /obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
+/obj/machinery/door/airlock/colony/engineering{
+	dir = 1
+	},
+/obj/machinery/door/firedoor/mainship{
+	dir = 2
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/engineering/engine_core)
 "wPP" = (
@@ -16937,7 +17506,9 @@
 /turf/open/floor/mainship/sterile/dark,
 /area/mainship/medical/lower_medical)
 "wXS" = (
-/obj/machinery/vending/MarineMed/Blood,
+/obj/machinery/vending/MarineMed/Blood{
+	req_one_access = null
+	},
 /turf/open/floor/mainship/sterile/corner{
 	dir = 4
 	},
@@ -17005,7 +17576,7 @@
 	dir = 4
 	},
 /obj/structure/cable,
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/ntf/dorm1)
 "xak" = (
@@ -17019,7 +17590,6 @@
 /turf/open/floor/wood,
 /area/mainship/hallways/ntf/dorm2)
 "xam" = (
-/obj/structure/mineral_door/wood,
 /obj/machinery/door/poddoor/mainship/open/cic{
 	dir = 2
 	},
@@ -17028,6 +17598,9 @@
 	},
 /obj/structure/disposalpipe/segment,
 /obj/structure/cable,
+/obj/machinery/door/airlock/mainship/command/free_access{
+	dir = 1
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/command/cic)
 "xaH" = (
@@ -17088,8 +17661,11 @@
 /turf/closed/wall/mainship,
 /area/mainship/groundhq/ntf/shipboard/brig_cells)
 "xhD" = (
-/obj/structure/mineral_door/wood,
 /obj/structure/cable,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
+	dir = 4
+	},
+/obj/structure/inflatable/door,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
 	},
@@ -17147,7 +17723,7 @@
 /obj/item/stack/sheet/plasteel/large_stack,
 /obj/item/stack/sheet/plasteel/large_stack,
 /obj/item/stack/sheet/plasteel/large_stack,
-/obj/machinery/power/apc/hyper{
+/obj/machinery/power/apc{
 	dir = 1
 	},
 /obj/structure/cable,
@@ -17160,8 +17736,11 @@
 /turf/open/floor/wood,
 /area/mainship/groundhq/ntf/living/commandbunks)
 "xmL" = (
-/obj/structure/mineral_door/wood,
 /obj/structure/cable,
+/obj/machinery/door/airlock/mainship/maint/free_access{
+	dir = 1;
+	req_one_access = null
+	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/aft_hallway{
 	name = "HQ Northwest Hallways"
@@ -17176,7 +17755,13 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 1
 	},
-/obj/structure/mineral_door/wood,
+/obj/machinery/door/poddoor/shutters/mainship/open/checkpoint{
+	dir = 2;
+	id = "Medbaycheckpoint"
+	},
+/obj/machinery/door/airlock/mainship/medical/free_access{
+	dir = 1
+	},
 /turf/open/floor/mainship/mono,
 /area/centcom/practice/medical{
 	outside = 0;
@@ -17267,7 +17852,7 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar2)
 "xvD" = (
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
 /area/outpost/brig/wardens_office{
@@ -17280,7 +17865,7 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+	name = "HQ Eastern hallways"
 	})
 "xwg" = (
 /obj/structure/window/reinforced/tinted{
@@ -17318,7 +17903,7 @@
 /turf/open/floor/plating/ground/snow/layer1,
 /area/desert_dam/exterior/valley/valley_wilderness)
 "xzI" = (
-/obj/structure/mineral_door/wood,
+/obj/structure/inflatable/door,
 /turf/open/floor/mainship,
 /area/mainship/groundhq/ntf/hallways/starboard_hallway{
 	name = "HQ Central Hallways"
@@ -17346,9 +17931,10 @@
 /area/lv624/lazarus/armory)
 "xEp" = (
 /obj/structure/cable,
-/obj/machinery/power/geothermal,
-/turf/open/floor/mainship/cargo,
-/area/mainship/groundhq/ntf/engineering/engine_core)
+/turf/open/floor/mainship/mono,
+/area/mainship/groundhq/ntf/hallways/stern_hallway{
+	name = "HQ Eastern hallways"
+	})
 "xEq" = (
 /obj/structure/window_frame,
 /turf/open/floor/plating/plating_catwalk,
@@ -17564,8 +18150,13 @@
 /obj/item/storage/toolbox/electrical,
 /obj/item/clothing/glasses/welding,
 /obj/item/storage/toolbox/mechanical,
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
+/obj/structure/transmitter/colony_net/desk{
+	phone_category = "TransCO";
+	phone_id = "Backup Power Middle";
+	pixel_x = -12
+	},
 /turf/open/floor/mainship/orange{
 	dir = 1
 	},
@@ -17579,10 +18170,10 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
 	},
-/obj/structure/mineral_door/wood,
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/machinery/door/airlock/colony/engineering,
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/groundhq/ntf/engineering/engineering_workshop)
 "xVC" = (
@@ -17669,8 +18260,8 @@
 /obj/effect/ai_node,
 /obj/structure/disposalpipe/segment/corner,
 /turf/open/floor/plating/plating_catwalk,
-/area/mainship/groundhq/ntf/hallways/stern_hallway{
-	name = "HQ Western hallways"
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
 	})
 "xZv" = (
 /turf/closed/wall/mainship/research/containment/wall/south,
@@ -17772,7 +18363,9 @@
 /obj/structure/cable,
 /obj/effect/ai_node,
 /turf/open/floor/mainship/stripesquare,
-/area/mainship/groundhq/ntf/hallways/hangar)
+/area/mainship/groundhq/ntf/hallways/aft_hallway{
+	name = "HQ Northwest Hallways"
+	})
 "yhs" = (
 /obj/machinery/door_control{
 	id = 1005
@@ -17802,7 +18395,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
 	},
-/obj/machinery/power/apc/hyper,
+/obj/machinery/power/apc,
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
 /area/mainship/groundhq/ntf/engineering/engine_core)
@@ -18846,8 +19439,8 @@ qtf
 qtf
 pit
 mHw
-vWy
-vWy
+adO
+adO
 sRU
 keS
 cYq
@@ -18855,7 +19448,7 @@ wlS
 sHw
 upD
 ybB
-mtP
+cnH
 ybB
 ybB
 hKj
@@ -18953,7 +19546,7 @@ jGn
 cFQ
 cFQ
 cFQ
-duV
+cFQ
 cAT
 wOo
 ybB
@@ -19060,9 +19653,9 @@ cnM
 cnM
 vcg
 vcg
-vWy
-raB
-qtI
+adO
+sih
+nKa
 ybB
 jRG
 cJq
@@ -19167,9 +19760,9 @@ rno
 rzD
 nsS
 vcg
-rCz
-raB
-vWy
+oOc
+sih
+adO
 ybB
 qGu
 hsp
@@ -19274,9 +19867,9 @@ pmc
 fJQ
 qaM
 lIy
-vWy
-raB
-vWy
+adO
+sih
+adO
 ybB
 ybB
 ybB
@@ -19381,13 +19974,13 @@ fQk
 bjK
 qaM
 ePJ
-vWy
-raB
-vWy
-vWy
-lvk
-vWy
-xTm
+adO
+sih
+adO
+adO
+tMA
+adO
+gfR
 hKj
 hKj
 hKj
@@ -19488,13 +20081,13 @@ pSB
 fQk
 pOo
 fmH
-rCz
+oOc
 xYf
-vgV
-vgV
+rGb
+rGb
 jMS
-vWy
-qWq
+adO
+afR
 hKj
 hKj
 hKj
@@ -19595,12 +20188,12 @@ tHI
 fQk
 ffs
 vcg
-vWy
-vWy
-vWy
-vWy
+adO
+adO
+adO
+adO
 vNl
-vWy
+adO
 jVd
 plO
 fXy
@@ -19645,7 +20238,7 @@ xhk
 hTC
 aCm
 xhk
-coM
+uFo
 xhk
 xhk
 hKj
@@ -19680,9 +20273,9 @@ hKj
 hKj
 hKj
 hKj
-hKj
-hKj
-hKj
+oGw
+oGw
+oGw
 gfR
 adO
 dgK
@@ -19705,9 +20298,9 @@ vcg
 cnM
 cnM
 vcg
-vWy
+adO
 vNl
-vWy
+adO
 jVd
 vVr
 bZs
@@ -19788,8 +20381,8 @@ hKj
 hKj
 hKj
 hKj
-hKj
-hKj
+oGw
+oGw
 gfR
 adO
 ihH
@@ -19812,9 +20405,9 @@ oix
 ihv
 ssp
 vcg
-rCz
+oOc
 vNl
-vWy
+adO
 jVd
 wrA
 wrI
@@ -19894,9 +20487,9 @@ hKj
 hKj
 hKj
 hKj
-hKj
-hKj
-hKj
+oGw
+oGw
+oGw
 gfR
 adO
 hGy
@@ -19919,9 +20512,9 @@ vmP
 ihv
 iQK
 vcg
-vWy
-raB
-vWy
+adO
+sih
+adO
 jVd
 neG
 yeP
@@ -20001,9 +20594,9 @@ hKj
 hKj
 hKj
 hKj
-hKj
-hKj
-hKj
+oGw
+oGw
+oGw
 gfR
 adO
 hGy
@@ -20026,7 +20619,7 @@ hBp
 ihv
 ihv
 lqi
-vWy
+adO
 vNl
 uHf
 jVd
@@ -20036,7 +20629,7 @@ jVd
 iAX
 bDH
 dGK
-nOT
+mXc
 dGK
 iAX
 oGw
@@ -20062,7 +20655,7 @@ mOa
 fHo
 onO
 xhk
-qUB
+azA
 tuP
 tuP
 tuP
@@ -20107,9 +20700,9 @@ hKj
 hKj
 hKj
 hKj
-hKj
-hKj
-hKj
+oGw
+oGw
+oGw
 hKj
 gfR
 adO
@@ -20133,9 +20726,9 @@ vmP
 ihv
 rqe
 vcg
-vWy
-raB
-qtI
+adO
+sih
+nKa
 kTO
 wAQ
 bTm
@@ -20143,7 +20736,7 @@ kAJ
 uXv
 soH
 dGK
-xEp
+nOT
 dGK
 iAX
 nAw
@@ -20169,7 +20762,7 @@ jCO
 dMJ
 bXC
 itU
-iuR
+qUB
 tuP
 pxO
 pxi
@@ -20214,12 +20807,12 @@ hKj
 hKj
 hKj
 hKj
-hKj
-hKj
+oGw
+oGw
 hKj
 hKj
 gfR
-adO
+iwj
 hGy
 nKa
 fUf
@@ -20240,9 +20833,9 @@ ihv
 gOh
 aDq
 vcg
-rCz
-raB
-vWy
+oOc
+sih
+adO
 kTO
 bsi
 gfQ
@@ -20321,8 +20914,8 @@ hKj
 hKj
 hKj
 hKj
-hKj
-hKj
+oGw
+oGw
 hKj
 hKj
 gfR
@@ -20347,9 +20940,9 @@ dVB
 vcg
 dVB
 vcg
-vWy
-raB
-vWy
+rsD
+sih
+adO
 ntt
 dqV
 mqa
@@ -20428,8 +21021,8 @@ hKj
 hKj
 hKj
 hKj
-hKj
-hKj
+oGw
+oGw
 hKj
 hKj
 gfR
@@ -20451,12 +21044,12 @@ jEd
 dZZ
 eLi
 tRy
-vWy
-vWy
-vWy
-vWy
+adO
+adO
+adO
+adO
 wKB
-gmE
+xRG
 uiu
 jDH
 dZe
@@ -20474,7 +21067,7 @@ oGw
 oGw
 saC
 saC
-sFx
+xUO
 saC
 pHw
 pHw
@@ -20535,7 +21128,7 @@ hKj
 hKj
 hKj
 hKj
-hKj
+oGw
 hKj
 hKj
 hKj
@@ -20557,13 +21150,13 @@ cMO
 cMO
 dMd
 eLi
-vWy
-etd
-cxo
-cxo
-vgV
+adO
+adD
+nGk
+nGk
+rGb
 nlf
-gbl
+qtH
 qip
 egW
 geT
@@ -20642,7 +21235,7 @@ hKj
 hKj
 hKj
 hKj
-hKj
+oGw
 hKj
 hKj
 hKj
@@ -20664,13 +21257,13 @@ cMO
 cMO
 nVy
 eLi
-rCz
-fgD
-vWy
-vWy
-vWy
-vWy
-qtI
+oOc
+hGy
+adO
+adO
+adO
+adO
+nKa
 kTO
 gfS
 rOT
@@ -20749,7 +21342,7 @@ hKj
 hKj
 hKj
 hKj
-hKj
+oGw
 hKj
 hKj
 hKj
@@ -20771,13 +21364,13 @@ wKW
 cMO
 dxk
 mTp
-miU
-chI
-miU
-xTm
-xTm
-xTm
-xTm
+lXN
+fks
+lXN
+gfR
+gfR
+gfR
+gfR
 kTO
 bEe
 rOT
@@ -20856,7 +21449,7 @@ hKj
 hKj
 hKj
 hKj
-hKj
+oGw
 hKj
 hKj
 hKj
@@ -20881,7 +21474,7 @@ eLi
 syg
 fNH
 syg
-xTm
+gfR
 hKj
 hKj
 hKj
@@ -20963,7 +21556,7 @@ hKj
 hKj
 hKj
 hKj
-hKj
+oGw
 hKj
 hKj
 hKj
@@ -20986,18 +21579,18 @@ cMO
 vHJ
 eLi
 hLo
-chI
+fks
 uxN
-xTm
+gfR
 hKj
 hKj
 hKj
 kTO
-ixh
+eqO
 uPF
 kTO
 kTO
-cPt
+cuX
 kTO
 dKw
 vWy
@@ -21070,7 +21663,7 @@ hKj
 hKj
 hKj
 hKj
-hKj
+oGw
 hKj
 hKj
 hKj
@@ -21092,10 +21685,10 @@ cMO
 cMO
 ulU
 eLi
-vWy
-fgD
-vWy
-xTm
+adO
+hGy
+adO
+gfR
 hKj
 hKj
 hKj
@@ -21177,7 +21770,7 @@ hKj
 hKj
 hKj
 hKj
-hKj
+oGw
 hKj
 hKj
 hKj
@@ -21200,9 +21793,9 @@ tsU
 aEY
 eLi
 ckY
-fgD
-vWy
-xTm
+hGy
+adO
+gfR
 hKj
 hKj
 hKj
@@ -21284,7 +21877,7 @@ hKj
 hKj
 hKj
 hKj
-hKj
+oGw
 hKj
 hKj
 hKj
@@ -21306,10 +21899,10 @@ eLi
 eLi
 eLi
 eLi
-jsE
-fgD
-vWy
-xTm
+mQa
+hGy
+adO
+gfR
 hKj
 hKj
 hKj
@@ -21391,7 +21984,7 @@ hKj
 hKj
 hKj
 hKj
-hKj
+oGw
 hKj
 hKj
 hKj
@@ -21415,8 +22008,8 @@ mfM
 xam
 uxu
 cnq
-vWy
-xTm
+adO
+gfR
 hKj
 hKj
 hKj
@@ -21498,8 +22091,8 @@ hKj
 hKj
 hKj
 hKj
-hKj
-hKj
+oGw
+oGw
 hKj
 hKj
 gfR
@@ -21520,10 +22113,10 @@ eLi
 eZI
 eLi
 eLi
-vWy
-fgD
-qtI
-xTm
+adO
+hGy
+nKa
+gfR
 hKj
 hKj
 hKj
@@ -21554,7 +22147,7 @@ tRS
 xTm
 aGL
 ajY
-ssM
+iHo
 ajY
 aGL
 eqt
@@ -21605,8 +22198,8 @@ hKj
 hKj
 hKj
 hKj
-hKj
-hKj
+oGw
+oGw
 hKj
 hKj
 gfR
@@ -21627,10 +22220,10 @@ nBH
 ahZ
 ahZ
 eLi
-vWy
-fgD
-vWy
-xTm
+adO
+hGy
+adO
+gfR
 hKj
 hKj
 hKj
@@ -21675,8 +22268,8 @@ tZQ
 ccj
 ccj
 uni
-cnH
 ccj
+tZQ
 ccj
 tad
 dXF
@@ -21713,7 +22306,7 @@ hKj
 hKj
 hKj
 hKj
-hKj
+oGw
 hKj
 hKj
 gfR
@@ -21734,10 +22327,10 @@ rsC
 oLK
 wtS
 eLi
-miU
-chI
-miU
-xTm
+lXN
+fks
+lXN
+gfR
 hKj
 hKj
 hKj
@@ -21820,8 +22413,8 @@ hKj
 hKj
 hKj
 hKj
-hKj
-hKj
+oGw
+oGw
 hKj
 gfR
 adO
@@ -21844,13 +22437,13 @@ eLi
 syg
 fNH
 syg
-xTm
-xTm
-xTm
-xTm
-xTm
-xTm
-xTm
+gfR
+gfR
+gfR
+gfR
+gfR
+gfR
+gfR
 xTm
 vWy
 iCm
@@ -21928,7 +22521,7 @@ hKj
 hKj
 hKj
 hKj
-hKj
+oGw
 hKj
 gfR
 adO
@@ -21948,15 +22541,15 @@ eLi
 eLi
 eLi
 eLi
-miU
-chI
+lXN
+fks
 rAO
-qZS
-gbl
-gbl
+lti
+qtH
+qtH
 qWL
-gbl
-gbl
+qtH
+qtH
 rAO
 qZS
 gbl
@@ -22035,7 +22628,7 @@ hKj
 hKj
 hKj
 hKj
-hKj
+oGw
 hKj
 gfR
 gfR
@@ -22048,23 +22641,23 @@ dgK
 qtH
 qtH
 xmL
-qtH
-qtH
+duV
+duV
 dHk
-qtH
-qtH
+duV
+duV
 xmL
 qtH
-gbl
+qtH
 lfB
-vWy
-vWy
-vWy
-vWy
-vWy
-nhG
-vWy
-miU
+adO
+adO
+adO
+adO
+adO
+jsz
+adO
+lXN
 vWy
 vWy
 iCm
@@ -22142,8 +22735,8 @@ hKj
 hKj
 hKj
 hKj
-hKj
-hKj
+oGw
+oGw
 hKj
 oGw
 oGw
@@ -22207,7 +22800,7 @@ tad
 tad
 dNO
 tad
-lPX
+qHl
 tad
 tad
 tad
@@ -22573,9 +23166,9 @@ hKj
 hKj
 hKj
 hKj
-hJM
-hJM
-hJM
+gfR
+gfR
+gfR
 cBm
 gfR
 adO
@@ -22680,10 +23273,10 @@ hKj
 hKj
 hKj
 hKj
-hJM
+gfR
 sLD
 saW
-iHo
+nKa
 gfR
 adO
 auW
@@ -22787,7 +23380,7 @@ hKj
 hKj
 hKj
 hKj
-hJM
+gfR
 olq
 jaR
 lSE
@@ -22824,7 +23417,7 @@ dOY
 pRw
 gdi
 rPQ
-rfp
+vPl
 doa
 eYK
 oho
@@ -22838,7 +23431,7 @@ bqH
 sVN
 bWH
 bWH
-ccj
+cvc
 ccj
 ccj
 wJx
@@ -22894,10 +23487,10 @@ hKj
 hKj
 hKj
 hKj
-hJM
+gfR
 dJm
 aXx
-afR
+aAf
 osj
 adO
 hhG
@@ -23001,7 +23594,7 @@ hKj
 hKj
 hKj
 hKj
-hJM
+gfR
 ppO
 aMn
 kUe
@@ -23108,7 +23701,7 @@ hKj
 hKj
 hKj
 hKj
-hJM
+gfR
 iEs
 iEs
 cHf
@@ -23215,12 +23808,12 @@ hKj
 hKj
 hKj
 hKj
-hJM
-saW
-nyK
+gfR
+adO
+tMA
 tEK
 iai
-saW
+adO
 auW
 qFg
 cWB
@@ -23322,29 +23915,29 @@ oGw
 hKj
 hKj
 hKj
-saW
-lrz
-xus
-xus
-xus
+adO
+rAO
+duV
+duV
+duV
 ygm
 eXS
-fAR
-bAj
-bAj
-bAj
-bAj
-bAj
+cFQ
+bTn
+bTn
+bTn
+bTn
+bTn
 dWY
-bAj
+bTn
 bAj
 izI
-aYh
-fav
+mLh
+mgs
 oDC
 wgH
-oyO
-xvp
+oDC
+mgs
 tgB
 cWu
 cWu
@@ -23447,10 +24040,10 @@ doP
 oyC
 bQQ
 mLh
-fav
-lti
-kEK
-oyO
+mgs
+mgs
+mgs
+mgs
 mgs
 nXs
 xJS
@@ -23484,7 +24077,7 @@ ppQ
 jkF
 lPo
 aRN
-lPX
+wht
 tVh
 bas
 tVh
@@ -23555,11 +24148,11 @@ oyC
 qey
 rRJ
 jwz
-kEK
-kEK
-oyO
-mgs
-nXs
+jwz
+jwz
+jwz
+fAf
+wRh
 xJS
 rlE
 rlE
@@ -23597,14 +24190,14 @@ aoZ
 aoZ
 aoZ
 pdd
-udv
+pmL
 ovm
 nyt
 aoZ
 aoZ
 tVh
-tad
-tad
+tVh
+tVh
 tad
 tad
 tad
@@ -23661,8 +24254,8 @@ oyC
 tiq
 qey
 mLh
-fav
-fav
+oyO
+oyO
 bns
 oyO
 mgs
@@ -23710,8 +24303,8 @@ nyt
 sYg
 sYg
 tVh
-nyt
 xwB
+fgD
 kyc
 hKj
 oGw
@@ -23816,8 +24409,8 @@ ovm
 nyt
 aoZ
 iDZ
-oBt
-nyt
+tVh
+cZf
 fkM
 kyc
 hKj
@@ -23910,7 +24503,7 @@ tad
 tad
 tad
 tad
-lPX
+fAR
 tad
 tad
 pNw
@@ -24013,7 +24606,7 @@ rlE
 exR
 tLj
 mgs
-lPX
+ouS
 dky
 bww
 rjX
@@ -24121,14 +24714,14 @@ mgs
 fGf
 pjF
 sDK
-hyi
 suO
+hyi
 sDK
 ane
 bWo
 tad
 hNk
-lPX
+qHl
 pKf
 tad
 ezc
@@ -24136,7 +24729,7 @@ dao
 gZP
 tad
 pKf
-lPX
+qHl
 hNk
 tad
 doP
@@ -24174,7 +24767,7 @@ hKj
 hKj
 hKj
 oGw
-oGw
+mcR
 oGw
 oGw
 hKj
@@ -24334,8 +24927,8 @@ rlE
 xJS
 xJS
 mgs
-suO
-lqx
+mGa
+hUG
 mUY
 suO
 ccj
@@ -24441,7 +25034,7 @@ rlE
 xJS
 mFG
 mgs
-suO
+mGa
 dvN
 cQB
 sDK
@@ -24548,9 +25141,9 @@ rlE
 xJS
 xJS
 mgs
-suO
-lqx
-pmL
+mGa
+uTL
+mUY
 suO
 ccj
 lfM
@@ -24764,7 +25357,7 @@ tad
 tad
 sDK
 keq
-suO
+hyi
 sDK
 ane
 bWo
@@ -24872,10 +25465,10 @@ akc
 tad
 eHl
 tVh
-vPl
+tVh
 tVh
 dky
-vPl
+tVh
 tVh
 tVh
 dky
@@ -24973,16 +25566,16 @@ mgs
 fKm
 mgs
 psf
-xnT
+oEa
 dNJ
 bDb
 xnT
 dXO
 pPe
-pvr
+pPe
 rfw
 gjN
-pvr
+pPe
 fHI
 ijI
 gjN
@@ -25086,10 +25679,10 @@ dHn
 tad
 sUb
 tVh
-vPl
+tVh
 dPv
 dky
-vPl
+tVh
 tVh
 dPv
 dky
@@ -25197,7 +25790,7 @@ rTJ
 rTJ
 rTJ
 rTJ
-lPX
+fAR
 tad
 tad
 tad
@@ -25296,15 +25889,15 @@ xcC
 iTZ
 rTJ
 oZX
-pBf
+pWX
 nHg
-eOe
+nfj
 eOQ
 rTJ
 dkl
 uox
 rTJ
-tVh
+mtI
 tad
 doP
 doP
@@ -25405,7 +25998,7 @@ rTJ
 cBe
 pWX
 rSP
-eOe
+nfj
 rSP
 gbv
 jfy
@@ -25512,7 +26105,7 @@ rTJ
 bBe
 pWX
 rSP
-eOe
+nfj
 lEt
 rTJ
 rTJ
@@ -25619,7 +26212,7 @@ rTJ
 hJa
 oVM
 rSP
-eOe
+nfj
 wIj
 rTJ
 dtc
@@ -25721,12 +26314,12 @@ nNK
 luO
 aqq
 rTJ
-oEa
+rTJ
 rTJ
 brc
 rSP
 rSP
-eOe
+nfj
 mTV
 toR
 jEH
@@ -25839,7 +26432,7 @@ gbv
 rSP
 rSP
 rTJ
-tVh
+lfM
 vix
 oGw
 doP
@@ -25946,7 +26539,7 @@ rTJ
 cAP
 ave
 rTJ
-tVh
+lfM
 vix
 oGw
 oGw
@@ -26053,7 +26646,7 @@ rTJ
 rTJ
 rTJ
 rTJ
-tVh
+lfM
 vix
 oGw
 oGw
@@ -26227,7 +26820,7 @@ iTZ
 iTZ
 iTZ
 iTZ
-xkJ
+ddC
 iTZ
 iTZ
 xcC
@@ -26334,7 +26927,7 @@ iTZ
 iTZ
 xkJ
 xkJ
-xkJ
+ddC
 iTZ
 iTZ
 iTZ
@@ -26548,7 +27141,7 @@ iTZ
 xkJ
 xkJ
 xkJ
-xkJ
+kaL
 iTZ
 iTZ
 iTZ
@@ -27012,12 +27605,12 @@ lxp
 lxp
 dZi
 lxp
-lxp
+oqe
 lxp
 lxp
 lxp
 dZi
-lxp
+oqe
 lxp
 lxp
 frD
@@ -27119,12 +27712,12 @@ lxp
 lxp
 dZi
 lxp
-lxp
+oqe
 lxp
 lxp
 lxp
 dZi
-lxp
+oqe
 lxp
 lxp
 frD
@@ -27226,12 +27819,12 @@ lxp
 lxp
 dZi
 lxp
-lxp
-lxp
+oqe
+oqe
 lxp
 lxp
 dZi
-lxp
+oqe
 lxp
 lxp
 frD
@@ -27303,7 +27896,7 @@ oGw
 oGw
 doP
 doP
-pVG
+kws
 doP
 doP
 doP
@@ -27333,12 +27926,12 @@ lxp
 lxp
 dZi
 lxp
-lxp
-lxp
+iQO
+oqe
 lxp
 lxp
 dZi
-lxp
+iQO
 lxp
 lxp
 frD
@@ -27414,7 +28007,7 @@ oGw
 doP
 doP
 doP
-xkJ
+kaL
 kzw
 izi
 flY
@@ -28030,9 +28623,9 @@ hKj
 oGw
 oGw
 oGw
-hKj
-hKj
-hKj
+oGw
+oGw
+oGw
 iTZ
 iTZ
 iTZ
@@ -28137,7 +28730,7 @@ hKj
 hKj
 oGw
 oGw
-hKj
+oGw
 hKj
 hKj
 iTZ
@@ -28159,8 +28752,8 @@ doP
 doP
 doP
 doP
-aZZ
-iTZ
+fTV
+umc
 doP
 doP
 xkJ
@@ -28266,10 +28859,10 @@ doP
 iTZ
 iTZ
 iTZ
-iTZ
-xkJ
-xkJ
-iTZ
+fav
+etd
+tqZ
+nyK
 xkJ
 xEq
 lxp
@@ -28373,11 +28966,11 @@ hYG
 hYG
 iTZ
 hYG
-dUV
-xkJ
-ddC
-ddC
-xkJ
+fav
+anD
+dFL
+oyO
+mMv
 mGA
 mGA
 mGA
@@ -28474,17 +29067,17 @@ iTZ
 qRY
 xkJ
 xkJ
-xkJ
+kaL
 xkJ
 rNs
 udS
 xkJ
 xkJ
 xkJ
-iEL
-xkJ
-bMS
-iTZ
+pFN
+uqK
+mMv
+mMv
 pYW
 rmJ
 npa
@@ -28551,7 +29144,7 @@ oGw
 oGw
 oGw
 oGw
-oGw
+mcR
 oGw
 oGw
 oGw
@@ -28581,7 +29174,7 @@ iTZ
 iTZ
 iTZ
 xkJ
-iTZ
+hYG
 hQf
 xkJ
 xkJ
@@ -28589,9 +29182,9 @@ pWE
 iTZ
 vlV
 iTZ
-xkJ
-xkJ
-xkJ
+pvr
+pvr
+pvr
 wuK
 paQ
 paQ
@@ -28610,7 +29203,7 @@ wYi
 lsa
 nVb
 mGA
-uqK
+iNI
 lGq
 gmg
 wmQ
@@ -28908,7 +29501,7 @@ wnM
 ptm
 bTJ
 sED
-uPi
+wBQ
 uPi
 uPi
 uPi
@@ -29143,11 +29736,11 @@ vwq
 vwq
 vwq
 lqB
-iOv
+oBt
 mGA
 kuc
 gmg
-eiw
+gmg
 gmg
 oLg
 ddb
@@ -29156,7 +29749,7 @@ cNB
 cNB
 akp
 aBf
-akp
+wBN
 gmg
 doP
 doP
@@ -30010,7 +30603,7 @@ doP
 doP
 gmg
 uNG
-gmg
+uNG
 gmg
 doP
 doP
@@ -30152,8 +30745,8 @@ hKj
 hKj
 hKj
 hKj
-oGw
-oGw
+gZH
+gZH
 hKj
 hKj
 hKj
@@ -30420,7 +31013,7 @@ toH
 ulO
 ihi
 eNV
-gbl
+xEp
 ulO
 pUy
 iTZ
@@ -30476,7 +31069,7 @@ hKj
 hKj
 oGw
 oGw
-oGw
+njB
 oGw
 oGw
 hKj
@@ -30527,7 +31120,7 @@ vlV
 ulO
 hUR
 mps
-gbl
+xEp
 ulO
 iTZ
 pWE
@@ -30591,12 +31184,12 @@ hKj
 hKj
 hKj
 hKj
-hKj
-hKj
-hKj
-hKj
-hKj
-hKj
+wnV
+wnV
+wnV
+wnV
+wnV
+wnV
 hKj
 hKj
 hKj
@@ -30634,7 +31227,7 @@ gPM
 gPM
 eol
 nyT
-vWy
+pBf
 gPM
 gPM
 gPM
@@ -30694,19 +31287,19 @@ oGw
 oGw
 oGw
 oGw
+njB
+oGw
+wnV
+wnV
+wnV
+oGw
+mcR
 oGw
 oGw
-hKj
-hKj
-hKj
-hKj
-hKj
-hKj
-hKj
-hKj
-hKj
-hKj
-hKj
+wnV
+wnV
+wnV
+wnV
 hKj
 hKj
 hKj
@@ -30741,7 +31334,7 @@ spZ
 gPM
 nWd
 lNp
-vWy
+pBf
 gPM
 spZ
 cos
@@ -30803,19 +31396,19 @@ oGw
 oGw
 oGw
 oGw
-hKj
-hKj
-hKj
-hKj
-hKj
-hKj
-hKj
+wnV
+oGw
+oGw
+oGw
+oGw
+oGw
+oGw
 hyC
 sWK
 oGw
-hKj
-hKj
-hKj
+wnV
+wnV
+wnV
 hKj
 hKj
 hKj
@@ -30910,19 +31503,19 @@ oGw
 oGw
 oGw
 oGw
-cZf
+gZH
+mcR
 oGw
-hKj
-hKj
-hKj
-hKj
-aRY
+oGw
+oGw
+oGw
+oGw
 oGw
 oGw
 oGw
 jAb
 jcT
-hKj
+wnV
 hKj
 hKj
 hKj
@@ -30955,7 +31548,7 @@ sWj
 gPM
 bQH
 qOz
-vWy
+pBf
 gPM
 vGh
 uhf
@@ -31013,23 +31606,23 @@ hKj
 oGw
 oGw
 oGw
+njB
 oGw
 oGw
 oGw
-oGw
-cZf
-oGw
+gZH
 oGw
 oGw
-hKj
-hKj
+oGw
+ezu
+oGw
 hyC
 oGw
 mcR
 oGw
 fux
 oGw
-hKj
+wnV
 hKj
 hKj
 hKj
@@ -31062,7 +31655,7 @@ iJa
 gPM
 bQH
 vJo
-vWy
+pBf
 gPM
 cnm
 fAI
@@ -31117,14 +31710,14 @@ hKj
 hKj
 hKj
 hKj
+ezu
 oGw
 oGw
 oGw
 oGw
+ezu
 oGw
-oGw
-oGw
-hKj
+wnV
 oGw
 fbc
 oGw
@@ -31136,7 +31729,7 @@ oGw
 oGw
 oGw
 oGw
-hKj
+wnV
 hKj
 hKj
 hKj
@@ -31231,9 +31824,9 @@ oGw
 oGw
 oGw
 oGw
-hKj
-hKj
-hKj
+wnV
+wnV
+wnV
 oGw
 oGw
 sWK
@@ -31243,7 +31836,7 @@ oGw
 oGw
 oGw
 fbc
-hKj
+wnV
 hKj
 hKj
 hKj
@@ -31276,7 +31869,7 @@ gPM
 gPM
 bQH
 hiY
-vWy
+pBf
 gPM
 gPM
 gPM
@@ -31340,17 +31933,17 @@ oGw
 oGw
 hKj
 hKj
-hKj
-hKj
-hKj
-hKj
+wnV
+oGw
+oGw
+oGw
 oGw
 oGw
 fbc
 mcR
 oGw
-aRY
-hKj
+oGw
+wnV
 hKj
 hKj
 hKj
@@ -31383,7 +31976,7 @@ spZ
 gPM
 nWd
 ksn
-vWy
+pBf
 gPM
 spZ
 qyi
@@ -31443,21 +32036,21 @@ hKj
 hKj
 hKj
 oGw
+njB
+oGw
+oGw
+hKj
+wnV
+wnV
 oGw
 oGw
 oGw
-hKj
-hKj
-hKj
-hKj
-hKj
-hKj
-hKj
+oGw
 oGw
 pGc
 oGw
-hKj
-hKj
+wnV
+wnV
 hKj
 hKj
 hKj
@@ -31555,15 +32148,15 @@ oGw
 oGw
 hKj
 hKj
-hKj
-hKj
-hKj
-hKj
-hKj
+wnV
+wnV
+wnV
+wnV
+wnV
 oGw
 oGw
 mcR
-hKj
+wnV
 hKj
 hKj
 hKj
@@ -31597,7 +32190,7 @@ sWj
 gPM
 bQH
 qOz
-vWy
+pBf
 gPM
 tOk
 uhf
@@ -31658,19 +32251,19 @@ hKj
 doP
 doP
 doP
-oGw
-oGw
+gZH
+gZH
 doP
 hKj
 hKj
 hKj
 hKj
 hKj
-hKj
-hKj
-hKj
-hKj
-hKj
+wnV
+wnV
+wnV
+wnV
+wnV
 hKj
 hKj
 hKj
@@ -31704,7 +32297,7 @@ iJa
 gPM
 wZT
 qOz
-vWy
+pBf
 gPM
 cnm
 fAI
@@ -31916,9 +32509,9 @@ gPM
 gPM
 gPM
 gPM
-bQH
+uXt
 vJo
-uHf
+sju
 gPM
 gPM
 gPM
@@ -31980,7 +32573,7 @@ doP
 doP
 doP
 doP
-oGw
+wmO
 doP
 doP
 oGw
@@ -32025,7 +32618,7 @@ spZ
 gPM
 nWd
 ksn
-vWy
+pBf
 gPM
 spZ
 aAK
@@ -32087,7 +32680,7 @@ doP
 doP
 doP
 doP
-oGw
+wmO
 doP
 doP
 oGw
@@ -32306,7 +32899,7 @@ oGw
 oGw
 oGw
 doP
-oGw
+uJQ
 doP
 qfG
 gkq
@@ -32346,7 +32939,7 @@ iJa
 gPM
 bQH
 qOz
-vWy
+pBf
 gPM
 bVE
 fAI
@@ -32373,7 +32966,7 @@ doP
 iTZ
 xkJ
 ddC
-ouS
+xkJ
 xkJ
 xkJ
 ddC
@@ -32413,7 +33006,7 @@ oGw
 oGw
 oGw
 oGw
-oGw
+uJQ
 doP
 qfG
 suH
@@ -32520,7 +33113,7 @@ oGw
 oGw
 oGw
 oGw
-oGw
+uJQ
 doP
 qfG
 kUc
@@ -32560,7 +33153,7 @@ gPM
 gPM
 bQH
 vJo
-vWy
+pBf
 gPM
 gPM
 gPM
@@ -32628,7 +33221,7 @@ oGw
 uJQ
 oGw
 oGw
-oGw
+uJQ
 qfG
 kUc
 suH
@@ -32667,7 +33260,7 @@ spZ
 gPM
 nWd
 ksn
-vWy
+pBf
 gPM
 spZ
 bUE
@@ -32841,7 +33434,7 @@ qfG
 qfG
 qfG
 iEG
-eqO
+qfG
 qfG
 qfG
 qfG
@@ -32953,17 +33546,17 @@ oHV
 oHV
 oWb
 gDP
-kUc
-kUc
-kUc
-kUc
-kUc
-kUc
-kUc
-kUc
-kUc
-kUc
-kUc
+oHV
+oHV
+oHV
+oHV
+oHV
+oHV
+oHV
+oHV
+oHV
+oHV
+gDP
 aWb
 qfG
 hKj
@@ -32987,7 +33580,7 @@ fAI
 iJa
 gPM
 bQH
-bWH
+hJM
 rpE
 gPM
 cnm
@@ -33094,7 +33687,7 @@ bRS
 khs
 gPM
 qPY
-bWH
+hJM
 aWy
 gPM
 ktG
@@ -33172,7 +33765,7 @@ dCx
 dCx
 dCx
 qfG
-iYE
+sbr
 qfG
 dCx
 vkx
@@ -33201,7 +33794,7 @@ gPM
 gPM
 gPM
 bQH
-bWH
+hJM
 rpE
 gPM
 gPM
@@ -33298,14 +33891,14 @@ vNs
 vNs
 vNs
 oYd
-vWy
-vWy
-vWy
-vWy
-vWy
-vWy
-vWy
-vWy
+pBf
+pBf
+pBf
+pBf
+pBf
+pBf
+pBf
+pBf
 lxm
 bQH
 fKB
@@ -33391,7 +33984,7 @@ oHV
 oHV
 oHV
 oHV
-uAC
+jPO
 oHV
 fEK
 fGy
@@ -33413,7 +34006,7 @@ mGl
 jeb
 rtM
 aQF
-ciN
+sFx
 jXb
 fBc
 xwd
@@ -33512,17 +34105,17 @@ vNs
 vNs
 vNs
 oYd
-vWy
-vWy
-vWy
-vWy
-vWy
-vWy
-vWy
+pBf
+pBf
+pBf
+pBf
+pBf
+pBf
+pBf
 iJL
-fOS
-mbn
-fOS
+chI
+ovr
+chI
 ttS
 wta
 iPV
@@ -33656,7 +34249,7 @@ hKj
 doP
 iTZ
 iTZ
-iTZ
+kEK
 iTZ
 iTZ
 iTZ
@@ -33862,7 +34455,7 @@ npt
 npt
 npt
 npt
-lRK
+hKj
 hKj
 tZf
 tZf
@@ -33969,11 +34562,11 @@ npt
 npt
 npt
 npt
-lRK
+hKj
 hKj
 tZf
 xfa
-tZf
+tYu
 esh
 wdG
 fmZ
@@ -34073,14 +34666,14 @@ npt
 npt
 npt
 npt
-npt
-npt
-npt
+hKj
+hKj
+hKj
 hKj
 hKj
 tZf
 hNY
-cvc
+kjx
 aed
 dzn
 fmZ
@@ -34179,7 +34772,7 @@ npt
 npt
 npt
 npt
-npt
+hKj
 hKj
 hKj
 hKj
@@ -34286,13 +34879,13 @@ npt
 npt
 npt
 npt
-npt
+hKj
 hKj
 aaV
 cnk
 rZn
 azO
-vym
+aGj
 nQw
 kjx
 tQw
@@ -34393,13 +34986,13 @@ npt
 npt
 npt
 npt
-npt
+hKj
 hKj
 xIG
 sKN
 juR
 juR
-tZf
+mCl
 xfa
 tZf
 fQN
@@ -34500,7 +35093,7 @@ npt
 npt
 npt
 npt
-npt
+hKj
 hKj
 pwY
 oZE
@@ -34558,7 +35151,7 @@ czt
 czt
 czt
 czt
-kUc
+fyT
 oHV
 kUc
 czt
@@ -34606,8 +35199,8 @@ npt
 npt
 npt
 npt
-npt
-npt
+hKj
+hKj
 hKj
 slm
 oZE
@@ -34713,19 +35306,19 @@ npt
 npt
 npt
 npt
-npt
+hKj
 hKj
 hKj
 vzz
 vzz
 vzz
 mCl
-mCl
+gmE
 heB
 ilO
 gUD
 doP
-oAS
+lpU
 ufL
 iaK
 iTZ
@@ -34820,20 +35413,20 @@ npt
 npt
 npt
 npt
-npt
+hKj
 hKj
 aVg
 mCl
 mCl
 mCl
 mCl
-mCl
+jMl
 gxH
 xEm
 pEp
 doP
-ncC
-ncC
+miU
+vgV
 iaK
 iTZ
 iTZ
@@ -34908,7 +35501,7 @@ wta
 wta
 wta
 wta
-eXX
+uoe
 wta
 wta
 wta
@@ -34927,20 +35520,20 @@ doP
 doP
 doP
 npt
-npt
+hKj
 hKj
 cVs
 cHc
 pwK
-wBQ
+pwK
 dhO
 ttX
 rsE
 xFv
 rqx
 doP
-ncC
-ncC
+jQj
+oAS
 doP
 xRz
 xRz

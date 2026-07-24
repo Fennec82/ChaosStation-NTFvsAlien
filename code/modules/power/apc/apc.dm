@@ -81,6 +81,12 @@
 	var/power_update_needed = FALSE
 	///Probability of APC being broken by a shuttle crash on the same z-level
 	var/crash_break_probability = 5
+#ifdef POWERDEBUG
+	var/total_charge_added_chargescale = 0
+	var/total_charge_added_availscale = 0
+	var/total_charge_outputted_chargescale = 0
+	var/total_charge_outputted_availscale = 0
+#endif
 
 /obj/machinery/power/apc/connect_to_network()
 	//Override because the APC does not directly connect to the network; it goes through a terminal.
@@ -227,6 +233,13 @@
 
 	if(CHECK_BITFIELD(machine_stat, PANEL_OPEN))
 		. += span_info("The wiring is exposed.")
+#ifdef POWERDEBUG
+	. += span_notice("it contains [cell ? "[DisplayEnergyFrac(cell.charge * (2 / GLOB.CELLRATE), cell.maxcharge * (2/GLOB.CELLRATE))] of electrical energy." : "No cell!"]")
+	. += span_notice("It has been charged by a total of [DisplayEnergy(total_charge_added_chargescale * (2 / GLOB.CELLRATE))] (based on [total_charge_added_chargescale] charge units)")
+	. += span_notice("It has been charged by a total of [DisplayEnergy(total_charge_added_availscale * 2)] (based on [total_charge_added_availscale] avail charge units)")
+	. += span_notice("It has outputted a total of [DisplayEnergy(total_charge_outputted_chargescale * (2 / GLOB.CELLRATE))] (based on [total_charge_outputted_chargescale] charge units)")
+	. += span_notice("It has outputted a total of [DisplayEnergy(total_charge_outputted_availscale * 2)] (based on [total_charge_outputted_availscale] avail charge units)")
+#endif
 
 /obj/machinery/power/apc/ui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
@@ -439,17 +452,33 @@
 		// draw power from cell as before to power the area
 		var/cellused = min(cell.charge, GLOB.CELLRATE * lastused_total)	// clamp deduction to a max, amount left in cell
 		cell.use(cellused)
-
+		if(is_ground_level(z))
+			GLOB.round_statistics.apc_output_ground += cellused * 2 / GLOB.CELLRATE // avail is in watts, 1 avail for 1 tick is 2 watt-seconds = 2 joules
+#ifdef POWERDEBUG
+		total_charge_outputted_chargescale += cellused
+		total_charge_outputted_availscale += cellused / GLOB.CELLRATE
+#endif
 		if(excess > lastused_total)		// if power excess recharge the cell
 										// by the same amount just used
 			cell.give(cellused)
 			add_load(cellused / GLOB.CELLRATE)		// add the load used to recharge the cell
-
+			if(is_ground_level(z))
+				GLOB.round_statistics.apc_input_ground += cellused * 2 / GLOB.CELLRATE // avail is in watts, 1 avail for 1 tick is 2 watt-seconds = 2 joules
+#ifdef POWERDEBUG
+			total_charge_added_chargescale += cellused
+			total_charge_added_availscale += cellused / GLOB.CELLRATE
+#endif
 
 		else		// no excess, and not enough per-apc
 			if((cell.charge / GLOB.CELLRATE + excess) >= lastused_total)		// can we draw enough from cell+grid to cover last usage?
 				cell.charge = min(cell.maxcharge, cell.charge + GLOB.CELLRATE * excess)	//recharge with what we can
 				add_load(excess)		// so draw what we can from the grid
+				if(is_ground_level(z))
+					GLOB.round_statistics.apc_input_ground += excess * 2 // avail is in watts, 1 avail for 1 tick is 2 watt-seconds = 2 joules
+#ifdef POWERDEBUG
+				total_charge_added_chargescale += excess * GLOB.CELLRATE
+				total_charge_added_availscale += excess
+#endif
 				charging = APC_NOT_CHARGING
 
 			else	// not enough power available to run the last tick!
@@ -524,6 +553,12 @@
 			var/ch = min(excess*GLOB.CELLRATE, cell.maxcharge*GLOB.CHARGELEVEL)
 			add_load(ch/GLOB.CELLRATE) // Removes the power we're taking from the grid
 			cell.give(ch) // actually recharge the cell
+			if(is_ground_level(z))
+				GLOB.round_statistics.apc_input_ground += ch * 2 / GLOB.CELLRATE // avail is in watts, 1 avail for 1 tick is 2 watt-seconds = 2 joules
+#ifdef POWERDEBUG
+			total_charge_added_chargescale += ch
+			total_charge_added_availscale += ch / GLOB.CELLRATE
+#endif
 
 		else
 			charging = APC_NOT_CHARGING		// stop charging

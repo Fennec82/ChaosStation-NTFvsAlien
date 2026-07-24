@@ -887,3 +887,4 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	item_flags = DELONDROP
 	subspace_transmission = FALSE
 	minimap_type = /datum/action/minimap/observer
+	faction = FACTION_SPATIAL_AGENT

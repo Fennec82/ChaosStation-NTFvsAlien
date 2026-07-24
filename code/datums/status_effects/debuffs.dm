@@ -25,11 +25,22 @@
 	if(!.)
 		return
 	ADD_TRAIT(owner, TRAIT_STAGGERED, TRAIT_STATUS_EFFECT(id))
-	owner.adjust_mob_scatter(5)
+	owner.adjust_mob_scatter(10)
+	if(isxeno(owner))
+		var/mob/living/carbon/xenomorph/beno = owner
+		if(length(beno.buckled_mobs))
+			beno.unbuckle_all_mobs(TRUE)
+			beno.ParalyzeNoChain(3 SECONDS)
+		if(beno.eaten_mob)
+			var/datum/action/ability/activable/xeno/devour/devussy = locate() in beno.actions
+			if(devussy)
+				devussy.release_haul(FALSE)
+				beno.ParalyzeNoChain(3 SECONDS)
+
 
 /datum/status_effect/incapacitating/stagger/on_remove()
 	REMOVE_TRAIT(owner, TRAIT_STAGGERED, TRAIT_STATUS_EFFECT(id))
-	owner.adjust_mob_scatter(-5)
+	owner.adjust_mob_scatter(-10)
 
 //STUN
 /datum/status_effect/incapacitating/stun
@@ -149,21 +160,39 @@
 	if(!owner.maxHealth)
 		return
 	var/health_ratio = owner.health / owner.maxHealth
-	var/healing = BASE_HEAL_RATE //set for a base of 0.25 healed per 2-second interval asleep in a bed with covers.
+	var/healing = (2 * BASE_HEAL_RATE) //set for a base of 0.25 healed per 2-second interval asleep in a bed with covers.
 	if((locate(/obj/structure/bed) in owner.loc))
-		healing += (2 * BASE_HEAL_RATE)
+		healing += (4 * BASE_HEAL_RATE)
 	else if((locate(/obj/structure/table) in owner.loc))
-		healing += BASE_HEAL_RATE
+		healing += (2 * BASE_HEAL_RATE)
 	if(locate(/obj/item/bedsheet) in owner.loc)
-		healing += BASE_HEAL_RATE
+		healing += (4 * BASE_HEAL_RATE)
 	if((locate(/obj/item/toy/plush) in owner.loc)) // plushie bonus in bed
-		healing += BASE_HEAL_RATE
+		healing += (4 * BASE_HEAL_RATE)
+	if((locate(/obj/alien/weeds/sticky) in owner.loc)) // Sticky weeds suck!
+		healing += (2 * BASE_HEAL_RATE)
+	if((locate(/obj/alien/weeds) in owner.loc)) // Alien weeds are comfy
+		healing += (4 * BASE_HEAL_RATE)
+	if((locate(/obj/alien/weeds/resting) in owner.loc)) // So comfortable!!
+		healing += (8 * BASE_HEAL_RATE)
+	if((locate(/obj/structure/bed/nest/advanced) in owner.loc)) // Can be comfortable?
+		healing += (2 * BASE_HEAL_RATE)
+	if((locate(/obj/structure/bed/nest/advanced/special) in owner.loc)) // Much much nicer
+		healing += (4 * BASE_HEAL_RATE)
+	if((locate(/obj/structure/bed/nest) in owner.loc)) // Nest that doesn't fuck you while you sleep
+		healing += (6 * BASE_HEAL_RATE)
+	if((locate(/obj/item/stack/req_jelly) in owner.loc)) // Helps you sleep a little better
+		healing += (2 * BASE_HEAL_RATE)
+	if(isxeno(owner)) // Xenos should get a much higher healing rate for sleeping, its better than resting!
+		healing += (8 * BASE_HEAL_RATE)
 	if(health_ratio > -0.5)
-		owner.adjustBruteLoss(healing)
-		owner.adjustFireLoss(healing)
+		if(owner.getBruteLoss())
+			owner.heal_limb_damage(-healing, 0, TRUE, TRUE)
+		if(owner.getFireLoss())
+			owner.heal_limb_damage(0, -healing, TRUE, TRUE)
 		owner.adjustToxLoss(healing * 0.5, TRUE, TRUE)
 		owner.adjustStaminaLoss(healing * 100)
-		owner.adjustCloneLoss(healing * health_ratio * 0.8)
+		owner.adjustCloneLoss(healing * health_ratio * 0.5)
 	if(human_owner?.drunkenness)
 		human_owner.drunkenness *= 0.997 //reduce drunkenness by 0.3% per tick, 6% per 2 seconds
 	if(prob(20))
@@ -177,7 +206,7 @@
 	id = "repairing"
 	tick_interval = 1 SECONDS
 	///How much brute or burn per second
-	var/healing_per_tick = 8 //Robots can now bleedout
+	var/healing_per_tick = 4 //Robots can now bleedout
 	///Whether the last tick made a sound effect or not
 	var/last_sound
 

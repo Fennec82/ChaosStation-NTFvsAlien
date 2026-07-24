@@ -1,7 +1,7 @@
 /datum/species/zombie
 	name = "Zombie"
 	icobase = 'icons/mob/human_races/r_husk.dmi'
-	total_health = 125
+	total_health = 100
 	species_flags = NO_BREATHE|NO_SCAN|NO_BLOOD|NO_POISON|NO_PAIN|NO_CHEM_METABOLIZATION|NO_STAMINA|HAS_UNDERWEAR|HEALTH_HUD_ALWAYS_DEAD|PARALYSE_RESISTANT|SPECIES_NO_HUG
 	lighting_cutoff = LIGHTING_CUTOFF_HIGH
 	inherent_traits = TRAIT_CRIT_IS_DEATH //so they dont stay alive when downed ig.
@@ -39,12 +39,6 @@
 
 /datum/species/zombie/on_species_gain(mob/living/carbon/human/H, datum/species/old_species)
 	. = ..()
-	for(var/datum/limb/limb AS in H.limbs)
-		if(!istype(limb, /datum/limb/head))
-			continue
-		limb.vital = FALSE
-		break
-
 	log_game("Marking [logdetails(H)] as undefibbable because they are rising as a zombie.")
 	H.set_undefibbable()
 	H.faction = faction
@@ -90,11 +84,6 @@
 
 /datum/species/zombie/post_species_loss(mob/living/carbon/human/H)
 	. = ..()
-	for(var/datum/limb/limb AS in H.limbs)
-		if(!istype(limb, /datum/limb/head))
-			continue
-		limb.vital = TRUE
-		break
 
 	var/datum/atom_hud/health_hud = GLOB.huds[DATA_HUD_MEDICAL_OBSERVER]
 	health_hud.remove_hud_from(H)
@@ -150,6 +139,7 @@
 	H.updatehealth()
 
 /datum/species/zombie/handle_death(mob/living/carbon/human/H)
+	/*
 	var/datum/limb/head/head = H.get_limb("head")
 	if(H.on_fire)
 		addtimer(CALLBACK(src, PROC_REF(fade_out_and_qdel_in), H), 1 MINUTES)
@@ -159,6 +149,8 @@
 		addtimer(CALLBACK(src, PROC_REF(fade_out_and_qdel_in), H), 1 MINUTES)
 		return
 	addtimer(CALLBACK(H, TYPE_PROC_REF(/mob/living/carbon/human, revive_to_crit), TRUE, FALSE), revive_time)
+	*/
+	addtimer(CALLBACK(src, PROC_REF(fade_out_and_qdel_in), H), 1 MINUTES)
 
 
 /datum/species/zombie/create_organs(mob/living/carbon/human/organless_human)

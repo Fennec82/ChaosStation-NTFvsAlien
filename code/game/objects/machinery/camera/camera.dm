@@ -138,7 +138,7 @@
 		return TRUE
 	TOGGLE_BITFIELD(machine_stat, PANEL_OPEN)
 	to_chat(user, span_notice("You screw the camera's panel [CHECK_BITFIELD(machine_stat, PANEL_OPEN) ? "open" : "closed"]."))
-	I.play_tool_sound(src)
+	I.play_tool_sound(src, 50)
 	update_icon()
 	return TRUE
 
@@ -148,7 +148,7 @@
 		return FALSE
 	repair_damage(max_integrity, user)
 	toggle_cam(user, TRUE)
-	I.play_tool_sound(src)
+	I.play_tool_sound(src, 50)
 	update_icon()
 	return TRUE
 
@@ -465,3 +465,21 @@
 /obj/machinery/camera/autoname/thunderdome/hidden/update_appearance(updates)
 	SHOULD_CALL_PARENT(FALSE)
 	return
+
+//ntf
+/obj/machinery/camera/projectile_hit(atom/movable/projectile/proj, cardinal_move, uncrossing)
+	. = ..()
+	if(powered())
+		if(!CHECK_BITFIELD(machine_stat, PANEL_OPEN))
+			ENABLE_BITFIELD(machine_stat, PANEL_OPEN)
+			update_icon()
+			visible_message(span_danger("\The [src]'s cover swings open, exposing the wires!"))
+			return
+
+		var/datum/effect_system/spark_spread/sparks = new
+		sparks.set_up(2, 0, src)
+		sparks.attach(src)
+		sparks.start()
+
+		deactivate()
+		visible_message(span_danger("\The [src]'s wires snap apart in a rain of sparks!"))

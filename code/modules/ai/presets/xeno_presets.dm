@@ -96,6 +96,9 @@
 	. = ..()
 	AddComponent(/datum/component/ai_controller, /datum/ai_behavior/xeno/ranged)
 
+/mob/living/carbon/xenomorph/sentinel/ai/retrograde
+	caste_base_type = /datum/xeno_caste/sentinel/retrograde
+
 /mob/living/carbon/xenomorph/spitter/ai
 
 /mob/living/carbon/xenomorph/spitter/ai/Initialize(mapload, do_not_set_as_ruler, _hivenumber)
@@ -128,5 +131,55 @@
 
 /mob/living/carbon/xenomorph/nymph/ai/Initialize(mapload, do_not_set_as_ruler, _hivenumber)
 	hivenumber = _hivenumber || hivenumber
+	. = ..()
+	AddComponent(/datum/component/ai_controller, /datum/ai_behavior/xeno)
+
+/mob/living/carbon/xenomorph/carrier/ai
+
+/datum/ai_behavior/xeno/ranged/carrier
+	minimum_health = 0.5
+
+/mob/living/carbon/xenomorph/carrier/ai/Initialize(mapload, do_not_set_as_ruler, _hivenumber)
+	hivenumber = _hivenumber || hivenumber
+	. = ..()
+	AddComponent(/datum/component/ai_controller, /datum/ai_behavior/xeno/ranged/carrier)
+
+/mob/living/carbon/xenomorph/king/ai
+
+/mob/living/carbon/xenomorph/king/ai/Initialize(mapload, do_not_set_as_ruler, _hivenumber)
+	hivenumber = _hivenumber || hivenumber
+	. = ..()
+	AddComponent(/datum/component/ai_controller, /datum/ai_behavior/xeno)
+
+/mob/living/carbon/xenomorph/king/conqueror/ai
+
+/mob/living/carbon/xenomorph/king/conqueror/ai/Initialize(mapload, do_not_set_as_ruler, _hivenumber)
+	hivenumber = _hivenumber || hivenumber
+	. = ..()
+	AddComponent(/datum/component/ai_controller, /datum/ai_behavior/xeno)
+
+/mob/living/carbon/xenomorph/shrike/ai
+
+/mob/living/carbon/xenomorph/shrike/ai/Initialize(mapload, do_not_set_as_ruler, _hivenumber)
+	hivenumber = _hivenumber || hivenumber
+	. = ..()
+	AddComponent(/datum/component/ai_controller, /datum/ai_behavior/xeno)
+
+/mob/living/carbon/xenomorph/dragon/ai
+
+/mob/living/carbon/xenomorph/dragon/ai/Initialize(mapload, do_not_set_as_ruler, _hivenumber)
+	hivenumber = _hivenumber || hivenumber
+	. = ..()
+	AddComponent(/datum/component/ai_controller, /datum/ai_behavior/xeno)
+
+/mob/living/carbon/xenomorph/spitter/globadier/ai
+
+/mob/living/carbon/xenomorph/spitter/globadier/ai/Initialize(mapload)
+	. = ..()
+	AddComponent(/datum/component/ai_controller, /datum/ai_behavior/xeno/ranged)
+
+/mob/living/carbon/xenomorph/bull/ai
+
+/mob/living/carbon/xenomorph/bull/ai/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/ai_controller, /datum/ai_behavior/xeno)

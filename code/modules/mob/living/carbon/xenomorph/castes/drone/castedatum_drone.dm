@@ -17,14 +17,14 @@
 
 	// *** Speed *** //
 	speed = -1.2
-	weeds_speed_mod = -0.6
+	weeds_speed_mod = -0.4
 
 	// *** Plasma *** //
 	plasma_max = 1000
 	plasma_gain = 50
 
 	// *** Health *** //
-	max_health = 380
+	max_health = 415
 
 	// *** Evolution *** //
 	evolution_threshold = 100

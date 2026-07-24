@@ -35,6 +35,9 @@ export const CharacterCustomization = (props) => {
     'characterCreatorLastNameRandomize',
     0,
   );
+  const [collapsedFeatureGroups, setCollapsedFeatureGroups] = useLocalState<
+    Record<string, boolean>
+  >('characterCreatorCollapsedFeatureGroups', {});
   const {
     random_name,
     gender,
@@ -95,7 +98,9 @@ export const CharacterCustomization = (props) => {
         selected={selected}
         displayText={selected}
         onSelected={(choice) =>
-          act(action, { newValue: valueForLabel ? valueForLabel[choice] : choice })
+          act(action, {
+            newValue: valueForLabel ? valueForLabel[choice] : choice,
+          })
         }
       />
     </Box>
@@ -108,7 +113,12 @@ export const CharacterCustomization = (props) => {
     const valuesByLabel = Object.fromEntries(
       labels.map((label) => [label, Number(label)]),
     );
-    return compactDropdown(`${value ?? minValue}`, labels, action, valuesByLabel);
+    return compactDropdown(
+      `${value ?? minValue}`,
+      labels,
+      action,
+      valuesByLabel,
+    );
   };
   const penisSizeLabels = Array.from(
     { length: 7 },
@@ -141,10 +151,21 @@ export const CharacterCustomization = (props) => {
   ];
   const stringList = (value) =>
     Array.isArray(value) ? value : Object.values(value || {});
+  const previewModes = data.preference_preview_modes || {
+    Job: 'job',
+    Naked: 'naked',
+    'Naked - Aroused': 'naked_aroused',
+  };
+  const previewModeLabels = Array.isArray(previewModes)
+    ? previewModes
+    : Object.keys(previewModes);
   const genitalColorActions = {
-    genitalia_boobs: ['genitalia_boobs_color', 'genitalia_boobs_color_secondary'],
+    genitalia_boobs: [
+      'genitalia_boobs_color',
+      'genitalia_boobs_color_secondary',
+    ],
     genitalia_ass: ['genitalia_ass_color'],
-    genitalia_cock: ['genitalia_cock_color'],
+    genitalia_cock: ['genitalia_cock_color', 'genitalia_cock_color_secondary'],
     genitalia_testicles: [
       'genitalia_testicles_color',
       'genitalia_testicles_color_secondary',
@@ -157,6 +178,7 @@ export const CharacterCustomization = (props) => {
     return {
       id,
       label: data[`character_creator_${id}_label`],
+      group: data[`character_creator_${id}_group`],
       value: data[`character_creator_${id}_value`],
       display: data[`character_creator_${id}_display`],
       option_labels: stringList(data[`character_creator_${id}_option_labels`]),
@@ -171,16 +193,39 @@ export const CharacterCustomization = (props) => {
     };
   };
   const genitalRowIds = stringList(data.character_creator_genital_row_ids);
-  const genitalRows: CharacterCreatorOptionRow[] = genitalRowIds.map(rowFromData);
+  const genitalRows: CharacterCreatorOptionRow[] =
+    genitalRowIds.map(rowFromData);
   const partRowIds = stringList(data.character_creator_part_row_ids);
   const partRows: CharacterCreatorOptionRow[] = partRowIds.map(rowFromData);
-  const legRows = partRows.filter((row) => row.id === 'digitigrade_legs');
-  const featureRows = partRows.filter((row) => row.id !== 'digitigrade_legs');
+  const creatorFeatureGroups = [
+    { id: 'body_frame', label: 'Body Frame' },
+    { id: 'head_parts', label: 'Head Parts' },
+    { id: 'back_tail', label: 'Back, Tail & Wings' },
+    { id: 'soft_anatomy', label: 'Soft Anatomy' },
+  ];
+  const toggleFeatureGroup = (groupId: string) => {
+    setCollapsedFeatureGroups({
+      ...collapsedFeatureGroups,
+      [groupId]: !collapsedFeatureGroups[groupId],
+    });
+  };
   const showCombatRobotParts = !!data.allow_mismatched_parts;
   const showSupersoldierParts = !!data.custom_supersoldier_parts;
   const isPrototypeSupersoldier = data.species === 'Prototype Supersoldier';
+  const canUseHumanBodyStyle =
+    data.species === 'Human' ||
+    data.species === 'Vatborn' ||
+    data.species === 'Prototype Supersoldier';
+  const usesClassicHumanBody =
+    canUseHumanBodyStyle &&
+    data.human_body_style === 'TGMC' &&
+    !(isPrototypeSupersoldier && showSupersoldierParts);
+  const ethnicityOptions = stringList(data.ethnicities);
+  const skinToneEntries = Object.entries(data.human_skin_tones || {});
   const showSyntheticJobBody =
-    data.species === 'Synthetic' || data.species === 'Early Synthetic' || data.species === 'Combat Robot';
+    data.species === 'Synthetic' ||
+    data.species === 'Early Synthetic' ||
+    data.species === 'Combat Robot';
   const creatorSizeControl = (row: CharacterCreatorOptionRow) => {
     if (!row.size_id) {
       return null;
@@ -363,6 +408,36 @@ export const CharacterCustomization = (props) => {
       null,
       creatorPartColorControls(row),
     );
+  const groupedFeatureSections = () =>
+    creatorFeatureGroups.map((group) => {
+      const rows =
+        group.id === 'soft_anatomy'
+          ? genitalRows
+          : partRows.filter((row) => row.group === group.id);
+      const renderer =
+        group.id === 'soft_anatomy' ? creatorGenitalRow : creatorPartRow;
+      if (!rows.length) {
+        return null;
+      }
+      const collapsed = !!collapsedFeatureGroups[group.id];
+      return (
+        <Box key={group.id} mb={1}>
+          <Button
+            fluid
+            icon={collapsed ? 'chevron-right' : 'chevron-down'}
+            onClick={() => toggleFeatureGroup(group.id)}
+            style={{ textAlign: 'left' }}
+          >
+            {group.label}
+          </Button>
+          {!collapsed ? (
+            <Box mt={0.5}>
+              <LabeledList>{rows.map(renderer)}</LabeledList>
+            </Box>
+          ) : null}
+        </Box>
+      );
+    });
   const markingZoneIds = stringList(data.character_creator_marking_zone_ids);
   const markingRow = (zone: string, rowId: string) => {
     const markingName = data[`character_creator_marking_${rowId}_name`];
@@ -404,7 +479,9 @@ export const CharacterCustomization = (props) => {
           }
         >
           <ColorBox
-            color={data[`character_creator_marking_${rowId}_color`] ?? '#ffffff'}
+            color={
+              data[`character_creator_marking_${rowId}_color`] ?? '#ffffff'
+            }
           />
         </Button>
         <Button
@@ -440,8 +517,12 @@ export const CharacterCustomization = (props) => {
     );
   };
   const markingZone = (zone: string) => {
-    const rowIds = stringList(data[`character_creator_marking_${zone}_row_ids`]);
-    const choices = stringList(data[`character_creator_marking_${zone}_choices`]);
+    const rowIds = stringList(
+      data[`character_creator_marking_${zone}_row_ids`],
+    );
+    const choices = stringList(
+      data[`character_creator_marking_${zone}_choices`],
+    );
     return (
       <LabeledList.Item
         key={zone}
@@ -548,184 +629,221 @@ export const CharacterCustomization = (props) => {
       case 'appearance':
         return (
           <LabeledList>
-              <LabeledList.Item label={'Gender'}>
-                <Dropdown
-                  options={genders.map((thisgender) => genderToName[thisgender])}
-                  selected={genderToName[gender]}
-                  displayText={genderToName[gender]}
-                  onSelected={(selected) =>
-                    act('toggle_gender', { newgender: nameToGender[selected] })
-                  }
-                />
-              </LabeledList.Item>
-              <LabeledList.Item label={'Physique'}>
-                <Dropdown
-                  options={physiques.map(
-                    (thisphysique) => genderToName[thisphysique],
-                  )}
-                  selected={genderToName[physique]}
-                  displayText={genderToName[physique]}
-                  onSelected={(selected) =>
-                    act('toggle_physique', {
-                      newphysique: nameToGender[selected],
-                    })
-                  }
-                />
-              </LabeledList.Item>
-              <SelectFieldPreference
-                label={'Hair style'}
-                value={'h_style'}
-                action={'hairstyle'}
-                extra={
-                  <Box as="span">
-                    {colorSwatchButton(
-                      rgbToHex(r_hair, g_hair, b_hair),
-                      'haircolor',
-                      'Hair color',
-                    )}
-                    {emissiveButton(
-                      data.hair_emissive,
-                      'toggle_hair_emissive',
-                      'Hair emissive',
-                    )}
-                  </Box>
+            <LabeledList.Item label={'Gender'}>
+              <Dropdown
+                options={genders.map((thisgender) => genderToName[thisgender])}
+                selected={genderToName[gender]}
+                displayText={genderToName[gender]}
+                onSelected={(selected) =>
+                  act('toggle_gender', { newgender: nameToGender[selected] })
                 }
               />
-              <SelectFieldPreference
-                label={'Hair gradient style'}
-                value={'grad_style'}
-                action={'grad_style'}
-                extra={colorSwatchButton(
-                  rgbToHex(r_grad, g_grad, b_grad),
-                  'grad_color',
-                  'Gradient color',
+            </LabeledList.Item>
+            <LabeledList.Item label={'Physique'}>
+              <Dropdown
+                options={physiques.map(
+                  (thisphysique) => genderToName[thisphysique],
                 )}
+                selected={genderToName[physique]}
+                displayText={genderToName[physique]}
+                onSelected={(selected) =>
+                  act('toggle_physique', {
+                    newphysique: nameToGender[selected],
+                  })
+                }
               />
-              {colorField(
-                'Eye Color',
-                rgbToHex(r_eyes, g_eyes, b_eyes),
-                'eyecolor',
-                emissiveButton(
-                  data.eye_emissive,
-                  'toggle_eye_emissive',
-                  'Eye emissive',
-                ),
+            </LabeledList.Item>
+            <SelectFieldPreference
+              label={'Hair style'}
+              value={'h_style'}
+              action={'hairstyle'}
+              extra={
+                <Box as="span">
+                  {colorSwatchButton(
+                    rgbToHex(r_hair, g_hair, b_hair),
+                    'haircolor',
+                    'Hair color',
+                  )}
+                  {emissiveButton(
+                    data.hair_emissive,
+                    'toggle_hair_emissive',
+                    'Hair emissive',
+                  )}
+                </Box>
+              }
+            />
+            <SelectFieldPreference
+              label={'Hair gradient style'}
+              value={'grad_style'}
+              action={'grad_style'}
+              extra={colorSwatchButton(
+                rgbToHex(r_grad, g_grad, b_grad),
+                'grad_color',
+                'Gradient color',
               )}
-              <ToggleFieldPreference
-                label={'Eye sight'}
-                value={'good_eyesight'}
-                leftLabel={'Good'}
-                rightLabel={'Bad'}
-                action={'toggle_eyesight'}
-              />
-              <SelectFieldPreference
-                label={'Facial hair'}
-                value={'f_style'}
-                action={'facial_style'}
-                extra={colorSwatchButton(
-                  rgbToHex(r_facial, g_facial, b_facial),
-                  'facialcolor',
-                  'Facial hair color',
-                )}
-              />
+            />
+            {colorField(
+              'Eye Color',
+              rgbToHex(r_eyes, g_eyes, b_eyes),
+              'eyecolor',
+              emissiveButton(
+                data.eye_emissive,
+                'toggle_eye_emissive',
+                'Eye emissive',
+              ),
+            )}
+            <ToggleFieldPreference
+              label={'Eye sight'}
+              value={'good_eyesight'}
+              leftLabel={'Good'}
+              rightLabel={'Bad'}
+              action={'toggle_eyesight'}
+            />
+            <SelectFieldPreference
+              label={'Facial hair'}
+              value={'f_style'}
+              action={'facial_style'}
+              extra={colorSwatchButton(
+                rgbToHex(r_facial, g_facial, b_facial),
+                'facialcolor',
+                'Facial hair color',
+              )}
+            />
           </LabeledList>
         );
       case 'species':
         return (
           <LabeledList>
+            <Button.Checkbox
+              checked={showCombatRobotParts}
+              onClick={toggleCombatRobotParts}
+              tooltip="Shows separate body and head controls for custom robot appearances."
+            >
+              Custom robot parts
+            </Button.Checkbox>
+            {isPrototypeSupersoldier ? (
               <Button.Checkbox
-                checked={showCombatRobotParts}
-                onClick={toggleCombatRobotParts}
-                tooltip="Shows separate body and head controls for custom robot appearances."
+                checked={showSupersoldierParts}
+                onClick={toggleSupersoldierParts}
+                tooltip="Shows separate body and head controls for prototype supersoldier appearance."
               >
-                Custom robot parts
+                Custom supersoldier parts
               </Button.Checkbox>
-              {isPrototypeSupersoldier ? (
-                <Button.Checkbox
-                  checked={showSupersoldierParts}
-                  onClick={toggleSupersoldierParts}
-                  tooltip="Shows separate body and head controls for prototype supersoldier appearance."
-                >
-                  Custom supersoldier parts
-                </Button.Checkbox>
-              ) : null}
-              <SelectFieldPreference
-                label={'Species'}
-                value={'species'}
-                action={'species'}
-                extra={colorSwatchButton(
-                  data.body_color,
-                  'bodycolor',
-                  'Body color',
+            ) : null}
+            <SelectFieldPreference
+              label={'Species'}
+              value={'species'}
+              action={'species'}
+              extra={
+                !usesClassicHumanBody
+                  ? colorSwatchButton(data.body_color, 'bodycolor', 'Body color')
+                  : null
+              }
+            />
+            {canUseHumanBodyStyle ? (
+              <Button.Checkbox
+                checked={usesClassicHumanBody}
+                onClick={() => act('toggle_human_body_style')}
+                tooltip="Uses the classic TGMC human body sprites for this character."
+              >
+                Classic TGMC body
+              </Button.Checkbox>
+            ) : null}
+            {canUseHumanBodyStyle && usesClassicHumanBody ? (
+              <LabeledList.Item label="Ethnicity">
+                {compactDropdown(
+                  data.ethnicity || 'Western',
+                  ethnicityOptions,
+                  'ethnicity',
+                  undefined,
+                  '160px',
                 )}
+              </LabeledList.Item>
+            ) : null}
+            {canUseHumanBodyStyle && !usesClassicHumanBody ? (
+              <LabeledList.Item label="Skin tone">
+                {skinToneEntries.map(([tone, color]) => (
+                  <Button
+                    key={tone}
+                    compact
+                    selected={
+                      data.body_color?.toLowerCase() ===
+                      String(color).toLowerCase()
+                    }
+                    tooltip={String(color)}
+                    onClick={() => act('bodycolor_preset', { newValue: tone })}
+                  >
+                    <ColorBox color={String(color)} /> {tone}
+                  </Button>
+                ))}
+              </LabeledList.Item>
+            ) : null}
+            {showSyntheticJobBody ? (
+              <SelectFieldPreference
+                label={'Synthetic job body'}
+                value={'synthetic_body_base'}
+                action={'synthetic_body_base'}
+                fallback={'Human'}
+                tooltip={'Body base used by the Synthetic and Early Synthetic appearance paths.'}
               />
+            ) : null}
+            {showSyntheticJobBody ? (
               <SelectFieldPreference
                 label={'Synth type'}
                 value={'synthetic_type'}
                 action={'synthetic_type'}
               />
-              {showCombatRobotParts ? (
-                <>
-                  <SelectFieldPreference
-                    label={'Combat robot body'}
-                    value={'robot_body_base'}
-                    action={'robot_body_base'}
-                    fallback={'Combat Robot'}
-                    tooltip={'Body sprite base used by custom robot appearances.'}
-                  />
-                  <SelectFieldPreference
-                    label={'Combat robot head'}
-                    value={'robot_head_base'}
-                    action={'robot_head_base'}
-                    fallback={'Combat Robot'}
-                    tooltip={'Head sprite base used by custom robot appearances.'}
-                  />
-                </>
-              ) : null}
-              {isPrototypeSupersoldier && showSupersoldierParts ? (
-                <>
-                  <SelectFieldPreference
-                    label={'Supersoldier body'}
-                    value={'supersoldier_body_base'}
-                    action={'supersoldier_body_base'}
-                    fallback={'Human'}
-                    tooltip={'Body sprite base used by custom prototype supersoldier appearances.'}
-                  />
-                  <SelectFieldPreference
-                    label={'Supersoldier head'}
-                    value={'supersoldier_head_base'}
-                    action={'supersoldier_head_base'}
-                    fallback={'Human'}
-                    tooltip={'Head sprite base used by custom prototype supersoldier appearances.'}
-                  />
-                </>
-              ) : null}
-              {colorField(
-                'Blood Color',
-                blood_color,
-                'bloodcolor',
-              )}
-              {legRows.map(creatorPartRow)}
+            ) : null}
+            {showCombatRobotParts ? (
+              <>
+                <SelectFieldPreference
+                  label={'Combat robot body'}
+                  value={'robot_body_base'}
+                  action={'robot_body_base'}
+                  fallback={'Combat Robot'}
+                  tooltip={'Body sprite base used by custom robot appearances.'}
+                />
+                <SelectFieldPreference
+                  label={'Combat robot head'}
+                  value={'robot_head_base'}
+                  action={'robot_head_base'}
+                  fallback={'Combat Robot'}
+                  tooltip={'Head sprite base used by custom robot appearances.'}
+                />
+              </>
+            ) : null}
+            {isPrototypeSupersoldier && showSupersoldierParts ? (
+              <>
+                <SelectFieldPreference
+                  label={'Supersoldier body'}
+                  value={'supersoldier_body_base'}
+                  action={'supersoldier_body_base'}
+                  fallback={'Human'}
+                  tooltip={'Body sprite base used by custom prototype supersoldier appearances.'}
+                />
+                <SelectFieldPreference
+                  label={'Supersoldier head'}
+                  value={'supersoldier_head_base'}
+                  action={'supersoldier_head_base'}
+                  fallback={'Human'}
+                  tooltip={'Head sprite base used by custom prototype supersoldier appearances.'}
+                />
+              </>
+            ) : null}
+            {colorField('Blood Color', blood_color, 'bloodcolor')}
           </LabeledList>
         );
       case 'features':
         return (
-          <LabeledList>
+          <Box>
             <Button.Checkbox
               checked={data.allow_emissives}
               onClick={() => act('toggle_emissives')}
             >
               Allow emissives
             </Button.Checkbox>
-            {genitalRows.length ? (
-              genitalRows.map(creatorGenitalRow)
-            ) : (
-                <LabeledList.Item label={'Genitals'}>
-                  No options available
-                </LabeledList.Item>
-              )}
-              {featureRows.map(creatorPartRow)}
-          </LabeledList>
+            <Box mt={1}>{groupedFeatureSections()}</Box>
+          </Box>
         );
       case 'markings':
         return (
@@ -756,7 +874,11 @@ export const CharacterCustomization = (props) => {
   };
   return (
     <Flex align="stretch">
-      <Flex.Item basis="245px" shrink={0} style={{ position: 'relative', zIndex: 0 }}>
+      <Flex.Item
+        basis="245px"
+        shrink={0}
+        style={{ position: 'relative', zIndex: 0 }}
+      >
         <Section title="Character">
           <Box textAlign="center" mb={1}>
             <Button
@@ -791,9 +913,24 @@ export const CharacterCustomization = (props) => {
           >
             <ProfilePicture width="225px" height="260px" />
           </Box>
+          <Dropdown
+            options={previewModeLabels}
+            selected={data.preference_preview_mode || 'Job'}
+            displayText={data.preference_preview_mode || 'Job'}
+            onSelected={(choice) =>
+              act('preference_preview_mode', {
+                newValue: previewModes?.[choice] ?? choice,
+              })
+            }
+          />
         </Section>
       </Flex.Item>
-      <Flex.Item grow={1} basis={0} ml={1} style={{ position: 'relative', zIndex: 2 }}>
+      <Flex.Item
+        grow={1}
+        basis={0}
+        ml={1}
+        style={{ position: 'relative', zIndex: 2 }}
+      >
         <Section title={creatorPanels[activeCreatorPanel]}>
           <Tabs>
             {Object.entries(creatorPanels).map(([id, label]) => (

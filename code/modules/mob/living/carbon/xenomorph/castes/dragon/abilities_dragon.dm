@@ -164,6 +164,20 @@
 		return FALSE
 	return TRUE
 
+/datum/action/ability/activable/xeno/backhand/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/activable/xeno/backhand/ai_should_use(atom/target)
+	if(!ismob(target))
+		return FALSE
+	if(get_dist(target, owner) > 6)
+		return FALSE
+	if(!line_of_sight(owner, target))
+		return FALSE
+	if(target.get_xeno_hivenumber() == owner.get_xeno_hivenumber())
+		return FALSE
+	return TRUE
+
 /datum/action/ability/activable/xeno/fly
 	name = "Fly"
 	action_icon_state = "fly"

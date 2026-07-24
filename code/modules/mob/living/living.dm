@@ -938,6 +938,15 @@ below 100 is not dizzy
 		if(CONSCIOUS) //From conscious to unconscious.
 			ADD_TRAIT(src, TRAIT_IMMOBILE, STAT_TRAIT)
 			ADD_TRAIT(src, TRAIT_FLOORED, STAT_TRAIT)
+			var/health_from_crit = health - get_crit_threshold()
+			var/healthcritmsg = "."
+			if(health_from_crit <= 0)
+				healthcritmsg = ", not yet registered as in healthcrit."
+			if(in_healthcrit_since)
+				var/time_in_healthcrit = world.time - in_healthcrit_since
+				healthcritmsg = ", [(time_in_healthcrit < 1 ? "0 seconds" : DisplayTimeText(time_in_healthcrit))] into healthcrit."
+			log_message("became unconscious, [health_from_crit] health above crit[healthcritmsg]", LOG_ATTACK, color="orange")
+			stat_not_conscious_since = world.time
 		if(DEAD)
 			REMOVE_TRAIT(src, TRAIT_NON_FLAMMABLE, STAT_TRAIT)
 			on_revive()
@@ -945,6 +954,8 @@ below 100 is not dizzy
 		if(CONSCIOUS) //From unconscious to conscious.
 			REMOVE_TRAIT(src, TRAIT_IMMOBILE, STAT_TRAIT)
 			REMOVE_TRAIT(src, TRAIT_FLOORED, STAT_TRAIT)
+			var/health_from_crit = health - get_crit_threshold()
+			log_message("stopped being unconscious, [health_from_crit] health above crit, was unconscious for [DisplayTimeText(world.time - stat_not_conscious_since)].", LOG_ATTACK, color="orange")
 		if(DEAD)
 			on_death()
 			ADD_TRAIT(src, TRAIT_NON_FLAMMABLE, STAT_TRAIT)

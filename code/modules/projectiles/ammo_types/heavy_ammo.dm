@@ -15,8 +15,13 @@
 	damage = 40 //Reduced damage due to vastly increased mobility
 	penetration = 40 //Reduced penetration due to vastly increased mobility
 	accuracy = 5
-	barricade_clear_distance = 2
 	sundering = 5
+
+/datum/ammo/bullet/machinegun/mob_hmg
+	damage = 35
+	penetration = 35
+	accurate_range_min = 2
+	sundering = 3
 
 /datum/ammo/bullet/minigun
 	name = "minigun bullet"
@@ -67,26 +72,35 @@
 	accuracy_variation = 3
 	damage = 50
 	penetration = 50
-	sundering = 12.5
+	sundering = 5
 	shrapnel_chance = 0
-	max_range = 20
-	accurate_range_min = 4
+	max_range = 22
+	///4 range accuracy minimum to hit a single target with windup? No and if not, see culverin stats.
 	///Bonus flat damage to walls, balanced around resin walls.
 	var/autocannon_wall_bonus = 50
 
 /datum/ammo/bullet/auto_cannon/on_hit_turf(turf/target_turf, atom/movable/projectile/proj)
 	proj.proj_max_range -= 10
+	proj.accuracy *= 0.7
+	proj.damage *= 0.7
+	proj.penetration *= 0.7
 
 	if(istype(target_turf, /turf/closed/wall))
 		var/turf/closed/wall/wall_victim = target_turf
 		wall_victim.take_damage(autocannon_wall_bonus, proj.damtype, proj.armor_type)
 
 /datum/ammo/bullet/auto_cannon/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
-	proj.proj_max_range -= 5
-	staggerstun(target_mob, proj, max_range = 20, stagger = 1.5)
+	proj.proj_max_range -= 8
+	proj.accuracy *= 0.8
+	proj.damage *= 0.8
+	proj.penetration *= 0.8
+	staggerstun(target_mob, proj, max_range = 20, stagger = 1)
 
 /datum/ammo/bullet/auto_cannon/on_hit_obj(obj/target_obj, atom/movable/projectile/proj)
-	proj.proj_max_range -= 5
+	proj.proj_max_range -= 4
+	proj.accuracy *= 0.9
+	proj.damage *= 0.9
+	proj.penetration *= 0.9
 
 /datum/ammo/bullet/bike_autocannon
 	name = "autocannon high-velocity bullet"

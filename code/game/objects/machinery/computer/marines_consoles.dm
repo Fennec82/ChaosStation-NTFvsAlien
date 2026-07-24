@@ -11,6 +11,7 @@
 	var/authenticated = 0
 	var/mode = 0
 	var/printing = null
+	faction = FACTION_TERRAGOV
 
 
 /obj/machinery/computer/marine_card/attackby(obj/item/I, mob/user, params)
@@ -55,7 +56,7 @@
 		dat += "<h4>Crew Manifest</h4>"
 		dat += "Entries cannot be modified from this terminal.<br><br>"
 		if(GLOB.datacore)
-			dat += GLOB.datacore.get_manifest(0) // make it monochrome
+			dat += GLOB.datacore.get_manifest(TRUE, FALSE, faction) // make it monochrome
 		dat += "<br>"
 		dat += "<a href='byond://?src=[text_ref(src)];choice=print'>Print</a><br>"
 		dat += "<br>"
@@ -319,7 +320,7 @@
 				var/t1 = "<h4>Crew Manifest</h4>"
 				t1 += "<br>"
 				if(GLOB.datacore)
-					t1 += GLOB.datacore.get_manifest(0) // make it monochrome
+					t1 += GLOB.datacore.get_manifest(TRUE, FALSE, faction) // make it monochrome
 
 				P.info = t1
 				P.name = "paper- 'Crew Manifest'"

@@ -203,6 +203,21 @@
 		if(collusion_paralyze_duration)
 			living_source.Paralyze(collusion_paralyze_duration)
 
+/datum/action/ability/activable/xeno/psychic_fling/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/activable/xeno/psychic_fling/ai_should_use(atom/target)
+	if(!ismob(target))
+		return FALSE
+	if(get_dist(target, owner) > 6)
+		return FALSE
+	if(!line_of_sight(owner, target))
+		return FALSE
+	if(target.get_xeno_hivenumber() == owner.get_xeno_hivenumber())
+		return FALSE
+	return TRUE
+
+
 // ***************************************
 // *********** Unrelenting Force
 // ***************************************
@@ -314,6 +329,20 @@
 	for(var/x in 1 to throwing_distance)
 		throw_location = get_step(throw_location, starting_direction)
 	movable_source.throw_at(throw_location, throwing_distance, 1, xeno_owner, TRUE)
+
+/datum/action/ability/activable/xeno/unrelenting_force/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/activable/xeno/unrelenting_force/ai_should_use(atom/target)
+	if(!ismob(target))
+		return FALSE
+	if(get_dist(target, owner) > 6)
+		return FALSE
+	if(!line_of_sight(owner, target))
+		return FALSE
+	if(target.get_xeno_hivenumber() == owner.get_xeno_hivenumber())
+		return FALSE
+	return TRUE
 
 // ***************************************
 // *********** Psychic Cure
@@ -473,6 +502,19 @@
 
 // COMSIG_LIVING_STATUS_STAGGER
 
+/datum/action/ability/activable/xeno/psychic_cure/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/activable/xeno/psychic_cure/ai_should_use(atom/target)
+	if(!ismob(target))
+		return FALSE
+	if(get_dist(target, owner) > 6)
+		return FALSE
+	if(!line_of_sight(owner, target))
+		return FALSE
+	if(target.get_xeno_hivenumber() != owner.get_xeno_hivenumber())
+		return FALSE
+	return TRUE
 
 /mob/living/proc/psychic_cure()
 	var/amount = 100
@@ -622,6 +664,20 @@
 		movable_victim.throw_at(targetturf, 4, 1, owner, FALSE, FALSE)
 
 
+/datum/action/ability/activable/xeno/psychic_vortex/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/activable/xeno/psychic_vortex/ai_should_use(atom/target)
+	if(!ismob(target))
+		return FALSE
+	if(get_dist(target, owner) > 6)
+		return FALSE
+	if(!line_of_sight(owner, target))
+		return FALSE
+	if(target.get_xeno_hivenumber() == owner.get_xeno_hivenumber())
+		return FALSE
+	return TRUE
+
 #define PSYCHIC_CHOKE_DAMAGE_THRESHOLD 5
 
 // ***************************************
@@ -743,6 +799,20 @@
 	damage_taken_so_far += damage_amount
 	if(damage_taken_so_far >= damage_threshold)
 		end_choke()
+
+/datum/action/ability/activable/xeno/psychic_choke/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/activable/xeno/psychic_choke/ai_should_use(atom/target)
+	if(!ismob(target))
+		return FALSE
+	if(get_dist(target, owner) > 6)
+		return FALSE
+	if(!line_of_sight(owner, target))
+		return FALSE
+	if(target.get_xeno_hivenumber() == owner.get_xeno_hivenumber())
+		return FALSE
+	return TRUE
 
 /particles/psychic_choke
 	icon = 'icons/effects/particles/generic_particles.dmi'

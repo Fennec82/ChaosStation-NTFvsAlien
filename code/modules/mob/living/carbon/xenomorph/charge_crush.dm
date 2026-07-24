@@ -168,6 +168,9 @@
 	if(next_move_limit && world.time > next_move_limit)
 		return FALSE
 
+	if(charger.eaten_mob)
+		return FALSE
+
 	if(charger.pulling)
 		return FALSE
 

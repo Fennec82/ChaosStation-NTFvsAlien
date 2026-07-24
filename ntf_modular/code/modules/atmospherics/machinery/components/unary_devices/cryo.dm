@@ -24,6 +24,22 @@
 	///the radio plugged into this pod
 	var/obj/item/radio/radio
 
+/obj/structure/bed/chair/stasis/wrench_act(mob/living/user, obj/item/I)
+	if(!user.Adjacent(src))
+		return
+	I.play_tool_sound(src, 50)
+	anchored = !anchored
+	if(anchored)
+		user.visible_message(
+			"[user] anchors \the [src].",
+			span_notice("You anchor \the [src]."),
+			span_italics("You hear ratchet."))
+	else
+		user.visible_message(
+			"[user] unanchors \the [src].",
+			span_notice("You unanchor \the [src]."),
+			span_italics("You hear ratchet."))
+
 //keep facing south unless north
 /obj/structure/bed/chair/stasis/setDir(newdir)
 	if(newdir == EAST)
@@ -125,9 +141,13 @@
 
 
 /obj/structure/bed/chair/stasis/user_buckle_mob(mob/living/buckling_mob, mob/living/user, check_loc, silent)
+	if(QDELETED(user) || !isliving(user))
+		return
+	/*
 	if(buckling_mob.stat == DEAD)
 		to_chat(user, span_notice("[buckling_mob] is dead!"))
 		return FALSE
+	*/
 
 	if(isxeno(buckling_mob))
 		return FALSE
@@ -280,7 +300,7 @@
 	set category = "IC.Object"
 	set src in view(0)
 
-	if(QDELETED(occupant) || !(usr in buckled_mobs))
+	if(QDELETED(occupant) || !isliving(usr) || !(usr in buckled_mobs))
 		return FALSE
 	if(ishuman(usr) && usr.client)
 		var/mob/living/carbon/human/human_usr = usr
@@ -295,23 +315,34 @@
 	set category = "IC.Object"
 	set src in view(1)
 
+	if(QDELETED(usr) || !isliving(usr))
+		return
 	if(usr.incapacitated(TRUE))
 		return
+
 	log_combat(usr, occupant, "attempted to fullcryo", src)
 	if(occupant.client && occupant != usr)
 		to_chat(usr, span_warning("You cannot send away an awake person."))
 		return
+	if(occupant.stat == DEAD)
+		to_chat(usr, span_notice("[occupant] is dead!"))
+		return
 	if(!occupant)
 		to_chat(usr, span_warning("There is no occupant in [src]."))
 		return
+	if(usr != occupant)
+		var/choice = tgui_alert(usr, "Are you sure you want to send [occupant] to hypersleep storage? You should ONLY do this if there is no job slots left for their job and one must be freed... Or if they asked you to.", "Fullcryo occupant", list("Yes","No"))
+		if(choice == "No")
+			return
 	playsound(loc, 'sound/machines/hiss.ogg', 25, 1)
 	UnregisterSignal(occupant, list(COMSIG_STARTED_SEX_UPON,COMSIG_RECEIVED_SEX,COMSIG_CAME_INTO,COMSIG_CAME_INTO_BY,COMSIG_CAME_ONTO,COMSIG_CAME_ONTO_BY))
 	log_combat(usr, occupant, "fullcryoed", src)
+	for(var/obj/item/W in src)
+		W.store_in_cryo(occupant.faction)
+	sex_records = list()
 	occupant.despawn()
 	occupant = null
 	update_icon()
-	for(var/obj/item/W in src)
-		W.store_in_cryo()
 
 /obj/structure/bed/chair/stasis/verb/store_items()
 	set name = "Store Worn Items"
@@ -319,6 +350,8 @@
 	set category = "IC.Object"
 	set src in view(1)
 
+	if(QDELETED(usr) || !isliving(usr))
+		return
 	if(usr.incapacitated(TRUE))
 		return
 	if(occupant.client)
@@ -338,6 +371,8 @@
 	set category = "IC.Object"
 	set src in view(1)
 
+	if(QDELETED(usr) || !isliving(usr))
+		return
 	if(usr.incapacitated(TRUE))
 		return
 	if(!length(contents))

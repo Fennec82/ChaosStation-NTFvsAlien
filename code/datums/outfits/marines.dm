@@ -73,13 +73,17 @@
 	name = "Quik-Clap Grenade"
 	icon_state = "grenade_sticky_pmc"
 	color = COLOR_RED
-	desc = "Unfolds into a quik-clap bedroll, to be used by security forces for emergency field administration of cock upon lawbreakers. It does nothing to capture the target, though."
+	desc = "Unfolds into a quik-clap bedroll, to be used by security forces for emergency field administration of cock upon lawbreakers. The very dense grenade itself is good as a nonlethal throwable that stuns and tires enemies, if it manages to capture someone, it will automatically present the lawbreaker on the bed but... It does not really bind them."
 	hit_sound = null
+	det_time = 3 SECONDS
 
 /obj/item/explosive/grenade/bednade/throw_impact(atom/hit_atom, speed, bounce)
 	. = ..()
 	if(isliving(hit_atom))
 		var/mob/living/mafaka = hit_atom
+		mafaka.ImmobilizeNoChain(1.5 SECONDS)
+		mafaka.adjustStaminaLoss(60)
+		playsound(mafaka.loc, SFX_PUNCH, 25, TRUE)
 		Move(mafaka.loc) //go beneath people
 
 /obj/item/explosive/grenade/bednade/prime()
@@ -94,6 +98,12 @@
 			idiot.dropItemToGround(src, TRUE)
 			loc = idiot.loc
 	var/obj/structure/bed/bedroll/sec/sexbed = new /obj/structure/bed/bedroll/sec(loc)
+	for(var/mob/living/victim in loc)
+		if(!ishuman(victim))
+			continue
+		victim.ParalyzeNoChain(4 SECONDS)
+		victim.adjustStaminaLoss(300) //ur caught, fucked up
+		sexbed.user_buckle_mob(victim, victim, TRUE, TRUE)
 	update_icon()
 	qdel(src)
 	sleep(2)

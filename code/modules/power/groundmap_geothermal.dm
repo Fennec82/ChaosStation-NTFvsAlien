@@ -29,6 +29,9 @@ GLOBAL_VAR_INIT(corrupted_generators, 0)
 	///whether they should generate corruption if corrupted
 	var/corruption_on = FALSE
 	var/obj/effect/miner_owner_marker/owner_marker
+#ifdef POWERDEBUG
+	var/total_charge_outputted_availscale = 0
+#endif
 
 /obj/machinery/power/geothermal/Initialize(mapload)
 	. = ..()
@@ -73,6 +76,9 @@ GLOBAL_VAR_INIT(corrupted_generators, 0)
 		. += "It is claimed by the [GLOB.hive_datums[corrupted].name] hive."
 	if(isxeno(user) && !is_corruptible)
 		. += "It is reinforced, making us not able to corrupt it."
+#ifdef POWERDEBUG
+	. += span_notice("It has outputted a total of [DisplayEnergy(total_charge_outputted_availscale * 2)] (based on [total_charge_outputted_availscale] avail charge units)")
+#endif
 
 /obj/machinery/power/geothermal/should_have_node()
 	return TRUE
@@ -147,6 +153,7 @@ GLOBAL_VAR_INIT(corrupted_generators, 0)
 		if(!GLOB.generators_on_ground)	//Prevent division by 0
 			return PROCESS_KILL
 
+		GLOB.round_statistics.generator_seconds += 2
 		var/total_humans_groundside = 0
 		for(var/z_level in SSmapping.levels_by_trait(ZTRAIT_GROUND))
 			total_humans_groundside += length(GLOB.humans_by_zlevel["[z_level]"])
@@ -155,7 +162,6 @@ GLOBAL_VAR_INIT(corrupted_generators, 0)
 			var/points_generated = GENERATOR_PSYCH_POINT_OUTPUT / GLOB.generators_on_ground
 			SSpoints.add_strategic_psy_points(corrupted, points_generated)
 			GLOB.round_statistics.strategic_psypoints_from_generators += points_generated
-			GLOB.round_statistics.generator_seconds += 2
 			SSpoints.add_tactical_psy_points(corrupted, points_generated*0.25)
 		return
 
@@ -174,6 +180,11 @@ GLOBAL_VAR_INIT(corrupted_generators, 0)
 				if(100)
 					visible_message("[icon2html(src, viewers(src))] [span_notice("<b>[src]</b> rumbles loudly as the combustion and thermal chambers reach full strength.")]")
 		add_avail(power_generation_max * (power_gen_percent / 100) ) //Nope, all good, just add the power
+		if(is_ground_level(z))
+			GLOB.round_statistics.geothermal_output_ground += power_generation_max * (power_gen_percent * 0.02)
+#ifdef POWERDEBUG
+		total_charge_outputted_availscale += power_generation_max * (power_gen_percent * 0.01)
+#endif
 
 /obj/machinery/power/geothermal/proc/check_failure()
 	cur_tick++
@@ -215,7 +226,7 @@ GLOBAL_VAR_INIT(corrupted_generators, 0)
 	if(SEND_SIGNAL(src, COMSIG_OBJ_ATTACK_ALIEN, xeno_attacker, damage_amount) & COMPONENT_NO_ATTACK_ALIEN)
 		return FALSE
 
-	if(is_corruptible && (CHECK_BITFIELD(xeno_attacker.xeno_caste.can_flags, CASTE_CAN_CORRUPT_GENERATOR) || (xeno_attacker.get_hive()?.living_xeno_ruler == xeno_attacker)))
+	if(is_corruptible && ((GLOB.tier_as_number[xeno_attacker.tier] >= 1) || CHECK_BITFIELD(xeno_attacker.xeno_caste.can_flags, CASTE_CAN_CORRUPT_GENERATOR) || (xeno_attacker.get_hive()?.living_xeno_ruler == xeno_attacker)))
 		to_chat(xeno_attacker, span_notice("You start to corrupt [src]"))
 		if(!do_after(xeno_attacker, 10 SECONDS, NONE, src, BUSY_ICON_HOSTILE))
 			return

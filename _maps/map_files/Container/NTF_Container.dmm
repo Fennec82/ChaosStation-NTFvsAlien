@@ -2344,7 +2344,7 @@
 /obj/structure/table/mainship,
 /obj/item/detective_scanner,
 /obj/item/taperecorder,
-/obj/item/storage/box/flashbangs{
+/obj/item/storage/box/stuns{
 	pixel_y = 10
 	},
 /obj/item/storage/box/handcuffs,
@@ -2421,6 +2421,10 @@
 	dir = 1
 	},
 /area/mainship/command/cic)
+"cpA" = (
+/obj/machinery/chem_dispenser/marine,
+/turf/open/floor/mainship/sterile/dark,
+/area/mainship/medical/lower_medical)
 "cpH" = (
 /obj/machinery/shower{
 	pixel_y = 12
@@ -5021,7 +5025,7 @@
 	dir = 9
 	},
 /obj/item/weapon/baton/stunprod,
-/obj/item/storage/box/flashbangs,
+/obj/item/storage/box/stuns,
 /obj/item/flash,
 /obj/item/clothing/glasses/sunglasses/sechud,
 /obj/structure/closet/secure_closet/military_police,
@@ -5667,7 +5671,8 @@
 /obj/item/teleporter_kit/premade,
 /obj/effect/remote_teleporter_linker/pair3,
 /obj/structure/sign/fixedinplace/hangar{
-	pixel_x = -30
+	pixel_x = -30;
+	dir = 4
 	},
 /turf/open/floor/mainship/tcomms,
 /area/deltastation/command/teleporter{
@@ -8645,6 +8650,10 @@
 /obj/effect/soundplayer,
 /turf/closed/wall/mainship/outer/canterbury,
 /area/mainship/shipboard/port_point_defense)
+"iho" = (
+/obj/machinery/chem_dispenser/marine,
+/turf/open/floor/mainship/floor,
+/area/mainship/squads/general)
 "iif" = (
 /obj/machinery/door/airlock/mainship/generic{
 	name = "\improper Private Dorm"
@@ -9184,7 +9193,7 @@
 /area/mainship/medical/surgery_hallway)
 "iIB" = (
 /obj/structure/cable,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
+/obj/machinery/atmospherics/components/unary/vent_pump/layer1,
 /turf/open/floor/mainship/floor,
 /area/mainship/squads/general)
 "iJj" = (
@@ -11262,10 +11271,10 @@
 /area/mainship/hallways/hangar)
 "kGX" = (
 /obj/structure/rack,
-/obj/item/storage/box/flashbangs,
-/obj/item/storage/box/flashbangs,
-/obj/item/storage/box/flashbangs,
-/obj/item/storage/box/flashbangs,
+/obj/item/storage/box/stuns,
+/obj/item/storage/box/stuns,
+/obj/item/storage/box/stuns,
+/obj/item/storage/box/stuns,
 /obj/item/clothing/head/helmet/marine/riot,
 /obj/item/clothing/head/helmet/marine/riot,
 /obj/item/clothing/head/helmet/marine/riot,
@@ -12269,8 +12278,8 @@
 /area/mainship/living/bridgebunks)
 "lyQ" = (
 /obj/structure/cable,
-/obj/machinery/atmospherics/components/unary/vent_pump/layer1,
 /obj/effect/urban/decal/dirt,
+/obj/machinery/chem_dispenser/marine,
 /turf/open/floor/mainship/floor,
 /area/mainship/squads/general)
 "lzh" = (
@@ -13072,7 +13081,8 @@
 /obj/item/teleporter_kit/premade,
 /obj/effect/remote_teleporter_linker/pair4,
 /obj/structure/sign/fixedinplace/cryo{
-	pixel_x = 30
+	pixel_x = 30;
+	dir = 8
 	},
 /turf/open/floor/mainship/tcomms,
 /area/deltastation/command/teleporter{
@@ -25775,8 +25785,8 @@
 /area/mainship/medical/lower_medical)
 "yjO" = (
 /obj/structure/sign/fixedinplace/command{
-	dir = 4;
-	pixel_x = -30
+	pixel_x = -30;
+	dir = 4
 	},
 /obj/effect/turf_decal/warning_stripes,
 /obj/item/teleporter_kit/premade,
@@ -38452,7 +38462,7 @@ hAe
 oTm
 fGN
 gPk
-fGN
+cpA
 fGN
 neS
 ljX
@@ -42488,7 +42498,7 @@ mxt
 ePt
 hMW
 lPR
-gah
+iho
 gah
 qJy
 agt

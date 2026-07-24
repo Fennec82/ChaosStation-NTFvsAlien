@@ -271,6 +271,8 @@
 	icon_state = "PFC"
 	job = /datum/job/pmc/squad/leader
 
+// kz
+
 /obj/effect/landmark/start/job/vsd
 	icon_state = "MP"
 	job = /datum/job/vsd_squad/standard
@@ -286,6 +288,18 @@
 /obj/effect/landmark/start/job/vsd_spec
 	icon_state = "MP"
 	job = /datum/job/vsd_squad/spec
+
+/obj/effect/landmark/start/job/vsd_escort
+	icon_state = "MP"
+	job = /datum/job/vsd_squad/escort
+
+/obj/effect/landmark/start/job/vsd_synthetic
+	icon_state = "Synth"
+	job = /datum/job/vsd_squad/silicon/synthetic
+
+/obj/effect/landmark/start/job/vsd_ripperdoc
+	icon_state = "MP"
+	job = /datum/job/vsd_squad/medical/ripperdoc
 
 /obj/effect/landmark/start/job/vsd_leader
 	icon_state = "MP"

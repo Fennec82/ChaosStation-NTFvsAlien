@@ -174,6 +174,20 @@
 /datum/action/ability/xeno_action/petrify/proc/remove_eye(obj/effect/eye)
 	owner.vis_contents -= eye
 
+/datum/action/ability/xeno_action/petrify/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/xeno_action/petrify/ai_should_use(atom/target)
+	if(!ismob(target))
+		return FALSE
+	if(get_dist(target, owner) > 6)
+		return FALSE
+	if(!line_of_sight(owner, target))
+		return FALSE
+	if(target.get_xeno_hivenumber() == owner.get_xeno_hivenumber())
+		return FALSE
+	return TRUE
+
 // ***************************************
 // *********** Off-Guard
 // ***************************************
@@ -224,6 +238,20 @@
 
 	add_cooldown()
 	succeed_activate()
+
+/datum/action/ability/activable/xeno/off_guard/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/activable/xeno/off_guard/ai_should_use(atom/target)
+	if(!ishuman(target))
+		return FALSE
+	if(get_dist(target, owner) > 6)
+		return FALSE
+	if(!line_of_sight(owner, target))
+		return FALSE
+	if(target.get_xeno_hivenumber() == owner.get_xeno_hivenumber())
+		return FALSE
+	return TRUE
 
 // ***************************************
 // *********** Psychic roar
@@ -346,6 +374,20 @@
 /obj/effect/temp_visual/shattering_roar/Initialize(mapload)
 	. = ..()
 	flick("smash", src)
+
+/datum/action/ability/activable/xeno/shattering_roar/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/activable/xeno/shattering_roar/ai_should_use(atom/target)
+	if(!ismob(target))
+		return FALSE
+	if(get_dist(target, owner) > 6)
+		return FALSE
+	if(!line_of_sight(owner, target))
+		return FALSE
+	if(target.get_xeno_hivenumber() == owner.get_xeno_hivenumber())
+		return FALSE
+	return TRUE
 
 // ***************************************
 // *********** Zero form energy beam
@@ -501,6 +543,20 @@
 		return
 	if(xeno_owner.xeno_caste.caste_flags & CASTE_STAGGER_RESISTANT)
 		ADD_TRAIT(owner, TRAIT_STAGGER_RESISTANT, XENO_TRAIT)
+
+/datum/action/ability/xeno_action/zero_form_beam/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/xeno_action/zero_form_beam/ai_should_use(atom/target)
+	if(!ismob(target))
+		return FALSE
+	if(get_dist(target, owner) > 6)
+		return FALSE
+	if(!line_of_sight(owner, target))
+		return FALSE
+	if(target.get_xeno_hivenumber() == owner.get_xeno_hivenumber())
+		return FALSE
+	return TRUE
 
 /particles/zero_form
 	width = 400

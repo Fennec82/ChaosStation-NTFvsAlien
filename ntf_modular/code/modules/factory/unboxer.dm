@@ -16,13 +16,18 @@
 	if(!isfactoryrefill(I) || user.a_intent == INTENT_HARM)
 		return ..()
 	var/obj/item/factory_refill/refill = I
-	if(refill.antag_refill_type != production_type)
+	var/obj/item/factory_part/selected_refill_type = refill.antag_refill_type
+	if(selected_refill_type == /obj/item/factory_part)
+		selected_refill_type = refill.refill_type
+	if(selected_refill_type != production_type)
 		if(production_amount_left)
 			balloon_alert(user, "Filler incompatible")
 			return
-		production_type = refill.antag_refill_type
+		production_type = selected_refill_type
+		ticks_per_object = refill.ticks_per_object
 	var/to_refill = min(max_fill_amount - production_amount_left, refill.refill_amount)
 	production_amount_left += to_refill
+	maptext = "[production_amount_left || ""]"
 	refill.refill_amount -= to_refill
 	visible_message(span_notice("[user] restocks \the [src] with \the [refill]!"), span_notice("You restock \the [src] with [refill]!"))
 	if(!on)

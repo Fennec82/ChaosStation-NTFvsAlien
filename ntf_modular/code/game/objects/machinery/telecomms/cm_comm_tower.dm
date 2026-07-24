@@ -6,7 +6,7 @@
 #define NTC_SIDED_FREQS list(FREQ_COMMON, FREQ_PMC, FREQ_CIV_GENERAL, FREQ_ICC, FREQ_COMMAND, FREQ_CAS, FREQ_SEC, FREQ_MEDICAL, FREQ_ENGINEERING, FREQ_REQUISITIONS, FREQ_DEATHSQUAD, FREQ_ALPHA, FREQ_BRAVO, FREQ_CHARLIE, FREQ_DELTA)
 #define SOM_FREQS list(FREQ_SOM, FREQ_COMMAND_SOM, FREQ_MEDICAL_SOM, FREQ_ENGINEERING_SOM, FREQ_ZULU, FREQ_YANKEE, FREQ_XRAY, FREQ_WHISKEY)
 #define KZ_FREQS list(FREQ_VSD)
-#define CM_FREQS list(FREQ_ICC)
+#define CM_FREQS list(FREQ_CIV_GENERAL, FREQ_ICC)
 #define CLF_FREQS list(FREQ_COLONIST)
 
 /obj/item/circuitboard/machine/telecomms/relay/tower
@@ -181,15 +181,15 @@
 		if(toggled)
 			toggled = FALSE // requires flipping on again once repaired
 			empulse(loc, 2,4,6,8)
+		if(!(atom_flags & NODECONSTRUCT))
+			//spill your shit cause those are not replacable.
+			deconstruct()
 	if(health < initial(health))
 		desc = "[initial(desc)] [span_warning(" It is damaged and needs a welder for repairs!")]"
 	else
 		desc = initial(desc)
 
 	update_state()
-	if(!(atom_flags & NODECONSTRUCT))
-		//spill your shit cause those are not replacable.
-		deconstruct()
 
 // In any case that might warrant reevaluating working state
 /obj/machinery/telecomms/relay/preset/tower/proc/update_state()
@@ -282,7 +282,7 @@
 
 /obj/machinery/telecomms/relay/preset/tower/faction/on_construction()
 	var/area/thearea = get_area(src)
-	if(thearea.ceiling > CEILING_NONE)
+	if(thearea.ceiling > CEILING_GLASS)
 		balloon_alert_to_viewers("Needs no ceiling over!", vision_distance = 5)
 		visible_message(span_warning("[src] can not be built under a roof, it's not strong enough."))
 		deconstruct(TRUE)

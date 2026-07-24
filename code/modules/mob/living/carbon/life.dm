@@ -83,6 +83,9 @@
 		return
 
 	if(status_flags & GODMODE)
+		if(in_healthcrit_since)
+			log_message("left healthcrit (lasted [DisplayTimeText(world.time - in_healthcrit_since)])", LOG_ATTACK, color="orange")
+			in_healthcrit_since = NONE
 		return
 
 	if(stat == DEAD)
@@ -96,7 +99,7 @@
 		return
 
 	if(health < get_crit_threshold())
-		if(stat == UNCONSCIOUS)
+		if(in_healthcrit_since)
 			return
 		set_stat(UNCONSCIOUS)
 		on_crit()
@@ -108,10 +111,17 @@
 
 	else if(stat == UNCONSCIOUS)
 		set_stat(CONSCIOUS)
+		if(in_healthcrit_since)
+			log_message("left healthcrit (lasted [DisplayTimeText(world.time - in_healthcrit_since)])", LOG_ATTACK, color="orange")
+			in_healthcrit_since = NONE
 
 ///called just after this mob goes unconscious due to taking too much dmg
 /mob/living/carbon/proc/on_crit()
+	log_message("entered healthcrit", LOG_ATTACK, color="orange")
+	in_healthcrit_since = world.time
 	if(!HAS_TRAIT(src, TRAIT_CRIT_IS_DEATH))
+		ASYNC
+			emote("healthcritgasp")
 		SEND_GLOBAL_SIGNAL(COMSIG_GLOB_MOB_ON_CRIT, src)
 		return
 	var/damage_dealt = health - get_death_threshold()

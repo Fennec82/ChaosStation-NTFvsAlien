@@ -1702,8 +1702,8 @@
 /turf/open/floor/tile/dark/gray,
 /area/centcom/valhalla)
 "chd" = (
-/obj/structure/prop/mainship/doorblocker/patrol_base{
-	name = "\improper Redeployment Airlock"
+/obj/machinery/door/airlock/mainship/generic/glass{
+	dir = 1
 	},
 /turf/open/floor/mainship,
 /area/mainship/squads/req)

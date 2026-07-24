@@ -70,9 +70,14 @@
 			doppleganger.med_hud_set_status()
 			hmob.med_hud_set_status()
 
-			for(var/obj/item/clothing/cloth in mob.contents) //duplicate outfit, only clothes tho.
-				var/lecloth = new cloth.type(doppleganger.loc)
+			for(var/obj/item/clothing/cloth in mob.contents) //duplicate outfit, only clothes tho and unremovable.
+				var/obj/item/clothing/lecloth = new cloth.type(doppleganger.loc)
 				doppleganger.equip_to_appropriate_slot(lecloth, TRUE)
+				ADD_TRAIT(lecloth, TRAIT_NODROP, "doppleganger_item")
+				lecloth.item_flags |= DELONDROP
+				if(isturf(lecloth.loc))
+					stack_trace("Failed to equip [logdetails(lecloth)] to doppelganger [logdetails(doppleganger)]")
+					qdel(lecloth)
 
 			//replace nested with doppleganger
 			if(istype(mob.buckled, /obj/structure/bed/nest/wall))
@@ -115,6 +120,8 @@
 				cmob.set_nutrition(0)
 				cmob.AdjustSleeping(1 MINUTES)
 				to_chat(cmob, span_warning("You feel weak, your body strange, you are in a new yourself again it seems. How did you get here..? Who took your body here?"))
+			for(var/obj/item/weapon/weppy in doppleganger.loc?.contents) //grab dropped weapons if any at doppleganger loc
+				weppy.forceMove(thespot.loc)
 			mob.forceMove(thespot.loc)
 		if("Ghost")
 			var/mob/dead/observer/ghost = mob.ghostize(TRUE, TRUE) //aghost

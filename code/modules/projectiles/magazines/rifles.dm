@@ -207,8 +207,17 @@
 	icon_state = "rpd"
 	icon = 'icons/obj/items/ammo/machinegun.dmi'
 	icon_state_mini = "mag_drum_big"
-	bonus_overlay = "rpd_100"
 	max_rounds = 100
+
+/obj/item/ammo_magazine/rifle/lmg_d/belt
+	name = "\improper lMG-D ammo buttpack (7.62x39mm)"
+	desc = "A metallic belt pack for the lMG-D which carries a huge amount of ammo inside."
+	icon_state = "rpd_belt"
+	equip_slot_flags = ITEM_SLOT_BELT
+	magazine_flags = MAGAZINE_WORN
+	w_class = WEIGHT_CLASS_HUGE
+	max_rounds = 500
+
 
 //-------------------------------------------------------
 //DP-27
@@ -815,7 +824,7 @@
 	color = list(1,0,0,0, 0,1,0,0, 0,1.5,1,0, 0,0,0,1) //recolor it green.  New sprites would be better but too much work
 
 //-------------------------------------------------------
-//ML-41 Autoshotgun
+//ML-41A Autoshotgun
 /obj/item/ammo_magazine/rifle/icc_autoshotgun
 	name = "\improper ML-41 Autoshotgun flechette drum magazine (12G)"
 	desc = "A magazine filled with 12G flechette shells for the ML-41."
@@ -824,6 +833,8 @@
 	default_ammo = /datum/ammo/bullet/shotgun/flechette
 	max_rounds = 20
 	icon_state_mini = "mag_rifle"
+	aim_speed_mod = 0.2
+	wield_delay_mod = 0.2 SECONDS
 
 /obj/item/ammo_magazine/rifle/icc_autoshotgun/rubber
 	name = "\improper ML-41 Autoshotgun rubber pellet drum magazine (12G)"
@@ -837,7 +848,9 @@
 	caliber = CALIBER_12G
 	icon_state = "ml41_frag"
 	default_ammo = /datum/ammo/bullet/shotgun/frag
-	max_rounds = 12
+	max_rounds = 20
+	aim_speed_mod = 0.2
+	wield_delay_mod = 0.2 SECONDS
 
 //-------------------------------------------------------
 //L-88 Assault Carbine
@@ -847,6 +860,7 @@
 	caliber = CALIBER_556X45
 	icon_state = "aug"
 	icon_state_mini = "mag_rifle_olive"
+	bonus_overlay = "l88_mag"
 	default_ammo = /datum/ammo/bullet/rifle
 	max_rounds = 30
 
@@ -915,13 +929,26 @@
 //CC/67
 
 /obj/item/ammo_magazine/rifle/vsd_rifle
-	name = "\improper CC/67 magazine (10x27mm)"
-	desc = "A 10x27mm rifle magazine."
-	caliber = CALIBER_10x27_CASELESS
+	name = "\improper CC/67 magazine (6.8X43mm)"
+	desc = "A 68x43mm rifle magazine."
+	caliber = CALIBER_68X43
 	icon_state = "c550"
 	icon_state_mini = "mag_rifle_big"
 	w_class = WEIGHT_CLASS_NORMAL
 	default_ammo = /datum/ammo/bullet/rifle/vsd_rifle
+	max_rounds = 30
+
+//CC/67 EXPORT
+
+/obj/item/ammo_magazine/rifle/vsd_sbr
+	name = "\improper CC/67 magazine (6.5X39mm)"
+	desc = "A 6.5x39mm rifle magazine."
+	caliber = CALIBER_65X39
+	icon = 'ntf_modular/icons/obj/items/ammo/rifle.dmi'
+	icon_state = "c550_export"
+	icon_state_mini = "mag_rifle_big"
+	w_class = WEIGHT_CLASS_NORMAL
+	default_ammo = /datum/ammo/bullet/rifle/vsd_sbr
 	max_rounds = 30
 
 //CC/74

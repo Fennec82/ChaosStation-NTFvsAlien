@@ -300,6 +300,7 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 		ghost.client?.init_verbs()
 		ghost.mind?.current = ghost
 		ghost.faction = faction
+		ghost.hivenumber = get_xeno_hivenumber()
 		ghost.pose = pose
 		ghost.ooc_notes = ooc_notes
 		ghost.ooc_notes_likes = ooc_notes_likes
@@ -694,7 +695,12 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 	set category = "Ghost"
 	set name = "View Game Manifest"
 
-	var/dat = GLOB.datacore.get_manifest(ooc = TRUE)
+	var/viewfaction = faction
+	if(viewfaction == FACTION_XENO)
+		var/datum/hive_status/hive = GLOB.hive_datums[get_xeno_hivenumber()]
+		if(istype(hive))
+			viewfaction = hive.allied_factions[1]
+	var/dat = GLOB.datacore.get_manifest(FALSE, TRUE, viewfaction)
 
 	var/datum/browser/popup = new(src, "manifest", "<div align='center'>Game Manifest</div>", 370, 420)
 	popup.set_content(dat)

@@ -18,11 +18,10 @@
 	// *** Plasma *** //
 	plasma_max = 2400
 	plasma_gain = 80
-	plasma_regen_limit = 0.5
 	plasma_icon_state = "hivelord_plasma"
 
 	// *** Health *** //
-	max_health = 380
+	max_health = 395
 
 
 	// *** Evolution *** //

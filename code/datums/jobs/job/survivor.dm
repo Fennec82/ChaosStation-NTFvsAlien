@@ -1,12 +1,13 @@
 /datum/job/survivor
 	title = "Generic Colonist"
-	supervisors = "anyone who might rescue you"
-	access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_RESEARCH, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_ICC_CARGO)
-	minimal_access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_RESEARCH, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_ICC_CARGO)
+	supervisors = "anyone who might rescue you, Colonial Militia"
+	paygrade = "CLNST"
+	access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_LOGISTICS, ACCESS_ICC_CARGO)
+	minimal_access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_LOGISTICS, ACCESS_ICC_CARGO)
 	display_order = JOB_DISPLAY_ORDER_SURVIVOR
 	faction = FACTION_ICC //closer to cm now
 	total_positions = -1
-	job_flags = JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_OVERRIDELATEJOINSPAWN
+	job_flags = JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_ADDTOMANIFEST
 	job_category = JOB_CAT_SURVIVOR
 	skills_type = /datum/skills/civilian/survivor
 
@@ -19,24 +20,25 @@
 	if(SSmapping.configs[GROUND_MAP].environment_traits[MAP_COLD])
 		spawned_carbon.equip_to_slot_or_del(new /obj/item/clothing/head/ushanka(spawned_carbon), SLOT_HEAD)
 		spawned_carbon.equip_to_slot_or_del(new /obj/item/clothing/suit/storage/snow_suit(spawned_carbon), SLOT_W_UNIFORM)
-		spawned_carbon.equip_to_slot_or_del(new /obj/item/clothing/mask/rebreather(spawned_carbon), SLOT_WEAR_MASK)
 		spawned_carbon.equip_to_slot_or_del(new /obj/item/clothing/shoes/snow(spawned_carbon), SLOT_SHOES)
 		spawned_carbon.equip_to_slot_or_del(new /obj/item/clothing/gloves/black(spawned_carbon), SLOT_GLOVES)
 
-	var/weapons = pick(SURVIVOR_WEAPONS)
-	var/obj/item/weapon/picked_weapon = weapons[1]
-	var/obj/item/ammo_magazine/picked_ammo = weapons[2]
-	spawned_carbon.equip_to_slot_or_del(new /obj/item/belt_harness(spawned_carbon), SLOT_BELT)
-	spawned_carbon.put_in_hands(new picked_weapon(spawned_carbon))
-	spawned_carbon.equip_to_slot_or_del(new picked_ammo(spawned_carbon), SLOT_IN_BACKPACK)
-	spawned_carbon.equip_to_slot_or_del(new picked_ammo(spawned_carbon), SLOT_IN_BACKPACK)
-	spawned_carbon.equip_to_slot_or_del(new picked_ammo(spawned_carbon), SLOT_IN_BACKPACK)
+	if(istype(get_area(spawned_carbon), /area/deathmatch))
+		var/weapons = pick(SURVIVOR_WEAPONS)
+		var/obj/item/weapon/picked_weapon = weapons[1]
+		var/obj/item/ammo_magazine/picked_ammo = weapons[2]
+		spawned_carbon.equip_to_slot_or_del(new /obj/item/belt_harness(spawned_carbon), SLOT_BELT)
+		spawned_carbon.put_in_hands(new picked_weapon(spawned_carbon))
+		spawned_carbon.equip_to_slot_or_del(new picked_ammo(spawned_carbon), SLOT_IN_BACKPACK)
+		spawned_carbon.equip_to_slot_or_del(new picked_ammo(spawned_carbon), SLOT_IN_BACKPACK)
+		spawned_carbon.equip_to_slot_or_del(new picked_ammo(spawned_carbon), SLOT_IN_BACKPACK)
+		spawned_carbon.equip_to_slot_or_del(new /obj/item/clothing/glasses/welding(spawned_carbon), SLOT_GLASSES)
+		spawned_carbon.equip_to_slot_or_del(new /obj/item/clothing/head/hardhat/rugged(spawned_carbon), SLOT_HEAD)
+
 	spawned_carbon.equip_to_slot_or_del(new /obj/item/weapon/combat_knife(spawned_carbon), SLOT_IN_BACKPACK)
 
-	spawned_carbon.equip_to_slot_or_del(new /obj/item/clothing/glasses/welding(spawned_carbon), SLOT_GLASSES)
 	spawned_carbon.equip_to_slot_or_del(new /obj/item/storage/pouch/tools/full(spawned_carbon), SLOT_R_STORE)
-	spawned_carbon.equip_to_slot_or_del(new /obj/item/storage/pouch/survival/full(spawned_carbon), SLOT_L_STORE)
-	spawned_carbon.equip_to_slot_or_del(new /obj/item/clothing/head/hardhat/rugged(spawned_carbon), SLOT_HEAD)
+	spawned_carbon.equip_to_slot_or_del(new /obj/item/storage/pouch/firstaid/basic(spawned_carbon), SLOT_L_STORE)
 
 	switch(SSmapping.configs[GROUND_MAP].map_name)
 		if(MAP_PRISON_STATION)
@@ -75,25 +77,35 @@ Good luck, but do not expect to survive."}
 //Scientist
 /datum/job/survivor/scientist
 	title = "Scientist Colonist"
+	access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_MEDICAL, ACCESS_CIVILIAN_RESEARCH, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_ICC_CARGO)
+	minimal_access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_MEDICAL, ACCESS_CIVILIAN_RESEARCH, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_ICC_CARGO)
 	skills_type = /datum/skills/civilian/survivor/scientist
 	outfit = /datum/outfit/job/survivor/scientist
+
+/datum/job/survivor/scientist/after_spawn(mob/living/carbon/C, mob/M, latejoin = FALSE)
+	. = ..()
+	ADD_TRAIT(C, TRAIT_RESEARCHER, "[type]")
 
 //Doctor
 /datum/job/survivor/doctor
 	title = "Doctor Colonist"
+	access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_MEDICAL,  ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_ICC_CARGO)
+	minimal_access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_MEDICAL,  ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_ICC_CARGO)
 	skills_type = /datum/skills/civilian/survivor/doctor
 	outfit = /datum/outfit/job/survivor/doctor
 
 //Liaison
 /datum/job/survivor/liaison
-	title = "Liaison Colonist"
+	title = "Colony Liaison"
+	access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_MEDICAL, ACCESS_CIVILIAN_RESEARCH, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_ICC_CARGO)
+	minimal_access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_MEDICAL, ACCESS_CIVILIAN_RESEARCH, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_ICC_CARGO)
 	outfit = /datum/outfit/job/survivor/liaison
 
 //Security Guard
 /datum/job/survivor/security
 	title = "Security Guard Colonist"
-	access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_RESEARCH, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_MARINE_BRIG, ACCESS_ICC_SECURITY)
-	minimal_access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_RESEARCH, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_MARINE_BRIG, ACCESS_ICC_SECURITY)
+	access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_MEDICAL, ACCESS_CIVILIAN_RESEARCH, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_SECURITY, ACCESS_CIVILIAN_LOGISTICS, ACCESS_MARINE_BRIG, ACCESS_ICC_SECURITY, ACCESS_ICC_CARGO)
+	minimal_access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_MEDICAL, ACCESS_CIVILIAN_RESEARCH, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_SECURITY, ACCESS_CIVILIAN_LOGISTICS, ACCESS_MARINE_BRIG, ACCESS_ICC_SECURITY, ACCESS_ICC_CARGO)
 	skills_type = /datum/skills/civilian/survivor/marshal
 	outfit = /datum/outfit/job/survivor/security
 
@@ -119,7 +131,6 @@ Good luck, but do not expect to survive."}
 	jobtype = /datum/job/survivor/botanist
 
 	w_uniform = /obj/item/clothing/under/rank/hydroponics
-	id = /obj/item/card/id/captains_spare/survival
 	wear_suit = /obj/item/clothing/suit/storage/apron/overalls
 	shoes = /obj/item/clothing/shoes/black
 	back = /obj/item/storage/backpack/hydroponics
@@ -131,6 +142,8 @@ Good luck, but do not expect to survive."}
 //Atmospherics Technician
 /datum/job/survivor/atmos
 	title = "Technician Colonist"
+	access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_ICC_CARGO)
+	minimal_access = list(ACCESS_CIVILIAN_PUBLIC,ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_ICC_CARGO)
 	skills_type = /datum/skills/civilian/survivor/atmos
 	outfit = /datum/outfit/job/survivor/atmos
 
@@ -153,6 +166,8 @@ Good luck, but do not expect to survive."}
 //Colonial Marshal
 /datum/job/survivor/marshal
 	title = "Colonial Marshal Colonist"
+	access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_MEDICAL, ACCESS_CIVILIAN_RESEARCH, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_SECURITY, ACCESS_CIVILIAN_LOGISTICS, ACCESS_MARINE_BRIG, ACCESS_ICC_SECURITY, ACCESS_ICC_CARGO)
+	minimal_access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_MEDICAL, ACCESS_CIVILIAN_RESEARCH, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_SECURITY, ACCESS_CIVILIAN_LOGISTICS, ACCESS_MARINE_BRIG, ACCESS_ICC_SECURITY, ACCESS_ICC_CARGO)
 	skills_type = /datum/skills/civilian/survivor/marshal
 	outfit = /datum/outfit/job/survivor/marshal
 
@@ -164,17 +179,16 @@ Good luck, but do not expect to survive."}
 //Chemist Survivor
 /datum/job/survivor/chemist
 	title = "Pharmacy Technician Colonist"
+	access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_MEDICAL, ACCESS_CIVILIAN_RESEARCH, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_ICC_CARGO)
+	minimal_access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_MEDICAL, ACCESS_CIVILIAN_RESEARCH, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_ICC_CARGO)
 	skills_type = /datum/skills/civilian/survivor/scientist
 	outfit = /datum/outfit/job/survivor/chemist
-
-//Assistant
-/datum/job/survivor/assistant
-	title = "Assistant Colonist"
-	outfit = /datum/outfit/job/survivor/assistant
 
 //Roboticist Survivor
 /datum/job/survivor/roboticist
 	title = "Roboticist Colonist"
+	access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_MEDICAL, ACCESS_CIVILIAN_RESEARCH, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_ICC_CARGO)
+	minimal_access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_MEDICAL, ACCESS_CIVILIAN_RESEARCH, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_ICC_CARGO)
 	skills_type = /datum/skills/civilian/survivor/atmos
 	outfit = /datum/outfit/job/survivor/roboticist
 

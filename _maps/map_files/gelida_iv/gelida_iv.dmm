@@ -333,6 +333,7 @@
 "amI" = (
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
 /obj/effect/landmark/weed_node,
+/obj/structure/cable,
 /turf/open/floor/prison,
 /area/gelida/indoors/a_block/security)
 "amJ" = (
@@ -7375,6 +7376,7 @@
 "eWP" = (
 /obj/effect/decal/cleanable/blood/splatter,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
+/obj/structure/cable,
 /turf/open/floor/plating/plating_catwalk/prison,
 /area/gelida/indoors/a_block/bridges/corpo)
 "eWY" = (
@@ -12580,6 +12582,7 @@
 	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
+/obj/structure/cable,
 /turf/open/floor/prison/darkred/full,
 /area/gelida/indoors/a_block/bridges/corpo)
 "iBv" = (
@@ -14573,6 +14576,7 @@
 /area/gelida/indoors/c_block/mining)
 "jSQ" = (
 /obj/machinery/atmospherics/pipe/manifold4w/green/hidden,
+/obj/structure/cable,
 /turf/open/floor/plating/plating_catwalk/prison,
 /area/gelida/indoors/a_block/security)
 "jTb" = (
@@ -23737,6 +23741,7 @@
 	id = "Sec-Kitchen-Lockdown"
 	},
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
+/obj/structure/cable,
 /turf/open/floor/mainship/stripesquare,
 /area/gelida/indoors/a_block/security)
 "qaV" = (
@@ -29156,6 +29161,12 @@
 /obj/structure/cable,
 /turf/open/floor/tile/yellow/patch,
 /area/gelida/indoors/a_block/corpo)
+"tLy" = (
+/obj/machinery/atmospherics/pipe/simple/green/hidden,
+/obj/effect/landmark/weed_node,
+/obj/structure/cable,
+/turf/open/floor/plating/plating_catwalk/prison,
+/area/gelida/indoors/a_block/bridges/corpo)
 "tLO" = (
 /obj/structure/prop/mainship/gelida/smallwire,
 /obj/item/tool/crowbar,
@@ -31747,6 +31758,11 @@
 /obj/structure/closet/crate/miningcar,
 /turf/open/floor/plating/ground/snow/layer2,
 /area/gelida/outdoors/colony_streets/north_west_street)
+"vDO" = (
+/obj/machinery/atmospherics/pipe/simple/green/hidden,
+/obj/structure/cable,
+/turf/open/floor/prison/darkred/full,
+/area/gelida/indoors/a_block/bridges/corpo)
 "vDU" = (
 /obj/machinery/light{
 	dir = 1
@@ -33431,6 +33447,7 @@
 	dir = 4
 	},
 /obj/effect/spawner/random/decal/blood,
+/obj/structure/cable,
 /turf/open/floor/tile/yellow/patch,
 /area/gelida/indoors/a_block/corpo)
 "wSr" = (
@@ -59881,21 +59898,21 @@ wId
 kHM
 oeM
 uNK
-wId
-wId
-wId
-kHM
+uNK
+uNK
+uNK
+vDO
 iBu
-wId
-sXG
-wId
-wId
+uNK
+tLy
+uNK
+uNK
 eWP
-kHM
+vDO
 qaR
-owG
+nMK
 amI
-owG
+nMK
 jSQ
 vAZ
 nMK

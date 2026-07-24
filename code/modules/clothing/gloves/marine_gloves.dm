@@ -51,6 +51,7 @@
 	name = "insulated operative combat gloves"
 	desc = "Insulated marine tactical gloves that protect against electrical shocks."
 	icon_state = "gloves_marine_insulated"
+	worn_icon_state_teshari = "ce_insuls"
 	siemens_coefficient = 0
 
 /obj/item/clothing/gloves/marine/officer
@@ -86,7 +87,7 @@
 	desc = "A pair of heavily armored gloves."
 	icon_state = "armored"
 	item_flags = SYNTH_RESTRICTED
-	soft_armor = list(MELEE = 35, BULLET = 15, LASER = 15, ENERGY = 15, BOMB = 25, BIO = 15, FIRE = 15, ACID = 20)
+	soft_armor = list(MELEE = 35, BULLET = 20, LASER = 20, ENERGY = 20, BOMB = 25, BIO = 15, FIRE = 15, ACID = 20)
 	resistance_flags = UNACIDABLE
 
 /obj/item/clothing/gloves/marine/specialist/tdf
@@ -98,7 +99,6 @@
 	icon_state = "black"
 	siemens_coefficient = 0
 	item_flags = SYNTH_RESTRICTED
-	soft_armor = list(MELEE = 30, BULLET = 20, LASER = 20, ENERGY = 20, BOMB = 30, BIO = 20, FIRE = 20, ACID = 15)
 
 /obj/item/clothing/gloves/marine/veteran/pmc_elite
 	name = "AC elite gloves"
@@ -106,7 +106,6 @@
 	icon_state = "armored_pmc"
 	siemens_coefficient = 0
 	item_flags = SYNTH_RESTRICTED
-	soft_armor = list(MELEE = 30, BULLET = 20, LASER = 20, ENERGY = 20, BOMB = 30, BIO = 20, FIRE = 20, ACID = 20)
 
 /obj/item/clothing/gloves/marine/veteran/pmc/commando
 	name = "\improper PMC commando gloves"
@@ -123,13 +122,13 @@
 /obj/item/clothing/gloves/marine/som/insulated
 	name = "\improper Insulated SOM gloves"
 	desc = "Gloves with origins dating back to the old mining colonies. These ones appear to have an electrically insulating layer built into them."
+	worn_icon_state_teshari = "ce_insuls"
 	siemens_coefficient = 0
 
 /obj/item/clothing/gloves/marine/som/veteran
 	name = "\improper SOM veteran gloves"
 	desc = "Gloves with origins dating back to the old mining colonies. These ones seem tougher than normal."
 	icon_state = "som_veteran"
-	soft_armor = list(MELEE = 30, BULLET = 20, LASER = 15, ENERGY = 20, BOMB = 15, BIO = 5, FIRE = 15, ACID = 15)
 
 /obj/item/clothing/gloves/marine/som/officer
 	name = "\improper SOM gloves"
@@ -150,7 +149,6 @@
 	name = "\improper ICCGF gloves"
 	desc = "Tough looking tactical gloves."
 	icon_state = "icc_guard"
-	soft_armor = list(MELEE = 30, BULLET = 20, LASER = 15, ENERGY = 20, BOMB = 15, BIO = 5, FIRE = 15, ACID = 15)
 
 /obj/item/clothing/gloves/marine/icc/som_guard
 	name = "\improper stolen ICCGF gloves"

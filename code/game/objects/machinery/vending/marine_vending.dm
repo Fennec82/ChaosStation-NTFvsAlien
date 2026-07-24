@@ -30,11 +30,11 @@
 			/obj/item/weapon/gun/rifle/nt_halter/cqb = -1,
 			/obj/item/ammo_magazine/rifle/nt_halter = -1,
 			/obj/item/ammo_magazine/rifle/nt_halter/laser = -1,
+			/obj/item/ammo_magazine/rifle/nt_halter/rubber = -1,
 			/obj/item/ammo_magazine/rifle/nt_halter/smart = 30,
 			/obj/item/ammo_magazine/rifle/nt_halter/extended = 15,
 			/obj/item/ammo_magazine/rifle/nt_halter/laser/extended = 15,
-			/obj/item/ammo_magazine/rifle/nt_halter/drum = 10,
-			/obj/item/ammo_magazine/rifle/nt_halter/laser/drum = 10,
+			/obj/item/ammo_magazine/rifle/nt_halter/rubber/extended = 15,
 			/obj/item/ammo_magazine/rifle/nt_halter/charged = 5,
 			/obj/item/ammo_magazine/rifle/nt_halter/foxfire = 5,
 		),
@@ -93,15 +93,21 @@
 			/obj/item/ammo_magazine/handful/tracker = 5,
 			/obj/item/ammo_magazine/handful/beanbag = -1,
 			/obj/item/ammo_magazine/handful/rubber_pellet = -1,
-			/obj/item/ammo_magazine/shotgun/heavy_buckshot = 2,
-			/obj/item/ammo_magazine/shotgun/heavy_flechette = 1,
-			/obj/item/ammo_magazine/shotgun/barrikada = 1,
-			/obj/item/ammo_magazine/handful/heavy_buckshot = 5,
-			/obj/item/ammo_magazine/handful/heavy_flechette = 5,
-			/obj/item/ammo_magazine/handful/barrikada = 3,
+			/obj/item/ammo_magazine/shotgun/heavy_buckshot = 3,
+			/obj/item/ammo_magazine/shotgun/heavy_flechette = 3,
+			/obj/item/ammo_magazine/shotgun/barrikada = 2,
+			/obj/item/ammo_magazine/handful/heavy_buckshot = 8,
+			/obj/item/ammo_magazine/handful/heavy_flechette = 8,
+			/obj/item/ammo_magazine/handful/barrikada = 5,
 			/obj/item/weapon/gun/rifle/standard_autoshotgun = -1,
 			/obj/item/ammo_magazine/rifle/tx15_flechette = -1,
 			/obj/item/ammo_magazine/rifle/tx15_slug = -1,
+			/obj/item/weapon/gun/rifle/light_autoshotgun = -1,
+			/obj/item/ammo_magazine/rifle/sh410_sabot = -1,
+			/obj/item/ammo_magazine/rifle/sh410_buckshot = -1,
+			/obj/item/ammo_magazine/rifle/sh410_ricochet = -1,
+			/obj/item/ammo_magazine/rifle/sh410_tracker = -1,
+			/obj/item/ammo_magazine/rifle/sh410_gas = -1,
 		),
 		"Machinegun" = list(
 			/obj/item/weapon/gun/rifle/standard_lmg = -1,
@@ -178,6 +184,7 @@
 			/obj/item/explosive/grenade/smokebomb/aphrotoxin = 15,
 			/obj/item/explosive/grenade/flashbang/stun = 30,
 			/obj/item/explosive/grenade/smokebomb/sleep = 15,
+			/obj/item/explosive/grenade/chem_grenade/teargas = 15,
 			/obj/item/explosive/grenade/bullet/laser = 30,
 			/obj/item/explosive/grenade/bullet/hefa = 5,
 			/obj/item/explosive/grenade/emp = 5,
@@ -308,6 +315,8 @@
 			/obj/item/toy/dice/d20 = -1,
 			/obj/item/deployable_floodlight = 5,
 			/obj/item/plantable_flag/ntc = 10,
+			/obj/item/quikdeploy/cade = 30,
+			/obj/item/quikdeploy/cade/plasteel = 10,
 		),
 	)
 
@@ -335,11 +344,11 @@
 			/obj/item/ammo_magazine/rifle = -1,
 			/obj/item/ammo_magazine/rifle/nt_halter = -1,
 			/obj/item/ammo_magazine/rifle/nt_halter/laser = -1,
+			/obj/item/ammo_magazine/rifle/nt_halter/rubber = -1,
 			/obj/item/ammo_magazine/rifle/nt_halter/smart = 30,
 			/obj/item/ammo_magazine/rifle/nt_halter/extended = 15,
 			/obj/item/ammo_magazine/rifle/nt_halter/laser/extended = 15,
-			/obj/item/ammo_magazine/rifle/nt_halter/drum = 10,
-			/obj/item/ammo_magazine/rifle/nt_halter/laser/drum = 10,
+			/obj/item/ammo_magazine/rifle/nt_halter/rubber/extended = 15,
 			/obj/item/ammo_magazine/rifle/nt_halter/charged = 5,
 			/obj/item/ammo_magazine/rifle/nt_halter/foxfire = 5,
 		),
@@ -400,10 +409,9 @@
 			/obj/item/weapon/gun/rifle/light_autoshotgun = -1,
 			/obj/item/ammo_magazine/rifle/sh410_sabot = -1,
 			/obj/item/ammo_magazine/rifle/sh410_buckshot = -1,
-			/obj/item/weapon/gun/rifle/light_autoshotgun = -1,
-			/obj/item/ammo_magazine/rifle/sh410_sabot = -1,
-			/obj/item/ammo_magazine/rifle/sh410_buckshot = -1,
 			/obj/item/ammo_magazine/rifle/sh410_ricochet = -1,
+			/obj/item/ammo_magazine/rifle/sh410_tracker = -1,
+			/obj/item/ammo_magazine/rifle/sh410_gas = -1,
 		),
 		"Machinegun" = list(
 			/obj/item/weapon/gun/rifle/standard_lmg = -1,
@@ -482,6 +490,7 @@
 			/obj/item/explosive/grenade/smokebomb/aphrotoxin = 15,
 			/obj/item/explosive/grenade/flashbang/stun = 30,
 			/obj/item/explosive/grenade/smokebomb/sleep = 15,
+			/obj/item/explosive/grenade/chem_grenade/teargas = 15,
 			/obj/item/explosive/grenade/bullet/laser = 30,
 			/obj/item/explosive/grenade/bullet/hefa = 5,
 			/obj/item/explosive/grenade/emp = 5,
@@ -547,6 +556,7 @@
 			/obj/item/ammo_magazine/packet/p10x26mm = -1,
 			/obj/item/ammo_magazine/packet/p10x265mm = -1,
 			/obj/item/ammo_magazine/packet/halter = -1,
+			/obj/item/ammo_magazine/packet/halter/rubber = -1,
 			/obj/item/ammo_magazine/packet/halter/laser = -1,
 			/obj/item/ammo_magazine/packet/p10x27mm = -1,
 			/obj/item/ammo_magazine/packet/p492x34mm = -1,
@@ -597,6 +607,8 @@
 			/obj/item/explosive/plastique = 12,
 			/obj/item/xeno_iff_tag = -1,
 			/obj/structure/closet/secure_closet/xeno_cage = 10,
+			/obj/item/quikdeploy/cade = 30,
+			/obj/item/quikdeploy/cade/plasteel = 10,
 		),
 	)
 
@@ -688,6 +700,8 @@
 			/obj/item/ammo_magazine/rifle/sh410_sabot = -1,
 			/obj/item/ammo_magazine/rifle/sh410_buckshot = -1,
 			/obj/item/ammo_magazine/rifle/sh410_ricochet = -1,
+			/obj/item/ammo_magazine/rifle/sh410_tracker = -1,
+			/obj/item/ammo_magazine/rifle/sh410_gas = -1,
 		),
 		"Machinegun" = list(
 			/obj/item/weapon/gun/rifle/standard_lmg = -1,
@@ -826,6 +840,7 @@
 			/obj/item/ammo_magazine/packet/p10x26mm = -1,
 			/obj/item/ammo_magazine/packet/p10x265mm = -1,
 			/obj/item/ammo_magazine/packet/halter = -1,
+			/obj/item/ammo_magazine/packet/halter/rubber = -1,
 			/obj/item/ammo_magazine/packet/halter/laser = -1,
 			/obj/item/ammo_magazine/packet/p10x27mm = -1,
 			/obj/item/ammo_magazine/packet/p492x34mm = -1,
@@ -873,6 +888,8 @@
 			/obj/item/toy/dice/d20 = -1,
 			/obj/item/deployable_floodlight = -1,
 			/obj/item/plantable_flag = 10,
+			/obj/item/quikdeploy/cade = 30,
+			/obj/item/quikdeploy/cade/plasteel = 10,
 		),
 	)
 
@@ -1018,6 +1035,8 @@
 			/obj/item/storage/box/visual/magazine/compact/standard_lmg/full = -1,
 			/obj/item/storage/box/visual/magazine/compact/standard_gpmg/full = -1,
 			/obj/item/storage/box/visual/magazine/compact/standard_mmg/full = -1,
+			/obj/item/storage/box/visual/magazine/compact/sh410/buckshot/full = -1,
+			/obj/item/storage/box/visual/magazine/compact/sh410/sabot/full = -1,
 		),
 		"Mecha Ammo" = list(
 			/obj/item/mecha_ammo/vendable/pistol = -1,
@@ -1035,6 +1054,26 @@
 			/obj/item/mecha_ammo/vendable/flamer = -1,
 			/obj/item/mecha_ammo/vendable/rpg = -1,
 		)
+	)
+
+/obj/machinery/vending/reqtorio_supply
+	name = "\improper Factory Supplies Vendor"
+	desc = "A large vendor for dispensing factory supplies. Restricted to cargo personnel only."
+	icon_state = "robotics"
+	icon_vend = "robotics-vend"
+	icon_deny = "robotics-deny"
+	wrenchable = FALSE
+	req_one_access = list(ACCESS_MARINE_CARGO, ACCESS_MARINE_LOGISTICS)
+	products = list(
+			/obj/item/paper/factoryhowto = -1,
+			/obj/machinery/factory/cutter = 1,
+			/obj/machinery/factory/heater = 1,
+			/obj/machinery/factory/flatter = 1,
+			/obj/machinery/factory/former = 1,
+			/obj/machinery/factory/reconstructor = 1,
+			/obj/machinery/unboxer = 1,
+			/obj/item/stack/conveyor/thirty = 10,
+			/obj/item/conveyor_switch_construct = 10,
 	)
 
 /obj/machinery/vending/lasgun
@@ -1287,8 +1326,10 @@
 			/obj/item/clothing/head/modular/tdf/sg = -1,
 			/obj/item/clothing/suit/modular/xenonauten/light/bikini = -1,
 			/obj/item/clothing/suit/modular/xenonauten/bulletresistant = -1,
+			/obj/item/clothing/suit/modular/xenonauten/bulletresistant/vest = -1,
 			/obj/item/clothing/suit/modular/xenonauten/bulletresistant/bikini = -1,
 			/obj/item/clothing/suit/modular/xenonauten/ablative = -1,
+			/obj/item/clothing/suit/modular/xenonauten/ablative/vest = -1,
 			/obj/item/clothing/suit/modular/xenonauten/ablative/bikini = -1,
 			/obj/item/clothing/suit/modular/xenonauten/light = -1,
 			/obj/item/clothing/suit/modular/xenonauten = -1,
@@ -1364,6 +1405,7 @@
 			/obj/item/armor_module/module/style/light_armor = -1,
 			/obj/item/armor_module/module/style/medium_armor = -1,
 			/obj/item/armor_module/module/style/heavy_armor = -1,
+/*		/obj/item/armor_module/module/style/superheavy_armor,*/
 			/obj/item/clothing/suit/modular/style/barrier/lightbarrier = -1,
 			/obj/item/clothing/suit/modular/style/barrier/mediumbarrier = -1,
 			/obj/item/clothing/suit/modular/style/barrier/heavybarrier = -1,
@@ -1909,6 +1951,10 @@
 			/obj/item/clothing/underwear/shirt/croptop_turtleneck = -1,
 			/obj/item/clothing/underwear/shirt/croptop_turtleneck_black = -1,
 			/obj/item/clothing/underwear/shirt/croptop_turtleneck_steel = -1,
+			/obj/item/clothing/underwear/shirt/croptop_turtleneck_window = -1,
+			/obj/item/clothing/underwear/shirt/croptop_turtleneck_window_black = -1,
+			/obj/item/clothing/underwear/shirt/croptop_turtleneck_full = -1,
+			/obj/item/clothing/underwear/shirt/croptop_turtleneck_full_black = -1,
 			/obj/item/clothing/underwear/shirt/buttondown = -1,
 			/obj/item/clothing/underwear/shirt/buttondown_short_sleeve = -1,
 			/obj/item/clothing/underwear/shirt/babydoll = -1,

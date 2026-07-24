@@ -105,6 +105,22 @@
 	xeno_owner.playsound_local(xeno_owner, 'sound/voice/hiss5.ogg', 25)
 	action_icon_state = "neuroclaws_off"
 
+/datum/action/ability/xeno_action/toxic_slash/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/xeno_action/toxic_slash/ai_should_use(atom/target)
+	if(remaining_slashes)
+		return FALSE
+	if(!ishuman(target))
+		return FALSE
+	if(get_dist(target, owner) > 6)
+		return FALSE
+	if(!line_of_sight(owner, target))
+		return FALSE
+	if(target.get_xeno_hivenumber() == owner.get_xeno_hivenumber())
+		return FALSE
+	return TRUE
+
 /datum/action/ability/xeno_action/toxic_slash/on_cooldown_finish()
 	owner.playsound_local(owner, 'sound/effects/alien/new_larva.ogg', 25, 0, 1)
 	owner.balloon_alert(owner, "Toxic Slash ready")
@@ -185,6 +201,9 @@
 /datum/action/ability/activable/xeno/drain_sting/use_ability(atom/A)
 	var/mob/living/carbon/human/human_target = A
 	var/datum/status_effect/stacking/intoxicated/debuff = human_target.has_status_effect(STATUS_EFFECT_INTOXICATED)
+	if(!debuff)
+		human_target.balloon_alert(owner, "Not intoxicated")
+		return FALSE
 
 	var/potency = get_potency(human_target)
 	var/potency_in_sets = round(potency / SENTINEL_DRAIN_MULTIPLIER)
@@ -218,6 +237,8 @@
 /// Returns the potency of Drain Sting which accounts for: base potency, Intoxicated stacks, xeno-chemicals, and range effectiveness.
 /datum/action/ability/activable/xeno/drain_sting/proc/get_potency(mob/living/carbon/human/human_target)
 	var/datum/status_effect/stacking/intoxicated/debuff = human_target.has_status_effect(STATUS_EFFECT_INTOXICATED)
+	if(!debuff)
+		return 0
 	var/potency = base_potency + (debuff.stacks * SENTINEL_DRAIN_MULTIPLIER)
 	if(chemical_potency)
 		for(var/datum/reagent/target_reagent AS in human_target.reagents.reagent_list)
@@ -225,6 +246,24 @@
 				continue
 			chemical_potency += human_target.reagents.get_reagent_amount(target_reagent) * chemical_potency
 	return potency * (xeno_owner.Adjacent(human_target) ? 1 : ranged_effectiveness)
+
+/datum/action/ability/activable/xeno/drain_sting/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/activable/xeno/drain_sting/ai_should_use(atom/target)
+	if(!ishuman(target))
+		return FALSE
+	var/mob/living/carbon/human/human_target = target
+	var/datum/status_effect/stacking/intoxicated/debuff = human_target.has_status_effect(STATUS_EFFECT_INTOXICATED)
+	if(debuff.stacks < 30)
+		return FALSE
+	if(get_dist(target, owner) > 6)
+		return FALSE
+	if(!line_of_sight(owner, target))
+		return FALSE
+	if(target.get_xeno_hivenumber() == owner.get_xeno_hivenumber())
+		return FALSE
+	return TRUE
 
 /obj/effect/temp_visual/drain_sting_crit
 	name = "drain_sting"
@@ -258,6 +297,20 @@
 	nade.throw_at(A, 5, 1, owner, TRUE)
 	nade.activate(owner)
 	owner.visible_message(span_warning("[owner] vomits up a bulbous lump and throws it at [A]!"), span_warning("We vomit up a bulbous lump and throw it at [A]!"))
+
+/datum/action/ability/activable/xeno/toxic_grenade/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/activable/xeno/toxic_grenade/ai_should_use(atom/target)
+	if(!ismob(target))
+		return FALSE
+	if(get_dist(target, owner) > 6)
+		return FALSE
+	if(!line_of_sight(owner, target))
+		return FALSE
+	if(target.get_xeno_hivenumber() == owner.get_xeno_hivenumber())
+		return FALSE
+	return TRUE
 
 /obj/item/explosive/grenade/smokebomb/xeno
 	name = "toxic grenade"
@@ -300,3 +353,14 @@
 	smoketype = /datum/effect_system/smoke_spread/xeno/neuro/light
 	arm_sound = 'sound/voice/alien/yell_alt.ogg'
 	smokeradius = 3
+
+/datum/action/ability/activable/xeno/toxic_grenade/neuro/ai_should_use(atom/target)
+	if(!ishuman(target))
+		return FALSE
+	if(get_dist(target, owner) > 6)
+		return FALSE
+	if(!line_of_sight(owner, target))
+		return FALSE
+	if(target.get_xeno_hivenumber() == owner.get_xeno_hivenumber())
+		return FALSE
+	return TRUE

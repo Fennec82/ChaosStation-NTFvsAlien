@@ -114,6 +114,7 @@ Make your way to the cafeteria for some post-cryosleep chow, and then get equipp
 	total_positions = -1
 	job_flags = JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_ADDTOMANIFEST|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_CAN_SEE_ORDERS
 	outfit = /datum/outfit/job/som/squad/slut
+	skills_type = /datum/skills/slut
 	jobworth = list(
 		/datum/job/xenomorph = LARVA_POINTS_REGULAR,
 		/datum/job/som/squad/veteran = VETERAN_POINTS_REGULAR,
@@ -165,6 +166,7 @@ What you lack alone, you gain standing shoulder to shoulder with the men and wom
 /datum/job/som/squad/engineer
 	title = SOM_SQUAD_ENGINEER
 	access = list (ACCESS_SOM_DEFAULT,ACCESS_SOM_REQUESITIONS,ACCESS_SOM_ENGINEERING,ACCESS_SOM_REQUESITIONS,ACCESS_MARINE_ENGINEERING,ACCESS_CIVILIAN_ENGINEERING)
+	minimal_access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_REQUESITIONS,ACCESS_SOM_ENGINEERING,ACCESS_SOM_REQUESITIONS,ACCESS_MARINE_ENGINEERING,ACCESS_CIVILIAN_ENGINEERING)
 	paygrade = "SOM_E3"
 	comm_title = "Eng"
 	total_positions = 12
@@ -222,6 +224,7 @@ What you lack alone, you gain standing shoulder to shoulder with the men and wom
 /datum/job/som/squad/medic
 	title = SOM_SQUAD_CORPSMAN
 	access = list (ACCESS_SOM_DEFAULT,ACCESS_SOM_MEDICAL,ACCESS_SOM_REQUESITIONS)
+	minimal_access = list (ACCESS_SOM_DEFAULT,ACCESS_SOM_MEDICAL,ACCESS_SOM_REQUESITIONS)
 	paygrade = "SOM_E3"
 	comm_title = "Med"
 	total_positions = 16
@@ -278,11 +281,12 @@ What you lack alone, you gain standing shoulder to shoulder with the men and wom
 
 /datum/job/som/squad/veteran
 	title = SOM_SQUAD_VETERAN
-	access = list (ACCESS_SOM_DEFAULT,ACCESS_SOM_VETERAN,ACCESS_SOM_REQUESITIONS,,ACCESS_SOM_TADPOLE)
+	access = list (ACCESS_SOM_DEFAULT,ACCESS_SOM_VETERAN,ACCESS_SOM_REQUESITIONS,ACCESS_SOM_TADPOLE)
+	minimal_access = list (ACCESS_SOM_DEFAULT,ACCESS_SOM_VETERAN,ACCESS_SOM_REQUESITIONS,ACCESS_SOM_TADPOLE)
 	paygrade = "SOM_S1"
 	comm_title = "Vet"
 	total_positions = 8
-	skills_type = /datum/skills/specialist
+	skills_type = /datum/skills/som_specveteran
 	display_order = JOB_DISPLAY_ORDER_SQUAD_SMARTGUNNER
 	minimap_icon = "smartgunner"
 	outfit = /datum/outfit/job/som/squad/veteran
@@ -331,6 +335,7 @@ What you lack alone, you gain standing shoulder to shoulder with the men and wom
 /datum/job/som/squad/leader
 	title = SOM_SQUAD_LEADER
 	access = list (ACCESS_SOM_DEFAULT,ACCESS_SOM_REQUESITIONS,ACCESS_SOM_SQUADLEADER,ACCESS_SOM_TADPOLE)
+	minimal_access = list (ACCESS_SOM_DEFAULT,ACCESS_SOM_REQUESITIONS,ACCESS_SOM_SQUADLEADER,ACCESS_SOM_TADPOLE)
 	req_admin_notify = TRUE
 	paygrade = "SOM_S3"
 	comm_title = JOB_COMM_TITLE_SQUAD_LEADER
@@ -394,3 +399,48 @@ You are also in charge of communicating with command and letting them know about
 	jobtype = /datum/job/som/squad/leader
 
 	id = /obj/item/card/id/dogtag/som/leader
+
+/datum/job/som/security/militarypolice
+	title = SOM_MP
+	paygrade = "E3"
+	comm_title = "MP"
+	access = ALL_SOM_ACCESS
+	minimal_access = ALL_SOM_ACCESS
+	display_order = JOB_DISPLAY_ORDER_SECURITY_OFFICER
+	skills_type = /datum/skills/security_officer
+	outfit = /datum/outfit/job/som/mp
+	total_positions = 5
+	job_flags = JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_ADDTOMANIFEST|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_CAN_SEE_ORDERS
+	job_category = JOB_CAT_COMMANDSOM
+	html_description = {"
+		<b>Difficulty</b>: Medium<br /><br />
+		<b>You answer to the</b> Chief MP and above.<br /><br />
+		<b>Unlock Requirement</b>: Starting Role<br /><br />
+		<b>Gamemode Availability</b>: Crash, Distress<br /><br /><br />
+		Maintain order in the base.
+		<br />You are a Military Police Officer, what else to say?<br />
+		<b>Duty</b>: Maintain the law aboard the SOM Ship and the Area of Operations.	"}
+	minimap_icon = "corpsec"
+
+/datum/job/som/security/militarypolice/after_spawn(mob/living/carbon/new_mob, mob/user, latejoin = FALSE)
+	. = ..()
+	if(!ishuman(new_mob))
+		return
+	var/mob/living/carbon/human/new_human = new_mob
+	var/playtime_mins = user?.client?.get_exp(title)
+	if(!playtime_mins || playtime_mins < 1 )
+		return
+	switch(playtime_mins)
+		if(0 to 1500)
+			new_human.wear_id.paygrade = "SOM_E3"
+		if(1501 to 6000)
+			new_human.wear_id.paygrade = "SOM_E4"
+		if(6001 to 18000)
+			new_human.wear_id.paygrade = "SOM_E5"
+		if(18001 to 60000)
+			new_human.wear_id.paygrade = "SOM_S1"
+
+/datum/outfit/job/som/mp
+	name = "SOM Military Police"
+	ears = /obj/item/radio/headset/mainship/mcom/som
+	id = /obj/item/card/id/dogtag/som

@@ -37,7 +37,7 @@
 	if(!message)
 		return
 
-	message = copytext_char(trim(sanitize(message)), 1, MAX_MESSAGE_LEN)
+	message = copytext_char(trim(sanitize_multiline_alt(message)), 1, MAX_MESSAGE_LEN)
 
 	SSspeech_controller.queue_say_for_mob(src, message, SPEECH_CONTROLLER_QUEUE_EMOTE_VERB)
 
@@ -104,7 +104,7 @@
 	if(!message)
 		return
 
-	message = copytext_char(trim(sanitize(message)), 1, MAX_MESSAGE_LEN)
+	message = copytext_char(trim(sanitize_multiline_alt(message)), 1, MAX_MESSAGE_LEN)
 
 	// Italicize it
 	message = "<i>[message]</i>"

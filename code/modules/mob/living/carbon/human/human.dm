@@ -2,6 +2,7 @@
 	if(client)
 		blood_type = client.prefs.blood_type
 	else
+		npc_characterise()
 		blood_type = pick(7;"O-", 38;"O+", 6;"A-", 34;"A+", 2;"B-", 9;"B+", 1;"AB-", 3;"AB+")
 
 	set_jump_component()
@@ -235,7 +236,7 @@
 	var/face_name = get_face_name()
 	var/id_name = get_id_name("")
 	if(id_name && (id_name != face_name))
-		return "[face_name] (as [id_name])"
+		return "[id_name]"
 	return face_name
 
 //Returns "Unknown" if facially disfigured and real_name if not. Useful for setting name when polyacided or when updating a human's name variable
@@ -754,6 +755,11 @@
 	set name = "View Crew Manifest"
 	set category = "IC"
 
+	var/viewfaction = job?.faction || faction
+	if(viewfaction == FACTION_XENO)
+		var/datum/hive_status/hive = GLOB.hive_datums[get_xeno_hivenumber()]
+		if(istype(hive))
+			viewfaction = hive.allied_factions[1]
 	var/dat = GLOB.datacore.get_manifest(ooc = FALSE, viewfaction = job?.faction)
 
 	var/datum/browser/popup = new(src, "manifest", "<div align='center'>Crew Manifest</div>", 370, 420)

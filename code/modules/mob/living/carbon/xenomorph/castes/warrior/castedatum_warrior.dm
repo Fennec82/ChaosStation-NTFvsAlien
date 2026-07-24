@@ -11,6 +11,7 @@
 
 	// *** Melee Attacks *** //
 	melee_damage = 25
+	exosuit_slash_damage_multiplier = 1.25
 
 	// *** Speed *** //
 	speed = -0.4
@@ -20,7 +21,7 @@
 	plasma_gain = 15
 
 	// *** Health *** //
-	max_health = 400
+	max_health = 420
 
 	// *** Sunder *** //
 	sunder_multiplier = 0.9

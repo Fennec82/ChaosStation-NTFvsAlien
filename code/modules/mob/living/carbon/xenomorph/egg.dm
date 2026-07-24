@@ -90,6 +90,11 @@
 	/// The amount to multiply the hugger's hand attach time, if any, by.
 	var/hand_attach_time_multiplier = 1
 
+/obj/alien/egg/hugger/examine(mob/user)
+	. = ..()
+	if(isxeno(user))
+		. += span_notice("You can transfer your mind to a facehugger if you become a larva, get adjacent and use right-click menu. That will burrow old you.")
+
 /obj/alien/egg/hugger/Initialize(mapload, hivenumber, new_hugger_type, new_hand_attach_time_multiplier)
 	. = ..()
 	if(new_hugger_type)

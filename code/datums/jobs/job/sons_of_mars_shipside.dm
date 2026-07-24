@@ -168,6 +168,46 @@ You are in charge of logistics and the overwatch system. You are also in line to
 		if(30001 to INFINITY) // 500 hrs
 			new_human.wear_id.paygrade = "SOM_O4"
 
+/datum/job/som/command/chiefmp
+	title = SOM_CHIEF_MP
+	access = ALL_SOM_ACCESS
+	minimal_access = ALL_SOM_ACCESS
+	req_admin_notify = TRUE
+	paygrade = "SOM_O1"
+	comm_title = "CMP"
+	total_positions = 1
+	skills_type = /datum/skills/fo
+	outfit = /datum/outfit/job/som/command/cmp
+	display_order = JOB_DISPLAY_ORDER_CORPSEC_COMMANDER //i guess bro
+	job_flags = JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_ALLOWS_PREFS_GEAR|JOB_FLAG_PROVIDES_BANK_ACCOUNT|JOB_FLAG_ADDTOMANIFEST|JOB_FLAG_ISCOMMAND|JOB_FLAG_PROVIDES_SQUAD_HUD|JOB_FLAG_CAN_SEE_ORDERS|JOB_FLAG_ALWAYS_VISIBLE_ON_MINIMAP
+	exp_requirements = XP_REQ_INTERMEDIATE
+	exp_type = EXP_TYPE_REGULAR_ALL
+	html_description = {"
+		<b>Difficulty</b>: Very Hard<br /><br />
+		<b>You answer to the</b> Captain<br /><br />
+		<b>Unlock Requirement</b>: Starting Role<br /><br />
+		<b>Gamemode Availability</b>: Campaign<br /><br /><br />
+		<b>Duty</b>: Take charge of the SOM's Military Police.
+	"}
+	minimap_icon = "corpseccomm"
+
+/datum/job/som/command/chiefmp/after_spawn(mob/living/carbon/new_mob, mob/user, latejoin = FALSE)
+	. = ..()
+	if(!ishuman(new_mob))
+		return
+	var/mob/living/carbon/human/new_human = new_mob
+	var/playtime_mins = user?.client?.get_exp(title)
+	if(!playtime_mins || playtime_mins < 1 )
+		return
+	switch(playtime_mins)
+		if(0 to 1500) // starting
+			new_human.wear_id.paygrade = "SOM_O1"
+		if(1501 to 6000) // 25 hrs
+			new_human.wear_id.paygrade = "SOM_O2"
+		if(6001 to 18000) // 100 hrs
+			new_human.wear_id.paygrade = "SOM_O3"
+
+
 //Pilot Officer
 /datum/job/som/command/pilot
 	title = SOM_PILOT_OFFICER
@@ -490,8 +530,8 @@ A happy base is a well-functioning base."}
 /datum/job/som/medical/professor
 	title = SOM_CHIEF_MEDICAL_OFFICER
 	shadow_languages = list(/datum/language/xenocommon)
-	access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_MEDICAL,ACCESS_SOM_ENGINEERING,ACCESS_SOM_COMMAND,ACCESS_MARINE_ENGINEERING, ACCESS_SOM_TADPOLE,ACCESS_MARINE_MEDBAY) //marine medbay because req locks and other things.
-	minimal_access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_MEDICAL,ACCESS_SOM_ENGINEERING,ACCESS_SOM_COMMAND,ACCESS_MARINE_ENGINEERING, ACCESS_SOM_TADPOLE,ACCESS_MARINE_MEDBAY)
+	access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_MEDICAL,ACCESS_SOM_ENGINEERING,ACCESS_SOM_REQUESITIONS,ACCESS_SOM_COMMAND,ACCESS_MARINE_ENGINEERING, ACCESS_SOM_TADPOLE,ACCESS_MARINE_MEDBAY) //marine medbay because req locks and other things.
+	minimal_access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_MEDICAL,ACCESS_SOM_ENGINEERING,ACCESS_SOM_REQUESITIONS,ACCESS_SOM_COMMAND,ACCESS_MARINE_ENGINEERING, ACCESS_SOM_TADPOLE,ACCESS_MARINE_MEDBAY)
 	req_admin_notify = TRUE
 	comm_title = "CMO"
 	paygrade = "CHO"
@@ -523,6 +563,7 @@ Make sure that the doctors and nurses are doing their jobs and keeping the SOM h
 
 /datum/job/som/medical/professor/after_spawn(mob/living/carbon/new_mob, mob/user, latejoin = FALSE)
 	. = ..()
+	ADD_TRAIT(new_mob, TRAIT_RESEARCHER, "[type]")
 	if(!ishuman(new_mob))
 		return
 	var/mob/living/carbon/human/new_human = new_mob
@@ -538,8 +579,8 @@ Make sure that the doctors and nurses are doing their jobs and keeping the SOM h
 //Medical Officer
 /datum/job/som/medical/medicalofficer
 	title = SOM_MEDICAL_DOCTOR
-	access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_MEDICAL,ACCESS_MARINE_ENGINEERING,ACCESS_MARINE_MEDBAY) //marine medbay because req locks and other things.
-	minimal_access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_MEDICAL,ACCESS_MARINE_ENGINEERING,ACCESS_MARINE_MEDBAY)
+	access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_MEDICAL,ACCESS_SOM_REQUESITIONS,ACCESS_MARINE_ENGINEERING,ACCESS_MARINE_MEDBAY) //marine medbay because req locks and other things.
+	minimal_access = list(ACCESS_SOM_DEFAULT,ACCESS_SOM_MEDICAL,ACCESS_SOM_REQUESITIONS,ACCESS_MARINE_ENGINEERING,ACCESS_MARINE_MEDBAY)
 	comm_title = "MD"
 	paygrade = "RES"
 	total_positions = 6
@@ -675,6 +716,7 @@ You are also an expert when it comes to botany and hydroponics. If you do not kn
 
 /datum/job/som/silicon/synthetic/som/after_spawn(mob/living/carbon/new_mob, mob/user, latejoin = FALSE)
 	. = ..()
+	ADD_TRAIT(new_mob, TRAIT_RESEARCHER, "[type]")
 	if(!ishuman(new_mob))
 		return
 	var/mob/living/carbon/human/new_human = new_mob

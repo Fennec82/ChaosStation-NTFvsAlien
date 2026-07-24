@@ -229,7 +229,7 @@ export const BackgroundInformation = (props) => {
           </Section>
         </Stack.Item>
       </Stack>
-      Set picture to &lsquo;!clear&rsquo; to clear
+      Set picture to &lsquo;!clear&rsquo; to clear.
       <hr />
       <Stack>
         <Stack.Item grow>
@@ -250,6 +250,7 @@ export const BackgroundInformation = (props) => {
               </Box>
             }
           >
+            (Width:300 Height:350)
             <TextArea
               expensive
               fluid
@@ -259,7 +260,7 @@ export const BackgroundInformation = (props) => {
               onChange={(value) => setProfilePic(value)}
             />
             {profile_pic ? (
-              <img src={profile_pic} width={350} height={400} />
+              <img src={profile_pic} width={300} height={350} />
             ) : (
               ''
             )}
@@ -286,6 +287,7 @@ export const BackgroundInformation = (props) => {
               </Box>
             }
           >
+            (Width:300 Height:350)
             <TextArea
               expensive
               fluid
@@ -295,7 +297,7 @@ export const BackgroundInformation = (props) => {
               onChange={(value) => setNSFWProfilePic(value)}
             />
             {nsfwprofile_pic ? (
-              <img src={nsfwprofile_pic} width={350} height={400} />
+              <img src={nsfwprofile_pic} width={300} height={350} />
             ) : (
               ''
             )}
@@ -322,6 +324,7 @@ export const BackgroundInformation = (props) => {
               </Box>
             }
           >
+            (Width:300 Height:350)
             <TextArea
               expensive
               fluid
@@ -331,7 +334,7 @@ export const BackgroundInformation = (props) => {
               onChange={(value) => setXenoProfilePic(value)}
             />
             {xenoprofile_pic ? (
-              <img src={xenoprofile_pic} width={350} height={400} />
+              <img src={xenoprofile_pic} width={300} height={350} />
             ) : (
               ''
             )}

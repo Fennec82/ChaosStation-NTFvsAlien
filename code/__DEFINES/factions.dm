@@ -21,6 +21,7 @@
 #define FACTION_MOTHELLIAN "Mothellians"
 #define FACTION_VSD "Kaizoku Corporation"
 #define FACTION_ERP "Emergency Response Pranksters"
+#define FACTION_SPATIAL_AGENT "Spatial Agents"
 
 //Alignement are currently only used by req.
 ///Mob with a neutral alignement cannot be sold by anyone
@@ -42,6 +43,7 @@ GLOBAL_LIST_INIT(faction_to_alignement, list(
 	FACTION_DEATHSQUAD = ALIGNEMENT_FRIENDLY,
 	FACTION_MOTHELLIAN = ALIGNEMENT_FRIENDLY,
 	FACTION_ERP = ALIGNEMENT_FRIENDLY,
+	FACTION_SPATIAL_AGENT = ALIGNEMENT_FRIENDLY,
 	//Hostile
 	FACTION_XENO = ALIGNEMENT_HOSTILE,
 	FACTION_CLF = ALIGNEMENT_HOSTILE,
@@ -83,6 +85,7 @@ GLOBAL_LIST_INIT(faction_default_frequency, list(
 	FACTION_HOSTILE = FREQ_CIV_GENERAL,
 	FACTION_PIRATE = FREQ_COLONIST,
 	FACTION_VSD = FREQ_VSD,
+	FACTION_SPATIAL_AGENT = FREQ_CIV_GENERAL,
 ))
 
 ///Iff signals for factions
@@ -98,6 +101,7 @@ GLOBAL_LIST_INIT(faction_default_frequency, list(
 #define PIRATE_IFF (1<<9)
 #define VSD_IFF (1<<10)
 #define NEUTRAL_IFF (1<<11)
+#define ALL_IFF ((1<<12) - 1)
 
 ///Iff for each faction that is able to use iff
 GLOBAL_LIST_INIT(faction_to_iff, list(
@@ -120,6 +124,7 @@ GLOBAL_LIST_INIT(faction_to_iff, list(
 	FACTION_PIRATE = PIRATE_IFF,
 	FACTION_MOTHELLIAN = TGMC_LOYALIST_IFF,
 	FACTION_VSD = VSD_IFF,
+	FACTION_SPATIAL_AGENT = ALL_IFF,
 ))
 
 ///Acronyms for each faction, or the shortest name possible
@@ -167,6 +172,7 @@ GLOBAL_LIST_INIT(faction_to_radio, list(
 	FACTION_HIVEBOT = FREQ_COLONIST,
 	FACTION_HOSTILE = FREQ_CIV_GENERAL,
 	FACTION_PIRATE = FREQ_COLONIST,
+	FACTION_SPATIAL_AGENT = FREQ_CIV_GENERAL,
 ))
 
 ///List of correspond factions to data hud
@@ -177,6 +183,7 @@ GLOBAL_LIST_INIT(faction_to_data_hud, list(
 	FACTION_CLF = DATA_HUD_SQUAD_CLF,
 	FACTION_VSD = DATA_HUD_SQUAD_VSD,
 	FACTION_ICC = DATA_HUD_SQUAD_ICC,
+	FACTION_SPATIAL_AGENT = DATA_HUD_SQUAD_TERRAGOV,
 ))
 
 GLOBAL_LIST_INIT(faction_to_squad_hud, list(
@@ -186,6 +193,7 @@ GLOBAL_LIST_INIT(faction_to_squad_hud, list(
 	FACTION_CLF = SQUAD_HUD_CLF,
 	FACTION_VSD = SQUAD_HUD_VSD,
 	FACTION_ICC = SQUAD_HUD_ICC,
+	FACTION_SPATIAL_AGENT = SQUAD_HUD_TERRAGOV,
 ))
 
 GLOBAL_LIST_INIT(faction_to_portrait, list(

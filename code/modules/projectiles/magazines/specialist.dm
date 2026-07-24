@@ -153,6 +153,17 @@
 	icon_state = "rocket_wp_unguided"
 	default_ammo = /datum/ammo/rocket/wp/unguided
 
+/obj/item/ammo_magazine/rocket/sadar/plasmaloss
+	name = "\improper 84mm 'L-G' tanglefoot rocket"
+	desc = "A warhead for the RL-152 rocket launcher. Carries a bogstandard tanglefoot warhead that bursts and disperses tanglefoot gas. Due to being laser-guided, it will hit exactly where you aim, the payload is big enough to allow for a large radius of tanglefoot gas. When empty, use this frame to deconstruct it."
+	caliber = CALIBER_84MM
+	icon_state = "rocket_tangle"
+	w_class = WEIGHT_CLASS_NORMAL
+	max_rounds = 1
+	default_ammo = /datum/ammo/rocket/plasmaloss
+	reload_delay = 60
+	bonus_overlay = "rocket_tangle"
+
 //-------------------------------------------------------
 //RL-160 recoilless rifle
 
@@ -225,6 +236,18 @@
 
 /obj/item/ammo_magazine/rocket/oneuse/anti_tank
 	default_ammo = /datum/ammo/rocket/recoilless/heat/mech
+
+//RPO Thermobaric
+
+/obj/item/ammo_magazine/rocket/oneuse/thermobaric
+	name = "\improper 93mm thermobaric Rocket"
+	desc = "A rocket used to reload a one use rocket once returned to an armory."
+	caliber = CALIBER_93MM
+	icon_state = "rocket"
+	w_class = WEIGHT_CLASS_BULKY
+	max_rounds = 1
+	default_ammo = /datum/ammo/rocket/oneuse/thermobaric
+	reload_delay = 30
 
 //-------------------------------------------------------
 //M5 RPG'S MEAN FUCKING COUSIN

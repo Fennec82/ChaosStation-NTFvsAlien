@@ -52,6 +52,7 @@
 		/obj/item/armor_module/module/style/light_armor,
 		/obj/item/armor_module/module/style/medium_armor,
 		/obj/item/armor_module/module/style/heavy_armor,
+/*		/obj/item/armor_module/module/style/superheavy_armor,*/
 	)
 
 	var/codex_info = {"<BR>This item is part of the <b>Style Line.</b><BR>
@@ -219,7 +220,7 @@
 	desc = "A stylish skimask, can be recolored. Makes you feel like an operator just looking at it."
 	icon_state = "ski_inhand"
 	worn_icon_state = "ski"
-	inv_hide_flags = HIDEALLHAIR|HIDEEARS
+	inv_hide_flags = HIDEALLHAIR|HIDEEARS|HIDEFACE
 	item_map_variant_flags = ITEM_JUNGLE_VARIANT|ITEM_ICE_VARIANT|ITEM_DESERT_VARIANT
 	greyscale_config = /datum/greyscale_config/style_hat
 
@@ -229,6 +230,7 @@
 	desc = "The CFCC is a prime and readied, yet stylish facemask ready to... cover your face."
 	icon_state = "coof_inhand"
 	worn_icon_state = "coof"
+	inv_hide_flags = HIDEFACE
 	item_map_variant_flags = ITEM_JUNGLE_VARIANT|ITEM_ICE_VARIANT|ITEM_DESERT_VARIANT
 	greyscale_config = /datum/greyscale_config/style_hat
 

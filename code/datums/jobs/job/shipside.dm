@@ -775,6 +775,7 @@ Make sure that the doctors and nurses are doing their jobs and keeping the marin
 
 /datum/job/terragov/medical/professor/after_spawn(mob/living/carbon/new_mob, mob/user, latejoin = FALSE)
 	. = ..()
+	ADD_TRAIT(new_mob, TRAIT_RESEARCHER, "[type]")
 	if(!ishuman(new_mob))
 		return
 	var/mob/living/carbon/human/new_human = new_mob
@@ -902,6 +903,7 @@ It is also recommended that you gear up like a regular marine, or your 'internsh
 
 /datum/job/terragov/medical/researcher/after_spawn(mob/living/carbon/new_mob, mob/user, latejoin = FALSE)
 	. = ..()
+	ADD_TRAIT(new_mob, TRAIT_RESEARCHER, "[type]")
 	if(!ishuman(new_mob))
 		return
 	var/mob/living/carbon/human/new_human = new_mob
@@ -920,7 +922,6 @@ It is also recommended that you gear up like a regular marine, or your 'internsh
 		if(18001 to INFINITY) // 300 hrs
 			new_human.wear_id.paygrade = "PROF"
 	new_human.wear_id.update_label()
-
 
 /datum/job/terragov/civilian
 	job_category = JOB_CAT_CIVILIAN
@@ -999,7 +1000,7 @@ Use your office fax machine to communicate with corporate headquarters or to acq
 	comm_title = "Syn"
 	paygrade = "Mk.I"
 	supervisors = "the acting captain, Ninetails."
-	total_positions = 1
+	total_positions = 4
 	skills_type = /datum/skills/synthetic
 	access = ALL_ACCESS
 	minimal_access = ALL_ACCESS
@@ -1029,6 +1030,7 @@ Use your office fax machine to communicate with corporate headquarters or to acq
 /datum/job/terragov/silicon/synthetic/get_special_name(client/preference_source)
 	return preference_source.prefs.synthetic_name
 
+	/*
 /datum/job/terragov/silicon/synthetic/special_check_latejoin(client/C)
 	. = ..()
 	if(!.)
@@ -1038,6 +1040,7 @@ Use your office fax machine to communicate with corporate headquarters or to acq
 			to_chat(C, span_warning("The ship already has a Synthetic."))
 			return FALSE
 	return TRUE
+		*/
 
 /datum/job/terragov/silicon/synthetic/return_spawn_type(datum/preferences/prefs)
 	if(prefs?.synthetic_type == "Early Synthetic")
@@ -1053,6 +1056,7 @@ Use your office fax machine to communicate with corporate headquarters or to acq
 
 /datum/job/terragov/silicon/synthetic/after_spawn(mob/living/carbon/new_mob, mob/user, latejoin = FALSE)
 	. = ..()
+	ADD_TRAIT(new_mob, TRAIT_RESEARCHER, "[type]")
 	if(!ishuman(new_mob))
 		return
 	var/mob/living/carbon/human/new_human = new_mob

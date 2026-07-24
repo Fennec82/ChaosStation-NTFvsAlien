@@ -564,6 +564,7 @@ The alternative is scattering them everywhere under their respective objects whi
 		last_unconscious = 0
 		return FALSE
 	var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[ckey]
+	log_message("is no longer knocked out, was knocked out for [DisplayTimeText(world.time - last_unconscious)]", LOG_ATTACK, color="orange")
 	personal_statistics.time_unconscious += world.time - last_unconscious
 	return TRUE
 

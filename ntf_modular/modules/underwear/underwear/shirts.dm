@@ -121,6 +121,22 @@
 	name = "Shirt - Black Steel Crop Top Turtleneck"
 	icon_state = "bcroptop_sleevesalt"
 
+/obj/item/clothing/underwear/shirt/croptop_turtleneck_window
+	name = "Shirt - Windowed Midriff Crop Top Turtleneck"
+	icon_state = "croptop_sleeves_gap"
+
+/obj/item/clothing/underwear/shirt/croptop_turtleneck_window_black
+	name = "Shirt - Black Windowed Midriff Crop Top Turtleneck"
+	icon_state = "bcroptop_sleeves_gap"
+
+/obj/item/clothing/underwear/shirt/croptop_turtleneck_full
+	name = "Shirt - Midriff Crop Top Turtleneck"
+	icon_state = "croptop_sleeves_full"
+
+/obj/item/clothing/underwear/shirt/croptop_turtleneck_full_black
+	name = "Shirt - Black Midriff Crop Top Turtleneck"
+	icon_state = "bcroptop_sleeves_full"
+
 /obj/item/clothing/underwear/shirt/buttondown
 	name = "Shirt - Buttondown"
 	icon_state = "buttondown"

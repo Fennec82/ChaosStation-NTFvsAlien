@@ -92,6 +92,14 @@ GLOBAL_LIST_INIT(freqtospan, list(
 	var/spanpart2 = "<span class='name'>"
 	//Speaker name
 	var/namepart = "[speaker.GetVoice()][speaker.get_alt_name()]"
+	if(istype(speaker, /atom/movable/virtualspeaker))
+		var/atom/movable/virtualspeaker/virt = speaker
+		if(ishuman(virt.source))
+			var/mob/living/carbon/human/hsauce = virt.source
+			namepart = "[hsauce.get_id_name("Unknown")]" //always ID if radio or something
+	if(ishuman(speaker))
+		var/mob/living/carbon/human/H = speaker
+		namepart = "[H.get_visible_name()]" //represent by id if face hidden etc
 	if(face_name && ishuman(speaker))
 		var/mob/living/carbon/human/H = speaker
 		namepart = "[H.get_face_name()]" //So "fake" speaking like in hallucinations does not give the speaker away if disguised
@@ -130,12 +138,17 @@ GLOBAL_LIST_INIT(freqtospan, list(
 		if(paygrade)
 			return "[paygrade] "	//Attempt to read off the id before defaulting to job
 
+		/* ntf edit we just get blank instead if no id
 		var/datum/job/J = H.job
 		if(!istype(J))
 			return ""
+		*/
 
+		/* ntf edit, we show nothing if no id
 		paygrade = get_paygrades(J.paygrade, TRUE, gender)
 		return paygrade ? "[paygrade] " : ""
+		*/
+		return ""
 	else if(istype(speaker, /atom/movable/virtualspeaker))
 		var/atom/movable/virtualspeaker/VT = speaker
 		if(!ishuman(VT.source))
@@ -145,11 +158,13 @@ GLOBAL_LIST_INIT(freqtospan, list(
 		if(paygrade)
 			return "[paygrade] "	//Attempt to read off the id before defaulting to job
 
+		/* ntf edit we just get blank instead if no id
 		var/datum/job/J = H.job
 		if(!istype(J))
 			return ""
 
 		paygrade = get_paygrades(J.paygrade, TRUE, gender)
+		*/
 		return paygrade ? "[paygrade] " : ""
 	else
 		return ""
@@ -300,6 +315,13 @@ INITIALIZE_IMMEDIATE(/atom/movable/virtualspeaker)
 			job = living_speaker.job.comm_title
 		else
 			job = ""
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			job = H.get_paygrade()
+			/* ntf edit dont force a paygrade if no id
+			if(H.get_paygrade())
+				job = "[H.get_paygrade()]"
+			*/
 	else if(isobj(M))  // Cold, emotionless machines
 		job = "Machine"
 

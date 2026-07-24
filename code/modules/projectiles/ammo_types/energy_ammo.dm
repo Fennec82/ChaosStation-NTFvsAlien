@@ -31,16 +31,21 @@
 	icon_state = "stun"
 	hud_state = "taser"
 	hud_state_empty = "battery_empty"
-	damage = 10
-	penetration = 100
+	damage = 25
+	penetration = 10
 	damage_type = STAMINA
 	ammo_behavior_flags = AMMO_ENERGY|AMMO_SKIPS_ALIENS
-	max_range = 15
-	accurate_range = 10
+	max_range = 8
+	accurate_range = 8
 	bullet_color = COLOR_VIVID_YELLOW
 
 /datum/ammo/energy/taser/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
-	staggerstun(target_mob, proj, stun = 20 SECONDS)
+	if(iscarbon(target_mob))
+		var/mob/living/carbon/cmob = target_mob
+		cmob.jitter(25)
+		cmob.adjustStaminaLoss(cmob.modify_by_armor(125, ENERGY, 10))
+	playsound(target_mob, 'ntf_modular/sound/items/taser.ogg', 50, TRUE)
+	staggerstun(target_mob, proj, stun = 1 SECONDS, stagger = 2 SECONDS, slowdown = 2)
 
 /datum/ammo/energy/tesla
 	name = "energy ball"

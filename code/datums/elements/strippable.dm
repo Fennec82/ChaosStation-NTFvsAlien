@@ -44,7 +44,8 @@
 			return
 
 	if(isxeno(user))
-		if(!(SSticker.mode.round_type_flags2 & MODE_2_CHILL_RULES))
+		var/mob/living/carbon/cuser = source
+		if(!(SSticker.mode.round_type_flags2 & MODE_2_CHILL_RULES) && (cuser.get_iff_signal() != user.get_iff_signal()))
 			return
 
 	if(over != user)
@@ -152,6 +153,8 @@
 
 	var/obj/item/item = get_item(source)
 	if(isnull(item))
+		return FALSE
+	if(HAS_TRAIT(item, TRAIT_NODROP))
 		return FALSE
 
 	source.visible_message(

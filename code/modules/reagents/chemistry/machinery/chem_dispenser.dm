@@ -28,6 +28,8 @@
 
 	var/obj/item/reagent_containers/beaker = null
 	var/hackedcheck = 0
+	name = "chem dispenser"
+	desc = "Creates and dispenses chemicals."
 	var/list/dispensable_reagents = list(
 		/datum/reagent/aluminum,
 		/datum/reagent/carbon,
@@ -188,9 +190,13 @@
 	if(.)
 		return
 
+	//ntf change, only doctors can use chemistry, medics can fumble around it.
 	if(needs_medical_training && ishuman(usr))
 		var/mob/living/carbon/human/user = usr
-		if(user.skills.getRating("medical") < SKILL_MEDICAL_NOVICE)
+		if(ishuman(user) && (user.skills.getRating("medical") < SKILL_MEDICAL_PRACTICED && user.skills.getRating("chemistry") < SKILL_CHEM_TRAINED))
+			to_chat(user, span_warning("You don't understand how to use this machine properly."))
+			return
+		if(user.skills.getRating("chemistry") < SKILL_CHEM_EXPERT)
 			if(user.do_actions)
 				return
 			to_chat(user, span_notice("You start fiddling with \the [src]..."))
@@ -552,3 +558,23 @@
 
 /obj/machinery/chem_dispenser/beer/nopower
 	use_power = NO_POWER_USE
+
+//bitchass normie dispenser usable by marines
+/obj/machinery/chem_dispenser/marine
+	name = "NM Ez-Chem dispenser"
+	desc = "Simplified basic medicine dispenser, for ages 3 and up."
+	color =  COLOR_BLUE_GRAY
+	dispensable_reagents = list(
+		/datum/reagent/medicine/bicaridine,
+		/datum/reagent/medicine/kelotane,
+		/datum/reagent/medicine/tramadol,
+		/datum/reagent/medicine/tricordrazine,
+		/datum/reagent/medicine/dylovene,
+		/datum/reagent/medicine/inaprovaline,
+		/datum/reagent/medicine/paracetamol,
+		/datum/reagent/medicine/leporazine,
+		/datum/reagent/medicine/saline_glucose,
+		/datum/reagent/consumable/sugar,
+		/datum/reagent/water,
+	)
+	needs_medical_training = FALSE

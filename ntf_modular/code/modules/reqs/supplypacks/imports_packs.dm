@@ -51,22 +51,27 @@
 /datum/supply_packs/imports/halterex
 	name = "NT Halter extended mag (x1)"
 	contains = list(/obj/item/ammo_magazine/rifle/nt_halter/extended)
-	cost = 5
+	cost = 15
 
 /datum/supply_packs/imports/halterdrum
 	name = "NT Halter drum mag (x1)"
 	contains = list(/obj/item/ammo_magazine/rifle/nt_halter/drum)
-	cost = 15
+	cost = 30
 
 /datum/supply_packs/imports/halterexlaser
 	name = "NT Halter extended laser mag (x1)"
 	contains = list(/obj/item/ammo_magazine/rifle/nt_halter/laser/extended)
-	cost = 5
+	cost = 15
+
+/datum/supply_packs/imports/halterexrub
+	name = "NT Halter extended rubber mag (x1)"
+	contains = list(/obj/item/ammo_magazine/rifle/nt_halter/rubber/extended)
+	cost = 10
 
 /datum/supply_packs/imports/halterdrumlaser
 	name = "NT Halter drum laser mag (x1)"
 	contains = list(/obj/item/ammo_magazine/rifle/nt_halter/laser/drum)
-	cost = 15
+	cost = 30
 
 /datum/supply_packs/imports/haltercharged
 	name = "NT Halter taser mag (x1)"
@@ -180,6 +185,151 @@
 	contains = list(/obj/item/ammo_magazine/rifle/m16_cmag)
 	cost = 10
 
+// SS13 mech wrecks
+
+/datum/supply_packs/imports/gygax_wreck
+	name = "Wreckage of Gygax (Repairable)"
+	contains = list(/obj/structure/mecha_wreckage/gygax)
+	cost = 400
+
+/datum/supply_packs/imports/durand_wreck
+	name = "Wreckage of Durand (Repairable)"
+	contains = list(/obj/structure/mecha_wreckage/durand)
+	cost = 400
+
+/datum/supply_packs/imports/phazon_wreck
+	name = "Wreckage of Phazon (Repairable)"
+	contains = list(/obj/structure/mecha_wreckage/phazon)
+	cost = 600
+
+/datum/supply_packs/imports/clarke_wreck
+	name = "Wreckage of Clarke (Repairable)"
+	contains = list(/obj/structure/mecha_wreckage/clarke)
+	cost = 200
+
+/datum/supply_packs/imports/ivan_wreck
+	name = "Wreckage of Ivan (Repairable)"
+	contains = list(/obj/structure/mecha_wreckage/ivan)
+	cost = 250
+
+/datum/supply_packs/imports/mauler_wreck
+	name = "Wreckage of Mauler (Repairable)"
+	contains = list(/obj/structure/mecha_wreckage/mauler)
+	cost = 900
+
+/datum/supply_packs/imports/marauder_wreck
+	name = "Wreckage of Marauder (Repairable)"
+	contains = list(/obj/structure/mecha_wreckage/marauder)
+	cost = 900
+
+/datum/supply_packs/imports/seraph_wreck
+	name = "Wreckage of Seraph (Repairable)"
+	contains = list(/obj/structure/mecha_wreckage/seraph)
+	cost = 2000
+
+// SS13 mech weapons
+
+/datum/supply_packs/imports/exosuit_aer9
+	name = "Exosuit laser rifle"
+	contains = list(/obj/item/mecha_parts/mecha_equipment/weapon/energy/exosuit/laser_rifle)
+	cost = 150
+
+/datum/supply_packs/imports/exosuit_tribeam
+	name = "Exosuit tribeam laser"
+	contains = list(/obj/item/mecha_parts/mecha_equipment/weapon/energy/exosuit/laser_scattershot)
+	cost = 150
+
+/datum/supply_packs/imports/exosuit_r84
+	name = "Exosuit 'R-84' LMG"
+	contains = list(/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/exosuit_lmg)
+	cost = 150
+
+/datum/supply_packs/imports/exosuit_smg9
+	name = "Exosuit SMG"
+	contains = list(/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/exosuit_smg)
+	cost = 150
+
+/datum/supply_packs/imports/exosuit_gl4
+	name = "Exosuit Grenade Launcher"
+	contains = list(/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/exosuit_gl)
+	cost = 300
+
+/datum/supply_packs/imports/exosuit_rangemaster
+	name = "Exosuit 'Rangemaster' Battle Rifle"
+	contains = list(/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/exosuit_br)
+	cost = 200
+
+/datum/supply_packs/imports/exosuit_minigun
+	name = "Non-Articulated Exosuit Minigun"
+	contains = list(/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/exosuit_minigun)
+	cost = 300
+
+// SS13 mech modules
+
+/datum/supply_packs/imports/exosuit_zoom
+	name = "Exosuit Optics Enhancement"
+	contains = list(/obj/item/mecha_parts/mecha_equipment/ability/zoom)
+	cost = 150
+
+/datum/supply_packs/imports/exosuit_generator
+	name = "Exosuit Phoron Engine"
+	contains = list(/obj/item/mecha_parts/mecha_equipment/generator/exosuit)
+	cost = 200
+
+/datum/supply_packs/imports/exosuit_smoke
+	name = "Exosuit Smoke Generator"
+	contains = list(/obj/item/mecha_parts/mecha_equipment/ability/smoke/cloak_smoke/exosuit)
+	cost = 150
+
+/datum/supply_packs/imports/exosuit_passenger_compartment
+	name = "Exosuit Passenger Compartment"
+	contains = list(/obj/item/mecha_parts/mecha_equipment/passenger_compartment)
+	cost = 100
+
+/datum/supply_packs/imports/exosuit_extinguisher
+	name = "Exosuit Fire Extinguisher"
+	contains = list(/obj/item/mecha_parts/mecha_equipment/extinguisher/exosuit)
+	cost = 100
+
+/datum/supply_packs/imports/exosuit_nightvision
+	name = "Exosuit Night-Vision Module"
+	contains = list(/obj/item/mecha_parts/mecha_equipment/ability/night_vision/exosuit)
+	cost = 300
+
+// SS13 mech ammo
+
+/datum/supply_packs/imports/exosuit_lmg_ammo
+	name = "Exosuit LMG Ammo"
+	contains = list(/obj/item/mecha_ammo/vendable/small_lmg)
+	cost = 50
+
+/datum/supply_packs/imports/exosuit_smg_ammo
+	name = "Exosuit SMG Ammo"
+	contains = list(/obj/item/mecha_ammo/vendable/small_smg)
+	cost = 50
+
+/datum/supply_packs/imports/exosuit_gl_ammo
+	name = "Exosuit Grenade Launcher Ammo"
+	contains = list(/obj/item/mecha_ammo/vendable/small_gl)
+	cost = 40
+
+/datum/supply_packs/imports/exosuit_br_ammo
+	name = "Exosuit Battle Rifle Ammo"
+	contains = list(/obj/item/mecha_ammo/vendable/small_br)
+	cost = 50
+
+/datum/supply_packs/imports/exosuit_minigun_ammo
+	name = "Exosuit Minigun Ammo"
+	contains = list(/obj/item/mecha_ammo/vendable/small_minigun)
+	cost = 75
+
+///
+
+/datum/supply_packs/imports/exosuit_painter
+	name = "exosuit painter"
+	contains = list(/obj/item/toy/crayon/exosuit_painter)
+	cost = 10
+
 /datum/supply_packs/imports/famas/ammoext
 	name = "FAMAS Assault Rifle Extended Ammo"
 	contains = list(/obj/item/ammo_magazine/rifle/famasext)
@@ -194,6 +344,171 @@
 	name = "Katana"
 	contains = list(/obj/item/storage/holster/blade/katana/full)
 	cost = 50
+
+/datum/supply_packs/imports/ptrsincendammo
+	name = "PTRS emplacement rifle"
+	contains = list(/obj/item/weapon/gun/clf_heavyrifle)
+	cost = 600
+
+/datum/supply_packs/imports/ptrsheavyrifle
+	name = "PTRS incendiary munitions box"
+	contains = list(/obj/item/big_ammo_box/shotgun/clf_heavyrifle)
+	cost = 200
+
+/datum/supply_packs/imports/icc_hmg
+	name = "KRD-61ES Mobile Heavy Machinegun"
+	contains = list(/obj/item/weapon/gun/icc_hmg)
+	cost = 800
+
+/datum/supply_packs/imports/icc_hmg/ammo
+	name = "KRD-61ES Ammo Box"
+	contains = list(/obj/item/ammo_magazine/icc_hmg)
+	cost = 50
+
+/datum/supply_packs/imports/minibmp
+	name = "MINI-B machinepistol"
+	contains = list(/obj/item/weapon/gun/smg/minib)
+	cost = 300
+
+/datum/supply_packs/imports/minibmpmag
+	name = "MINI-B magazine"
+	contains = list(/obj/item/ammo_magazine/smg/minib)
+	cost = 5
+
+/datum/supply_packs/imports/minibmpmagext
+	name = "MINI-B extended magazine"
+	contains = list(/obj/item/ammo_magazine/smg/minib/extended)
+	cost = 10
+
+/datum/supply_packs/imports/valerian
+	name = "Valerian assault carbine"
+	contains = list(/obj/item/weapon/gun/rifle/valerian)
+	cost = 500
+
+/datum/supply_packs/imports/valerian/vantage
+	name = "Vantage marksman carbine"
+	contains = list(/obj/item/weapon/gun/rifle/valerian/vantage)
+	cost = 500
+
+/datum/supply_packs/imports/tac
+	name = "OV-120 Night vision scope"
+	contains = list(/obj/item/attachable/scope/tac)
+	cost = 300
+
+/datum/supply_packs/imports/valerianmag
+	name = "Valerian magazine"
+	contains = list(/obj/item/ammo_magazine/rifle/valerian)
+	cost = 5
+
+/datum/supply_packs/imports/valerianextmag
+	name = "Valerian extended magazine"
+	contains = list(/obj/item/ammo_magazine/rifle/valerian/ext)
+	cost = 10
+
+/datum/supply_packs/imports/valerianlrgext
+	name = "Valerian large magazine"
+	contains = list(/obj/item/ammo_magazine/rifle/valerian/lrg)
+	cost = 20
+
+/datum/supply_packs/imports/valerianmag/spp
+	name = "Valerian match magazine"
+	contains = list(/obj/item/ammo_magazine/rifle/valerian/spp)
+	cost = 10
+
+/datum/supply_packs/imports/valerianextmag/spp
+	name = "Valerian extended match magazine"
+	contains = list(/obj/item/ammo_magazine/rifle/valerian/spp/ext)
+	cost = 20
+
+/datum/supply_packs/imports/valerianlrgext/spp
+	name = "Valerian large match magazine"
+	contains = list(/obj/item/ammo_magazine/rifle/valerian/spp/lrg)
+	cost = 40
+
+/datum/supply_packs/imports/valerianmag/pz
+	name = "Valerian incendiary magazine"
+	contains = list(/obj/item/ammo_magazine/rifle/valerian/pz)
+	cost = 10
+
+/datum/supply_packs/imports/valerianextmag/pz
+	name = "Valerian extended incendiary magazine"
+	contains = list(/obj/item/ammo_magazine/rifle/valerian/pz/ext)
+	cost = 20
+
+/datum/supply_packs/imports/valerianlrgext/pz
+	name = "Valerian large incendiary magazine"
+	contains = list(/obj/item/ammo_magazine/rifle/valerian/pz/lrg)
+	cost = 40
+
+/datum/supply_packs/imports/mparexport
+	name = "Civilian Multi-Purpose Adaptive Rifle"
+	contains = list(/obj/item/weapon/gun/rifle/mpar/export)
+	cost = 500
+
+/datum/supply_packs/imports/mparmag
+	name = "Multi-Purpose Adaptive Rifle 15-Round magazine"
+	contains = list(/obj/item/ammo_magazine/rifle/mpar)
+	cost = 15
+
+/datum/supply_packs/imports/mparextmag
+	name = "Multi-Purpose Adaptive Rifle 30-Round magazine"
+	contains = list(/obj/item/ammo_magazine/rifle/mpar/ext)
+	cost = 30
+
+/datum/supply_packs/imports/mparsmartmag
+	name = "Multi-Purpose Adaptive Rifle 20-Round Smart magazine"
+	contains = list(/obj/item/ammo_magazine/rifle/mpar/smart)
+	cost = 30
+
+/datum/supply_packs/imports/mparbombmag
+	name = "Multi-Purpose Adaptive Rifle 10-Round Shatter magazine"
+	contains = list(/obj/item/ammo_magazine/rifle/mpar/bomb)
+	cost = 30
+
+/datum/supply_packs/imports/mpartanglemag
+	name = "Multi-Purpose Adaptive Rifle 10-Round Tangle magazine"
+	contains = list(/obj/item/ammo_magazine/rifle/mpar/drain)
+	cost = 30
+
+/datum/supply_packs/imports/mparelectromag
+	name = "Multi-Purpose Adaptive Rifle 5-Round EMP magazine"
+	contains = list(/obj/item/ammo_magazine/rifle/mpar/electromag)
+	cost = 40
+
+/datum/supply_packs/imports/cc67export
+	name = "CC/67 CQB Rifle"
+	contains = list(/obj/item/weapon/gun/rifle/vsd_rifle/export)
+	cost = 650
+
+/datum/supply_packs/imports/khm4export
+	name = "K&H KHM4 Subcarbine"
+	contains = list(/obj/item/weapon/gun/rifle/khm4)
+	cost = 300
+
+/datum/supply_packs/imports/lbar88export
+	name = "L&S EM-88 Squad Assault Weapon"
+	contains = list(/obj/item/weapon/gun/rifle/icc_assaultcarbine/exportautorifle)
+	cost = 360
+
+/datum/supply_packs/imports/apssmartpistol
+	name = "APS Smartpistol"
+	contains = list(/obj/item/weapon/gun/pistol/apsmart_pistol)
+	cost = 100
+
+/datum/supply_packs/imports/apsammo
+	name = "APS Smartpistol magazine"
+	contains = list(/obj/item/ammo_magazine/pistol/standard_pistol/apsmart_pistol)
+	cost = 5
+
+/datum/supply_packs/imports/cc67exportmag
+	name = "CC/67 CQB magazine"
+	contains = list(/obj/item/ammo_magazine/rifle/vsd_sbr)
+	cost = 15
+
+/datum/supply_packs/imports/cc67export
+	name = "CC/67 CQB Rifle"
+	contains = list(/obj/item/weapon/gun/rifle/vsd_rifle/export)
+	cost = 650
 
 /datum/supply_packs/imports/plasticfork
 	name = "Plastic Fork"
@@ -260,6 +575,11 @@
 	contains = list(/obj/item/reagent_containers/food/condiment/enzyme)
 	cost = 5
 
+/datum/supply_packs/imports/sugar
+	name = "Sugar Bottle"
+	contains = list(/obj/item/reagent_containers/food/condiment/sugar)
+	cost = 5
+
 /datum/supply_packs/imports/hotsauce
 	name = "Hot Sauce Bottle"
 	contains = list(/obj/item/reagent_containers/cup/bottle/capsaicin)
@@ -285,10 +605,215 @@
 	contains = list(/obj/item/reagent_containers/cup/bottle/frostoil)
 	cost = 50
 
+/datum/supply_packs/imports/synthsteak
+	name = "Raw Synth Meat"
+	contains = list(/obj/item/reagent_containers/food/snacks/meat/syntiflesh)
+	cost = 10
+
+/datum/supply_packs/imports/steak
+	name = "Raw Meat"
+	contains = list(/obj/item/reagent_containers/food/snacks/meat)
+	cost = 20
+
+/datum/supply_packs/imports/bearsteak
+	name = "Raw Bear Meat"
+	contains = list(/obj/item/reagent_containers/food/snacks/bearmeat)
+	cost = 30
+
+/datum/supply_packs/imports/carpmeat
+	name = "Carp Fillet"
+	contains = list(/obj/item/reagent_containers/food/snacks/carpmeat)
+	cost = 40
+
 /datum/supply_packs/imports/pizzarandom
 	name = "Mystery Pizza"
 	contains = list(/obj/item/pizzabox/random)
 	cost = 25
+
+/datum/supply_packs/imports/dozeneggs
+	name = "A Dozen Box of Eggs"
+	contains = list(/obj/item/storage/fancy/egg_box)
+	cost = 36
+
+/datum/supply_packs/imports/halfdozendonuts
+	name = "A Half-Dozen Box of Donuts"
+	contains = list(/obj/item/storage/donut_box)
+	cost = 18
+
+/datum/supply_packs/imports/microwave
+	name = "Microwave"
+	contains = list(/obj/machinery/microwave)
+	cost = 50
+
+/datum/supply_packs/imports/processor
+	name = "Food Processor"
+	contains = list(/obj/machinery/processor)
+	cost = 50
+
+/datum/supply_packs/imports/gibber
+	name = "Gibber"
+	contains = list(/obj/machinery/gibber)
+	cost = 50
+
+/datum/supply_packs/imports/hydrotray
+	name = "Hydroponics Tray"
+	contains = list(/obj/machinery/hydroponics)
+	cost = 25
+
+/datum/supply_packs/imports/seedextractor
+	name = "Seed Extractor"
+	contains = list(/obj/machinery/seed_extractor)
+	cost = 50
+
+/datum/supply_packs/imports/poppyseed
+	name = "Poppy Flower Seed"
+	contains = list(/obj/item/seeds/poppyseed)
+	cost = 5
+
+/datum/supply_packs/imports/chiliseed
+	name = "Chili Seed"
+	contains = list(/obj/item/seeds/chiliseed)
+	cost = 5
+
+/datum/supply_packs/imports/grapeseed
+	name = "Grape Seed"
+	contains = list(/obj/item/seeds/grapeseed)
+	cost = 5
+
+/datum/supply_packs/imports/peanutseed
+	name = "Peanut Seed"
+	contains = list(/obj/item/seeds/peanutseed)
+	cost = 5
+
+/datum/supply_packs/imports/cabbageseed
+	name = "Cabbage Seed"
+	contains = list(/obj/item/seeds/cabbageseed)
+	cost = 5
+
+/datum/supply_packs/imports/berryseed
+	name = "Berry Seed"
+	contains = list(/obj/item/seeds/berryseed)
+	cost = 5
+
+/datum/supply_packs/imports/bananaseed
+	name = "Banana Seed"
+	contains = list(/obj/item/seeds/bananaseed)
+	cost = 5
+
+/datum/supply_packs/imports/eggplantseed
+	name = "Eggplant Seed"
+	contains = list(/obj/item/seeds/eggplantseed)
+	cost = 5
+
+/datum/supply_packs/imports/tomatoseed
+	name = "Tomato Seed"
+	contains = list(/obj/item/seeds/tomatoseed)
+	cost = 5
+
+/datum/supply_packs/imports/cornseed
+	name = "Corn Seed"
+	contains = list(/obj/item/seeds/cornseed)
+	cost = 5
+
+/datum/supply_packs/imports/potatoseed
+	name = "Potato Seed"
+	contains = list(/obj/item/seeds/potatoseed)
+	cost = 5
+
+/datum/supply_packs/imports/soyaseed
+	name = "Soybean Seed"
+	contains = list(/obj/item/seeds/soyaseed)
+	cost = 5
+
+/datum/supply_packs/imports/wheatseed
+	name = "Wheat Seed"
+	contains = list(/obj/item/seeds/wheatseed)
+	cost = 5
+
+/datum/supply_packs/imports/riceseed
+	name = "Rice Seed"
+	contains = list(/obj/item/seeds/riceseed)
+	cost = 5
+
+/datum/supply_packs/imports/carrotseed
+	name = "Carrot Seed"
+	contains = list(/obj/item/seeds/carrotseed)
+	cost = 5
+
+/datum/supply_packs/imports/harebell
+	name = "Harebell Flower Seed"
+	contains = list(/obj/item/seeds/harebell)
+	cost = 5
+
+/datum/supply_packs/imports/appleseed
+	name = "Apple Seed"
+	contains = list(/obj/item/seeds/appleseed)
+	cost = 5
+
+/datum/supply_packs/imports/carrotseed
+	name = "Carrot Seed"
+	contains = list(/obj/item/seeds/carrotseed)
+	cost = 5
+
+/datum/supply_packs/imports/ambrosiavulgarisseed
+	name = "Ambrosia Vulgaris Seed"
+	contains = list(/obj/item/seeds/ambrosiavulgarisseed)
+	cost = 5
+
+/datum/supply_packs/imports/whitebeetseed
+	name = "White Beet Seed"
+	contains = list(/obj/item/seeds/whitebeetseed)
+	cost = 5
+
+/datum/supply_packs/imports/sugarcaneseed
+	name = "Sugarcane Seed"
+	contains = list(/obj/item/seeds/sugarcaneseed)
+	cost = 5
+
+/datum/supply_packs/imports/watermelonseed
+	name = "Watermelon Seed"
+	contains = list(/obj/item/seeds/watermelonseed)
+	cost = 5
+
+/datum/supply_packs/imports/pumpkinseed
+	name = "Pumpkin Seed"
+	contains = list(/obj/item/seeds/pumpkinseed)
+	cost = 5
+
+/datum/supply_packs/imports/limeseed
+	name = "Lime Seed"
+	contains = list(/obj/item/seeds/limeseed)
+	cost = 5
+
+/datum/supply_packs/imports/lemonseed
+	name = "Lemon Seed"
+	contains = list(/obj/item/seeds/lemonseed)
+	cost = 5
+
+/datum/supply_packs/imports/orangeseed
+	name = "Orange Seed"
+	contains = list(/obj/item/seeds/orangeseed)
+	cost = 5
+
+/datum/supply_packs/imports/grassseed
+	name = "Grass Seed"
+	contains = list(/obj/item/seeds/grassseed)
+	cost = 5
+
+/datum/supply_packs/imports/cocoapodseed
+	name = "Cocoa Pod Seed"
+	contains = list(/obj/item/seeds/cocoapodseed)
+	cost = 5
+
+/datum/supply_packs/imports/cherryseed
+	name = "Cherry Seed"
+	contains = list(/obj/item/seeds/cherryseed)
+	cost = 5
+
+/datum/supply_packs/imports/towercapseed
+	name = "Tower-Cap Seed"
+	contains = list(/obj/item/seeds/towermycelium)
+	cost = 5
 
 //faction specific things below here.
 
@@ -298,6 +823,54 @@
 	faction_lock = list(FACTION_TERRAGOV)
 	cost = 600
 
+/datum/supply_packs/imports/kzflamethrower
+	name = "KZ CC/21 flamethrower (Faction Supply)"
+	contains = list(/obj/item/weapon/gun/flamer/vsd)
+	faction_lock = list(FACTION_VSD)
+	cost = 300
+
+/datum/supply_packs/imports/kzfuelreg
+	name = "KZ CC/21 fuel tank (Faction Supply)"
+	contains = list(/obj/item/ammo_magazine/flamer_tank/vsd)
+	faction_lock = list(FACTION_VSD)
+	cost = 50
+
+/datum/supply_packs/imports/kzfuelx
+	name = "KZ CC/21 X fuel tank (Faction Supply)"
+	contains = list(/obj/item/ammo_magazine/flamer_tank/vsd/blue)
+	faction_lock = list(FACTION_VSD)
+	cost = 150
+
+/datum/supply_packs/imports/kzrocketlauncher
+	name = "KZ C153 shoulder launcher (Faction Supply)"
+	contains = list(/obj/item/weapon/gun/launcher/rocket/vsd)
+	faction_lock = list(FACTION_VSD)
+	cost = 800
+
+/datum/supply_packs/imports/kzrockethe
+	name = "KZ C153 shoulder launcher he rocket (Faction Supply)"
+	contains = list(/obj/item/ammo_magazine/rocket/vsd/he)
+	faction_lock = list(FACTION_VSD)
+	cost = 25
+
+/datum/supply_packs/imports/kzrocketincend
+	name = "KZ C153 shoulder launcher incendiary rocket (Faction Supply)"
+	contains = list(/obj/item/ammo_magazine/rocket/vsd/incendiary)
+	faction_lock = list(FACTION_VSD)
+	cost = 50
+
+/datum/supply_packs/imports/kzrocketchem
+	name = "KZ C153 shoulder launcher chemical rocket (Faction Supply)"
+	contains = list(/obj/item/ammo_magazine/rocket/vsd/chemical)
+	faction_lock = list(FACTION_VSD)
+	cost = 50
+
+/datum/supply_packs/imports/kzrocketheat
+	name = "KZ C153 shoulder launcher HEAT rocket (Faction Supply)"
+	contains = list(/obj/item/ammo_magazine/rocket/vsd/heat)
+	faction_lock = list(FACTION_VSD)
+	cost = 50
+
 /datum/supply_packs/imports/antiballisticshieldfs
 	name = "KZ Anti Ballsitic Shield (Faction Supply)"
 	contains = list(/obj/item/armor_module/module/eshield/absorbant/ballistic)
@@ -305,7 +878,41 @@
 	cost = 600
 
 /datum/supply_packs/medical/carpotoxin
-	name = "Carpotoxin Bottle"
+	name = "Carpotoxin Bottle (Faction Supply)"
 	contains = list(/obj/item/reagent_containers/glass/bottle/carpotoxin)
 	faction_lock = list(FACTION_TERRAGOV) //novamed
 	cost = 400
+
+/datum/supply_packs/imports/vx12serpenta
+	name = "VX-12 Serpenta (Faction Supply)"
+	contains = list(/obj/item/weapon/gun/energy/lasgun/lasrifle/volkite/serpenta)
+	faction_lock = list(FACTION_SOM)
+	cost = 75
+
+/datum/supply_packs/imports/vx32charger
+	name = "VX-32 Charger (Faction Supply)"
+	contains = list(/obj/item/weapon/gun/energy/lasgun/lasrifle/volkite/charger)
+	faction_lock = list(FACTION_SOM)
+	cost = 200
+
+/datum/supply_packs/imports/vx33caliver
+	name = "VX-33 Caliver (Faction Supply)"
+	contains = list(/obj/item/weapon/gun/energy/lasgun/lasrifle/volkite/caliver)
+	faction_lock = list(FACTION_SOM)
+	cost = 325
+
+/datum/supply_packs/imports/ml41afrag
+	name = " ML-41A Autoshotgun frag drum (Faction Supply)"
+	contains = list(/obj/item/ammo_magazine/rifle/icc_autoshotgun/frag)
+	faction_lock = list(FACTION_ICC)
+	cost = 50
+
+/datum/supply_packs/imports/m41a2/ammo/ap
+	name = "PR-412 Pulse Rifle Ammo AP Mag"
+	contains = list(/obj/item/ammo_magazine/rifle/ap)
+	cost = 25
+
+/datum/supply_packs/imports/m41a2/ammo/ap/box
+	name = "\improper Big ammo box (10x24mm AP)"
+	contains = list(/obj/item/big_ammo_box/ap)
+	cost = 200

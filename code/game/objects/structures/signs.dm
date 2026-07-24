@@ -144,10 +144,20 @@
 	desc = "A warning sign which reads 'LIVE AMMUNITION RANGE'."
 	icon_state = "firingrange"
 
+/obj/structure/sign/leader
+	name = "\improper Squad Leader Preparation"
+	desc = "A sign which reads 'Squad Leader Preparation Area'."
+	icon_state = "leader"
+
 /obj/structure/sign/gunnery
 	name = "\improper Smartgunner Preparation"
 	desc = "A sign which reads 'Smartgunner Preparation Area'."
 	icon_state = "gunnery"
+
+/obj/structure/sign/corpsman
+	name = "\improper Corpsman Preparation"
+	desc = "A sign which reads 'Corpsman Preparation Area'."
+	icon_state = "corpsman"
 
 /obj/structure/sign/biohazard
 	name = "\improper BIOHAZARD"
@@ -436,11 +446,13 @@
 /obj/structure/sign/fixedinplace/hangar
 	name = "\improper Hangar bay"
 	desc = "A direction sign, pointing out which way the Hangar bay is."
+	icon = 'ntf_modular/icons/obj/decals.dmi'
 	icon_state = "direction_hangar"
 
 /obj/structure/sign/fixedinplace/cryo
 	name = "\improper Cryogenics bay"
 	desc = "A direction sign, pointing out which way the Cryogenics bay is."
+	icon = 'ntf_modular/icons/obj/decals.dmi'
 	icon_state = "direction_cryo"
 
 //end nondirectional signs

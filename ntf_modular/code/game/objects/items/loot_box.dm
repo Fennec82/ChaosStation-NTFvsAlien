@@ -100,6 +100,7 @@
 
 /obj/item/storage/box/crate/loot/infiltration_lethal_pack_spec/Initialize(mapload)
 	. = ..()
+	new /obj/item/pamphlet/pistoleer(src)
 	new /obj/item/storage/holster/belt/pistol/m4a3/specops(src)
 	new /obj/item/ammo_magazine/pistol/m1911/ap(src)
 	new /obj/item/ammo_magazine/pistol/m1911/ap(src)
@@ -138,23 +139,26 @@
 /obj/item/storage/box/crate/loot/gheist_pack_spec/Initialize(mapload)
 	. = ..()
 	new /obj/item/pamphlet/rifleman(src)
-	new /obj/item/weapon/gun/rifle/dragoon(src)
-	new /obj/item/ammo_magazine/rifle/boltclip/dragoon(src)
-	new /obj/item/ammo_magazine/rifle/boltclip/dragoon(src)
-	new /obj/item/ammo_magazine/rifle/boltclip/dragoon(src)
-	new /obj/item/ammo_magazine/rifle/boltclip/dragoon(src)
-	new /obj/item/ammo_magazine/rifle/boltclip/dragoon(src)
-	new /obj/item/ammo_magazine/rifle/boltclip/dragoon(src)
-	new /obj/item/ammo_magazine/rifle/boltclip/dragoon(src)
-	new /obj/item/ammo_magazine/rifle/boltclip/dragoon(src)
-	new /obj/item/ammo_magazine/rifle/boltclip/dragoon(src)
-	new /obj/item/ammo_magazine/rifle/boltclip/dragoon(src)
-	new /obj/item/ammo_magazine/rifle/boltclip/dragoon/pox(src)
-	new /obj/item/ammo_magazine/rifle/boltclip/dragoon/pox(src)
-	new /obj/item/ammo_magazine/rifle/boltclip/dragoon/pox(src)
-	new /obj/item/ammo_magazine/rifle/boltclip/dragoon/pox(src)
-	new /obj/item/ammo_magazine/rifle/boltclip/dragoon/pox(src)
-	new /obj/item/clothing/glasses/night/m56_goggles(src)
+	new /obj/item/weapon/gun/rifle/mpar/mil(src)
+	new /obj/item/attachable/scope/marine(src)
+	new /obj/item/attachable/angledgrip(src)
+	new /obj/item/attachable/compensator(src)
+	new /obj/item/ammo_magazine/rifle/mpar(src)
+	new /obj/item/ammo_magazine/rifle/mpar(src)
+	new /obj/item/ammo_magazine/rifle/mpar(src)
+	new /obj/item/ammo_magazine/rifle/mpar/ext(src)
+	new /obj/item/ammo_magazine/rifle/mpar/ext(src)
+	new /obj/item/ammo_magazine/rifle/mpar/ext(src)
+	new /obj/item/ammo_magazine/rifle/mpar/smart(src)
+	new /obj/item/ammo_magazine/rifle/mpar/smart(src)
+	new /obj/item/ammo_magazine/rifle/mpar/smart(src)
+	new /obj/item/ammo_magazine/rifle/mpar/bomb(src)
+	new /obj/item/ammo_magazine/rifle/mpar/bomb(src)
+	new /obj/item/ammo_magazine/rifle/mpar/drain(src)
+	new /obj/item/ammo_magazine/rifle/mpar/drain(src)
+	new /obj/item/ammo_magazine/rifle/mpar/electromag(src)
+	new /obj/item/ammo_magazine/rifle/mpar/electromag(src)
+	new /obj/item/clothing/glasses/night_vision(src)
 	new /obj/item/skillsoft/lightfooted(src)
 	new /obj/item/fulton_extraction_pack/adminbus/advanced(src)
 	new /obj/item/assembly/signaler (src)
@@ -162,6 +166,43 @@
 	new /obj/item/detpack(src)
 	new /obj/item/detpack(src)
 	new /obj/item/detpack(src)
+
+/obj/item/storage/box/crate/loot/at_pack_spec/Initialize(mapload)
+	. = ..()
+	new /obj/item/pamphlet/rifleman(src)
+	new /obj/item/weapon/gun/rifle/khm4(src)
+	new /obj/item/attachable/reddot(src)
+	new /obj/item/attachable/angledgrip(src)
+	new /obj/item/attachable/compensator(src)
+	new /obj/item/ammo_magazine/rifle/m16(src)
+	new /obj/item/ammo_magazine/rifle/m16(src)
+	new /obj/item/ammo_magazine/rifle/m16(src)
+	new /obj/item/ammo_magazine/rifle/m16(src)
+	new /obj/item/ammo_magazine/rifle/m16(src)
+	new /obj/item/ammo_magazine/rifle/m16(src)
+	new /obj/item/weapon/gun/launcher/rocket/sadar(src)
+	new /obj/item/ammo_magazine/rocket/sadar/unguided(src)
+	new /obj/item/ammo_magazine/rocket/sadar/unguided(src)
+	new /obj/item/ammo_magazine/rocket/sadar/unguided(src)
+	new /obj/item/ammo_magazine/rocket/sadar/unguided(src)
+	new /obj/item/ammo_magazine/rocket/sadar/unguided(src)
+	new /obj/item/ammo_magazine/rocket/sadar/unguided(src)
+	new /obj/item/ammo_magazine/rocket/sadar/unguided(src)
+	new /obj/item/ammo_magazine/rocket/sadar/ap(src)
+	new /obj/item/ammo_magazine/rocket/sadar/ap(src)
+	new /obj/item/ammo_magazine/rocket/sadar/ap(src)
+	new /obj/item/ammo_magazine/rocket/sadar/ap(src)
+	new /obj/item/ammo_magazine/rocket/sadar/ap(src)
+	new /obj/item/ammo_magazine/rocket/sadar/ap(src)
+	new /obj/item/ammo_magazine/rocket/sadar/ap(src)
+	new /obj/item/ammo_magazine/rocket/sadar/plasmaloss(src)
+	new /obj/item/ammo_magazine/rocket/sadar/plasmaloss(src)
+	new /obj/item/ammo_magazine/rocket/sadar/plasmaloss(src)
+	new /obj/item/ammo_magazine/rocket/sadar/plasmaloss(src)
+	new /obj/item/ammo_magazine/rocket/sadar/plasmaloss(src)
+	new /obj/item/ammo_magazine/rocket/sadar/plasmaloss(src)
+	new /obj/item/ammo_magazine/rocket/sadar/plasmaloss(src)
+	new /obj/item/armor_module/module/hlin_explosive_armor(src)
 
 /obj/item/storage/box/crate/loot/targetrifle_pack_spec/Initialize(mapload)
 	. = ..()
@@ -406,26 +447,6 @@
 	new /obj/item/skillsoft/constitution_two(src)
 	new /obj/item/armor_module/module/valkyrie_autodoc(src)
 
-/obj/item/weapon/shield/riot/marine/soulsteel
-	name = "soulsteel ablative ballistic shield"
-	desc = "An expensive, very heavy metal shield made of a metal only found in phantom city, almost one of a kind... Adept at blocking projectiles and lasers, better than a normal shield in every way. This will slow you down even more while holding it due how heavy it is."
-	max_integrity = 500
-	integrity_failure = 100
-	soft_armor = list(MELEE = 40, BULLET = 70, LASER = 70, ENERGY = 60, BOMB = 30, BIO = 50, FIRE = 0, ACID = 15)
-	hard_armor = list(MELEE = 0, BULLET = 5, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, FIRE = 0, ACID = 0)
-	color = COLOR_STRONG_VIOLET
-	slowdown = 0.5
-
-/obj/item/weapon/shield/riot/marine/soulsteel/equipped(mob/user, slot)
-	if(!user.has_movespeed_modifier(type))
-		user.add_movespeed_modifier(type, TRUE, 0, (item_flags & IMPEDE_JETPACK) ? SLOWDOWN_IMPEDE_JETPACK : NONE, TRUE, 0.7)
-	. = ..()
-
-/obj/item/weapon/shield/riot/marine/soulsteel/unequipped(mob/unequipper, slot)
-	if(unequipper.has_movespeed_modifier(type))
-		unequipper.remove_movespeed_modifier(type)
-	. = ..()
-
 /obj/item/storage/box/crate/loot/mg_pack_spec/PopulateContents()
 	new /obj/item/weapon/gun/standard_mmg/machinegunner/spec(src)
 	new /obj/item/ammo_magazine/standard_mmg(src)
@@ -434,23 +455,3 @@
 	new /obj/item/ammo_magazine/standard_mmg(src)
 	new /obj/item/ammo_magazine/standard_mmg(src)
 	new /obj/item/skillsoft/constitution_one(src)
-
-/obj/item/weapon/gun/standard_mmg/machinegunner/spec
-	name = "\improper MG-27-E medium machinegun"
-	desc = "The MG-27-E is the home improved version of the olden MG-27, it sports lighter post-factory components and a soulsteel rifle shield that must be installed and uninstalled between deployments, allowing it to take a lot of punishment while deployed and work as if a shield for the gunner, it can be shot without being deployed in a pinch but It's impossible to utilize the gun and the bullet shield together due the weight while undeployed, therefore it is uninstalled while taking the weapon in hand. It uses 10x27mm boxes."
-	icon = 'ntf_modular/icons/obj/machines/deployable/mounted_machinegun.dmi'
-	icon_state = "t27e"
-	worn_icon_state = "t27e"
-	worn_icon_list = list(
-		slot_l_hand_str = 'ntf_modular/icons/mob/inhands/guns/machineguns_left_1.dmi',
-		slot_r_hand_str = 'ntf_modular/icons/mob/inhands/guns/machineguns_right_1.dmi',
-	)
-	scatter = 8
-	deployed_scatter_change = -50
-	wield_delay = 1.8 SECONDS
-	soft_armor = list(MELEE = 30, BULLET = 80, LASER = 80, ENERGY = 70, BOMB = 60, BIO = 100, FIRE = 0, ACID = 0)
-	max_integrity = 500
-	deployable_item = /obj/machinery/deployable/mounted/shielded
-
-/obj/machinery/deployable/mounted/shielded
-	allow_pass_flags = PASS_AIR|PASS_LOW_STRUCTURE

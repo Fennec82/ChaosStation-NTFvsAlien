@@ -1249,7 +1249,6 @@
 
 /obj/effect/vendor_bundle/vanguard
 	gear_to_spawn = list(
-		/obj/item/weapon/gun/rifle/nt_halter/cqb/elite,
 		/obj/item/tweezers,
 		/obj/item/storage/holster/belt/pistol/smart_pistol/full,
 		/obj/item/reagent_containers/hypospray/advanced/oxycodone,
@@ -1713,7 +1712,7 @@
 
 /obj/effect/vendor_bundle/vsd/leader
 	gear_to_spawn = list(
-		/obj/item/clothing/glasses/night/vsd,
+		/obj/item/clothing/glasses/night_vision/vsd,
 		/obj/item/explosive/plastique,
 		/obj/item/binoculars/tactical/range,
 		/obj/item/pinpointer,
@@ -1738,7 +1737,7 @@
 
 /obj/effect/vendor_bundle/vsd/specialist
 	gear_to_spawn = list(
-		/obj/item/clothing/glasses/night/vsd,
+		/obj/item/clothing/glasses/night_vision/vsd,
 		/obj/item/binoculars/tactical/range,
 		/obj/item/explosive/plastique,
 		/obj/item/explosive/plastique,

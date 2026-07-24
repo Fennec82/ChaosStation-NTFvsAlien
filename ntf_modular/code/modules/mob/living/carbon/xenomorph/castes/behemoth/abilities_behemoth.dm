@@ -252,15 +252,16 @@
 	icon_state = "flechette"
 	ammo_behavior_flags = AMMO_BALLISTIC|AMMO_PASS_THROUGH_MOB
 	accuracy_variation = 5
-	damage = 25
-	penetration = 20
+	damage = 40
+	penetration = 30
 	sundering = 3
 	damage_falloff = 3
 	max_range = 7
 	shell_speed = 1.5
+	shrapnel_chance = 15
 	bonus_projectiles_type = /datum/ammo/bullet/sieger_shard/scatter
-	bonus_projectiles_amount = 14
-	bonus_projectiles_scatter = 6
+	bonus_projectiles_amount = 5
+	bonus_projectiles_scatter = 12
 
 /datum/ammo/bullet/sieger_shard/scatter
 	bonus_projectiles_type = null

@@ -44,7 +44,13 @@
 /mob/living/proc/erptime(mob/living/user, mob/living/target)
 	if(!istype(target))
 		return
+	if(!istype(target.sexcon))
+		to_chat(user, span_warning("Unsuitable target."))
+		return
 	var/datum/sex_controller/usersexcon = user.sexcon
+	if(!usersexcon)
+		to_chat(user, span_warning("Unsuitable user."))
+		return
 	usersexcon.start(target)
 
 /* obsolete now
@@ -102,8 +108,7 @@
 /mob/living/carbon/xenomorph/proc/impregify(mob/living/carbon/victim, hole_target = HOLE_VAGINA, maxlarvas = MAX_LARVA_PREGNANCIES, damaging = TRUE, damagemult = 1, damageloc = BODY_ZONE_PRECISE_GROIN)
 	if(!istype(victim))
 		return
-	victim.reagents.remove_reagent(/datum/reagent/toxin/xeno_aphrotoxin, 10)
-	victim.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno, 10)
+	victim.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno/strong, 10)
 	if(damaging)
 		new /obj/effect/decal/cleanable/blood/splatter/xenocum(loc)
 		var/aciddamagetodeal = 5
@@ -128,9 +133,9 @@
 
 /mob/living/carbon/xenomorph/proc/xenoimpregify()
 	if(!preggo && gender == FEMALE)
-		if(!(SSticker.mode.round_type_flags2 & MODE_2_CHILL_RULES) && client?.prefs?.xenogender == 4) //futa
+/*		if(!(SSticker.mode.round_type_flags2 & MODE_2_CHILL_RULES) && client?.prefs?.xenogender == 4) //futa
 			to_chat(src, span_alien("We can't bear larvas during war times, our mixed physiology makes it difficult."))
-			return FALSE
+			return FALSE*/
 		to_chat(src, span_alien("We feel a new larva forming within us."))
 		addtimer(CALLBACK(src, PROC_REF(xenobirth)), 5 MINUTES)
 		Shake(duration = 3 SECONDS)

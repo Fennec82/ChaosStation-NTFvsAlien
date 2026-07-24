@@ -1664,6 +1664,11 @@
 	dir = 4
 	},
 /area/desert_dam/interior/lab_northeast/east_lab_biology)
+"alx" = (
+/obj/effect/landmark/start/job/survivor,
+/obj/effect/landmark/start/latejoinsurvivor,
+/turf/open/floor/prison/bright_clean,
+/area/desert_dam/building/warehouse/loading)
 "aly" = (
 /obj/structure/closet/crate,
 /obj/item/storage/fancy/vials,
@@ -17254,6 +17259,15 @@
 "ceQ" = (
 /turf/open/floor/prison/plate,
 /area/desert_dam/interior/dam_interior/south_tunnel)
+"ceR" = (
+/obj/structure/prop/mainship/railing{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/prison/darkbrown{
+	dir = 8
+	},
+/area/desert_dam/building/warehouse/loading)
 "ceW" = (
 /obj/machinery/light{
 	dir = 8
@@ -22062,11 +22076,11 @@
 /area/desert_dam/building/security/armory)
 "cJs" = (
 /obj/structure/rack,
-/obj/item/storage/box/flashbangs{
+/obj/item/storage/box/stuns{
 	pixel_x = 3;
 	pixel_y = -2
 	},
-/obj/item/storage/box/flashbangs,
+/obj/item/storage/box/stuns,
 /turf/open/floor/prison/darkred/full,
 /area/desert_dam/building/security/armory)
 "cJt" = (
@@ -31663,6 +31677,10 @@
 	name = "pool"
 	},
 /area/desert_dam/building/dorms/pool)
+"fVK" = (
+/obj/docking_port/stationary/supplycolony,
+/turf/open/floor/mainship/empty,
+/area/desert_dam/building/warehouse/loading)
 "fVM" = (
 /obj/effect/ai_node,
 /turf/open/floor/plating/ground/desertdam/asphalt/edge{
@@ -32400,6 +32418,16 @@
 /obj/effect/turf_decal/warning_stripes/thin,
 /turf/open/floor/plating/ground/desertdam/asphalt,
 /area/desert_dam/interior/dam_interior/west_tunnel)
+"guL" = (
+/obj/structure/prop/mainship/railing{
+	dir = 4
+	},
+/obj/machinery/computer/supplycomp/colony,
+/obj/effect/urban/decal/dirt,
+/obj/effect/urban/decal/dirt,
+/obj/effect/urban/decal/dirt,
+/turf/open/floor/prison/bright_clean,
+/area/desert_dam/building/warehouse/loading)
 "gve" = (
 /obj/effect/decal/cleanable/blood,
 /turf/open/floor/wood,
@@ -49530,10 +49558,7 @@
 	},
 /area/desert_dam/interior/dam_interior/break_room)
 "rlj" = (
-/obj/effect/landmark/start/job/survivor,
-/obj/effect/landmark/start/latejoinsurvivor,
-/obj/effect/decal/cleanable/dirt,
-/turf/open/floor/prison/bright_clean,
+/turf/open/floor/mainship/empty,
 /area/desert_dam/building/warehouse/loading)
 "rlr" = (
 /obj/effect/turf_decal/warning_stripes/thin{
@@ -75321,9 +75346,9 @@ cVi
 oFJ
 oBz
 nkb
-kAl
+guL
 cIq
-cIq
+alx
 cIq
 cIq
 cIq
@@ -75789,7 +75814,7 @@ cZB
 cVO
 ndy
 rbq
-lIf
+fVK
 xia
 jDb
 lDU
@@ -76023,7 +76048,7 @@ cZB
 kAl
 fRE
 rbq
-xia
+rlj
 xia
 cIq
 xia
@@ -76257,7 +76282,7 @@ cVi
 cIq
 wdW
 pzK
-hcl
+ceR
 lLI
 msa
 hcl

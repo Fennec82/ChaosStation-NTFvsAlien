@@ -56,6 +56,10 @@ GLOBAL_LIST_EMPTY(faxes)
 
 		flick("faxreceive", F)
 
+		if(!isnull(FM.faction))
+			for(var/mob/living/carbon/human/homon in GLOB.alive_human_list_faction[FM.faction])
+				to_chat(homon, span_warning("(N-UI) Notice: '[FM.department]' at [get_area(FM)] received a fax."))
+
 		var/obj/item/paper/P = new /obj/item/paper(FM.loc)
 		P.name = "[title]"
 		P.info = "[message]"

@@ -2,7 +2,7 @@
 	name = "Encounter"
 	config_tag = "Encounter"
 	round_type_flags = MODE_LATE_OPENING_SHUTTER_TIMER|MODE_TWO_HUMAN_FACTIONS|MODE_INFESTATION|MODE_PSY_POINTS|MODE_SILO_RESPAWN|MODE_ENCOUNTER|MODE_HUMAN_ONLY
-	round_type_flags2 = MODE_2_CAMPAIGN_LITE_SUPPORT
+	round_type_flags2 = MODE_2_CAMPAIGN_LITE_SUPPORT|MODE_2_ALLOW_LOADOUTS
 	xeno_abilities_flags = ABILITY_ENCOUNTER
 	factions = list(FACTION_TERRAGOV, FACTION_SOM, FACTION_XENO)
 	human_factions = list(FACTION_TERRAGOV, FACTION_SOM)
@@ -86,7 +86,7 @@
 	for(var/i in GLOB.xeno_encounter_resin_silo_turfs)
 		new /obj/structure/xeno/silo(i)
 
-	SEND_GLOBAL_SIGNAL(COMSIG_GLOB_HVH_REQ)
+	addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(send_global_signal), COMSIG_GLOB_HVH_REQ), 1 SECONDS)
 
 	// Apply Evolution Xeno Population Locks:
 	for(var/datum/xeno_caste/caste AS in evo_requirements)

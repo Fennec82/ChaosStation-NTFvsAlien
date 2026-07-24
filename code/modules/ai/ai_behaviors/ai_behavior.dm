@@ -52,8 +52,6 @@ Registers signals, handles the pathfinding element addition/removal alongside ma
 	var/is_offered_on_creation = FALSE
 	///Are we waiting for advanced pathfinding
 	var/registered_for_node_pathfinding = FALSE
-	///Are we already registered for normal pathfinding
-	var/registered_for_move = FALSE
 	///Should we lose the escorted atom if we change action
 	var/weak_escort = FALSE
 	///List of abilities to consider doing every Process()
@@ -62,6 +60,10 @@ Registers signals, handles the pathfinding element addition/removal alongside ma
 	var/fail_goal_path_count = 0
 	///Will not look for targets to attack
 	var/non_aggressive = FALSE
+	///timer for movement
+	var/next_move_timer
+	///the time when we can next move
+	var/next_move_time = 0
 
 /datum/ai_behavior/New(loc, mob/parent_to_assign, atom/escorted_atom)
 	..()
@@ -111,8 +113,8 @@ Registers signals, handles the pathfinding element addition/removal alongside ma
 			change_action(ESCORTING_ATOM, escorted_atom)
 		if(IDLE)
 			change_action(IDLE)
-	if(!registered_for_move)
-		scheduled_move()
+	if(!next_move_timer)
+		prepare_move()
 
 ///Refresh abilities-to-consider list
 /datum/ai_behavior/proc/refresh_abilities()
@@ -360,9 +362,11 @@ Registers signals, handles the pathfinding element addition/removal alongside ma
 		return
 	//we blacklist our current node in case its orphaned or otherwise not linked to our goal. This is not foolproof for mapping issues however
 	var/previous_current_node = current_node
-	var/goal_nodes_serialized = rustg_generate_path_astar("[current_node.unique_id]", "[goal_node.unique_id]")
-	if(rustg_json_is_valid(goal_nodes_serialized))
-		goal_nodes = json_decode(goal_nodes_serialized)
+	var/list/obj/effect/ai_node/node_path = get_path(current_node, goal_node)
+	if(length(node_path))
+		goal_nodes = list()
+		for(var/obj/effect/ai_node/node AS in node_path)
+			goal_nodes += node.unique_id
 	else
 		goal_nodes = list()
 		set_current_node(null)
@@ -385,6 +389,8 @@ Registers signals, handles the pathfinding element addition/removal alongside ma
 
 //Generic process(), this is used for mainly looking at the world around the AI and determining if a new action must be considered and executed
 /datum/ai_behavior/process()
+	if(!mob_parent)
+		return
 	if(!escorted_atom || (get_dist(mob_parent, escorted_atom) > AI_ESCORTING_BREAK_DISTANCE) || mob_parent.z != escorted_atom.z || isainode(escorted_atom))
 		set_escort()
 	var/atom/next_target = get_nearest_target(mob_parent, target_distance, TARGET_HOSTILE, mob_parent.faction, mob_parent.get_xeno_hivenumber(), TRUE)
@@ -465,17 +471,22 @@ These are parameter based so the ai behavior can choose to (un)register the sign
 
 /// Move the ai and schedule the next move
 /datum/ai_behavior/proc/scheduled_move()
+	next_move_timer = null
 	if(QDELETED(mob_parent))
 		return
 	if(!atom_to_walk_to)
-		registered_for_move = FALSE
 		return
 	ai_do_move()
-	var/next_move = mob_parent.cached_multiplicative_slowdown + mob_parent.next_move_slowdown
+	prepare_move()
+
+///Prepares the NPC to move
+/datum/ai_behavior/proc/prepare_move()
+	if(next_move_timer)
+		return
+	var/next_move = min(next_move_time - world.time, mob_parent.cached_multiplicative_slowdown + mob_parent.next_move_slowdown)
 	if(next_move <= 0)
 		next_move = 1
-	addtimer(CALLBACK(src, PROC_REF(scheduled_move)), next_move, NONE, SSpathfinder)
-	registered_for_move = TRUE
+	next_move_timer = addtimer(CALLBACK(src, PROC_REF(scheduled_move)), next_move, TIMER_STOPPABLE, SSpathfinder)
 
 ///Returns true if the mob should not move for some reason
 /datum/ai_behavior/proc/should_hold()
@@ -492,6 +503,8 @@ These are parameter based so the ai behavior can choose to (un)register the sign
 	if(!mob_parent?.canmove)
 		return
 	if(should_hold())
+		return
+	if(world.time < next_move_time)
 		return
 	mob_parent.next_move_slowdown = 0
 	var/list/dir_options = find_next_dirs()
@@ -546,6 +559,7 @@ These are parameter based so the ai behavior can choose to (un)register the sign
 	if(ISDIAGONALDIR(move_dir))
 		mob_parent.next_move_slowdown += (DIAG_MOVEMENT_ADDED_DELAY_MULTIPLIER - 1) * mob_parent.cached_multiplicative_slowdown
 	mob_parent.set_glide_size(DELAY_TO_GLIDE_SIZE(mob_parent.cached_multiplicative_slowdown + mob_parent.next_move_slowdown * ( ISDIAGONALDIR(move_dir) ? DIAG_MOVEMENT_ADDED_DELAY_MULTIPLIER : 1 ) )) //todo: probs dont even need this
+	next_move_time = world.time + mob_parent.cached_multiplicative_slowdown + mob_parent.next_move_slowdown
 
 ///Finds and sets the most suitable escort candidate, if possible
 /datum/ai_behavior/proc/set_escort()
@@ -557,6 +571,8 @@ These are parameter based so the ai behavior can choose to (un)register the sign
 
 ///Finds the most suitable thing to escort
 /datum/ai_behavior/proc/get_atom_to_escort()
+	if(!mob_parent)
+		return
 	var/list/goal_list = list()
 	if(GLOB.goal_nodes[mob_parent.faction] && (fail_goal_path_count < AI_MAX_GOAL_PATH_FAILS))
 		goal_list[GLOB.goal_nodes[mob_parent.faction]] = AI_ESCORT_RATING_FACTION_GOAL
@@ -618,8 +634,8 @@ These are parameter based so the ai behavior can choose to (un)register the sign
 		do_unset_target(atom_to_walk_to, FALSE)
 	atom_to_walk_to = new_target
 	RegisterSignals(atom_to_walk_to, list(COMSIG_QDELETING, COMSIG_MOB_DEATH, COMSIG_OBJ_DECONSTRUCT, COMSIG_MOVABLE_Z_CHANGED, COMSIG_FACE_HUGGER_DEATH), PROC_REF(unset_target), TRUE)
-	if(!registered_for_move)
-		INVOKE_ASYNC(src, PROC_REF(scheduled_move))
+	if(!next_move_timer)
+		INVOKE_ASYNC(src, PROC_REF(prepare_move))
 	return TRUE
 
 ///Sets our active combat target
@@ -669,4 +685,3 @@ These are parameter based so the ai behavior can choose to (un)register the sign
 		atom_to_walk_to = null
 		if(current_action == MOVING_TO_ATOM && need_new_state)
 			look_for_new_state()
-

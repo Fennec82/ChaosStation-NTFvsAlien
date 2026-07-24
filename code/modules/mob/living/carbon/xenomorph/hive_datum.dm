@@ -605,6 +605,9 @@
 
 /datum/hive_status/proc/setup_nuke_hud_timer(source, thing)
 	SIGNAL_HANDLER
+	var/datum/game_mode/infestation/secret_of_life/gamemode = SSticker.mode
+	if(istype(gamemode))
+		return
 	var/obj/machinery/nuclearbomb/nuke = thing
 	if(!nuke.timer)
 		CRASH("hive_status's setup_nuke_hud_timer called with invalid nuke object")
@@ -1787,6 +1790,12 @@ to_chat will check for valid clients itself already so no need to double check f
 	VAR_PROTECTED/hivenumber
 
 /mob/living/get_xeno_hivenumber()
+	return hivenumber
+
+/mob/dead/observer
+	var/hivenumber
+
+/mob/dead/observer/get_xeno_hivenumber()
 	return hivenumber
 
 /mob/illusion/xeno/get_xeno_hivenumber()

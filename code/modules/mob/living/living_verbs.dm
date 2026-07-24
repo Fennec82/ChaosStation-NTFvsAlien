@@ -98,7 +98,7 @@
 		return
 	// Gamemode disallowed handler - END
 
-	if(stat == DEAD || isxenohivemind(src) || iszombie(src))
+	if(stat == DEAD || isxenohivemind(src) || iszombie(src) || isAI(src))
 		log_game("[key_name(usr)] has ghosted at [AREACOORD(usr)].")
 		message_admins("[ADMIN_TPMONTY(usr)] has ghosted.")
 		ghostize(TRUE)

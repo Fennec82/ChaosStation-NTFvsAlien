@@ -8,20 +8,10 @@
 	contains = list(/obj/item/ammo_magazine/sentry/ads_system)
 	cost = 50
 
-/datum/supply_packs/weapons/ar18_ap
+/datum/supply_packs/weapons/tx55/ap
 	name = "AR-18 AP magazine (10x24mm)"
 	contains = list(/obj/item/ammo_magazine/rifle/standard_carbine/ap)
 	cost = 50
-
-/datum/supply_packs/weapons/m412_ap
-	name = "\improper PR-412 AP magazine (10x24mm)"
-	contains = list(/obj/item/ammo_magazine/rifle/ap)
-	cost = 25
-
-/datum/supply_packs/weapons/apbox10x24
-	name = "\improper Big ammo box (10x24mm AP)"
-	contains = list(/obj/item/big_ammo_box/ap)
-	cost = 200
 
 /datum/supply_packs/weapons/dragoon
 	name = "Dragoon Mk1 Rapid Engagement Rifle"
@@ -92,16 +82,16 @@
 	cost = 400
 
 /datum/supply_packs/weapons/moonbeam_ammo
-	name = "Moonbeam NL sniper rifle tranq magazine"
-	contains = list(/obj/item/ammo_magazine/rifle/chamberedrifle/tranq)
+	name = "Moonbeam NL sniper rifle tranq magazine (x3)"
+	contains = list(/obj/item/ammo_magazine/rifle/chamberedrifle/tranq, /obj/item/ammo_magazine/rifle/chamberedrifle/tranq, /obj/item/ammo_magazine/rifle/chamberedrifle/tranq)
 	faction_lock = list(FACTION_TERRAGOV)
-	cost = 30
+	cost = 10 //easily expended
 
 /datum/supply_packs/weapons/moonbeam_ammo_bluescreen
 	name = "Moonbeam NL sniper rifle bluescreen magazine"
-	contains = list(/obj/item/ammo_magazine/rifle/chamberedrifle/bluescreen)
+	contains = list(/obj/item/ammo_magazine/rifle/chamberedrifle/bluescreen, /obj/item/ammo_magazine/rifle/chamberedrifle/bluescreen, /obj/item/ammo_magazine/rifle/chamberedrifle/bluescreen)
 	faction_lock = list(FACTION_TERRAGOV)
-	cost = 60
+	cost = 20
 
 /datum/supply_packs/weapons/bikeautocannonammo
 	name = "heavy motorbike AC-32 autocannon ammo rack (x2)"
@@ -114,3 +104,9 @@
 	contains = list(/obj/item/ammo_magazine/bike_minigun, /obj/item/ammo_magazine/bike_minigun)
 	faction_lock = list(FACTION_SOM)
 	cost = 30
+
+/datum/supply_packs/weapons/rpg_tangle
+	name = "RL-152 SADAR tanglefoot rocket"
+	contains = list(/obj/item/ammo_magazine/rocket/sadar/plasmaloss)
+	cost = 125
+	available_against_xeno_only = TRUE

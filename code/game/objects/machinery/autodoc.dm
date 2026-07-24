@@ -51,7 +51,7 @@
 	//It uses power
 	use_power = ACTIVE_POWER_USE
 	idle_power_usage = 15
-	active_power_usage = 120000 // It rebuilds you from nothing...
+	active_power_usage = 12000 // It rebuilds you from nothing...
 	/// The connected autodoc console.
 	var/obj/machinery/computer/autodoc_console/connected
 	/// The human that is currently inside of the machine.

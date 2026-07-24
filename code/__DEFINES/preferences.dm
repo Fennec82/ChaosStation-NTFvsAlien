@@ -138,8 +138,10 @@
 	"Cult of Dismas",\
 	"Cult of Sinius",\
 	"Cult of Tenebrase",\
+	"Cult of Evolution",\
 	"Some Old world religion",\
 	"Atheism",\
+	"Other",\
 	"None"\
 	)
 

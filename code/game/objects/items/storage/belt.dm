@@ -424,6 +424,14 @@
 	new /obj/item/ammo_magazine/smg/m25(src)
 	new /obj/item/ammo_magazine/smg/m25(src)
 
+/obj/item/storage/belt/marine/squashhead/PopulateContents()
+	new /obj/item/ammo_magazine/smg/standard_heavysmg/squashhead(src)
+	new /obj/item/ammo_magazine/smg/standard_heavysmg/squashhead(src)
+	new /obj/item/ammo_magazine/smg/standard_heavysmg/squashhead(src)
+	new /obj/item/ammo_magazine/smg/standard_heavysmg/squashhead(src)
+	new /obj/item/ammo_magazine/smg/standard_heavysmg/squashhead(src)
+	new /obj/item/ammo_magazine/smg/standard_heavysmg/squashhead(src)
+
 /obj/item/storage/belt/marine/antimaterial/PopulateContents()
 	new /obj/item/ammo_magazine/sniper/flak(src)
 	new /obj/item/ammo_magazine/sniper/flak(src)

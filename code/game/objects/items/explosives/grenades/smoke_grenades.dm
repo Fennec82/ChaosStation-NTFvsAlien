@@ -47,7 +47,7 @@
 	dangerous = TRUE
 	smoketype = /datum/effect_system/smoke_spread/xeno/neuro/alt
 	smokeradius = 3
-	smoke_duration = 40 // 80 seconds
+	smoke_duration = 50 // 100 seconds
 	color = list(0.7,0,0,0, 0,1.5,0,0, 0,0,1.5,0, 0,0,0,1, 0,0,0,0)
 
 /obj/item/explosive/grenade/smokebomb/acid
