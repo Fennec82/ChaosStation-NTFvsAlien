@@ -57,7 +57,8 @@
 
 	backpack_contents = list(
 		/obj/item/stack/cable_coil = 6,
-		/obj/item/tool/weldingtool = 6,
+		/obj/item/tool/weldingtool = 5,
+		/obj/item/tool/surgery/solderingtool = 1,
 	)
 
 	suit_contents = list(
@@ -120,7 +121,8 @@
 
 	r_pocket_contents = list(
 		/obj/item/stack/cable_coil = 2,
-		/obj/item/tool/weldingtool = 3,
+		/obj/item/tool/weldingtool = 2,
+		/obj/item/tool/surgery/solderingtool = 1,
 	)
 
 /datum/outfit/quick/beginner_robot/marine/marksman
@@ -141,7 +143,8 @@
 
 	backpack_contents = list(
 		/obj/item/stack/cable_coil = 6,
-		/obj/item/tool/weldingtool = 6,
+		/obj/item/tool/weldingtool = 5,
+		/obj/item/tool/surgery/solderingtool = 1,
 	)
 
 	suit_contents = list(
@@ -180,7 +183,8 @@
 
 	backpack_contents = list(
 		/obj/item/stack/cable_coil = 6,
-		/obj/item/tool/weldingtool = 6,
+		/obj/item/tool/weldingtool = 5,
+		/obj/item/tool/surgery/solderingtool = 1,
 	)
 
 	suit_contents = list(
@@ -223,7 +227,8 @@
 
 	backpack_contents = list(
 		/obj/item/stack/cable_coil = 6,
-		/obj/item/tool/weldingtool = 6,
+		/obj/item/tool/weldingtool = 5,
+		/obj/item/tool/surgery/solderingtool = 1,
 	)
 
 	suit_contents = list(
@@ -439,7 +444,8 @@
 		/obj/item/storage/box/m94 = 2,
 		/obj/item/ammo_magazine/packet/p4570 = 4,
 		/obj/item/stack/cable_coil = 2,
-		/obj/item/tool/weldingtool = 2,
+		/obj/item/tool/weldingtool = 1,
+		/obj/item/tool/surgery/solderingtool = 1,
 		/obj/item/defibrillator = 1,
 	)
 
@@ -492,7 +498,8 @@
 		/obj/item/reagent_containers/food/snacks/protein_pack = 1,
 		/obj/item/ammo_magazine/handful/slug = 5,
 		/obj/item/stack/cable_coil = 2,
-		/obj/item/tool/weldingtool = 2,
+		/obj/item/tool/weldingtool = 1,
+		/obj/item/tool/surgery/solderingtool = 1,
 	)
 
 	suit_contents = list(
@@ -554,7 +561,8 @@
 	webbing_contents = list(
 		/obj/item/storage/box/m94 = 1,
 		/obj/item/stack/cable_coil = 2,
-		/obj/item/tool/weldingtool = 2,
+		/obj/item/tool/weldingtool = 1,
+		/obj/item/tool/surgery/solderingtool = 1,
 	)
 
 	r_pocket_contents = list(
@@ -590,7 +598,8 @@
 	webbing_contents = list(
 		/obj/item/storage/box/m94 = 1,
 		/obj/item/stack/cable_coil = 2,
-		/obj/item/tool/weldingtool = 2,
+		/obj/item/tool/weldingtool = 1,
+		/obj/item/tool/surgery/solderingtool = 1,
 	)
 
 	r_pocket_contents = list(

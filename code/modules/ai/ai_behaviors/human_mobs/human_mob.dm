@@ -41,6 +41,9 @@
 
 /datum/ai_behavior/human/New(loc, mob/parent_to_assign, atom/escorted_atom)
 	. = ..()
+	if(ishuman(mob_parent))
+		var/mob/living/carbon/human/hparent = mob_parent
+		hparent.npc_characterise() //randomise ai appearance
 	mob_inventory = new(mob_parent)
 	RegisterSignal(mob_parent, COMSIG_MOB_DROPPING_ITEM, PROC_REF(on_item_unequip)) //we do this on New because we want to know about items lost when dead
 
@@ -159,7 +162,7 @@
 			set_interact_target(atom)
 
 /datum/ai_behavior/human/should_hold()
-	if(human_ai_state_flags & HUMAN_AI_BUSY_ACTION && COOLDOWN_FINISHED(src, ai_heal_after_dam_cooldown)) //Don't just stand there when taking damage
+	if((human_ai_state_flags & HUMAN_AI_BUSY_ACTION) && COOLDOWN_FINISHED(src, ai_heal_after_dam_cooldown)) //Don't just stand there when taking damage
 		return TRUE
 	if(HAS_TRAIT(mob_parent, TRAIT_IS_RELOADING))
 		return TRUE
@@ -169,7 +172,7 @@
 		return TRUE
 	if(HAS_TRAIT(mob_parent, TRAIT_IS_EQUIPPING_ITEM))
 		return TRUE
-	if(mob_parent.pulledby?.faction == mob_parent.faction)
+	if(GLOB.faction_to_iff[mob_parent.pulledby?.faction] & GLOB.faction_to_iff[mob_parent.faction])
 		return TRUE //lets players wrangle NPC's
 	if(HAS_TRAIT(mob_parent, TRAIT_STASIS)) //ntf addition
 		return TRUE

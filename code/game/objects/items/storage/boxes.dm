@@ -1030,8 +1030,8 @@
 // -Energy-
 
 /obj/item/storage/box/visual/magazine/compact/lasrifle
-	name = "Terra Experimental cell box"
-	desc = "A box specifically designed to hold a large amount of Terra Experimental cells."
+	name = "old world cell box"
+	desc = "A box specifically designed to hold a large amount of old world cells."
 	closed_overlay = "mag_box_small_overlay_te"
 
 /obj/item/storage/box/visual/magazine/compact/lasrifle/Initialize(mapload, ...)

@@ -50,7 +50,7 @@
 
 /datum/loadout_item/suit_store/main_gun/squad_leader/laser_rifle
 	name = "Laser rifle"
-	desc = "Equipped with a red dot sight, bayonet and miniflamer. The Terra Experimental laser rifle, is a powerful and flexible weapon thanks to a variety of firemodes. \
+	desc = "Equipped with a red dot sight, bayonet and miniflamer. The old world laser rifle, is a powerful and flexible weapon thanks to a variety of firemodes. \
 	Has good mobility and excellent falloff, although lacks the power offered by weapons with an underbarrel grenade launcher.\
 	Uses TE power cells that are shared across all NTF laser weaponry."
 	ui_icon = "ter"

@@ -59,7 +59,9 @@
 		wreck_repair_stage++
 
 	balloon_alert_to_viewers("ready to extract!")
-	SEND_SIGNAL(src, COMSIG_ARMORED_DO_EXTRACT, user)
+	//SEND_SIGNAL(src, COMSIG_ARMORED_DO_EXTRACT, user)
+	//ntf edit just return the shit back where it was after a delay
+	SEND_SIGNAL(src, COMSIG_ARMORED_DO_EXTRACT_FAKE, user)
 
 ///Returns the vehicle to base and restores it to working order
 /obj/vehicle/sealed/armored/proc/return_to_base()

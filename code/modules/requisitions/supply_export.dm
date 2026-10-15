@@ -1,7 +1,7 @@
 ///Function that sells whatever object this is to the faction_selling; returns a /datum/export_report if successful
 /atom/movable/proc/supply_export(faction_selling, mob/user)
 	var/list/points = get_export_value()
-	if(!points)
+	if(!islist(points) || ((!points[1]) && (!points[2])))
 		return FALSE
 
 	SSpoints.add_supply_points(faction_selling, points[1])
@@ -10,7 +10,7 @@
 
 /mob/living/carbon/human/supply_export(faction_selling, mob/user)
 	if(!can_sell_human_body(src, faction_selling))
-		return list(new /datum/export_report(0, name, faction_selling, 0))
+		return list(new /datum/export_report(0, "[name] (Not wanted!)", faction_selling, 0))
 	return ..()
 
 /mob/living/carbon/xenomorph/supply_export(faction_selling, mob/user)
@@ -52,36 +52,47 @@
 	. = list(0,0)
 
 /mob/living/carbon/human/get_export_value()
+	var/modifier = 1
+	if(stat != DEAD)
+		modifier = 2
 	switch(job.job_category)
 		if(JOB_CAT_ENGINEERING, JOB_CAT_MEDICAL, JOB_CAT_REQUISITIONS, JOB_CAT_ENGINEERINGSOM, JOB_CAT_MEDICALSOM, JOB_CAT_REQUISITIONSSOM, JOB_CAT_SURVIVOR)
-			. = list(200, 100)
+			. = list(200 * modifier, 100 * modifier)
 		if(JOB_CAT_MARINE, JOB_CAT_MARINESOM, JOB_CAT_ICC, JOB_CAT_CLF, JOB_CAT_PMC, JOB_CAT_VSD)
-			. = list(300, 150)
+			. = list(300 * modifier, 150 * modifier)
 		if(JOB_CAT_SILICON)
-			. = list(800, 400)
+			. = list(800 * modifier, 400 * modifier)
 		if(JOB_CAT_COMMAND, JOB_CAT_COMMANDSOM)
-			. = list(1000, 500)
+			. = list(1000 * modifier, 500 * modifier)
 	return
 
 /mob/living/carbon/xenomorph/get_export_value()
+	var/modifier = 1
+	if(stat != DEAD)
+		modifier = 2
 	switch(tier)
 		if(XENO_TIER_MINION)
-			. = list(60, 30)
+			. = list(10 * modifier, 1 * modifier)
 		if(XENO_TIER_ZERO)
-			. = list(200, 100)
+			. = list(35 * modifier, 4 * modifier)
 		if(XENO_TIER_ONE)
-			. = list(300, 150)
+			. = list(75 * modifier, 8 * modifier)
 		if(XENO_TIER_TWO)
-			. = list(600, 300)
+			. = list(175 * modifier, 18 * modifier)
 		if(XENO_TIER_THREE)
-			. = list(1000, 500)
+			. = list(300 * modifier, 30 * modifier)
 		if(XENO_TIER_FOUR)
-			. = list(2000, 1000)
+			. = list(550 * modifier, 55 * modifier)
 	return
 
 //I hate it but it's how it was so I'm not touching it further than this
 /mob/living/carbon/xenomorph/shrike/get_export_value()
-	return list(1200, 600)
+	var/modifier = 1
+	if(stat != DEAD)
+		modifier = 2
+	. = list(300 * modifier, 30 * modifier)
+
+	return
 
 /obj/item/reagent_containers/food/snacks/req_pizza/get_export_value()
 	return list(60, 30)

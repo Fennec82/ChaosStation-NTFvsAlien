@@ -502,7 +502,7 @@
 	base_icon_state = "tube_red"
 	light_color = LIGHT_COLOR_FLARE
 	brightness = 3
-	bulb_power = 0.5
+	bulb_power = 1
 	bulb_colour = LIGHT_COLOR_FLARE
 
 /obj/machinery/light/bluegreen

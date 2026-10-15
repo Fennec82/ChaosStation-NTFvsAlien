@@ -1278,6 +1278,7 @@
 		/obj/item/cell/high,
 		/obj/item/lightreplacer,
 		/obj/item/circuitboard/apc,
+		/obj/item/tool/surgery/solderingtool,
 	)
 
 /obj/effect/vendor_bundle/smartgunner_pistol
@@ -1362,6 +1363,7 @@
 		/obj/item/cell/high,
 		/obj/item/circuitboard/apc,
 		/obj/item/tool/soap,
+		/obj/item/tool/surgery/solderingtool,
 	)
 
 /obj/effect/vendor_bundle/white_dress
@@ -1522,6 +1524,7 @@
 		/obj/item/cell/high,
 		/obj/item/lightreplacer,
 		/obj/item/circuitboard/apc,
+		/obj/item/tool/surgery/solderingtool,
 	)
 
 /obj/effect/vendor_bundle/som/medic
@@ -1723,6 +1726,7 @@
 		/obj/item/cell/high,
 		/obj/item/lightreplacer,
 		/obj/item/circuitboard/apc,
+		/obj/item/tool/surgery/solderingtool,
 	)
 
 /obj/effect/vendor_bundle/vsd/medic
@@ -1840,6 +1844,7 @@
 		/obj/item/cell/high,
 		/obj/item/lightreplacer,
 		/obj/item/circuitboard/apc,
+		/obj/item/tool/surgery/solderingtool,
 	)
 
 /obj/effect/vendor_bundle/pmc/sniper

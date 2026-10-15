@@ -302,6 +302,8 @@
 #define TRAIT_PAIN_IMMUNE "pain_immune" // We don't feel pain.
 ///Prevent mob from being ignited due to IgniteMob()
 #define TRAIT_NON_FLAMMABLE "non-flammable"
+/// Character customization trait that renders a second pair of eyes.
+#define TRAIT_QUAD_EYES "quad_eyes"
 /// Prevents mob from riding mobs when buckled onto something
 #define TRAIT_CANT_RIDE "cant_ride"
 ///Prevents humans from gaining oxyloss in their handle_breath()

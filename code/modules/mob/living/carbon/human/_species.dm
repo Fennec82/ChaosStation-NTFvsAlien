@@ -31,6 +31,10 @@
 	var/damage_mask_icon = 'icons/mob/dam_mask.dmi'
 	///icon for eyes
 	var/eyes = "eyes_s"
+	///Icon file used for eye overlays. Species with custom head proportions can override this.
+	var/eye_icon = 'icons/mob/human_face.dmi'
+	///Blend mode used when tinting eye overlays with the character's eye color.
+	var/eye_color_blend_mode = ICON_ADD
 	///Color of the blood specific to our species
 	var/blood_color = "#A10808"
 	///Color of the gibs that spawn from our species [/mob/living/carbon/human/spawn_gibs]
@@ -39,6 +43,12 @@
 	var/base_color
 	///If the species only has one hair color
 	var/hair_color
+	///If TRUE, this species renders emissive overlays even when the owner's emissive preference is disabled.
+	var/force_emissives = FALSE
+	///If TRUE, this species always renders hair as emissive.
+	var/force_hair_emissive = FALSE
+	///If TRUE, this species always renders eyes as emissive.
+	var/force_eye_emissive = FALSE
 	///Used in icon caching
 	var/race_key = 0
 	///Used in icon caching

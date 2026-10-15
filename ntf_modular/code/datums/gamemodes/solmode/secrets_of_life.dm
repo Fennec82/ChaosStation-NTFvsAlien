@@ -58,6 +58,9 @@
 		/datum/job/survivor/prisoner = 2,
 		/datum/job/survivor/stripper = -1,
 		/datum/job/survivor/maid = 3,
+		/datum/job/survivor/bartender = 1,
+		/datum/job/survivor/chemist = 1,
+		/datum/job/survivor/roboticist = 1,
 		/datum/job/other/prisoner = 4,
 		/datum/job/survivor/synth = 2,
 		/datum/job/xenomorph = 8,
@@ -140,6 +143,7 @@
 	var/atom/movable/screen/text/screen_timer/nuke_hud_timer = null
 	var/nuking_faction = "Unknown"
 	var/total_war = FALSE
+	var/saved_larva_count = 0
 
 /datum/game_mode/infestation/secret_of_life/on_nuke_started(datum/source, obj/machinery/nuclearbomb/nuke)
 	. = ..()
@@ -185,6 +189,11 @@
 		*/
 		for(var/obj/item/teleporter_kit/indestructible/teles in GLOB.indestructible_teleporters)
 			teles.set_destructible(TRUE)
+		var/datum/job/xenomorph/xeno_job = SSjob.GetJobType(/datum/job/xenomorph)
+		var/burrowed = xeno_job.total_positions - xeno_job.current_positions
+		message_admins("saving [burrowed] burrowed for normal hive, war reserve burrowed is [FREE_XENO_AT_START]")
+		saved_larva_count = burrowed
+		xeno_job.total_positions = xeno_job.current_positions + FREE_XENO_AT_START
 		respawn_time = 10 MINUTES //we have cloning here and small pop so its not 30 minutes.
 		xenorespawn_time = 5 MINUTES
 		bioscan_interval = 15 MINUTES
@@ -192,6 +201,8 @@
 		round_type_flags2 &= ~(MODE_2_CHILL_RULES|MODE_2_MINER_RUSH_PROT)
 		GLOB.time_before_dnr = STANDARD_DNR_TIME
 		GLOB.max_larva_count_per_mob = MAX_LARVA_PREGNANCIES
+		GLOB.phoron_crate_value = PHORON_CRATE_SELL_AMOUNT
+		GLOB.plat_crate_value = PLATINUM_CRATE_SELL_AMOUNT
 	else
 		evo_requirements = list(
 			/datum/xeno_caste/queen = 0,
@@ -200,8 +211,13 @@
 		)
 		for(var/obj/item/teleporter_kit/indestructible/teles in GLOB.indestructible_teleporters)
 			teles.set_destructible(FALSE)
+		var/datum/job/xenomorph/xeno_job = SSjob.GetJobType(/datum/job/xenomorph)
+		xeno_job.total_positions = saved_larva_count
+		message_admins("re-setting [saved_larva_count] burrowed for normal hive.")
 		GLOB.time_before_dnr = SOL_DNR_TIME
 		GLOB.max_larva_count_per_mob = MAX_LARVA_PREGNANCIES_SOL
+		GLOB.phoron_crate_value = PHORON_CRATE_SELL_AMOUNT_WAR
+		GLOB.plat_crate_value = PLATINUM_CRATE_SELL_AMOUNT_WAR
 		respawn_time = initial(respawn_time)
 		xenorespawn_time = initial(xenorespawn_time)
 		bioscan_interval = initial(bioscan_interval)
@@ -219,6 +235,12 @@
 	)
 	SSvote.initiate_vote()
 
+//have to have this late
+/datum/game_mode/post_setup()
+	. = ..()
+	if(!(round_type_flags2 & MODE_2_CHILL_RULES))
+		GLOB.plat_crate_value = PLATINUM_CRATE_SELL_AMOUNT_WAR
+		GLOB.phoron_crate_value = PHORON_CRATE_SELL_AMOUNT_WAR
 
 //sets NTC and SOM squads
 /datum/game_mode/infestation/secret_of_life/set_valid_squads()
@@ -664,6 +686,9 @@ alt gamemodes
 		/datum/job/survivor/stripper = -1,
 		/datum/job/survivor/maid = 4,
 		/datum/job/survivor/synth = 1,
+		/datum/job/survivor/bartender = 1,
+		/datum/job/survivor/chemist = 1,
+		/datum/job/survivor/roboticist = 1,
 		/datum/job/other/prisoner = 4,
 		/datum/job/xenomorph = 5,
 		/datum/job/xenomorph/green = FREE_XENO_AT_START_CORRUPT,
@@ -738,6 +763,9 @@ alt gamemodes
 		/datum/job/survivor/prisoner = 2,
 		/datum/job/survivor/stripper = -1,
 		/datum/job/survivor/maid = 3,
+		/datum/job/survivor/bartender = 1,
+		/datum/job/survivor/chemist = 1,
+		/datum/job/survivor/roboticist = 1,
 		/datum/job/other/prisoner = 4,
 		/datum/job/survivor/synth = 2,
 		/datum/job/xenomorph = 8,

@@ -494,7 +494,6 @@
 /turf/open/shuttle/dropship/floor,
 /area/shuttle/dropship/alamo)
 "dO" = (
-/obj/structure/largecrate/supply/medicine/medkits,
 /obj/structure/rack,
 /turf/open/shuttle/dropship/floor,
 /area/shuttle/dropship/alamo)
@@ -570,7 +569,7 @@
 /turf/open/shuttle/dropship/floor/out,
 /area/shuttle/dropship/alamo)
 "nt" = (
-/obj/structure/largecrate/supply/medicine/iv,
+/obj/structure/largecrate/supply/vehicle/truck,
 /turf/open/shuttle/dropship/floor,
 /area/shuttle/dropship/alamo)
 "nO" = (
@@ -679,7 +678,7 @@
 /area/shuttle/dropship/alamo)
 "IA" = (
 /obj/structure/rack,
-/obj/structure/largecrate/supply/explosives/grenades,
+/obj/structure/largecrate/supply/medicine/medkits,
 /turf/open/shuttle/dropship/floor,
 /area/shuttle/dropship/alamo)
 "Ki" = (

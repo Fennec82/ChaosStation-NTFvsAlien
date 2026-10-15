@@ -437,6 +437,8 @@
 	new /obj/item/ammo_magazine/rifle/tx8/impact(src)
 	new /obj/item/ammo_magazine/rifle/tx8/impact(src)
 	new /obj/item/clothing/glasses/night/m56_goggles(src)
+	new /obj/item/skillsoft/lightfooted(src)
+	new /obj/item/fulton_extraction_pack/adminbus/advanced(src)
 	new /obj/item/storage/box/explosive_mines(src)
 	new /obj/item/storage/box/explosive_mines(src)
 	new /obj/item/attachable/motiondetector/advanced/covert(src)
@@ -448,7 +450,7 @@
 	new /obj/item/armor_module/module/valkyrie_autodoc(src)
 
 /obj/item/storage/box/crate/loot/mg_pack_spec/PopulateContents()
-	new /obj/item/weapon/gun/standard_mmg/machinegunner/spec(src)
+	new /obj/item/weapon/gun/standard_mmg/spec(src)
 	new /obj/item/ammo_magazine/standard_mmg(src)
 	new /obj/item/ammo_magazine/standard_mmg(src)
 	new /obj/item/ammo_magazine/standard_mmg(src)

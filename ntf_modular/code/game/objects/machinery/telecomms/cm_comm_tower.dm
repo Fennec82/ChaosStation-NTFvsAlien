@@ -33,7 +33,7 @@
 	name = "\improper TC-4T Telecommunications Cult Circuit Board"
 	build_path = /obj/machinery/telecomms/relay/preset/tower/faction/clf
 
-/obj/item/circuitboard/machine/telecomms/relay/tower/faction/cm
+/obj/item/circuitboard/machine/telecomms/relay/tower/faction/icc
 	name = "\improper TC-4T Telecommunications CM Circuit Board"
 	build_path = /obj/machinery/telecomms/relay/preset/tower/faction/cm
 
@@ -83,7 +83,7 @@
 
 /obj/item/storage/box/crate/loot/telecomm_tower_pack/cm/Initialize(mapload)
 	. = ..()
-	new /obj/item/circuitboard/machine/telecomms/relay/tower/faction/cm(src)
+	new /obj/item/circuitboard/machine/telecomms/relay/tower/faction/icc(src)
 
 /obj/item/storage/box/crate/loot/telecomm_tower_pack/kz
 	name = parent_type::name +" (" + FACTION_VSD + ")"

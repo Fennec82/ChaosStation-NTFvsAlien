@@ -100,6 +100,12 @@ type BackgroundInformationData = {
   profile_pic: string;
   nsfwprofile_pic: string;
   xenoprofile_pic: string;
+  metadata: string;
+  metadata_favs: string;
+  metadata_likes: string;
+  metadata_maybes: string;
+  metadata_dislikes: string;
+  metadata_ooc_style: boolean;
 };
 
 type FlavorCustomizationData = {

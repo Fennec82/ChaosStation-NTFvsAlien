@@ -618,7 +618,7 @@ WEAPONS
 	available_against_xeno_only = TRUE
 
 /datum/supply_packs/weapons/rechargemag
-	name = "Terra Experimental recharger battery"
+	name = "old world recharger battery"
 	contains = list(/obj/item/cell/lasgun/lasrifle/recharger)
 	cost = 60
 
@@ -650,4 +650,52 @@ WEAPONS
 /datum/supply_packs/weapons/sledgehammer
 	name = "Sledgehammer"
 	contains = list(/obj/item/weapon/twohanded/sledgehammer)
+	cost = 50
+
+/datum/supply_packs/weapons/plasmadmr
+	name = "PMR-14 plasma marksman rifle"
+	contains = list(/obj/item/weapon/gun/rifle/plasma_dmr)
+	cost = 300
+
+/datum/supply_packs/weapons/plasmadmrcell
+	name = "PMR-14 plasma marksman rifle ammo"
+	contains = list(/obj/item/ammo_magazine/rifle/plasma_dmr)
+	cost = 10
+
+/datum/supply_packs/weapons/assortedattachmentstoprail
+	name = "Assorted Attachment Pack (Top Rail)"
+	contains = list(
+		/obj/item/attachable/flashlight,
+		/obj/item/attachable/magnetic_harness,
+		/obj/item/attachable/reddot,
+		/obj/item/attachable/motiondetector,
+		/obj/item/attachable/scope/marine,
+		/obj/item/attachable/scope/mini,
+	)
+	cost = 50
+
+/datum/supply_packs/weapons/assortedattachmentsbottomrail
+	name = "Assorted Attachment Pack (Bottom Rail)"
+	contains = list(
+		/obj/item/attachable/flashlight/under,
+		/obj/item/attachable/angledgrip,
+		/obj/item/attachable/verticalgrip,
+		/obj/item/attachable/foldable/bipod,
+		/obj/item/attachable/gyro,
+		/obj/item/attachable/lasersight,
+		/obj/item/weapon/gun/grenade_launcher/underslung,
+		/obj/item/weapon/gun/shotgun/combat/masterkey,
+	)
+	cost = 75
+
+/datum/supply_packs/weapons/assortedattachmentsmuzzle
+	name = "Assorted Attachment Pack (Muzzle)"
+	contains = list(
+		/obj/item/attachable/lace,
+		/obj/item/attachable/bayonet/converted,
+		/obj/item/attachable/compensator,
+		/obj/item/attachable/extended_barrel,
+		/obj/item/attachable/heavy_barrel,
+		/obj/item/attachable/suppressor,
+	)
 	cost = 50

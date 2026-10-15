@@ -300,9 +300,6 @@
 
 	GLOB.nightfall_toggleable_lights -= src
 
-	if(LAZYLEN(flat_equipment))
-		for(var/obj/item/mecha_parts/mecha_equipment/equip AS in flat_equipment)
-			equip.detach(loc)
 	radio = null
 
 	STOP_PROCESSING(SSobj, src)
@@ -343,12 +340,12 @@
 			occupant.gib() //No wreck, no AI to recover
 			continue
 		mob_exit(occupant, FALSE, TRUE)
-		occupant.SetSleeping(destruction_sleep_duration)
+		occupant.SetParalyzed(destruction_sleep_duration)
 		occupant.setStaminaLoss(occupant.getMaxHealth()*2)
 
 	if(wreckage)
 		var/obj/structure/mecha_wreckage/WR = new wreckage(loc, unlucky_ais)
-		for(var/obj/item/mecha_parts/mecha_equipment/E in flat_equipment)
+		for(var/obj/item/mecha_parts/mecha_equipment/E AS in flat_equipment)
 			if(E.detachable)
 				WR.crowbar_salvage += E
 				E.detach(WR)  // NTF EDIT, forces equipment into wrecks
@@ -359,7 +356,6 @@
 		if(cell)
 			WR.crowbar_salvage += cell
 			cell.forceMove(WR)
-			cell.use(rand(0, cell.charge), TRUE)
 			cell = null
 	return ..()
 

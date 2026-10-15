@@ -37,7 +37,7 @@
 
 
 /mob/new_player/proc/check_playerpolls()
-	if(!WHITELIST_CHECK(client))
+	if(client && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(client))
 		return FALSE
 	var/output
 	if (SSdbcore.Connect())
@@ -77,7 +77,7 @@
 
 	if(!SSticker)
 		return
-	if(!WHITELIST_CHECK(client))
+	if(client && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(client))
 		return
 
 	if(SSticker.current_state == GAME_STATE_PREGAME)
@@ -147,7 +147,7 @@
 			view_som()
 
 		if("SelectedJob")
-			if(!WHITELIST_CHECK(client))
+			if(client && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(client))
 				WHITELIST_MESSAGE(client)
 				return
 			if(!SSticker)
@@ -219,7 +219,7 @@
 
 
 /mob/new_player/proc/late_choices()
-	if(!WHITELIST_CHECK(client))
+	if(client && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(client))
 		WHITELIST_MESSAGE(client)
 		return
 	var/list/dat = list("<div class='notice'>Round Duration: [DisplayTimeText(world.time - SSticker.round_start_time)]</div>")
@@ -387,7 +387,7 @@
 
 /mob/new_player/proc/transfer_character()
 	. = new_character
-	if(!WHITELIST_CHECK(client))
+	if(client && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(client))
 		WHITELIST_MESSAGE(client)
 		return
 	if(.)
@@ -415,7 +415,7 @@
 	return TRUE
 
 /mob/new_player/proc/try_to_observe()
-	if(!WHITELIST_CHECK(client))
+	if(client && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(client))
 		WHITELIST_MESSAGE(client)
 		return
 	if(!SSticker || SSticker.current_state == GAME_STATE_STARTUP)
@@ -498,7 +498,7 @@
 			to_chat(src,span_warning("Your humanoid flavor text is too short ([flavorlength]/100 characters) AND you don't have an image reference!"))
 			ready = FALSE
 			return
-		if(!WHITELIST_CHECK(client))
+		if(client && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(client))
 			WHITELIST_MESSAGE(client)
 			ready = FALSE
 			return
@@ -509,7 +509,7 @@
 
 ///Attempts to latejoin the player
 /mob/new_player/proc/attempt_late_join(queue_override = FALSE)
-	if(!WHITELIST_CHECK(client))
+	if(client && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(client))
 		WHITELIST_MESSAGE(client)
 		return
 	if(!SSticker?.mode || SSticker.current_state != GAME_STATE_PLAYING)
@@ -543,7 +543,7 @@
 
 
 /mob/new_player/proc/take_ssd_mob()
-	if(!WHITELIST_CHECK(client))
+	if(client && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(client))
 		WHITELIST_MESSAGE(client)
 	if((src.key in GLOB.key_to_time_of_death) && (GLOB.key_to_time_of_death[src.key] + TIME_BEFORE_TAKING_BODY > world.time))
 		to_chat(src, span_warning("You died too recently to be able to take a new mob."))

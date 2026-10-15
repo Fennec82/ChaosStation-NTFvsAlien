@@ -66,7 +66,7 @@ map gelida_iv
 endmap
 
 map deltastation
-	minplayers 1
+	minplayers 40
 endmap
 
 map fort_phobos
@@ -134,4 +134,16 @@ endmap
 
 map bluemoon
 	maxplayers 40
+endmap
+
+map vietzhuo_8_borders
+	minplayers 1
+endmap
+
+map turkenden_3_excluzone
+	minplayers 1
+endmap
+
+map gleichseitig_16_flashpoints_winter
+	minplayers 1
 endmap

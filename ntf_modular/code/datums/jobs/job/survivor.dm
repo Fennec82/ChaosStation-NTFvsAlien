@@ -82,8 +82,19 @@
 			new_human.wear_id.paygrade = "Mk.V"
 	new_human.wear_id.update_label()
 
-/datum/job/terragov/silicon/synthetic/get_spawn_message_information(mob/M)
+/datum/job/survivor/synth/get_spawn_message_information(mob/M)
 	. = ..()
 	. += separator_hr("[span_role_header("<b>[title] Information</b>")]")
 	. += "Your primary job is to support and assist all survivors, NTC departments and personnel. \
 		In addition, being a Synthetic gives you knowledge in every field and specialization possible on-board the ship."
+
+
+//for colony fall etc
+/datum/job/survivor/admin
+	title = "Local Colony Administrator"
+	access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_MEDICAL, ACCESS_CIVILIAN_RESEARCH, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_MARINE_BRIG, ACCESS_ICC_SECURITY, ACCESS_ICC_CARGO)
+	minimal_access = list(ACCESS_CIVILIAN_PUBLIC, ACCESS_CIVILIAN_MEDICAL, ACCESS_CIVILIAN_RESEARCH, ACCESS_CIVILIAN_ENGINEERING, ACCESS_CIVILIAN_LOGISTICS, ACCESS_MARINE_BRIG, ACCESS_ICC_SECURITY, ACCESS_ICC_CARGO)
+	paygrade = "CM6"
+	comm_title = "ADMN"
+	total_positions = 1
+	outfit = /datum/outfit/job/survivor/administrator

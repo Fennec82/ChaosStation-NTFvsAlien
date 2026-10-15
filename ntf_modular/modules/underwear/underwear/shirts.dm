@@ -3,6 +3,7 @@
 	desc = "A shirt."
 	icon_state = "undershirt"
 	equip_slot_flags = ITEM_SLOT_SHIRT
+	blocks_top_genital = TRUE
 
 /obj/item/clothing/underwear/shirt/update_clothing_icon()
 	var/mob/M = loc
@@ -85,6 +86,12 @@
 	greyscale_config = /datum/greyscale_config/shirt
 	colorable_allowed = COLOR_WHEEL_ALLOWED
 
+/obj/item/clothing/underwear/shirt/turtleneck_f
+	name = "Sweater - Turtleneck (alt)"
+	icon_state = "turtleneck_f"
+	greyscale_config = /datum/greyscale_config/shirt
+	colorable_allowed = COLOR_WHEEL_ALLOWED
+
 /obj/item/clothing/underwear/shirt/turtleneck_smooth
 	name = "Sweater - Smooth Turtleneck"
 	icon_state = "turtleneck_smooth"
@@ -97,15 +104,37 @@
 	greyscale_config = /datum/greyscale_config/shirt
 	colorable_allowed = COLOR_WHEEL_ALLOWED
 
+/obj/item/clothing/underwear/shirt/turtleneck_f_sleeveless
+	name = "Sweater - Sleeveless Turtleneck (alt)"
+	icon_state = "turtleneck_f_sleeveless"
+	greyscale_config = /datum/greyscale_config/shirt
+	colorable_allowed = COLOR_WHEEL_ALLOWED
+
 /obj/item/clothing/underwear/shirt/leotard_turtleneck
 	name = "Shirt - Turtleneck Leotard"
 	icon_state = "leotard_turtleneck"
+	greyscale_config = /datum/greyscale_config/shirt
+	colorable_allowed = COLOR_WHEEL_ALLOWED
+	blocks_butt = TRUE
+	blocks_bottom_genital = TRUE
+
+/obj/item/clothing/underwear/shirt/leotard_f_turtleneck
+	name = "Shirt - Turtleneck Leotard (alt)"
+	icon_state = "leotard_f_turtleneck"
 	greyscale_config = /datum/greyscale_config/shirt
 	colorable_allowed = COLOR_WHEEL_ALLOWED
 
 /obj/item/clothing/underwear/shirt/leotard_turtleneck_sleeveless
 	name = "Shirt - Turtleneck Leotard Sleeveless"
 	icon_state = "leotard_turtleneck_sleeveless"
+	greyscale_config = /datum/greyscale_config/shirt
+	colorable_allowed = COLOR_WHEEL_ALLOWED
+	blocks_butt = TRUE
+	blocks_bottom_genital = TRUE
+
+/obj/item/clothing/underwear/shirt/leotard_turtleneck_f_sleeveless
+	name = "Shirt - Turtleneck Leotard Sleeveless (alt)"
+	icon_state = "leotard_turtleneck_f_sleeveless"
 	greyscale_config = /datum/greyscale_config/shirt
 	colorable_allowed = COLOR_WHEEL_ALLOWED
 
@@ -303,4 +332,3 @@
 	icon_file = 'ntf_modular/modules/underwear/underwear/underwear.dmi'
 	json_config = 'ntf_modular/modules/underwear/underwear/shirt.json'
 	greyscale_flags = HYPERSCALE_ALLOW_GREYSCALE
-

@@ -1537,13 +1537,17 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 		if(!(job.job_flags & (JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE)))
 			to_chat(usr, span_warning("Job is not joinable."))
 			return
+		if(SSticker.mode && !(SSticker.mode.round_type_flags2 & (MODE_2_CHILL_RULES|MODE_2_MINER_RUSH_PROT)))
+			if(tgui_alert(usr, "There appears to currently be a war on.  This action may affect balance.  Are you sure you wish to add a [slot] job slot?  If you do it will be announced publicly (without your ckey).", "Confirm adding job slot", list("Yes", "Cancel")) != "Yes")
+				return
 		job.add_job_positions(1)
 
 		SSadmin_verbs.dynamic_invoke_verb(usr, /datum/admin_verb/job_slots)
 
 		log_admin("[key_name(src)] has added a [slot] job slot.")
 		message_admins("[ADMIN_TPMONTY(usr)] has added a [slot] job slot.")
-
+		if(SSticker.mode && !(SSticker.mode.round_type_flags2 & (MODE_2_CHILL_RULES|MODE_2_MINER_RUSH_PROT)))
+			to_chat(world, span_boldnotice("An admin has added a [slot] job slot."))
 
 	else if(href_list["filljobslot"])
 		if(!check_rights(R_ADMIN))
@@ -1574,6 +1578,9 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 		if(J.current_positions <= 0)
 			to_chat(usr, span_warning("Cannot free more job slots."))
 			return
+		if(SSticker.mode && !(SSticker.mode.round_type_flags2 & (MODE_2_CHILL_RULES|MODE_2_MINER_RUSH_PROT)))
+			if(tgui_alert(usr, "There appears to currently be a war on.  This action may affect balance.  Are you sure you wish to free a [slot] job slot?  If you do it will be announced publicly (without your ckey).", "Confirm freeing job slot", list("Yes", "Cancel")) != "Yes")
+				return
 		log_game("Freeing 1 [J.title] slot due to [usr.ckey] commanding this via the admin job panel.")
 		J.free_job_positions(1)
 
@@ -1581,7 +1588,8 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 
 		log_admin("[key_name(src)] has freed a [slot] job slot.")
 		message_admins("[ADMIN_TPMONTY(usr)] has freed a [slot] job slot.")
-
+		if(SSticker.mode && !(SSticker.mode.round_type_flags2 & (MODE_2_CHILL_RULES|MODE_2_MINER_RUSH_PROT)))
+			to_chat(world, span_boldnotice("An admin has freed a [slot] job slot."))
 
 	else if(href_list["removejobslot"])
 		if(!check_rights(R_ADMIN))

@@ -410,7 +410,7 @@
 //cade armor defines
 #define CADE_UPGRADE_BOMB list(melee = 40, bomb = 40) //plus tanks 20% of crusher charges pre melee armor reduction
 #define CADE_UPGRADE_MELEE list(melee = 30, bullet = 60, laser = 60, energy = 60, bomb = 20)
-#define CADE_UPGRADE_ACID 75
+#define CADE_UPGRADE_ACID list(laser = 40, energy = 40, fire = 75, acid= 75)
 
 /obj/structure/barricade/solid
 	name = "metal barricade"
@@ -539,7 +539,7 @@
 		if(CADE_TYPE_MELEE)
 			soft_armor = soft_armor.modifyRating(MELEE = CADE_UPGRADE_MELEE["melee"], BULLET = CADE_UPGRADE_MELEE["bullet"], LASER = CADE_UPGRADE_MELEE["laser"], ENERGY = CADE_UPGRADE_MELEE["energy"], BOMB = CADE_UPGRADE_MELEE["bomb"])
 		if(CADE_TYPE_ACID)
-			soft_armor = soft_armor.modifyRating(ACID = CADE_UPGRADE_ACID)
+			soft_armor = soft_armor.modifyRating(LASER = CADE_UPGRADE_ACID["laser"], ENERGY = CADE_UPGRADE_ACID["energy"], FIRE = CADE_UPGRADE_ACID["fire"], ACID = CADE_UPGRADE_ACID["acid"])
 			resistance_flags |= UNACIDABLE
 
 	barricade_upgrade_type = choice

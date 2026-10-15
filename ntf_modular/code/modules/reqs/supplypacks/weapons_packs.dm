@@ -30,13 +30,13 @@
 
 /datum/supply_packs/weapons/laserweapons
 	name = "Standard laser weapon bundle" // Since we can buy an xray laser rifle but not regular ones?
-	contains = list(/obj/item/weapon/gun/energy/lasgun/lasrifle/standard_marine_carbine,
+	contains = list(/obj/item/weapon/gun/energy/lasgun/lasrifle/standard_marine_carbine, //300x4 = 1200 + backpack and pouch
 /obj/item/weapon/gun/energy/lasgun/lasrifle/standard_marine_rifle,
 /obj/item/weapon/gun/energy/lasgun/lasrifle/standard_marine_sniper,
 /obj/item/weapon/gun/energy/lasgun/lasrifle/standard_marine_mlaser,
 /obj/item/cell/lasgun/volkite/powerpack/marine,
 /obj/item/cell/lasgun/volkite/powerpack/marine/backpack,)
-	cost = 250
+	cost = 2000
 
 //factional things down here
 /datum/supply_packs/weapons/unity
@@ -105,7 +105,7 @@
 	faction_lock = list(FACTION_SOM)
 	cost = 30
 
-/datum/supply_packs/weapons/rpg_tangle
+/datum/supply_packs/weapons/specdemo/rpg_tangle
 	name = "RL-152 SADAR tanglefoot rocket"
 	contains = list(/obj/item/ammo_magazine/rocket/sadar/plasmaloss)
 	cost = 125

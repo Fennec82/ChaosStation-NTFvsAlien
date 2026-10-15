@@ -118,7 +118,6 @@ GLOBAL_LIST_INIT(possible_cock_storage_names, list(
 GLOBAL_LIST_INIT(possible_cock_states, list(
 	"Stored" = COCK_STATE_STORED,
 	"Flaccid" = COCK_STATE_FLACCID,
-	"Partial" = COCK_STATE_PARTIAL,
 	"Erect" = COCK_STATE_ERECT,
 ))
 
@@ -202,7 +201,7 @@ GLOBAL_LIST_INIT(breast_number_to_size, list(
 	var/list/data = list(
 		"cockState" = GLOB.possible_cock_sprite_names[human.cock],
 		"cockStorage" = GLOB.possible_cock_storage_names[human.cock_storage],
-		"cockDisplayState" = GLOB.possible_cock_state_names[human.cock_state],
+		"cockDisplayState" = GLOB.possible_cock_state_names[human.cock_state == COCK_STATE_PARTIAL ? COCK_STATE_FLACCID : human.cock_state],
 		"assState" = GLOB.possible_ass_sprite_names[human.ass],
 		"boobState" = GLOB.possible_boob_sprite_names[human.boobs],
 		"vaginaState" = GLOB.possible_vagina_sprite_names[human.vagina],

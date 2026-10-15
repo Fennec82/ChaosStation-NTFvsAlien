@@ -817,92 +817,120 @@
 
 //faction specific things below here.
 
+/datum/supply_packs/imports/vortexammo
+	name = "NT Vortex AP SMG magazine (9x19mm Parabellum) (Ninetails Supply)"
+	contains = list(/obj/item/ammo_magazine/smg/vortex/ap)
+	faction_lock = list(FACTION_TERRAGOV)
+	cost = 60
+
+/datum/supply_packs/imports/vortexammo/incend
+	name = "NT Vortex incendiary SMG magazine (9x19mm Parabellum) (Ninetails Supply)"
+	contains = list(/obj/item/ammo_magazine/smg/vortex/incendiary)
+
+/datum/supply_packs/imports/vortexammo/taser
+	name = "NT Vortex HC SMG magazine (9x19mm Parabellum) (Ninetails Supply)"
+	contains = list(/obj/item/ammo_magazine/smg/vortex/taser)
+
 /datum/supply_packs/imports/antienergyshieldfs
-	name = "NTC Anti Energy Shield (Faction Supply)"
+	name = "NTC Anti Energy Shield (Ninetails Supply)"
 	contains = list(/obj/item/armor_module/module/eshield/absorbant/energy)
 	faction_lock = list(FACTION_TERRAGOV)
 	cost = 600
 
 /datum/supply_packs/imports/kzflamethrower
-	name = "KZ CC/21 flamethrower (Faction Supply)"
+	name = "KZ CC/21 flamethrower (Kaizoku Supply)"
 	contains = list(/obj/item/weapon/gun/flamer/vsd)
 	faction_lock = list(FACTION_VSD)
 	cost = 300
 
 /datum/supply_packs/imports/kzfuelreg
-	name = "KZ CC/21 fuel tank (Faction Supply)"
+	name = "KZ CC/21 fuel tank (Kaizoku Supply)"
 	contains = list(/obj/item/ammo_magazine/flamer_tank/vsd)
 	faction_lock = list(FACTION_VSD)
 	cost = 50
 
 /datum/supply_packs/imports/kzfuelx
-	name = "KZ CC/21 X fuel tank (Faction Supply)"
+	name = "KZ CC/21 X fuel tank (Kaizoku upply)"
 	contains = list(/obj/item/ammo_magazine/flamer_tank/vsd/blue)
 	faction_lock = list(FACTION_VSD)
 	cost = 150
 
 /datum/supply_packs/imports/kzrocketlauncher
-	name = "KZ C153 shoulder launcher (Faction Supply)"
+	name = "KZ C153 shoulder launcher (Kaizoku Supply)"
 	contains = list(/obj/item/weapon/gun/launcher/rocket/vsd)
 	faction_lock = list(FACTION_VSD)
 	cost = 800
 
 /datum/supply_packs/imports/kzrockethe
-	name = "KZ C153 shoulder launcher he rocket (Faction Supply)"
+	name = "KZ C153 shoulder launcher he rocket (Kaizoku Supply)"
 	contains = list(/obj/item/ammo_magazine/rocket/vsd/he)
 	faction_lock = list(FACTION_VSD)
 	cost = 25
 
 /datum/supply_packs/imports/kzrocketincend
-	name = "KZ C153 shoulder launcher incendiary rocket (Faction Supply)"
+	name = "KZ C153 shoulder launcher incendiary rocket (Kaizoku Supply)"
 	contains = list(/obj/item/ammo_magazine/rocket/vsd/incendiary)
 	faction_lock = list(FACTION_VSD)
 	cost = 50
 
 /datum/supply_packs/imports/kzrocketchem
-	name = "KZ C153 shoulder launcher chemical rocket (Faction Supply)"
+	name = "KZ C153 shoulder launcher chemical rocket (Kaizoku Supply)"
 	contains = list(/obj/item/ammo_magazine/rocket/vsd/chemical)
 	faction_lock = list(FACTION_VSD)
 	cost = 50
 
 /datum/supply_packs/imports/kzrocketheat
-	name = "KZ C153 shoulder launcher HEAT rocket (Faction Supply)"
+	name = "KZ C153 shoulder launcher HEAT rocket (Kaizoku Supply)"
 	contains = list(/obj/item/ammo_magazine/rocket/vsd/heat)
 	faction_lock = list(FACTION_VSD)
 	cost = 50
 
 /datum/supply_packs/imports/antiballisticshieldfs
-	name = "KZ Anti Ballsitic Shield (Faction Supply)"
+	name = "KZ Anti Ballsitic Shield (Kaizoku Supply)"
 	contains = list(/obj/item/armor_module/module/eshield/absorbant/ballistic)
 	faction_lock = list(FACTION_VSD)
 	cost = 600
 
 /datum/supply_packs/medical/carpotoxin
-	name = "Carpotoxin Bottle (Faction Supply)"
+	name = "Carpotoxin Bottle (Novamed Supply)"
 	contains = list(/obj/item/reagent_containers/glass/bottle/carpotoxin)
 	faction_lock = list(FACTION_TERRAGOV) //novamed
 	cost = 400
 
 /datum/supply_packs/imports/vx12serpenta
-	name = "VX-12 Serpenta (Faction Supply)"
+	name = "VX-12 Serpenta (Sons of Mars Supply)"
 	contains = list(/obj/item/weapon/gun/energy/lasgun/lasrifle/volkite/serpenta)
 	faction_lock = list(FACTION_SOM)
 	cost = 75
 
 /datum/supply_packs/imports/vx32charger
-	name = "VX-32 Charger (Faction Supply)"
+	name = "VX-32 Charger (Sons of Mars Supply)"
 	contains = list(/obj/item/weapon/gun/energy/lasgun/lasrifle/volkite/charger)
 	faction_lock = list(FACTION_SOM)
 	cost = 200
 
 /datum/supply_packs/imports/vx33caliver
-	name = "VX-33 Caliver (Faction Supply)"
+	name = "VX-33 Caliver (Sons of Mars Supply)"
 	contains = list(/obj/item/weapon/gun/energy/lasgun/lasrifle/volkite/caliver)
 	faction_lock = list(FACTION_SOM)
 	cost = 325
 
+/datum/supply_packs/imports/somsmgammo
+	name = "V-21 AP submachinegun magazine (10x20mm) (Sons of Mars Supply)"
+	contains = list(/obj/item/ammo_magazine/smg/som/ap)
+	faction_lock = list(FACTION_SOM)
+	cost = 60
+
+/datum/supply_packs/imports/somsmgammo/incend
+	name = "V-21 incendiary submachinegun magazine (10x20mm) (Sons of Mars Supply)"
+	contains = list(/obj/item/ammo_magazine/smg/som/incendiary)
+
+/datum/supply_packs/imports/somsmgammo/rad
+	name = "V-21 radioactive submachinegun magazine (10x20mm) (Sons of Mars Supply)"
+	contains = list(/obj/item/ammo_magazine/smg/som/rad)
+
 /datum/supply_packs/imports/ml41afrag
-	name = " ML-41A Autoshotgun frag drum (Faction Supply)"
+	name = " ML-41A Autoshotgun frag drum (Colonial Militia Supply)"
 	contains = list(/obj/item/ammo_magazine/rifle/icc_autoshotgun/frag)
 	faction_lock = list(FACTION_ICC)
 	cost = 50

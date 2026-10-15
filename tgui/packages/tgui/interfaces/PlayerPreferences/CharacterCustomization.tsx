@@ -5,6 +5,7 @@ import {
   Dropdown,
   Flex,
   LabeledList,
+  NumberInput,
   Section,
   Tabs,
 } from 'tgui-core/components';
@@ -408,6 +409,46 @@ export const CharacterCustomization = (props) => {
       null,
       creatorPartColorControls(row),
     );
+  const quadEyeRows = () => [
+    <LabeledList.Item key="quad-eyes" label="Quad Eyes">
+      <Button.Checkbox
+        checked={data.quad_eyes}
+        onClick={() => act('toggle_quad_eyes')}
+        tooltip="Gives the character four eyes. This may have oddities with custom eyes."
+      >
+        Enabled
+      </Button.Checkbox>
+    </LabeledList.Item>,
+    data.quad_eyes ? (
+      <LabeledList.Item key="quad-eyes-offset" label="Quad Eyes Offset">
+        <NumberInput
+          value={data.quad_eyes_offset ?? 0}
+          minValue={-2}
+          maxValue={2}
+          step={1}
+          width="64px"
+          onChange={(value) => act('quad_eyes_offset', { newValue: value })}
+        />
+      </LabeledList.Item>
+    ) : null,
+    data.quad_eyes ? (
+      <LabeledList.Item
+        key="quad-eyes-offset-width"
+        label="Quad Eyes Offset Width"
+      >
+        <NumberInput
+          value={data.quad_eyes_offset_width ?? 1}
+          minValue={-2}
+          maxValue={2}
+          step={1}
+          width="64px"
+          onChange={(value) =>
+            act('quad_eyes_offset_width', { newValue: value })
+          }
+        />
+      </LabeledList.Item>
+    ) : null,
+  ];
   const groupedFeatureSections = () =>
     creatorFeatureGroups.map((group) => {
       const rows =
@@ -416,7 +457,7 @@ export const CharacterCustomization = (props) => {
           : partRows.filter((row) => row.group === group.id);
       const renderer =
         group.id === 'soft_anatomy' ? creatorGenitalRow : creatorPartRow;
-      if (!rows.length) {
+      if (!rows.length && group.id !== 'head_parts') {
         return null;
       }
       const collapsed = !!collapsedFeatureGroups[group.id];
@@ -432,7 +473,10 @@ export const CharacterCustomization = (props) => {
           </Button>
           {!collapsed ? (
             <Box mt={0.5}>
-              <LabeledList>{rows.map(renderer)}</LabeledList>
+              <LabeledList>
+                {group.id === 'head_parts' ? quadEyeRows() : null}
+                {rows.map(renderer)}
+              </LabeledList>
             </Box>
           ) : null}
         </Box>

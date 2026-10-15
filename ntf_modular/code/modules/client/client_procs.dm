@@ -38,7 +38,7 @@
 	if(world.time < (reclone_start_time + reclone_time))
 		the_question = "A new body is growing, You will be able to reclone in [DisplayTimeText((reclone_start_time + reclone_time) - world.time)], keeping your equipment, You can choose to stay for now or ghost and re-enter your body freely... You can pop this up again by using the 'ghost' verb."
 	to_chat(src, span_notice(replacetext(the_question, "'ghost' verb", "'[span_bold("ghost")]' verb")))
-	var/choice = tgui_input_list(src, the_question, "Recloning", list("Reclone","Ghost","Stay in body"), "Stay in body")
+	var/choice = tgui_input_list(src, the_question, "Recloning", list("Reclone", "Recalculate", "Ghost","Stay in body"), "Stay in body")
 	switch(choice)
 		if("Reclone")
 			if(world.time < (reclone_start_time + reclone_time))
@@ -62,6 +62,8 @@
 				embryos.forceMove(doppleganger)
 				embryos.affected_mob = doppleganger
 				doppleganger.status_flags |= XENO_HOST
+				REMOVE_TRAIT(mob, TRAIT_XENO_HOST(embryos.hivenumber), embryos)
+				ADD_TRAIT(mob, TRAIT_XENO_HOST(embryos.hivenumber), embryos)
 			for(var/mob/living/carbon/xenomorph/larva/larba in mob.contents)
 				larba.forceMove(doppleganger)
 				doppleganger.status_flags |= XENO_HOST
@@ -127,4 +129,48 @@
 			var/mob/dead/observer/ghost = mob.ghostize(TRUE, TRUE) //aghost
 			log_admin("[key_name(ghost)] nest-ghosted at [AREACOORD(ghost)].")
 		if("Stay in body")
+			return
+		if("Recalculate") //gives an option to re-set timer if circumstances change
+			var/theoritical_reclone_time
+			var/theoritical_reclone_start_time
+			if(!ishuman(mob))
+				return
+			if(!hmob) //how
+				return
+			var/area/recalc_area = get_area(mob)
+			var/theoritical_cost = 300
+			var/theoritical_embryo_present = FALSE
+			for(var/obj/item/alien_embryo/embryos in mob.contents)
+				if(embryos.stage < 3)
+					continue
+				theoritical_embryo_present = TRUE
+				break
+			for(var/mob/living/carbon/xenomorph/larva/larba in mob.contents)
+				theoritical_embryo_present = TRUE
+				break
+			theoritical_reclone_start_time = world.time
+			theoritical_reclone_time = SSticker.mode.respawn_time
+			if(recalc_area.ceiling >= CEILING_UNDERGROUND || theoritical_embryo_present || hmob.getCloneLoss() >= 40)
+				theoritical_reclone_time /= 2
+			var/All[] = SSticker.mode.count_humans_and_xenos(null, COUNT_CLF_TOWARDS_XENOS | COUNT_GREENOS_TOWARDS_MARINES | COUNT_IGNORE_ALIVE_SSD)
+			var/AllMarines[] = All[1]
+			var/AllXenos[] = All[2]
+			if(AllMarines < AllXenos * XENO_MARINE_RATIO)
+				theoritical_reclone_time /= 2
+			if(SSticker.mode.round_type_flags2 & MODE_2_CHILL_RULES)
+				theoritical_reclone_time *= 0.1
+				theoritical_reclone_time = max(theoritical_reclone_time, 1 MINUTES)
+			else
+				theoritical_reclone_time = max(theoritical_reclone_time, 8 MINUTES) //absolute minimum time.
+			if(ishuman(mob)) //if person is dnr they get half cost
+				var/mob/living/carbon/human/hum = mob
+				if(hum.dead_ticks > GLOB.time_before_dnr || SSticker.mode.round_type_flags2 & MODE_2_CHILL_RULES)
+					theoritical_cost /= 2
+			var/recalc_question = "Your new reclone timer would be re-set to [DisplayTimeText((theoritical_reclone_start_time + theoritical_reclone_time) - world.time)] (Old: [DisplayTimeText((reclone_start_time + reclone_time) - world.time)]) and points cost would be [theoritical_cost] (Old: [the_cost]) considering the current circumstances, Do you accept this?"
+			var/recalc_choice = tgui_input_list(src, recalc_question, "Recalculate Reclone", list("Accept", "Do Not"), "Do Not")
+			switch(recalc_choice)
+				if("Accept")
+					INVOKE_ASYNC(src, TYPE_PROC_REF(/client, ask_reclone))
+				if("Do Not")
+					INVOKE_ASYNC(src, TYPE_PROC_REF(/client, ask_reclone), FALSE)
 			return

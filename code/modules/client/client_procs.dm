@@ -418,7 +418,7 @@ GLOBAL_PROTECT(new_client_amia_whitelist_callback)
 					log_admin("Skipped amia whitelist check for [key] because the amia whitelist is disabled.")
 					GLOB.whitelisted_clients += src
 					GLOB.whitelisted_clients[src] = "none - WL disabled"
-	if(CONFIG_GET(flag/amia_whitelist_enabled) && (src in GLOB.whitelisted_clients))
+	if(src && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(src))
 		to_chat(src, span_notice("Whitelist check passed.  Welcome."))
 
 /proc/new_client_whitelist_check_callback(ckey, result)

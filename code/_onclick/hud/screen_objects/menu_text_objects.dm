@@ -111,7 +111,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/text/lobby)
 /atom/movable/screen/text/lobby/clickable/join_game/Click()
 	. = ..()
 	var/mob/new_player/player = hud.mymob
-	if(!WHITELIST_CHECK(player.client))
+	if(player.client && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(player.client))
 		WHITELIST_MESSAGE(player.client)
 		return
 	if(SSticker?.current_state > GAME_STATE_PREGAME)
@@ -128,7 +128,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/text/lobby)
 /atom/movable/screen/text/lobby/clickable/observe/Click()
 	. = ..()
 	var/mob/new_player/player = hud.mymob
-	if(!WHITELIST_CHECK(player.client))
+	if(player.client && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(player.client))
 		WHITELIST_MESSAGE(player.client)
 		return
 	player.try_to_observe()
@@ -140,7 +140,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/text/lobby)
 /atom/movable/screen/text/lobby/clickable/take_ssd_mob/Click()
 	. = ..()
 	var/mob/new_player/player = hud.mymob
-	if(!WHITELIST_CHECK(player.client))
+	if(player.client && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(player.client))
 		WHITELIST_MESSAGE(player.client)
 		return
 	player.take_ssd_mob()
@@ -152,7 +152,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/text/lobby)
 /atom/movable/screen/text/lobby/clickable/manifest/Click()
 	. = ..()
 	var/mob/new_player/player = hud.mymob
-	if(!WHITELIST_CHECK(player.client))
+	if(player.client && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(player.client))
 		WHITELIST_MESSAGE(player.client)
 		return
 	player.view_manifest()
@@ -164,7 +164,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/text/lobby)
 /atom/movable/screen/text/lobby/clickable/xenomanifest/Click()
 	. = ..()
 	var/mob/new_player/player = hud.mymob
-	if(!WHITELIST_CHECK(player.client))
+	if(player.client && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(player.client))
 		WHITELIST_MESSAGE(player.client)
 		return
 	player.view_xeno_manifest()

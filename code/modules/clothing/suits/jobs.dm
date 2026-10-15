@@ -49,6 +49,7 @@
 		/obj/item/stack/nanopaste,
 		/obj/item/tweezers,
 		/obj/item/tweezers_advanced,
+		/obj/item/tool/surgery/solderingtool,
 	)
 	soft_armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 10, FIRE = 0, ACID = 0)
 

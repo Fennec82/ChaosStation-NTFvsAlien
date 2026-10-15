@@ -95,6 +95,7 @@
 			/obj/item/ammo_magazine/smg,
 			/obj/item/ammo_magazine/sniper,
 			/obj/item/cell/lasgun,
+			/obj/item/tool/surgery/solderingtool,
 		)
 	)
 
@@ -135,6 +136,7 @@
 		/obj/item/bodybag,
 		/obj/item/roller,
 		/obj/item/whistle,
+		/obj/item/tool/surgery/solderingtool,
 	))
 
 /datum/storage/internal/surgery_webbing
@@ -148,6 +150,7 @@
 		/obj/item/stack/nanopaste,
 		/obj/item/tweezers,
 		/obj/item/tweezers_advanced,
+		/obj/item/tool/surgery/solderingtool,
 	))
 
 /datum/storage/internal/holster
@@ -228,6 +231,7 @@
 		/obj/item/tweezers,
 		/obj/item/tweezers_advanced,
 		/obj/item/whistle,
+		/obj/item/tool/surgery/solderingtool,
 	))
 
 /datum/storage/internal/general
@@ -314,6 +318,7 @@
 		/obj/item/lightreplacer,
 		/obj/item/minerupgrade,
 		/obj/item/deploy_capsule/barricade,
+		/obj/item/tool/surgery/solderingtool,
 	))
 
 /datum/storage/internal/medical
@@ -342,6 +347,7 @@
 		/obj/item/tweezers,
 		/obj/item/tweezers_advanced,
 		/obj/item/whistle,
+		/obj/item/tool/surgery/solderingtool,
 	))
 
 /datum/storage/internal/injector

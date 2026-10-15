@@ -139,6 +139,12 @@ GLOBAL_LIST_EMPTY(human_genitals_cache)
 		)
 	return defs
 
+/proc/genital_visual_by_style(style)
+	for(var/datum/genital_visual/def in genital_visuals())
+		if(def.style_var == style)
+			return def
+	return null
+
 /proc/genital_overlay(icon_file, icon_state, draw_color, draw_layer)
 	var/mutable_appearance/overlay = mutable_appearance(icon_file, icon_state, draw_layer)
 	overlay.color = draw_color ? sanitize_character_recolor(draw_color) : null
@@ -226,7 +232,63 @@ GLOBAL_LIST_EMPTY(human_genitals_cache)
 		return FALSE
 	if(def.hide_underwear && owner.vars.Find("w_underwear") && owner.vars["w_underwear"])
 		return FALSE
+	var/obj/item/clothing/undershirt = owner.w_undershirt
+	if(undershirt)
+		switch(def.visibility)
+			if(GENITAL_VISIBILITY_TOP)
+				if(undershirt.blocks_top_genital)
+					return FALSE
+			if(GENITAL_VISIBILITY_REAR)
+				if(undershirt.blocks_butt)
+					return FALSE
+			else
+				if(undershirt.blocks_bottom_genital)
+					return FALSE
 	return TRUE
+
+/mob/living/carbon/human/proc/sexcon_genital_visibility_mode(style)
+	if(!sexcon_genital_visibility)
+		return SEXCON_GENITAL_VISIBILITY_CLOTHED
+	return sexcon_genital_visibility[style] || SEXCON_GENITAL_VISIBILITY_CLOTHED
+
+/mob/living/carbon/human/proc/sexcon_set_genital_visibility_mode(style, mode)
+	if(!(mode in list(SEXCON_GENITAL_VISIBILITY_NEVER, SEXCON_GENITAL_VISIBILITY_CLOTHED, SEXCON_GENITAL_VISIBILITY_ALWAYS)))
+		return FALSE
+	if(!sexcon_genital_visibility)
+		sexcon_genital_visibility = list()
+	if(mode == SEXCON_GENITAL_VISIBILITY_CLOTHED)
+		sexcon_genital_visibility -= style
+	else
+		sexcon_genital_visibility[style] = mode
+	return TRUE
+
+/mob/living/carbon/human/proc/sexcon_genital_always_accessible(style)
+	return !!sexcon_genital_accessibility?[style]
+
+/mob/living/carbon/human/proc/sexcon_toggle_genital_accessibility(style)
+	if(!sexcon_genital_accessibility)
+		sexcon_genital_accessibility = list()
+	if(sexcon_genital_accessibility[style])
+		sexcon_genital_accessibility -= style
+	else
+		sexcon_genital_accessibility[style] = TRUE
+	return TRUE
+
+/mob/living/proc/sexcon_part_exposed(style)
+	return TRUE
+
+/mob/living/carbon/human/sexcon_part_exposed(style)
+	var/datum/genital_visual/def = genital_visual_by_style(style)
+	if(!def)
+		return TRUE
+	if(def.style_var == "cock" && cock_storage && cock_state == COCK_STATE_STORED)
+		return FALSE
+	if(sexcon_genital_always_accessible(style))
+		return TRUE
+	var/obj/item/clothing/worn_suit
+	if(wear_suit && istype(wear_suit, /obj/item/clothing))
+		worn_suit = wear_suit
+	return genital_clothing_allows(def, w_uniform, worn_suit) && genital_underwear_allows(def, src)
 
 /proc/genital_static_suffix(datum/genital_visual/def, mob/living/carbon/human/owner)
 	if(def.state_var && owner?.vars[def.state_var] == COCK_STATE_ERECT)
@@ -264,7 +326,12 @@ GLOBAL_LIST_EMPTY(human_genitals_cache)
 	return parts.Join("_")
 
 /mob/living/carbon/human/proc/add_genital_visual(list/genital_layers, datum/genital_visual/def, genital_body_color, obj/item/clothing/uniform, obj/item/clothing/suit)
-	if(!def || !genital_clothing_allows(def, uniform, suit) || !genital_underwear_allows(def, src))
+	if(!def)
+		return
+	var/visibility_mode = sexcon_genital_visibility_mode(def.style_var)
+	if(visibility_mode == SEXCON_GENITAL_VISIBILITY_NEVER)
+		return
+	if(visibility_mode != SEXCON_GENITAL_VISIBILITY_ALWAYS && (!genital_clothing_allows(def, uniform, suit) || !genital_underwear_allows(def, src)))
 		return
 	if(def.required_var && (!vars.Find(def.required_var) || !vars[def.required_var]))
 		return

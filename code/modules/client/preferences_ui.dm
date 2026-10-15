@@ -243,6 +243,12 @@
 			data["gen_record"] = html_decode(gen_record)
 			data["sec_record"] = html_decode(sec_record)
 			data["exploit_record"] = html_decode(exploit_record)
+			data["metadata"] = html_decode(metadata)
+			data["metadata_favs"] = html_decode(metadata_favs)
+			data["metadata_likes"] = html_decode(metadata_likes)
+			data["metadata_maybes"] = html_decode(metadata_maybes)
+			data["metadata_dislikes"] = html_decode(metadata_dislikes)
+			data["metadata_ooc_style"] = metadata_ooc_style
 		if(FLAVOR_CUSTOMIZATION)
 			data["xeno_edible_jelly_name"] = xeno_edible_jelly_name
 			data["r_jelly"] = r_jelly
@@ -412,6 +418,16 @@
 
 /datum/preferences/proc/tab_needs_static_data(tab)
 	return tab == GEAR_CUSTOMIZATION || tab == JOB_PREFERENCES || tab == KEYBIND_SETTINGS
+
+/datum/preferences/proc/sync_ooc_notes_to_current_mob()
+	if(!parent?.mob)
+		return
+	parent.mob.ooc_notes = metadata
+	parent.mob.ooc_notes_likes = metadata_likes
+	parent.mob.ooc_notes_dislikes = metadata_dislikes
+	parent.mob.ooc_notes_maybes = metadata_maybes
+	parent.mob.ooc_notes_favs = metadata_favs
+	parent.mob.ooc_notes_style = metadata_ooc_style
 
 /datum/preferences/ui_act(action, list/params, datum/tgui/ui)
 	. = ..()
@@ -606,7 +622,7 @@
 			update_preview_icon()
 
 		if("moth_wings")
-			var/choice = tgui_input_list(ui.user, "What kind of moth wings do you want to play with? Only useable as a moth.", "Moth with type choice", GLOB.moth_wings_list)
+			var/choice = tgui_input_list(ui.user, "What kind of moth wings do you want to play with?", "Moth wing type choice", GLOB.moth_wings_list)
 			if(!choice)
 				return
 			moth_wings = choice
@@ -1095,6 +1111,30 @@
 			if(new_record == "!clear")
 				new_record = ""
 			xenoprofile_pic = new_record
+
+		if("metadata")
+			metadata = trim(html_encode(params["oocNotes"]), MAX_MESSAGE_LEN)
+			sync_ooc_notes_to_current_mob()
+
+		if("metadata_favs")
+			metadata_favs = trim(html_encode(params["oocFavs"]), MAX_MESSAGE_LEN)
+			sync_ooc_notes_to_current_mob()
+
+		if("metadata_likes")
+			metadata_likes = trim(html_encode(params["oocLikes"]), MAX_MESSAGE_LEN)
+			sync_ooc_notes_to_current_mob()
+
+		if("metadata_maybes")
+			metadata_maybes = trim(html_encode(params["oocMaybes"]), MAX_MESSAGE_LEN)
+			sync_ooc_notes_to_current_mob()
+
+		if("metadata_dislikes")
+			metadata_dislikes = trim(html_encode(params["oocDislikes"]), MAX_MESSAGE_LEN)
+			sync_ooc_notes_to_current_mob()
+
+		if("metadata_ooc_style")
+			metadata_ooc_style = !metadata_ooc_style
+			sync_ooc_notes_to_current_mob()
 
 		if("xenogender")
 			var/new_xgender = text2num(params["newValue"])

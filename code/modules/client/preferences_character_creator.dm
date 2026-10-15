@@ -67,7 +67,7 @@
 	return null
 
 /datum/preferences/proc/character_creator_part_ids()
-	return list("digitigrade_legs", "moth_wings", "taur_body", "xenodorsal", "xenohead", "tail", "snout", "ears", "horns", "synth_antenna", "wings")
+	return list("digitigrade_legs", "moth_wings", "taur_body", "xenodorsal", "xenohead", "tail", "snout", "ears", "horns", "synth_antenna", "wings", "fluff")
 
 /datum/preferences/proc/normalize_character_creator_parts(changed_field)
 	if(changed_field == "digitigrade_legs" && digitigrade_legs && digitigrade_legs != "Normal")
@@ -326,6 +326,9 @@
 			data["character_creator_[id]_emissive_action_[color_index]"] = "toggle_character_creator_emissive"
 	data["character_creator_part_row_ids"] = row_ids
 	data["character_creator_part_row_count"] = length(row_ids)
+	data["quad_eyes"] = quad_eyes
+	data["quad_eyes_offset"] = quad_eyes_offset
+	data["quad_eyes_offset_width"] = quad_eyes_offset_width
 
 /datum/preferences/proc/body_marking_row_id(zone, index)
 	return "[zone]_[index]"
@@ -584,6 +587,21 @@
 		var/list/emissive_list = sanitize_character_creator_emissive_list(vars[emissive_var])
 		emissive_list[color_index] = !emissive_list[color_index]
 		vars[emissive_var] = emissive_list
+		queue_preview_icon_update()
+		return TRUE
+
+	if(action == "toggle_quad_eyes")
+		quad_eyes = !quad_eyes
+		queue_preview_icon_update()
+		return TRUE
+
+	if(action == "quad_eyes_offset")
+		quad_eyes_offset = sanitize_integer(params["newValue"], -2, 2, initial(quad_eyes_offset))
+		queue_preview_icon_update()
+		return TRUE
+
+	if(action == "quad_eyes_offset_width")
+		quad_eyes_offset_width = sanitize_integer(params["newValue"], -2, 2, initial(quad_eyes_offset_width))
 		queue_preview_icon_update()
 		return TRUE
 

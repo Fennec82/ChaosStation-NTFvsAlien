@@ -53,8 +53,7 @@
 /* NTF edit
 	restricted_castes = list(/datum/xeno_caste/wraith, /datum/xeno_caste/hivemind)
 */
-///Timer used to track the countdown to hive collapse due to lack of silos or corrupted generators
-	var/siloless_hive_timer
+
 /datum/game_mode/infestation/sovl_war/setup()
 	. = ..()
 	/*

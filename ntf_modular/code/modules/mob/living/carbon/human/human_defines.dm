@@ -39,6 +39,9 @@
 	var/testicles_color = "#FFFFFF"
 	var/testicles_color_secondary = "#d98fa3"
 	var/list/testicles_emissive = list(FALSE, FALSE, FALSE)
+/// Runtime genital display/access overrides from the mob interaction panel.
+	var/list/sexcon_genital_visibility
+	var/list/sexcon_genital_accessibility
 ///For xeno healing bone repair
 	var/xeno_heals = 0
 	// Xenomorph that is hauling us if we are hauled

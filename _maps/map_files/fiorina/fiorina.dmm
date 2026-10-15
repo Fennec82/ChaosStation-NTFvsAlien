@@ -35524,6 +35524,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 10
 	},
+/obj/effect/landmark/patrol_point/xeno/xeno_11,
 /turf/open/floor/plating/plating_catwalk/prison/alt,
 /area/fiorina/maintenance)
 "tri" = (
@@ -43636,6 +43637,10 @@
 /obj/item/reagent_containers/food/snacks/donkpocket,
 /turf/open/floor/squares,
 /area/fiorina/station/civres_blue)
+"xDH" = (
+/obj/effect/landmark/patrol_point/xeno/xeno_21,
+/turf/open/floor/prison/plate,
+/area/fiorina/tumor/servers)
 "xDL" = (
 /obj/structure/platform_decoration,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
@@ -65439,7 +65444,7 @@ qIe
 unp
 oHk
 jme
-jcO
+xDH
 lXD
 jme
 jme

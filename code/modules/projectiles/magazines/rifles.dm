@@ -212,6 +212,7 @@
 /obj/item/ammo_magazine/rifle/lmg_d/belt
 	name = "\improper lMG-D ammo buttpack (7.62x39mm)"
 	desc = "A metallic belt pack for the lMG-D which carries a huge amount of ammo inside."
+	icon = 'ntf_modular/icons/obj/items/ammo/machinegun.dmi'
 	icon_state = "rpd_belt"
 	equip_slot_flags = ITEM_SLOT_BELT
 	magazine_flags = MAGAZINE_WORN
@@ -319,10 +320,20 @@
 	icon = 'icons/obj/items/ammo/machinegun.dmi'
 	icon_state_mini = "mag_gpmg"
 	caliber = CALIBER_10x26_CASELESS
-	default_ammo = /datum/ammo/bullet/rifle/som_machinegun //ntf change cause som mg fucks
+	default_ammo = /datum/ammo/bullet/rifle/machinegun
 	w_class = WEIGHT_CLASS_NORMAL
 	max_rounds = 200
 	reload_delay = 3 SECONDS
+
+/obj/item/ammo_magazine/standard_gpmg/big
+	name = "\improper MG-60 GPMG quadruple box magazine (10x26mm)"
+	desc = "A series of 4 belt boxes linked together for the MG-60 general purpose machinegun, incredibly impractical to use undeployed."
+	icon_state = "t60b"
+	w_class = WEIGHT_CLASS_BULKY
+	reload_delay = 8 SECONDS
+	max_rounds = 800
+	scatter_mod = 15
+	wield_delay_mod = 6 SECONDS
 
 //-------------------------------------------------------
 //PR-412L1 HEAVY PULSE RIFLE
@@ -919,7 +930,7 @@
 	name = "\improper L26 box mag (5.56x45mm)"
 	desc = "A 200 round box mag for the L26."
 	caliber = CALIBER_556X45
-	default_ammo = /datum/ammo/bullet/rifle/vsd_mg_main
+	default_ammo = /datum/ammo/bullet/rifle/machinegun
 	icon_state = "l26"
 	icon = 'icons/obj/items/ammo/machinegun.dmi'
 	icon_state_mini = "mag_drum_big_long"

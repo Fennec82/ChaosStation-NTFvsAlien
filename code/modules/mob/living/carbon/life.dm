@@ -10,6 +10,9 @@
 
 	handle_fire() //Check if we're on fire
 
+	if(sexcon)
+		sexcon.process_sexcon(1 SECONDS)
+
 /mob/living/carbon/handle_regular_hud_updates()
 	. = ..()
 	if(.)

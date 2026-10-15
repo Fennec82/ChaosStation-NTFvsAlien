@@ -6,10 +6,8 @@
 
 /obj/item/clothing/suit/modular/xenonauten/light/bikini
 	name = "\improper NTC-B bikini armor"
-	desc = "A NTC-B vest, a set... of extra-light bikini armor? with modular attachments made to work in many enviroments. This one seems to be a bikini variant. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
+	desc = "A NTC-B vest, a set... of light bikini armor? with modular attachments made to work in many enviroments. This one seems to be a bikini variant. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
 	greyscale_config = /datum/greyscale_config/xenonaut/bikini
-	slowdown = SLOWDOWN_ARMOR_VERY_LIGHT
-	soft_armor = list(MELEE = 35, BULLET = 50, LASER = 50, ENERGY = 50, BOMB = 40, BIO = 40, FIRE = 50, ACID = 40)
 	shows_butt = TRUE
 
 /datum/greyscale_config/xenonaut/bulletproof
@@ -34,7 +32,7 @@
 
 /obj/item/clothing/suit/modular/xenonauten/light/bikini/som
 	name = "\improper SOM M-69 Bikini-pattern light armor"
-	desc = "An unusal armor made by the " + FACTION_SOM + ", apparently based on an NTC design. Extra-light bikini armor with modular attachments made to work in many enviroments. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
+	desc = "An unusal armor made by the " + FACTION_SOM + ", apparently based on an NTC design. light bikini armor with modular attachments made to work in many enviroments. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
 	attachments_allowed = list(
 		/obj/item/armor_module/module/better_shoulder_lamp,
 		/obj/item/armor_module/module/valkyrie_autodoc/som,
@@ -104,11 +102,11 @@
 
 /obj/item/clothing/suit/modular/xenonauten/light/bikini/neutral/vsd
 	name = "\improper Crasher MT-B/69 bikini armor"
-	desc = "An unusal armor made by the " + FACTION_VSD + ", apparently based on an NTC design. Extra-light bikini armor with modular attachments made to work in many enviroments. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
+	desc = "An unusal armor made by the " + FACTION_VSD + ", apparently based on an NTC design. light bikini armor with modular attachments made to work in many enviroments. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
 
 /obj/item/clothing/suit/modular/xenonauten/light/bikini/neutral/icc
 	name = "\improper Modelle/69 'Bikini' combat armor"
-	desc = "An unusal armor made by the " + FACTION_ICC + ", apparently based on an NTC design. Extra-light bikini armor with modular attachments made to work in many enviroments. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
+	desc = "An unusal armor made by the " + FACTION_ICC + ", apparently based on an NTC design. light bikini armor with modular attachments made to work in many enviroments. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
 
 /obj/item/clothing/suit/modular/xenonauten/bulletresistant
 	name = "\improper NTC bullet-resistant armor"
@@ -151,7 +149,7 @@
 	desc = "A lightweight set of armor that excels in protecting the wearer against laser and energy attacks thanks to it's reflective plating, how does it work? don't ask."
 	greyscale_config = /datum/greyscale_config/xenonaut/bikini
 
-/obj/item/clothing/suit/modular/rownin/dermal
+/obj/item/clothing/suit/modular/dermal
 	name = "\improper dermal torso patch"
 	desc = "A subdermal layer of reinforcements and small holders that allows for the attachment of modules, without restricting or being visible on the wearer."
 	icon = 'icons/obj/clothing/headwear/hats.dmi'
@@ -202,32 +200,16 @@
 /*		/obj/item/armor_module/module/style/superheavy_armor,*/
 	) // The people want their equalizer dermal armor, they will get their dermal armor
 
-/obj/item/clothing/shoes/dermal
+/obj/item/clothing/shoes/marine/dermal
 	name = "\improper dermal feet pads"
 	desc = "A subdermal layer of reinforcements and modding that strengthens the durability of your tootsies."
 	icon = 'icons/obj/clothing/headwear/hats.dmi'
 	icon_state = "dermal"
 	worn_icon_state = "dermal"
-	armor_protection_flags = FEET
-	cold_protection_flags = FEET
-	heat_protection_flags = FEET
-	inventory_flags = NOQUICKEQUIP|NOSLIPPING
-	min_cold_protection_temperature = SHOE_MIN_COLD_PROTECTION_TEMPERATURE
-	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECTION_TEMPERATURE
-	siemens_coefficient = 0.7
-	soft_armor = list(MELEE = 30, BULLET = 20, LASER = 20, ENERGY = 20, BOMB = 30, BIO = 20, FIRE = 20, ACID = 15)
 
-/obj/item/clothing/gloves/dermal
+/obj/item/clothing/gloves/marine/dermal
 	name = "\improper dermal knuckle guards"
 	desc = "A subdermal layer of reinforcements and modding that strengthens the durability of your fingies."
 	icon = 'icons/obj/clothing/headwear/hats.dmi'
 	icon_state = "dermal"
 	worn_icon_state = "dermal"
-	siemens_coefficient = 0.6
-	permeability_coefficient = 0.05
-	cold_protection_flags = HANDS
-	heat_protection_flags = HANDS
-	min_cold_protection_temperature = GLOVES_MIN_COLD_PROTECTION_TEMPERATURE
-	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
-	armor_protection_flags = HANDS
-	soft_armor = list(MELEE = 30, BULLET = 20, LASER = 20, ENERGY = 20, BOMB = 30, BIO = 20, FIRE = 20, ACID = 15)

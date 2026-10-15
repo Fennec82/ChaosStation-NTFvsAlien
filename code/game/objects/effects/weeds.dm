@@ -5,7 +5,7 @@
 
 //Stat defines
 #define RESTING_BUFF 1.2
-#define SLOWDOWN_NORMAL 0.5
+#define SLOWDOWN_NORMAL 0
 #define SLOWDOWN_RESTING 0
 #define SLOWDOWN_STICKY 2
 

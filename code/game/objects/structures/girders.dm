@@ -120,7 +120,7 @@
 	switch(girder_state)
 		if(GIRDER_BUILDING1_SECURED, GIRDER_BUILDING2_SECURED)
 			var/old_girder_state = girder_state
-			var/work_time = 3 SECONDS
+			var/work_time = 2 SECONDS
 			if(reinforcement == GIRDER_REINF_PLASTEEL)
 				work_time += 3 SECONDS
 			if(!do_after(user, work_time, TRUE, src, BUSY_ICON_BUILD))
@@ -160,7 +160,7 @@
 				return FALSE
 			playsound(loc, 'sound/items/ratchet.ogg', 25, 1)
 			to_chat(user, span_notice("Now securing the girder"))
-			if(!do_after(user, 4 SECONDS, TRUE, src, BUSY_ICON_BUILD))
+			if(!do_after(user, 1 SECONDS, TRUE, src, BUSY_ICON_BUILD))
 				return TRUE
 			if(anchored || girder_state != GIRDER_NORMAL)
 				return TRUE
@@ -180,7 +180,7 @@
 				return FALSE
 			playsound(loc, 'sound/items/crowbar.ogg', 25, 1)
 			to_chat(user, span_notice("Now dislodging the girder..."))
-			if(!do_after(user, 4 SECONDS, TRUE, src, BUSY_ICON_BUILD))
+			if(!do_after(user, 3 SECONDS, TRUE, src, BUSY_ICON_BUILD))
 				return TRUE
 			if(!anchored || girder_state != GIRDER_NORMAL)
 				return TRUE
@@ -191,7 +191,7 @@
 			return TRUE
 		if(GIRDER_BUILDING1_LOOSE, GIRDER_BUILDING2_LOOSE)
 			var/old_girder_state = girder_state
-			var/work_time = 3 SECONDS
+			var/work_time = 1 SECONDS
 			if(reinforcement == GIRDER_REINF_PLASTEEL)
 				work_time += 3 SECONDS
 			if(!do_after(user, work_time, TRUE, src, BUSY_ICON_BUILD))
@@ -215,7 +215,7 @@
 				return FALSE
 			playsound(loc, 'sound/items/screwdriver.ogg', 25, 1)
 			to_chat(user, span_notice("Now dissassembling the girder"))
-			if(!do_after(user, 4 SECONDS, TRUE, src, BUSY_ICON_BUILD))
+			if(!do_after(user, 2 SECONDS, TRUE, src, BUSY_ICON_BUILD))
 				return TRUE
 			if(anchored || girder_state != GIRDER_NORMAL)
 				return TRUE
@@ -226,7 +226,7 @@
 		if(GIRDER_BUILDING1_LOOSE, GIRDER_BUILDING2_LOOSE)
 			to_chat(user, span_notice("Now securing support struts"))
 			var/old_girder_state = girder_state
-			var/work_time = 3 SECONDS
+			var/work_time = 1 SECONDS
 			if(reinforcement == GIRDER_REINF_PLASTEEL)
 				work_time += 3 SECONDS
 			if(!do_after(user, work_time, TRUE, src, BUSY_ICON_BUILD))
@@ -240,7 +240,7 @@
 		if(GIRDER_BUILDING1_SECURED, GIRDER_BUILDING2_SECURED)
 			to_chat(user, span_notice("Now unsecuring support struts"))
 			var/old_girder_state = girder_state
-			var/work_time = 3 SECONDS
+			var/work_time = 1 SECONDS
 			if(reinforcement == GIRDER_REINF_PLASTEEL)
 				work_time += 3 SECONDS
 			if(!do_after(user, work_time, TRUE, src, BUSY_ICON_BUILD))
@@ -268,11 +268,14 @@
 			return TRUE
 		if(GIRDER_BUILDING1_WELDED)
 			var/old_girder_state = girder_state
-			var/work_time = 3 SECONDS
+			var/work_time = 1 SECONDS
 			if(reinforcement == GIRDER_REINF_PLASTEEL)
 				work_time += 3 SECONDS
+			else
+				change_state(GIRDER_WALL_BUILT, user) //thats it for normal wall
+				return TRUE
 			to_chat(user, span_notice("Now cutting the support struts..."))
-			if(!do_after(user, 4 SECONDS, TRUE, src, BUSY_ICON_BUILD))
+			if(!do_after(user, work_time, TRUE, src, BUSY_ICON_BUILD))
 				return
 			if(girder_state != old_girder_state)
 				return TRUE

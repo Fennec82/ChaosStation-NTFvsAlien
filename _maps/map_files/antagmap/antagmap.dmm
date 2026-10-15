@@ -1414,6 +1414,7 @@
 "eL" = (
 /obj/structure/cable,
 /obj/machinery/power/apc,
+/obj/structure/largecrate/supply/vehicle/truck,
 /turf/open/floor/mainship/black/corner,
 /area/antag_ship/pmc_ntf/center/armory)
 "eM" = (
@@ -2886,6 +2887,7 @@
 /obj/machinery/power/apc{
 	dir = 8
 	},
+/obj/structure/largecrate/supply/vehicle/truck,
 /turf/open/floor/mainship/mono,
 /area/antag_ship/icc/hangar/west)
 "jw" = (
@@ -3947,6 +3949,10 @@
 	},
 /turf/open/floor/iron/dark,
 /area/antag_ship/vsd/port)
+"mQ" = (
+/obj/structure/largecrate/supply/vehicle/truck,
+/turf/open/floor/mainship/mono,
+/area/antag_ship/icc/hangar/west)
 "mR" = (
 /obj/structure/window/framed/mainship/gray,
 /turf/open/floor/plating,
@@ -4208,6 +4214,10 @@
 /obj/item/storage/box/monkeycubes,
 /turf/open/floor/plating/ground/desertdam/asphalt/cement_sunbleached,
 /area/antag_ship/clf_base/lounge)
+"nH" = (
+/obj/structure/largecrate/supply/vehicle/truck,
+/turf/open/floor/mainship/mono,
+/area/antag_ship/som/hangar)
 "nI" = (
 /obj/machinery/chem_dispenser,
 /obj/item/storage/box/pillbottles{
@@ -15837,6 +15847,10 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/antag_ship/icc/warehouse)
+"YB" = (
+/obj/structure/largecrate/supply/vehicle/truck,
+/turf/open/floor/plating/ground/dirt,
+/area/antag_ship/clf_base/hallways/inside)
 "YC" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
 /turf/open/floor/mainship/mono,
@@ -15972,6 +15986,7 @@
 /obj/effect/turf_decal/warning_stripes/thin{
 	dir = 1
 	},
+/obj/structure/largecrate/supply/vehicle/truck,
 /turf/open/floor/iron/dark/herringbone,
 /area/antag_ship/vsd/port)
 "Za" = (
@@ -19983,7 +19998,7 @@ wW
 Wq
 Wq
 tM
-ad
+nH
 ad
 qj
 ad
@@ -24066,8 +24081,8 @@ Mb
 Mb
 Mb
 Mb
-Mb
-Mb
+mQ
+mQ
 la
 zb
 zb
@@ -29677,7 +29692,7 @@ fb
 UR
 ma
 GN
-GN
+YB
 Ko
 Ko
 sx

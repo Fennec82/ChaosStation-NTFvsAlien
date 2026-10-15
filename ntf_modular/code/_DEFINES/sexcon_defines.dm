@@ -11,6 +11,11 @@
 ///every time we receive sex action
 #define COMSIG_RECEIVED_SEX "comsig_received_sex"
 
+/// Runtime genital visibility modes used by the mob interaction panel.
+#define SEXCON_GENITAL_VISIBILITY_NEVER "never"
+#define SEXCON_GENITAL_VISIBILITY_CLOTHED "clothed"
+#define SEXCON_GENITAL_VISIBILITY_ALWAYS "always"
+
 GLOBAL_LIST_INIT(sex_actions, build_sex_actions())
 
 /// Returns whether a type is an abstract type.

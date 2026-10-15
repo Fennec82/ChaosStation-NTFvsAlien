@@ -72,11 +72,11 @@
 #define MECHA_AMMO_GRENADE "Frag grenade"
 #define MECHA_AMMO_FLAMER "Napalm"
 
-#define EXOSUIT_AMMO_LMG "Small rifle bullet"
-#define EXOSUIT_AMMO_SMG "Small pistol bullet"
-#define EXOSUIT_AMMO_GRENADE "Low-velocity grenade"
-#define EXOSUIT_AMMO_BATTLERIFLE "Battle rifle bullet"
-#define EXOSUIT_AMMO_MINIGUN "Small pistol bullet"
+#define EXOSUIT_AMMO_LMG "armor-piercing heavy rifle bullet"
+#define EXOSUIT_AMMO_SMG "armor-piercing submachinegun bullet"
+#define EXOSUIT_AMMO_GRENADE "canister grenade"
+#define EXOSUIT_AMMO_BATTLERIFLE "Heavy marksman bullet"
+#define EXOSUIT_AMMO_MINIGUN "minigun bullet"
 
 /// Module is compatible with Ripley Exosuit models
 #define EXOSUIT_MODULE_RIPLEY (1<<0)

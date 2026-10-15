@@ -41,6 +41,12 @@
 		"icon_state": "turtleneck"
 		}
 	],
+	"turtleneck_f":[
+		{
+		"type": "hyperscale",
+		"icon_state": "turtleneck_f"
+		}
+	],
 	"turtleneck_smooth":[
 		{
 		"type": "hyperscale",
@@ -53,6 +59,13 @@
 		"icon_state": "turtleneck_sleeveless"
 		}
 	],
+	"turtleneck_f_sleeveless":[
+		{
+		"type": "hyperscale",
+		"icon_state": "turtleneck_f_sleeveless"
+		}
+	],
+
 	"croptop_sleeves":[
 		{
 		"type": "hyperscale",
@@ -77,10 +90,22 @@
 		"icon_state": "leotard_turtleneck"
 		}
 	],
+	"leotard_f_turtleneck":[
+		{
+		"type": "hyperscale",
+		"icon_state": "leotard_f_turtleneck"
+		}
+	],
 	"leotard_turtleneck_sleeveless":[
 		{
 		"type": "hyperscale",
 		"icon_state": "leotard_turtleneck_sleeveless"
+		}
+	],
+	"leotard_turtleneck_f_sleeveless":[
+		{
+		"type": "hyperscale",
+		"icon_state": "leotard_turtleneck_f_sleeveless"
 		}
 	],
 	"buttondown":[

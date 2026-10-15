@@ -23,7 +23,7 @@
 /obj/item/clothing/mask/facehugger/latching/equipped(mob/living/user, slot)
 	. = ..()
 	if(slot == SLOT_UNDERWEAR || slot == SLOT_SHIRT || slot == SLOT_WEAR_MASK)
-		if(user.gender == MALE && target_hole == HOLE_VAGINA)
+		if(!user.sexcon.can_use_vagina() && target_hole == HOLE_VAGINA)
 			target_hole = HOLE_ASS //i aint writing fem hugger on male messages for allat plus their descs have cock and balls
 		wearer = user
 		COOLDOWN_START(src, implant_cooldown, special_effect_delay/2)
@@ -44,25 +44,47 @@
 		add_filter("base_color", -10, color_matrix_filter(filter_color))
 
 /obj/item/clothing/mask/facehugger/latching/proc/special_effect()
+	var/flags = wearer?.client.prefs.sex_pref_flags
 	if(can_implant_embryo(wearer) && !sterile)
-		wearer.visible_message(span_lovebold("[src] roughly slams it's [cock_flavor] into [wearer]'s [target_hole], a round bulge visibly sliding throug as it inserts an egg into [wearer]!"),
-		span_lovebold("[src] roughly thrusts it's [cock_flavor] into your [target_hole], a round bulge visibly sliding through as it inserts an egg into you!"),
-		span_notice("You hear squelching."), vision_distance = 5)
+		if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
+			wearer.visible_message(span_lovebold("[src] roughly slams it's [cock_flavor] into [wearer]'s [target_hole], a round bulge visibly sliding through as it inserts something into [wearer]!"),
+			span_lovebold("[src] roughly thrusts it's [cock_flavor] into your [target_hole], a round bulge visibly sliding through as it inserts something into you!"),
+			span_notice("You hear squelching."), vision_distance = 1)
+		else
+			wearer.visible_message(span_danger("[src] implants [wearer] with something!"),
+			span_danger("[src] implants you with something!"),
+			span_notice("You hear something."), vision_distance = 1)
 		if(source && issamexenohive(source))
 			implant_embryo(wearer, target_hole, 1, source = source)
 		else
 			implant_embryo(wearer, target_hole, 1, force_xenohive = hivenumber)
 	else
-		wearer.visible_message(span_lovebold("[src]'s [cock_flavor] cums thick globs of acidic cum into [wearer]'s [target_hole]!"),
-		span_lovebold("[src]'s [cock_flavor] pumps thick globs of acidic cum into your [target_hole]!"),
-		span_notice("You hear spurting."), vision_distance = 5)
+		if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
+			wearer.visible_message(span_lovebold("[src]'s [cock_flavor] cums thick globs of acidic cum into [wearer]'s [target_hole]!"),
+			span_lovebold("[src]'s [cock_flavor] pumps thick globs of acidic cum into your [target_hole]!"),
+			span_notice("You hear spurting."), vision_distance = 1)
+			wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno, 10)
+		else
+			wearer.visible_message(span_danger("[src] injects [wearer] with a corrosive substance!"),
+			span_danger("[src] injects you with a corrosive substance! It burns!"),
+			span_notice("You hear injecting."), vision_distance = 1)
+			wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno/sfw, 10)
+	if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
 		wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno, 10)
-	wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno, 10)
+	else
+		wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno/sfw, 10)
 	if(!harmless)
-		wearer.reagents.add_reagent(/datum/reagent/toxin/acid/xeno_cum, 1)
+		if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
+			wearer.reagents.add_reagent(/datum/reagent/toxin/acid/xeno_cum, 1)
+		else
+			wearer.reagents.add_reagent(/datum/reagent/toxin/acid/xeno_cum, 1)
 
 /obj/item/clothing/mask/facehugger/latching/proc/thrust_effect()
-	wearer.sexcon.adjust_arousal(5)
+	var/flags = wearer?.client.prefs.sex_pref_flags
+	if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
+		wearer.sexcon.adjust_arousal(5)
+	else
+		wearer.adjustOxyLoss(1)
 
 //changed so we dont honk mimi when idling
 /obj/item/clothing/mask/facehugger/latching/go_idle(hybernate = FALSE, no_activate = FALSE)
@@ -109,10 +131,12 @@
 		special_effect()
 		playsound(src, 'ntf_modular/sound/misc/mat/endin.ogg', 50, TRUE, 7, ignore_walls = FALSE)
 	else
-		wearer.visible_message(span_loveextreme("[src] roughly thrusts it's [cock_flavor] into [wearer]'s [target_hole]!"),
-		span_loveextreme("[src] roughly thrusts it's [cock_flavor] into your [target_hole]!"),
-		span_notice("You hear squelching."), vision_distance = 5)
-		playsound(wearer, 'ntf_modular/sound/misc/mat/segso.ogg', 50, TRUE, 5, ignore_walls = FALSE)
+		var/flags = wearer?.client.prefs.sex_pref_flags
+		if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
+			wearer.visible_message(span_loveextreme("[src] roughly thrusts it's [cock_flavor] into [wearer]'s [target_hole]!"),
+			span_loveextreme("[src] roughly thrusts it's [cock_flavor] into your [target_hole]!"),
+			span_notice("You hear squelching."), vision_distance = 1)
+			playsound(wearer, 'ntf_modular/sound/misc/mat/segso.ogg', 50, TRUE, 5, ignore_walls = FALSE)
 		thrust_effect()
 
 /obj/item/clothing/mask/facehugger/latching/dropped(mob/user)
@@ -132,18 +156,34 @@
 
 /obj/item/clothing/mask/facehugger/latching/clawer/special_effect()
 	wearer.emote("scream")
-	wearer.visible_message(span_danger("[src] goes in a fucking-frenzy into [wearer]'s [target_hole] with it's [cock_flavor] while cumming!"),span_danger("[src] goes on a fucking-frenzy and shreds your [target_hole] sloppily with it's cumming [cock_flavor]!"), vision_distance = 5)
+	var/flags = wearer?.client.prefs.sex_pref_flags
+	if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
+		wearer.visible_message(span_danger("[src] goes in a fucking-frenzy into [wearer]'s [target_hole] with it's [cock_flavor] while cumming!"),span_danger("[src] goes on a fucking-frenzy and shreds your [target_hole] sloppily with it's cumming [cock_flavor]!"), vision_distance = 1)
+	else
+		wearer.visible_message(span_danger("[src] goes in a frenzy!"),span_danger("[src] goes on a frenzy!"), vision_distance = 1)
 	wearer.do_attack_animation(wearer, ATTACK_EFFECT_REDSLASH)
 	wearer.do_attack_animation(wearer, ATTACK_EFFECT_CLAW)
-	wearer.sexcon.adjust_arousal(5)
+	if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
+		wearer.sexcon.adjust_arousal(5)
+	else
+		wearer.adjustOxyLoss(1)
 	wearer.apply_damage(CARRIER_SLASH_HUGGER_DAMAGE*2, BRUTE, BODY_ZONE_PRECISE_GROIN, MELEE)
-	wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno, 7)
-	wearer.reagents.add_reagent(/datum/reagent/toxin/acid/xeno_cum, 3)
+	if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
+		wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno, 7)
+		wearer.reagents.add_reagent(/datum/reagent/toxin/acid/xeno_cum, 3)
+	else
+		wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno/sfw, 7)
+		wearer.reagents.add_reagent(/datum/reagent/toxin/acid/xeno_cum/sfw, 3)
 
 /obj/item/clothing/mask/facehugger/latching/clawer/thrust_effect()
-	wearer.sexcon.adjust_arousal(5)
+	var/flags = wearer?.client.prefs.sex_pref_flags
+	if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
+		wearer.sexcon.adjust_arousal(5)
+	else
+		wearer.adjustOxyLoss(1)
 	if(prob(20))
-		wearer.visible_message(span_danger("[src] roughly fucks [wearer] with a [cock_flavor], damaging [wearer.p_their()] [target_hole]!"),span_danger("[src] churns your [target_hole] painfully with it's [cock_flavor]!"), vision_distance = 5)
+		if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
+			wearer.visible_message(span_danger("[src] roughly fucks [wearer] with a [cock_flavor], damaging [wearer.p_their()] [target_hole]!"),span_danger("[src] churns your [target_hole] painfully with it's [cock_flavor]!"), vision_distance = 1)
 		wearer.apply_damage(CARRIER_SLASH_HUGGER_DAMAGE/2, BRUTE, BODY_ZONE_PRECISE_GROIN, MELEE)
 	if(prob(20))
 		var/the_damage = CARRIER_SLASH_HUGGER_DAMAGE
@@ -160,8 +200,10 @@
 			affecting = BODY_ZONE_CHEST //Gotta have a torso?!
 		the_damage = wearer.check_shields(COMBAT_MELEE_ATTACK, the_damage, MELEE, shield_flags = SHIELD_FLAG_XENOMORPH)
 		wearer.apply_damage(the_damage, BRUTE, affecting, MELEE) //Crap base damage after armour...
-		wearer.visible_message(span_danger("[src] frantically claws at [wearer] while fucking [wearer.p_their()] [target_hole]!"),span_danger("[src] frantically fucks your [target_hole] and claws you!"), vision_distance = 5)
-
+		if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
+			wearer.visible_message(span_danger("[src] frantically claws [wearer] while fucking [wearer.p_their()] [target_hole]!"),span_danger("[src] frantically fucks your [target_hole] and claws you!"), vision_distance = 1)
+		else
+			wearer.visible_message(span_danger("[src] frantically claws [wearer]!"),span_danger("[src] frantically claws you!"), vision_distance = 1)
 
 //chemical base -----------------------------
 /obj/item/clothing/mask/facehugger/latching/chemical
@@ -179,27 +221,41 @@
 		/datum/reagent/toxin/xeno_ozelomelyn = /datum/effect_system/smoke_spread/xeno/ozelomelyn,
 		/datum/reagent/toxin/xeno_aphrotoxin = /datum/effect_system/smoke_spread/xeno/aphrotoxin,
 		/datum/reagent/toxin/acid/potent_xenocum = /datum/effect_system/smoke_spread/xeno/acid/light,
+		/datum/reagent/toxin/acid/potent_xenocum/sfw = /datum/effect_system/smoke_spread/xeno/acid/light,
 	)
 
 
 /obj/item/clothing/mask/facehugger/latching/chemical/special_effect()
 	wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno, 10)
-	wearer.visible_message(span_loveextreme("[src] slams it's [cock_flavor] ballsdeep into [wearer]'s [target_hole] and it's balls start to throb strongly, pumping thick globs of something inside!"),span_loveextreme("[src] slams it's [cock_flavor] ballsdeep into your [target_hole] and it's balls start to throb strongly, pumping thick globs of something inside!"), vision_distance = 5)
-	wearer.visible_message(span_lovebold("[injected_chemical_type.name] gas explodes out of [wearer]'s [target_hole], around [src]'s [cock_flavor]!"),span_lovebold("[injected_chemical_type.name] gas explodes out of your [target_hole], around [src]'s [cock_flavor]!"), vision_distance = 5)
+	var/flags = wearer?.client.prefs.sex_pref_flags
+	if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
+		wearer.visible_message(span_loveextreme("[src] slams it's [cock_flavor] ballsdeep into [wearer]'s [target_hole] and it's balls start to throb strongly, pumping thick globs of something inside!"),span_loveextreme("[src] slams it's [cock_flavor] ballsdeep into your [target_hole] and it's balls start to throb strongly, pumping thick globs of something inside!"), vision_distance = 1)
+		wearer.visible_message(span_lovebold("[injected_chemical_type.name] gas explodes out of [wearer]'s [target_hole], around [src]'s [cock_flavor]!"),span_lovebold("[injected_chemical_type.name] gas explodes out of your [target_hole], around [src]'s [cock_flavor]!"), vision_distance = 1)
+	else
+		wearer.visible_message(span_danger("[injected_chemical_type.name] gas vents out of [src]!"),span_danger("[injected_chemical_type.name] gas vents out of [src]!"), vision_distance = 1)
 	var/smoke_choice = hugger_smoke_list[injected_chemical_type]
-	var/datum/effect_system/smoke_spread/smoke = new smoke_choice(get_turf(wearer))
-	smoke.set_up(1, get_turf(wearer), 2)
-	playsound(src, 'sound/effects/airhiss.ogg', 25)
-	smoke.start()
+	if(smoke_choice)
+		var/datum/effect_system/smoke_spread/smoke = new smoke_choice(get_turf(wearer))
+		smoke.set_up(1, get_turf(wearer), 2)
+		playsound(src, 'sound/effects/airhiss.ogg', 25)
+		smoke.start()
 	if(wearer.reagents.get_reagent_amount(injected_chemical_type) < 50)
 		wearer.reagents.add_reagent(injected_chemical_type, amount_injected, no_overdose = TRUE)
 
 /obj/item/clothing/mask/facehugger/latching/chemical/thrust_effect()
+	var/flags = wearer?.client.prefs.sex_pref_flags
 	if(prob(5))
-		wearer.visible_message(span_love("[src] slams it's [cock_flavor] ballsdeep into [wearer]'s [target_hole]! Leaking slightly..!"),span_love("[src] slams it's [cock_flavor] ballsdeep into your [target_hole]! Leaking slightly..!"), vision_distance = 5)
+		if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
+			wearer.visible_message(span_love("[src] slams it's [cock_flavor] ballsdeep into [wearer]'s [target_hole]! Leaking slightly..!"),span_love("[src] slams it's [cock_flavor] ballsdeep into your [target_hole]! Leaking slightly..!"), vision_distance = 1)
+			wearer.sexcon.adjust_arousal(5)
+		else
+			wearer.visible_message(span_danger("[src] injects [wearer] with something!"),span_danger("[src] injects you with something!"), vision_distance = 1)
+			wearer.adjustOxyLoss(1)
 		wearer.reagents.add_reagent(injected_chemical_type, 1)
+	if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
 		wearer.sexcon.adjust_arousal(5)
-	wearer.sexcon.adjust_arousal(5)
+	else
+		wearer.adjustOxyLoss(1)
 
 //aphrotox
 /obj/item/clothing/mask/facehugger/latching/chemical/aphrotox
@@ -210,11 +266,19 @@
 	filter_color = COLOR_PINK
 
 /obj/item/clothing/mask/facehugger/latching/chemical/aphrotox/thrust_effect()
+	var/flags = wearer?.client.prefs.sex_pref_flags
 	if(prob(5))
-		wearer.visible_message(span_love("[src] slams it's [cock_flavor] ballsdeep into [wearer] and seemingly writhes it around [wearer.p_their()] [target_hole]! Rubbing pheromones inside..."),span_love("[src] slams it's [cock_flavor] ballsdeep into your [target_hole] writhes it around! You feel hotter..."), vision_distance = 5)
+		if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
+			wearer.visible_message(span_love("[src] slams it's [cock_flavor] ballsdeep into [wearer] and seemingly writhes it around [wearer.p_their()] [target_hole]! Rubbing pheromones inside..."),span_love("[src] slams it's [cock_flavor] ballsdeep into your [target_hole] writhes it around! You feel hotter..."), vision_distance = 1)
+			wearer.sexcon.adjust_arousal(5)
+		else
+			wearer.visible_message(span_danger("[src] injects [wearer] with something!"),span_danger("[src] injects you with something!"), vision_distance = 1)
+			wearer.adjustOxyLoss(1)
 		wearer.reagents.add_reagent(injected_chemical_type, 1)
+	if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
 		wearer.sexcon.adjust_arousal(5)
-	wearer.sexcon.adjust_arousal(5)
+	else
+		wearer.adjustOxyLoss(1)
 
 /obj/item/clothing/mask/facehugger/latching/chemical/ozelomelyn
 	name = "evolved ozelomelyn facehugger"
@@ -251,10 +315,16 @@
 	amount_injected = 5
 
 /obj/item/clothing/mask/facehugger/latching/chemical/acid/special_effect()
-	wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno, 10)
-	wearer.emote("scream")
-	wearer.visible_message(span_loveextreme("[src] slams it's [cock_flavor] ballsdeep into [wearer]'s [target_hole] and it's balls start to throb strongly, pumping thick globs of something inside!"),span_loveextreme("[src] slams it's [cock_flavor] ballsdeep into your [target_hole] and it's balls start to throb strongly, pumping thick globs of something inside!"), vision_distance = 5)
-	wearer.visible_message(span_danger("Acid spurts from [wearer]'s [target_hole] around [src]'s [cock_flavor]!!!"),span_danger("Acid spurts from your [target_hole] around [src]'s [cock_flavor]!!!"), vision_distance = 5)
+	var/flags = wearer?.client.prefs.sex_pref_flags
+	if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
+		injected_chemical_type = /datum/reagent/toxin/acid/potent_xenocum
+		wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno, 10)
+		wearer.visible_message(span_loveextreme("[src] slams it's [cock_flavor] ballsdeep into [wearer]'s [target_hole] and it's balls start to throb strongly, pumping thick globs of something inside!"),span_loveextreme("[src] slams it's [cock_flavor] ballsdeep into your [target_hole] and it's balls start to throb strongly, pumping thick globs of something inside!"), vision_distance = 1)
+		wearer.visible_message(span_danger("Acid spurts from [wearer]'s [target_hole] around [src]'s [cock_flavor]!!!"),span_danger("Acid spurts from your [target_hole] around [src]'s [cock_flavor]!!!"), vision_distance = 1)
+	else
+		injected_chemical_type = /datum/reagent/toxin/acid/potent_xenocum/sfw
+		wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno/sfw, 10)
+		wearer.visible_message(span_danger("acid explodes out of [src]!"), vision_distance = 1)
 	playsound(loc, 'sound/bullets/acid_impact1.ogg', 50, 1)
 	for(var/turf/acid_tile AS in RANGE_TURFS(1, loc))
 		xenomorph_spray(acid_tile, 2 SECONDS, 5, null, TRUE)
@@ -272,13 +342,22 @@
 	proximity_time = 0.5 SECONDS
 	special_effect_delay = 20 SECONDS
 	strip_delay = 6 SECONDS
+	injected_chemical_type = /datum/reagent/consumable/nutriment/cum/xeno/resin
 
 /obj/item/clothing/mask/facehugger/latching/chemical/resin/special_effect()
-	wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno/resin, 5)
-	wearer.reagents.add_reagent(/datum/reagent/toxin/acid/xeno_cum, 1)
+	var/flags = wearer?.client.prefs.sex_pref_flags
 	wearer.emote("scream")
-	wearer.visible_message(span_lovebold("[src] slams it's [cock_flavor] ballsdeep into [wearer]'s [target_hole] and it's balls start to throb strongly, pumping thick globs of something inside!"),span_lovebold("[src] slams it's [cock_flavor] ballsdeep into your [target_hole] and it's balls start to throb strongly, pumping thick globs of something inside!"), vision_distance = 5)
-	wearer.visible_message(span_danger("Sticky resin spurts from [wearer]'s [target_hole] around [src]'s [cock_flavor]!"),span_danger("Sticky resin spurts from your [target_hole] around [src]'s [cock_flavor]!"), vision_distance = 5)
+	if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
+		injected_chemical_type = /datum/reagent/consumable/nutriment/cum/xeno/resin
+		wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno/resin, 5)
+		wearer.reagents.add_reagent(/datum/reagent/toxin/acid/xeno_cum, 1)
+		wearer.visible_message(span_lovebold("[src] slams it's [cock_flavor] ballsdeep into [wearer]'s [target_hole] and it's balls start to throb strongly, pumping thick globs of something inside!"),span_lovebold("[src] slams it's [cock_flavor] ballsdeep into your [target_hole] and it's balls start to throb strongly, pumping thick globs of something inside!"), vision_distance = 1)
+		wearer.visible_message(span_danger("Sticky resin spurts from [wearer]'s [target_hole] around [src]'s [cock_flavor]!"),span_danger("Sticky resin spurts from your [target_hole] around [src]'s [cock_flavor]!"), vision_distance = 1)
+	else
+		injected_chemical_type = /datum/reagent/consumable/nutriment/cum/xeno/resin/sfw
+		wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno/resin/sfw, 5)
+		wearer.reagents.add_reagent(/datum/reagent/toxin/acid/xeno_cum/sfw, 1)
+		wearer.visible_message(span_danger("resin explodes out of [src]!"),span_danger("resin explodes out of [src]!"), vision_distance = 1)
 	playsound(loc, 'sound/bullets/acid_impact1.ogg', 50, 1)
 	new /obj/alien/resin/sticky(get_turf(wearer), hivenumber) //no area effect but non thin sticky
 	wearer.adjust_stagger(3 SECONDS)
@@ -287,11 +366,20 @@
 		wearer.reagents.add_reagent(injected_chemical_type, amount_injected, no_overdose = TRUE)
 
 /obj/item/clothing/mask/facehugger/latching/chemical/resin/thrust_effect()
+	var/flags = wearer?.client.prefs.sex_pref_flags
 	if(prob(5))
-		wearer.visible_message(span_love("[src] slams it's [cock_flavor] ballsdeep into [wearer] and gets stuck in the resin filled [target_hole] for a moment! Leaking more resin inside..."),span_love("[src] slams it's [cock_flavor] ballsdeep into your [target_hole] and seems to get stuck in the resin packed hole for a moment! Leaking more resin inside..."), vision_distance = 5)
-		wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno/resin, 2)
+		if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
+			wearer.visible_message(span_love("[src] slams it's [cock_flavor] ballsdeep into [wearer] and gets stuck in the resin filled [target_hole] for a moment! Leaking more resin inside..."),span_love("[src] slams it's [cock_flavor] ballsdeep into your [target_hole] and seems to get stuck in the resin packed hole for a moment! Leaking more resin inside..."), vision_distance = 1)
+			wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno/resin, 2)
+			wearer.sexcon.adjust_arousal(5)
+		else
+			wearer.visible_message(span_danger("[src] covers [wearer] in resin!"),span_danger("[src] covers you in resin!"), vision_distance = 1)
+			wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno/resin/sfw, 2)
+			wearer.adjustOxyLoss(1)
+	if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
 		wearer.sexcon.adjust_arousal(5)
-	wearer.sexcon.adjust_arousal(5)
+	else
+		wearer.adjustOxyLoss(1)
 
 
 //lets change eggs to have a new state of maturity
@@ -319,6 +407,7 @@ GLOBAL_LIST_INIT(hugger_to_latching, list(
 		/obj/item/clothing/mask/facehugger/combat/chem_injector/aphrotoxin = /obj/item/clothing/mask/facehugger/latching/chemical/aphrotox,
 		/obj/item/clothing/mask/facehugger/combat/acid = /obj/item/clothing/mask/facehugger/latching/chemical/acid,
 		/obj/item/clothing/mask/facehugger/combat/resin = /obj/item/clothing/mask/facehugger/latching/chemical/resin,
+		/obj/item/clothing/mask/facehugger/combat/chem_injector/tricordrazine = /obj/item/clothing/mask/facehugger/latching/chemical/tricordrazine,
 		))
 
 /datum/action/ability/xeno_action/lay_egg/alternate_action_activate()
@@ -351,10 +440,15 @@ GLOBAL_LIST_INIT(hugger_to_latching, list(
 	special_effect_delay = 30 SECONDS
 
 /obj/item/clothing/mask/facehugger/latching/friendly/special_effect()
-	wearer.visible_message(span_lovebold("[src]'s [cock_flavor] cums thick globs of acidic cum into [wearer]'s [target_hole]!"),
-	span_lovebold("[src]'s [cock_flavor] pumps thick globs of acidic cum into your [target_hole]!"),
-	span_notice("You hear spurting."), vision_distance = 5)
-	wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno, 10)
+	var/flags = wearer?.client.prefs.sex_pref_flags
+	if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
+		wearer.visible_message(span_lovebold("[src]'s [cock_flavor] cums thick globs of acidic cum into [wearer]'s [target_hole]!"),
+		span_lovebold("[src]'s [cock_flavor] pumps thick globs of acidic cum into your [target_hole]!"),
+		span_notice("You hear spurting."), vision_distance = 1)
+		wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno, 10)
+	else
+		//why are you here
+		reset_attach_status()
 
 //immortal
 /obj/item/clothing/mask/facehugger/latching/friendly/check_lifecycle()
@@ -424,12 +518,16 @@ GLOBAL_LIST_INIT(hugger_to_latching, list(
 	if(!wearer)
 		reset_attach_status()
 		return
+	var/flags = wearer?.client.prefs.sex_pref_flags
+	if(wearer.client && !(flags & SEXPREF_FACEHUGGER_LEWD))
+		visible_message(span_warning("[src] wonders what the hell you want from it with your prefs disabled."), vision_distance = 1)
+		reset_attach_status()
 	if(!producing_reagent && reagents.total_volume < 2)
-		visible_message(span_warning("[src]'s [cock_flavor] is semi-hard and the balls are empty, they can't perform without a chemical introduced to them."), vision_distance = 5)
+		visible_message(span_warning("[src]'s [cock_flavor] is semi-hard and the balls are empty, they can't perform without a chemical introduced to them."), vision_distance = 1)
 		reset_attach_status()
 		return
 	else if(reagents.total_volume < 2)
-		visible_message(span_love("[src]'s [cock_flavor] pops out of [wearer]'s [target_hole] as the balls are finally empty and he is satisfied."), vision_distance = 5)
+		visible_message(span_love("[src]'s [cock_flavor] pops out of [wearer]'s [target_hole] as the balls are finally empty and he is satisfied."), vision_distance = 1)
 		reset_attach_status()
 		return
 	. = ..()
@@ -460,8 +558,8 @@ GLOBAL_LIST_INIT(hugger_to_latching, list(
 
 /obj/item/clothing/mask/facehugger/latching/chemical/medical/special_effect()
 	wearer.reagents.add_reagent(/datum/reagent/consumable/nutriment/cum/xeno, 5)
-	wearer.visible_message(span_loveextreme("[src] slams it's [cock_flavor] ballsdeep into [wearer]'s [target_hole] and it's balls start to throb strongly, pumping thick globs of something inside!"),span_loveextreme("[src] slams it's [cock_flavor] ballsdeep into your [target_hole] and it's balls start to throb strongly, pumping thick globs of something inside!"), vision_distance = 5)
-	wearer.visible_message(span_lovebold("[initial(producing_reagent.name)] gas explodes out of [wearer]'s [target_hole], around [src]'s [cock_flavor]!"),span_lovebold("[initial(producing_reagent.name)] gas explodes out of your [target_hole], around [src]'s [cock_flavor]!"), vision_distance = 5)
+	wearer.visible_message(span_loveextreme("[src] slams it's [cock_flavor] ballsdeep into [wearer]'s [target_hole] and it's balls start to throb strongly, pumping thick globs of something inside!"),span_loveextreme("[src] slams it's [cock_flavor] ballsdeep into your [target_hole] and it's balls start to throb strongly, pumping thick globs of something inside!"), vision_distance = 1)
+	wearer.visible_message(span_lovebold("[initial(producing_reagent.name)] gas explodes out of [wearer]'s [target_hole], around [src]'s [cock_flavor]!"),span_lovebold("[initial(producing_reagent.name)] gas explodes out of your [target_hole], around [src]'s [cock_flavor]!"), vision_distance = 1)
 	var/datum/effect_system/smoke_spread/chem/smoke = new(get_turf(wearer))
 	reagents.trans_to(smoke.chemholder, amount_injected/2)
 	smoke.set_up(smoke.chemholder.reagents, 1, get_turf(wearer), 2)
@@ -471,7 +569,7 @@ GLOBAL_LIST_INIT(hugger_to_latching, list(
 
 /obj/item/clothing/mask/facehugger/latching/chemical/medical/thrust_effect()
 	if(prob(15))
-		wearer.visible_message(span_love("[src] slams it's [cock_flavor] ballsdeep into [wearer]'s [target_hole]! Leaking slightly..!"),span_love("[src] slams it's [cock_flavor] ballsdeep into your [target_hole]! Leaking slightly..!"), vision_distance = 5)
+		wearer.visible_message(span_love("[src] slams it's [cock_flavor] ballsdeep into [wearer]'s [target_hole]! Leaking slightly..!"),span_love("[src] slams it's [cock_flavor] ballsdeep into your [target_hole]! Leaking slightly..!"), vision_distance = 1)
 		reagents.trans_to(wearer, 2)
 		wearer.sexcon.adjust_arousal(5)
 	wearer.sexcon.adjust_arousal(5)
@@ -480,3 +578,27 @@ GLOBAL_LIST_INIT(hugger_to_latching, list(
 //immortal
 /obj/item/clothing/mask/facehugger/latching/chemical/medical/check_lifecycle()
 	return FALSE
+
+/obj/item/clothing/mask/facehugger/combat/chem_injector/tricordrazine
+	name = "tricordrazine hugger"
+	injected_chemical_type = /datum/reagent/medicine/tricordrazine
+	filtercolor = COLOR_REAGENT_TRICORDRAZINE
+
+/obj/item/clothing/mask/facehugger/latching/chemical/tricordrazine
+	name = "evolved tricordrazine facehugger"
+	desc = "It has some sort of weird jelly-like floppy thick alien cock with MASSIVE balls storing some <b>gray</b> glowing chemical... It can also fix overdose of tricordrazine."
+	cock_flavor = "jelly-like cock"
+	injected_chemical_type = /datum/reagent/medicine/tricordrazine
+	filter_color = COLOR_REAGENT_TRICORDRAZINE
+
+/obj/item/clothing/mask/facehugger/latching/chemical/tricordrazine/special_effect()
+	. = ..()
+	if(wearer.reagents.get_reagent_amount(injected_chemical_type) > REAGENTS_OVERDOSE)
+		wearer.reagents.remove_all_type(injected_chemical_type)
+	var/flags = wearer?.client.prefs.sex_pref_flags
+	if(!wearer.client || flags & SEXPREF_FACEHUGGER_LEWD)
+		wearer.visible_message(span_love("[src] ferociously slams it's [cock_flavor] ballsdeep into [wearer]'s [target_hole], expelling excess chemicals..!"),span_love("[src] ferociously slams it's [cock_flavor] ballsdeep into your [target_hole], expelling excess chemicals ..!"), vision_distance = 1)
+		wearer.sexcon.adjust_arousal(5)
+	else
+		wearer.visible_message(span_notice("[src] filters something out of [wearer]'s blood!"),span_notice("[src] filters something out of your blood!"), vision_distance = 1)
+		wearer.adjustOxyLoss(1)

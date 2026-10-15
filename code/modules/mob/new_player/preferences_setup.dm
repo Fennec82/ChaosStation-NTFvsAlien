@@ -159,7 +159,7 @@
 
 
 /datum/preferences/proc/randomize_species_specific()
-	moth_wings = pick(GLOB.moth_wings_list - "Burnt Off")
+	moth_wings = pick(GLOB.moth_wings_list - list("Burnt Off", "None"))
 	tail = pick(character_creator_tail_options() - "None")
 	snout = pick(GLOB.snouts_list - "None")
 	ears = pick(GLOB.ears_list - "None")
@@ -370,6 +370,13 @@
 	character.g_eyes = g_eyes
 	character.b_eyes = b_eyes
 	character.eye_emissive = eye_emissive
+	character.quad_eyes = quad_eyes
+	if(quad_eyes)
+		ADD_TRAIT(character, TRAIT_QUAD_EYES, TRAIT_GENERIC)
+	else
+		REMOVE_TRAIT(character, TRAIT_QUAD_EYES, TRAIT_GENERIC)
+	character.quad_eyes_offset = quad_eyes_offset
+	character.quad_eyes_offset_width = quad_eyes_offset_width
 
 	character.r_hair = r_hair
 	character.g_hair = g_hair

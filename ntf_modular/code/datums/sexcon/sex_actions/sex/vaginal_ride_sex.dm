@@ -7,30 +7,10 @@
 /datum/sex_action/vaginal_ride_sex/shows_on_menu(mob/living/carbon/user, mob/living/carbon/target)
 	if(user == target)
 		return FALSE
-	if(isxeno(user))
-		var/mob/living/carbon/xenomorph/userxeno = user
-		if(userxeno.client?.prefs?.xenogender != 2 && userxeno.client?.prefs?.xenogender != 4)
-			return FALSE
-	else
-		if(user.gender != FEMALE)
-			return FALSE
-	if(target.gender != MALE && !target.sexcon.can_use_penis())
-		return FALSE
-
 	return TRUE
 
 /datum/sex_action/vaginal_ride_sex/can_perform(mob/living/carbon/user, mob/living/carbon/target)
 	if(user == target)
-		return FALSE
-
-	if(isxeno(user))
-		var/mob/living/carbon/xenomorph/userxeno = user
-		if(userxeno.client?.prefs?.xenogender != 2 && userxeno.client?.prefs?.xenogender != 4)
-			return FALSE
-	else
-		if(user.gender != FEMALE)
-			return FALSE
-	if(target.gender != MALE && !target.sexcon.can_use_penis())
 		return FALSE
 	return TRUE
 
@@ -57,25 +37,9 @@
 	if(target.sexcon.check_active_ejaculation())
 		target.visible_message(span_lovebold("[target] cums into [user]'s cunt!"))
 		target.sexcon.cum_into(FALSE, user)
-		if(isxeno(target))
-			var/mob/living/carbon/xenomorph/X = target
-			X.impregify(user, HOLE_VAGINA)
-		if(isxeno(user) && ishuman(target))
-			var/mob/living/carbon/xenomorph/X = user
-			if(ishuman(target) && !(SSticker.mode.round_type_flags2 & MODE_2_CHILL_RULES))
-				if(target.getCloneLoss() >= 45 || HAS_TRAIT(target, TRAIT_PSY_DRAINED))
-					to_chat(user, "This person is too devestated to impregnate you anymore!")
-					X.claim_hive_target_reward(target)
-					return
-				if(target.status_flags & XENO_HOST)
-					to_chat(user, "This targets pregnancy prevents you from becoming pregnant!")
-					X.claim_hive_target_reward(target)
-					return
-				if(X.xenoimpregify())
-					target.adjustCloneLoss(45)
-					target.Shake(duration = 2 SECONDS)
-			if(X.xenoimpregify())
-				X.claim_hive_target_reward(target)
+	if(isxeno(user))
+		var/mob/living/carbon/xenomorph/X = user
+		X.xenoimpregify(target)
 
 
 

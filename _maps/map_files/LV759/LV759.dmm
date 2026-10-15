@@ -14495,7 +14495,6 @@
 "cGj" = (
 /obj/structure/table/reinforced/prison,
 /obj/machinery/computer/marine_card,
-/obj/structure/cable,
 /turf/open/floor/urban_plating,
 /area/lv759/indoors/electical_systems/substation2)
 "cGk" = (
@@ -25592,8 +25591,11 @@
 /turf/open/floor/plating,
 /area/lv759/indoors/nt_research_complex/hallwaysoutheast)
 "eFK" = (
-/obj/machinery/power/terminal,
 /obj/structure/cable,
+/obj/machinery/power/smes/buildable{
+	capacity = 1e+006;
+	dir = 1
+	},
 /turf/open/floor/urban_plating,
 /area/lv759/indoors/electical_systems/substation2)
 "eFQ" = (
@@ -29075,6 +29077,7 @@
 /turf/open/floor/prison/red,
 /area/lv759/indoors/colonial_marshals/armory_evidenceroom)
 "fmS" = (
+/obj/structure/cable,
 /turf/open/shuttle/escapepod{
 	dir = 1
 	},
@@ -57399,7 +57402,6 @@
 /area/lv759/indoors/hospital/medical_storage)
 "knZ" = (
 /obj/machinery/light/spot,
-/obj/structure/cable,
 /turf/open/shuttle/escapepod{
 	dir = 8
 	},
@@ -58222,7 +58224,6 @@
 	pixel_x = 3;
 	pixel_y = 12
 	},
-/obj/structure/cable,
 /turf/open/floor/urban_plating,
 /area/lv759/indoors/electical_systems/substation2)
 "kwl" = (
@@ -70336,11 +70337,10 @@
 /turf/open/urban/street/sidewalkcenter,
 /area/lv759/outdoors/colony_streets/east_central_street)
 "mDp" = (
-/obj/machinery/power/smes/buildable{
-	capacity = 1e+006;
-	dir = 1
-	},
 /obj/structure/cable,
+/obj/machinery/power/terminal{
+	dir = 8
+	},
 /turf/open/floor/urban_plating,
 /area/lv759/indoors/electical_systems/substation2)
 "mDv" = (
@@ -84979,7 +84979,7 @@
 /turf/open/floor/urban/carpet/carpetbeige,
 /area/lv759/indoors/spaceport/cuppajoes)
 "pjO" = (
-/obj/machinery/power/geothermal,
+/obj/structure/cable,
 /turf/open/floor/urban_plating,
 /area/lv759/indoors/electical_systems/substation2)
 "pjQ" = (
@@ -85049,6 +85049,7 @@
 /area/lv759/indoors/spaceport/starglider)
 "pkG" = (
 /obj/item/tool/wirecutters,
+/obj/structure/cable,
 /turf/open/floor/mainship{
 	dir = 5
 	},
@@ -88414,6 +88415,10 @@
 	},
 /turf/open/floor/plating,
 /area/lv759/indoors/power_plant/south_hallway)
+"pNq" = (
+/obj/effect/landmark/patrol_point/xeno/xeno_21,
+/turf/open/ground/sandrock,
+/area/lv759/indoors/caves/central_caves)
 "pNt" = (
 /obj/structure/window/framed/urban/spaceport{
 	dir = 8
@@ -93401,8 +93406,8 @@
 /turf/open/floor/plating,
 /area/lv759/indoors/mining_outpost/northeast)
 "qKo" = (
-/obj/machinery/power/geothermal,
 /obj/structure/cable,
+/obj/machinery/power/port_gen/pacman/super/preset,
 /turf/open/floor/urban_plating,
 /area/lv759/indoors/electical_systems/substation2)
 "qKr" = (
@@ -94382,7 +94387,6 @@
 	light_power = 2;
 	light_range = 3
 	},
-/obj/structure/cable,
 /turf/open/floor/urban_plating,
 /area/lv759/indoors/electical_systems/substation2)
 "qTn" = (
@@ -97014,6 +97018,10 @@
 /obj/structure/rock/dark/small,
 /turf/open/urbanshale/layer1,
 /area/lv759/indoors/nt_research_complex_entrance)
+"rrW" = (
+/obj/effect/landmark/patrol_point/xeno/xeno_11,
+/turf/open/ground/sandrock,
+/area/lv759/indoors/caves/north_caves)
 "rsa" = (
 /obj/structure/window/reinforced/toughened{
 	dir = 1
@@ -97403,6 +97411,7 @@
 /obj/machinery/atmospherics/components/unary/vent_pump/layer1{
 	dir = 1
 	},
+/obj/structure/cable,
 /turf/open/floor/mainship{
 	dir = 5
 	},
@@ -97419,6 +97428,7 @@
 /obj/structure/bed/chair/office/dark{
 	dir = 8
 	},
+/obj/structure/cable,
 /turf/open/floor/mainship{
 	dir = 5
 	},
@@ -125257,9 +125267,11 @@
 /turf/open/urban/street/asphalt,
 /area/lv759/outdoors/colony_streets/central_streets)
 "wke" = (
-/obj/machinery/power/terminal,
 /obj/effect/ai_node,
 /obj/structure/cable,
+/obj/machinery/power/terminal{
+	dir = 8
+	},
 /turf/open/floor/urban_plating,
 /area/lv759/indoors/electical_systems/substation2)
 "wkf" = (
@@ -134197,15 +134209,6 @@
 	},
 /turf/open/floor/officetiles,
 /area/lv759/indoors/nt_research_complex/reception)
-"xMV" = (
-/obj/machinery/power/smes/buildable{
-	capacity = 1e+006;
-	dir = 1
-	},
-/obj/machinery/power/smes/buildable,
-/obj/structure/cable,
-/turf/open/floor/urban_plating,
-/area/lv759/indoors/electical_systems/substation2)
 "xMZ" = (
 /obj/effect/spawner/random/machinery/random_broken_computer/small/emails,
 /obj/structure/table,
@@ -154220,7 +154223,7 @@ pbh
 kPD
 meQ
 kgG
-kgG
+pNq
 kRv
 sFp
 sQn
@@ -157095,7 +157098,7 @@ cMi
 pjR
 miQ
 pjR
-pjR
+rrW
 pWA
 pjR
 pjR
@@ -180204,7 +180207,7 @@ qTm
 kwe
 tBo
 eFK
-xMV
+eFK
 ejQ
 qOy
 qOy
@@ -180607,7 +180610,7 @@ gOl
 uhh
 ejQ
 qKo
-pjO
+czk
 czk
 lBk
 knZ
@@ -181012,9 +181015,9 @@ eTF
 hly
 hly
 ejQ
+qKo
 pjO
 pjO
-czk
 rvo
 ten
 ejQ

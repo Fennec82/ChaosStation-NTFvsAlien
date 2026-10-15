@@ -30,6 +30,8 @@ GLOBAL_LIST_INIT(tier_to_primo_upgrade, list(
 			continue
 		if(!(SSticker.mode.xeno_abilities_flags & upgrade.gamemode_flags))
 			continue
+		if(upgrade.name in upgrades_by_name)
+			continue //duplicates break tgui
 		buyable_upgrades += upgrade
 		upgrades_by_name[upgrade.name] = upgrade
 
@@ -534,8 +536,10 @@ GLOBAL_LIST_INIT(tier_to_primo_upgrade, list(
 	xeno_message("[buyer] has built \a [built] at [get_area(buildloc)]!", "xenoannounce", 3, hivenumber)
 	return ..()
 
+/*
 /datum/hive_upgrade/xenos
 	category = "Xenos"
+*/
 
 /datum/hive_upgrade/primordial
 	category = "Xenos"

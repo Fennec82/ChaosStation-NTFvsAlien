@@ -19,6 +19,10 @@
 	var/arousal = 0
 	/// Whether we want to screw until finished, or non stop
 	var/do_until_finished = TRUE
+	/// Whether actions blocked by missing anatomy should be shown as disabled in the TGUI list.
+	var/show_unavailable_part_actions = FALSE
+	/// Last proximity state sent to open Mob Interaction UIs.
+	var/last_ui_target_adjacent
 	var/last_arousal_increase_time = 0
 	var/last_ejaculation_time = 0
 	var/last_moan = 0
@@ -59,9 +63,9 @@
 	animate(user, pixel_x = target_x, pixel_y = target_y, time = time)
 	animate(pixel_x = oldx, pixel_y = oldy, time = time)
 
-/datum/sex_controller/proc/do_message_signature(sigkey)
+/datum/sex_controller/proc/do_message_signature(sigkey, show_balloon = TRUE)
 	var/properkey = "[speed][force][sigkey]"
-	if(prob(10))
+	if(show_balloon && prob(10))
 		user.balloon_alert_to_viewers(pick("*plap*","*plop*","*slap*","*pap*","*slick*",))
 	if(properkey == msg_signature && last_msg_signature + 20 SECONDS >= world.time)
 		return FALSE
@@ -89,6 +93,7 @@
 
 /datum/sex_controller/proc/adjust_arousal_manual(amt)
 	manual_arousal = clamp(manual_arousal + amt, SEX_MANUAL_AROUSAL_MIN, SEX_MANUAL_AROUSAL_MAX)
+	update_arousal_appearance()
 
 /atom/movable/screen/fullscreen/love
 	icon = 'ntf_modular/icons/mob/screen_full.dmi'
@@ -167,7 +172,7 @@
 				if(!isxeno(blame_mob) || SSticker.mode.round_type_flags2 & MODE_2_CHILL_RULES)
 					user.adjustCloneLoss(-(rand(5,10)+(5*blame_mob_sexskill)))
 			if(SEX_DRAIN_STYLE_DRAIN_STAMINA)
-				if((!(user.mind)) || (user.client?.prefs.harmful_sex_flags & HARMFUL_SEX_STAMINA_DRAIN))
+				if((!(user.mind)) || (user.client?.prefs.sex_pref_flags & SEXPREF_STAMINA_DRAIN))
 					to_chat(user, span_warning("You feel weak as [blame_mob] exhausts you through your orgasm."))
 					log_combat(blame_mob, user, "drained stamina from", "an orgasm")
 					blame_mob.heal_overall_damage(rand(10, 20)+ (10*blame_mob_sexskill), rand(10, 20)+(10*blame_mob_sexskill), TRUE, TRUE)
@@ -178,7 +183,7 @@
 					else
 						user.adjustStaminaLoss(rand(40,80)+(60*blame_mob_sexskill))
 			if(SEX_DRAIN_STYLE_DRAIN_BLOOD_FAST)
-				if((!(user.mind)) || (user.client?.prefs.harmful_sex_flags & HARMFUL_SEX_BLOOD_DRAIN))
+				if((!(user.mind)) || (user.client?.prefs.sex_pref_flags & SEXPREF_BLOOD_DRAIN))
 					to_chat(user, span_userdanger("You feel weak and dizzy as [blame_mob] drains your life force through your orgasm!"))
 					log_combat(blame_mob, user, "drained life from", "an orgasm")
 					blame_mob.heal_overall_damage(rand(20, 40)+(20*blame_mob_sexskill), rand(20, 40)+(20*blame_mob_sexskill), TRUE, TRUE)
@@ -190,7 +195,7 @@
 						user.adjust_blood_volume(-(115+(15*blame_mob_sexskill)))
 					blame_mob.adjust_blood_volume(20+blame_mob_sexskill)
 			if(SEX_DRAIN_STYLE_DRAIN_BLOOD_SLOW)
-				if((!(user.mind)) || (user.client?.prefs.harmful_sex_flags & HARMFUL_SEX_BLOOD_DRAIN))
+				if((!(user.mind)) || (user.client?.prefs.sex_pref_flags & SEXPREF_BLOOD_DRAIN))
 					to_chat(user, span_userdanger("You feel weak and dizzy as [blame_mob] drains your life force through your orgasm!"))
 					log_combat(blame_mob, user, "drained life from", "an orgasm")
 					blame_mob.heal_overall_damage(rand(20, 40)+(20*blame_mob_sexskill), rand(20, 40)+(20*blame_mob_sexskill), TRUE, TRUE)
@@ -215,7 +220,7 @@
 		playsound(target, pick(list('ntf_modular/sound/misc/mat/mouthend (1).ogg','ntf_modular/sound/misc/mat/mouthend (2).ogg')), 100, FALSE, 7, ignore_walls = FALSE)
 	else
 		playsound(target, 'ntf_modular/sound/misc/mat/endin.ogg', 50, TRUE, 7, ignore_walls = FALSE)
-	if(user.gender == MALE)
+	if(user.sexcon.can_use_testicles())
 		filled?.reagents?.add_reagent(/datum/reagent/consumable/nutriment/cum, 10)
 	else
 		filled?.reagents?.add_reagent(/datum/reagent/consumable/nutriment/cum/girl, 10)
@@ -317,13 +322,42 @@
 		last_arousal_increase_time = world.time
 	arousal = clamp(amount, 0, MAX_AROUSAL)
 	update_pink_screen()
+	update_arousal_appearance()
 
 
 /datum/sex_controller/proc/adjust_arousal(amount)
 	set_arousal(arousal + amount)
 
+/datum/sex_controller/proc/get_arousal_cock_state(has_storage = FALSE)
+	switch(manual_arousal)
+		if(SEX_MANUAL_AROUSAL_UNAROUSED)
+			return has_storage ? COCK_STATE_STORED : COCK_STATE_FLACCID
+		if(SEX_MANUAL_AROUSAL_PARTIAL)
+			return COCK_STATE_FLACCID
+		if(SEX_MANUAL_AROUSAL_FULL)
+			return COCK_STATE_ERECT
+	if(arousal >= 151)
+		return COCK_STATE_ERECT
+	if(has_storage && arousal >= 51)
+		return COCK_STATE_FLACCID
+	return has_storage ? COCK_STATE_STORED : COCK_STATE_FLACCID
+
+/datum/sex_controller/proc/update_arousal_appearance()
+	if(!ishuman(user))
+		return
+	var/mob/living/carbon/human/human = user
+	if(!human.sexcon_has_penis())
+		return
+	var/new_cock_state = get_arousal_cock_state(!!human.cock_storage)
+	if((new_cock_state in list(COCK_STATE_STORED, COCK_STATE_PARTIAL)) && !human.cock_storage)
+		new_cock_state = COCK_STATE_FLACCID
+	if(human.cock_state == new_cock_state)
+		return
+	human.cock_state = new_cock_state
+	human.update_genitals(FALSE)
+
 /datum/sex_controller/proc/perform_deepthroat_oxyloss(mob/living/action_target, oxyloss_amt)
-	if(action_target.mind && !(action_target.client?.prefs.harmful_sex_flags & HARMFUL_SEX_CHOKING))
+	if(action_target.mind && !(action_target.client?.prefs.sex_pref_flags & SEXPREF_CHOKING))
 		return FALSE
 	var/oxyloss_multiplier = 0
 	switch(force)
@@ -360,7 +394,7 @@
 
 /datum/sex_controller/proc/perform_sex_action(mob/living/action_target, arousal_amt, pain_amt, giving)
 	var/datum/sex_action/action = SEX_ACTION(current_action)
-	var/healing_amount = (action?.heal_sex) ? rand(1, 3) : 0
+	var/healing_amount = (action?.can_heal(user, target, action_target)) ? rand(1, 3) : 0
 	action_target.sexcon.receive_sex_action(arousal_amt, pain_amt, giving, force, speed, healing_amount, user)
 
 /datum/sex_controller/proc/receive_sex_action(arousal_amt, pain_amt, giving, applied_force, applied_speed, healing_amount, mob/living/blame_mob)
@@ -388,7 +422,7 @@
 						var/heal_amount = (healing_amount*2)*(1+blame_mob_sexskill) + (xeno_user.recovery_aura * xeno_user.maxHealth * 0.01)
 						HEAL_XENO_DAMAGE(xeno_user, heal_amount, FALSE)
 				if(SEX_DRAIN_STYLE_DRAIN_STAMINA)
-					if((!(user.mind)) || (user.client?.prefs.harmful_sex_flags & HARMFUL_SEX_STAMINA_DRAIN))
+					if((!(user.mind)) || (user.client?.prefs.sex_pref_flags & SEXPREF_STAMINA_DRAIN))
 						blame_mob.heal_overall_damage((healing_amount*0.5)+(3*blame_mob_sexskill), (healing_amount*0.3)+(3*blame_mob_sexskill), TRUE, TRUE)
 						if(isxeno(user))
 							var/mob/living/carbon/xenomorph/xeno_user = user
@@ -396,14 +430,14 @@
 						else
 							user.adjustStaminaLoss(healing_amount*(1+blame_mob_sexskill))
 				if(SEX_DRAIN_STYLE_DRAIN_BLOOD_FAST)
-					if((!(user.mind)) || (user.client?.prefs.harmful_sex_flags & HARMFUL_SEX_BLOOD_DRAIN))
+					if((!(user.mind)) || (user.client?.prefs.sex_pref_flags & SEXPREF_BLOOD_DRAIN))
 						blame_mob.heal_overall_damage(healing_amount*(1+blame_mob_sexskill), healing_amount*(1+blame_mob_sexskill), TRUE, TRUE)
 						if(isxeno(user))
 							user.adjustBruteLoss(healing_amount/2)
 						else
 							user.adjust_blood_volume(-healing_amount/2)
 				if(SEX_DRAIN_STYLE_DRAIN_BLOOD_SLOW)
-					if((!(user.mind)) || (user.client?.prefs.harmful_sex_flags & HARMFUL_SEX_BLOOD_DRAIN))
+					if((!(user.mind)) || (user.client?.prefs.sex_pref_flags & SEXPREF_BLOOD_DRAIN))
 						blame_mob.heal_overall_damage(healing_amount*(1+blame_mob_sexskill), healing_amount*(1+blame_mob_sexskill), TRUE, TRUE)
 						if(isxeno(user))
 							user.adjustBruteLoss(healing_amount/2)
@@ -411,10 +445,10 @@
 							user.adjust_blood_volume(-healing_amount/2)
 
 	adjust_arousal(arousal_amt+blame_mob_sexskill)
-	if((!(user.mind)) || (user.client?.prefs.harmful_sex_flags & HARMFUL_SEX_ROUGH_SEX))
+	if((!(user.mind)) || (user.client?.prefs.sex_pref_flags & SEXPREF_ROUGH_SEX))
 		damage_from_pain(pain_amt)
 	try_do_moan(arousal_amt, pain_amt, applied_force, giving)
-	if((!(user.mind)) || (user.client?.prefs.harmful_sex_flags & HARMFUL_SEX_ROUGH_SEX))
+	if((!(user.mind)) || (user.client?.prefs.sex_pref_flags & SEXPREF_ROUGH_SEX))
 		try_do_pain_effect(pain_amt, giving)
 
 /datum/sex_controller/proc/damage_from_pain(pain_amt)
@@ -529,15 +563,54 @@
 /datum/sex_controller/proc/can_use_penis()
 	if(!user.client)
 		return TRUE //return true for clientless shit anyway
-	if(user.client?.prefs?.genitalia_cock)
+	if(isxeno(user))
+		var/mob/living/carbon/xenomorph/userxeno = user
+		if(userxeno.client?.prefs?.xenogender >= 3)
+			return TRUE
+	if(ishuman(user))
+		if(user.client?.prefs?.genitalia_cock)
+			return TRUE
+	return FALSE
+
+/datum/sex_controller/proc/can_use_testicles()
+	if(!user.client)
+		return TRUE //return true for clientless shit anyway
+	if(isxeno(user))
+		var/mob/living/carbon/xenomorph/userxeno = user
+		if(userxeno.client?.prefs?.xenogender >= 3)
+			return TRUE
+	if(ishuman(user))
+		if(user.client?.prefs?.genitalia_testicles)
+			return TRUE
+	return FALSE
+
+/datum/sex_controller/proc/can_use_vagina()
+	if(!user.client)
+		return TRUE //return true for clientless shit anyway
+	if(ishuman(user))
+		if(user.client?.prefs?.genitalia_vagina)
+			return TRUE
+	return FALSE
+
+/datum/sex_controller/proc/can_use_tail()
+	if(!user.client)
+		return TRUE //return true for clientless shit anyway
+	if(isxeno(user))
+		return TRUE
+	if(user.client?.prefs?.tail)
 		return TRUE
 	return FALSE
 
 /datum/sex_controller/proc/can_use_breasts()
 	if(!user.client)
 		return TRUE //return true for clientless shit anyway
-	if(user.client?.prefs?.genitalia_boobs)
-		return TRUE
+	if(isxeno(target))
+		var/mob/living/carbon/xenomorph/userxeno = user
+		if(userxeno.client?.prefs?.xenogender == 2 || userxeno.client?.prefs?.xenogender == 4)
+			return TRUE
+	if(ishuman(user))
+		if(user.client?.prefs?.genitalia_boobs)
+			return TRUE
 	return FALSE
 
 /datum/sex_controller/proc/considered_limp()
@@ -548,6 +621,16 @@
 /datum/sex_controller/proc/process_sexcon(dt)
 	handle_arousal_unhorny(dt)
 	handle_passive_ejaculation(user)
+	update_proximity_ui()
+
+/datum/sex_controller/proc/update_proximity_ui()
+	if(!target)
+		return
+	var/target_adjacent = user.Adjacent(target)
+	if(last_ui_target_adjacent == target_adjacent)
+		return
+	last_ui_target_adjacent = target_adjacent
+	SStgui.update_uis(src)
 
 /datum/sex_controller/proc/handle_arousal_unhorny(dt)
 	if(!can_ejaculate())
@@ -565,49 +648,417 @@
 	adjust_arousal(-dt * rate)
 
 /datum/sex_controller/proc/show_ui()
-	var/list/dat = list()
-	var/force_name = get_force_string()
-	var/speed_name = get_speed_string()
-	var/drain_style_name = get_drain_style_string()
-	var/manual_arousal_name = get_manual_arousal_string()
-	if(user.gender != MALE && !user.sexcon.can_use_penis())
-		dat += "<center><a href='?src=[REF(src)];task=speed_down'>\<</a> [speed_name] <a href='?src=[REF(src)];task=speed_up'>\></a> ~|~ <a href='?src=[REF(src)];task=force_down'>\<</a> [force_name] <a href='?src=[REF(src)];task=force_up'>\></a></center>"
-	else
-		dat += "<center><a href='?src=[REF(src)];task=speed_down'>\<</a> [speed_name] <a href='?src=[REF(src)];task=speed_up'>\></a> ~|~ <a href='?src=[REF(src)];task=force_down'>\<</a> [force_name] <a href='?src=[REF(src)];task=force_up'>\></a> ~|~ <a href='?src=[REF(src)];task=manual_arousal_down'>\<</a> [manual_arousal_name] <a href='?src=[REF(src)];task=manual_arousal_up'>\></a></center>"
-	dat += "<center><a href='?src=[REF(src)];task=drain_style_down'>\<</a> [drain_style_name] <a href='?src=[REF(src)];task=drain_style_up'>\></a></center>"
-	dat += "<center>| <a href='?src=[REF(src)];task=toggle_finished'>[do_until_finished ? "UNTIL IM FINISHED" : "UNTIL I STOP"]</a> |</center>"
-	if(target == user)
-		dat += "<center>Doing onto yourself</center>"
-	else
-		dat += "<center>Doing onto [target]'s</center>"
+	ui_interact(user)
+
+/datum/sex_controller/ui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "MobInteraction")
+		ui.open()
+
+/datum/sex_controller/ui_state(mob/user)
+	return GLOB.always_state
+
+/datum/sex_controller/ui_data(mob/ui_user)
+	var/current_action_name
 	if(current_action)
-		dat += "<center><a href='?src=[REF(src)];task=stop'>Stop</a></center>"
-	else
-		dat += "<br>"
-	dat += "<table width='100%'><td width='50%'></td><td width='50%'></td><tr>"
-	var/i = 0
+		var/datum/sex_action/action = SEX_ACTION(current_action)
+		current_action_name = action?.name
+	var/list/data = list(
+		"targetName" = target ? target.name : "No target",
+		"isTargetSelf" = target == user,
+		"arousal" = arousal,
+		"targetArousal" = target?.sexcon?.arousal || 0,
+		"maxArousal" = MAX_AROUSAL,
+		"speed" = get_speed_plaintext(),
+		"force" = get_force_plaintext(),
+		"drainStyle" = get_drain_style_plaintext(),
+		"manualArousal" = get_manual_arousal_plaintext(),
+		"doUntilFinished" = do_until_finished,
+		"showUnavailableParts" = show_unavailable_part_actions,
+		"isTargetAdjacent" = !target || user.Adjacent(target),
+		"currentAction" = current_action_name,
+		"canUseManualArousal" = user.sexcon_has_penis(),
+		"actions" = list(),
+		"genitals" = get_genital_panel_data(),
+		"genitalControls" = get_genital_control_data(),
+		"cockStorageVisible" = sexcon_cock_storage_visible(),
+	)
 	for(var/action_type in GLOB.sex_actions)
 		var/datum/sex_action/action = SEX_ACTION(action_type)
 		if(!action.shows_on_menu(user, target))
 			continue
-		dat += "<td>"
-		var/link = ""
-		if(!can_perform_action(action_type))
-			link = "linkOff"
-		if(current_action == action_type)
-			link = "linkOn"
-		dat += "<center><a class='[link]' href='?src=[REF(src)];task=action;action_type=[action_type]'>[action.name]</a></center>"
-		dat += "</td>"
-		i++
-		if(i >= 2)
-			i = 0
-			dat += "</tr><tr>"
+		var/action_enabled = can_perform_action(action_type)
+		var/action_available_if_near = action_enabled || can_perform_action(action_type, FALSE)
+		if(!action_enabled && current_action != action_type)
+			if(!action_available_if_near && (!show_unavailable_part_actions || !action.is_unavailable_due_to_parts(user, target)))
+				continue
+		data["actions"] += list(list(
+			"name" = action.name,
+			"ref" = "[action_type]",
+			"enabled" = action_enabled,
+			"active" = current_action == action_type,
+			"color" = action.menu_color,
+			"disabledReason" = action_available_if_near ? "Move closer" : null,
+			"sortOrder" = action.menu_priority,
+		))
+	return data
 
-	dat += "</tr></table>"
-	var/datum/browser/popup = new(user, "sexcon", "<center>The Funny Place</center>", 490, 550)
-	popup.set_content(dat.Join())
-	popup.open()
-	return
+/datum/sex_controller/ui_act(action, list/params)
+	. = ..()
+	if(.)
+		return
+	if(!user || usr != user)
+		return
+
+	switch(action)
+		if("action")
+			var/action_path = text2path(params["action_type"])
+			var/datum/sex_action/sex_action = SEX_ACTION(action_path)
+			if(!sex_action)
+				return TRUE
+			try_start_action(action_path)
+			return TRUE
+		if("stop")
+			try_stop_current_action()
+			return TRUE
+		if("speed_up")
+			adjust_speed(1)
+			return TRUE
+		if("speed_down")
+			adjust_speed(-1)
+			return TRUE
+		if("force_up")
+			adjust_force(1)
+			return TRUE
+		if("force_down")
+			adjust_force(-1)
+			return TRUE
+		if("drain_style_up")
+			adjust_drain_style(1)
+			return TRUE
+		if("drain_style_down")
+			adjust_drain_style(-1)
+			return TRUE
+		if("manual_arousal_up")
+			adjust_arousal_manual(1)
+			return TRUE
+		if("manual_arousal_down")
+			adjust_arousal_manual(-1)
+			return TRUE
+		if("toggle_finished")
+			do_until_finished = !do_until_finished
+			return TRUE
+		if("toggle_unavailable_parts")
+			show_unavailable_part_actions = !show_unavailable_part_actions
+			return TRUE
+		if("toggle_genital_accessibility")
+			toggle_genital_accessibility(params["genital"])
+			return TRUE
+		if("toggle_genital_visibility")
+			set_genital_visibility(params["genital"], params["visibility"])
+			return TRUE
+		if("toggle_genital_arousal")
+			set_genital_arousal(params["genital"], params["arousal"])
+			return TRUE
+		if("genital_dropdown")
+			handle_genital_dropdown(params["field"], params["value"])
+			return TRUE
+		if("genital_size")
+			handle_genital_size(params["field"], params["value"])
+			return TRUE
+		if("genital_reset")
+			reset_genital_panel_data()
+			return TRUE
+
+/datum/sex_controller/proc/sexcon_cock_storage_visible()
+	if(!ishuman(user))
+		return FALSE
+	var/mob/living/carbon/human/human = user
+	return cock_style_supports_storage(human.cock)
+
+/datum/sex_controller/proc/get_genital_option_keys(list/options)
+	. = list()
+	for(var/entry in options)
+		. += entry
+
+/datum/sex_controller/proc/get_genital_control_data()
+	. = list()
+	if(!ishuman(user))
+		return
+	var/mob/living/carbon/human/human = user
+	var/list/rows = list(
+		list("style" = "cock", "label" = "Penis", "active" = !!human.cock, "can_arouse" = TRUE),
+		list("style" = "testicles", "label" = "Testicles", "active" = !!human.testicles && human.testicles_size > 0),
+		list("style" = "vagina", "label" = "Vagina", "active" = !!human.vagina),
+		list("style" = "boobs", "label" = "Breasts", "active" = !!human.boobs && human.boobs_size > 0),
+		list("style" = "ass", "label" = "Butt", "active" = !!human.ass && human.ass_size > 0),
+		list("style" = "belly", "label" = "Belly", "active" = !!human.belly && human.belly_size > 0),
+	)
+	for(var/list/row in rows)
+		var/style = row["style"]
+		. += list(list(
+			"slot" = style,
+			"name" = row["label"],
+			"active" = row["active"],
+			"visibility" = human.sexcon_genital_visibility_mode(style),
+			"alwaysAccessible" = human.sexcon_genital_always_accessible(style),
+			"canArouse" = row["can_arouse"] || FALSE,
+			"aroused" = get_genital_arousal_state(style),
+		))
+
+/datum/sex_controller/proc/get_genital_arousal_state(style)
+	if(style != "cock")
+		return SEX_MANUAL_AROUSAL_UNAROUSED
+	switch(manual_arousal)
+		if(SEX_MANUAL_AROUSAL_UNAROUSED)
+			return SEX_MANUAL_AROUSAL_UNAROUSED
+		if(SEX_MANUAL_AROUSAL_PARTIAL)
+			return SEX_MANUAL_AROUSAL_PARTIAL
+		if(SEX_MANUAL_AROUSAL_FULL)
+			return SEX_MANUAL_AROUSAL_FULL
+	if(arousal >= 151)
+		return SEX_MANUAL_AROUSAL_FULL
+	if(arousal >= 51)
+		return SEX_MANUAL_AROUSAL_PARTIAL
+	return SEX_MANUAL_AROUSAL_UNAROUSED
+
+/datum/sex_controller/proc/toggle_genital_accessibility(style)
+	if(!ishuman(user) || !genital_visual_by_style(style))
+		return
+	var/mob/living/carbon/human/human = user
+	human.sexcon_toggle_genital_accessibility(style)
+
+/datum/sex_controller/proc/set_genital_visibility(style, mode)
+	if(!ishuman(user) || !genital_visual_by_style(style))
+		return
+	var/mob/living/carbon/human/human = user
+	if(human.sexcon_set_genital_visibility_mode(style, mode))
+		human.update_genitals(FALSE)
+
+/datum/sex_controller/proc/set_genital_arousal(style, state)
+	if(style != "cock" || !user.sexcon_has_penis())
+		return
+	switch(state)
+		if(SEX_MANUAL_AROUSAL_UNAROUSED, SEX_MANUAL_AROUSAL_PARTIAL, SEX_MANUAL_AROUSAL_FULL)
+			manual_arousal = state
+		else
+			return
+	update_arousal_appearance()
+
+/datum/sex_controller/proc/get_genital_panel_data()
+	. = list()
+	if(!ishuman(user))
+		return
+	var/mob/living/carbon/human/human = user
+	. += list(list(
+		"id" = "cock",
+		"label" = "Genitalia",
+		"value" = GLOB.possible_cock_sprite_names[human.cock] || "Default",
+		"options" = get_genital_option_keys(GLOB.possible_cock_sprites),
+	))
+	. += list(list(
+		"id" = "cockStorage",
+		"label" = "Penis Sheath",
+		"value" = GLOB.possible_cock_storage_names[human.cock_storage] || "None",
+		"options" = get_genital_option_keys(GLOB.possible_cock_storage),
+	))
+	. += list(list(
+		"id" = "cockDisplay",
+		"label" = "Penis Display",
+		"value" = GLOB.possible_cock_state_names[human.cock_state == COCK_STATE_PARTIAL ? COCK_STATE_FLACCID : human.cock_state] || "Flaccid",
+		"options" = get_genital_option_keys(GLOB.possible_cock_states),
+	))
+	. += list(list(
+		"id" = "ass",
+		"label" = "Butt",
+		"value" = GLOB.possible_ass_sprite_names[human.ass] || "None",
+		"options" = get_genital_option_keys(GLOB.possible_ass_sprites),
+	))
+	. += list(list(
+		"id" = "assSize",
+		"label" = "Butt Size",
+		"size" = human.ass_size,
+		"min" = 1,
+		"max" = 8,
+	))
+	. += list(list(
+		"id" = "boobs",
+		"label" = "Boobs",
+		"value" = GLOB.possible_boob_sprite_names[human.boobs] || "None",
+		"options" = get_genital_option_keys(GLOB.possible_boob_sprites),
+	))
+	. += list(list(
+		"id" = "boobsSize",
+		"label" = "Boob Size",
+		"value" = GLOB.breast_number_to_size["[human.boobs_size]"] || "C",
+		"sizeOptions" = get_genital_option_keys(GLOB.breast_size_to_number),
+	))
+	. += list(list(
+		"id" = "vagina",
+		"label" = "Vagina",
+		"value" = GLOB.possible_vagina_sprite_names[human.vagina] || "Default",
+		"options" = get_genital_option_keys(GLOB.possible_vagina_sprites),
+	))
+	. += list(list(
+		"id" = "testicles",
+		"label" = "Testicles",
+		"value" = GLOB.possible_testicle_sprite_names[human.testicles] || "None",
+		"options" = get_genital_option_keys(GLOB.possible_testicle_sprites),
+	))
+	. += list(list(
+		"id" = "testiclesSize",
+		"label" = "Testicle Size",
+		"size" = human.testicles_size,
+		"min" = 0,
+		"max" = 8,
+	))
+	. += list(list(
+		"id" = "belly",
+		"label" = "Belly",
+		"value" = GLOB.possible_belly_sprite_names[human.belly] || "None",
+		"options" = get_genital_option_keys(GLOB.possible_belly_sprites),
+	))
+	. += list(list(
+		"id" = "bellySize",
+		"label" = "Belly Size",
+		"size" = human.belly_size,
+		"min" = 0,
+		"max" = 10,
+	))
+	. += list(list(
+		"id" = "cockSize",
+		"label" = "Penis Size",
+		"size" = human.cock_size,
+		"min" = 1,
+		"max" = 7,
+	))
+
+/datum/sex_controller/proc/handle_genital_dropdown(field, value)
+	if(!ishuman(user))
+		return
+	var/mob/living/carbon/human/human = user
+	switch(field)
+		if("cock")
+			if(!(value in GLOB.possible_cock_sprites))
+				return
+			human.cock = GLOB.possible_cock_sprites[value]
+			if(!cock_style_supports_storage(human.cock))
+				human.cock_storage = null
+				if(human.cock_state in list(COCK_STATE_STORED, COCK_STATE_PARTIAL))
+					human.cock_state = COCK_STATE_FLACCID
+			human.client?.prefs?.genitalia_cock = human.cock
+			human.client?.prefs?.genitalia_cock_storage = human.cock_storage
+		if("cockStorage")
+			if(!cock_style_supports_storage(human.cock) || !(value in GLOB.possible_cock_storage))
+				return
+			human.cock_storage = GLOB.possible_cock_storage[value]
+			if(!human.cock_storage && (human.cock_state in list(COCK_STATE_STORED, COCK_STATE_PARTIAL)))
+				human.cock_state = COCK_STATE_FLACCID
+			human.client?.prefs?.genitalia_cock_storage = human.cock_storage
+		if("cockDisplay")
+			if(!(value in GLOB.possible_cock_states))
+				return
+			human.cock_state = GLOB.possible_cock_states[value]
+			if((human.cock_state in list(COCK_STATE_STORED, COCK_STATE_PARTIAL)) && !human.cock_storage)
+				human.cock_state = COCK_STATE_FLACCID
+			switch(human.cock_state)
+				if(COCK_STATE_STORED)
+					manual_arousal = SEX_MANUAL_AROUSAL_UNAROUSED
+				if(COCK_STATE_FLACCID, COCK_STATE_PARTIAL)
+					manual_arousal = SEX_MANUAL_AROUSAL_PARTIAL
+				if(COCK_STATE_ERECT)
+					manual_arousal = SEX_MANUAL_AROUSAL_FULL
+		if("ass")
+			if(!(value in GLOB.possible_ass_sprites))
+				return
+			human.ass = GLOB.possible_ass_sprites[value]
+			human.client?.prefs?.genitalia_ass = human.ass
+		if("boobs")
+			if(!(value in GLOB.possible_boob_sprites))
+				return
+			human.boobs = GLOB.possible_boob_sprites[value]
+			human.client?.prefs?.genitalia_boobs = human.boobs
+		if("vagina")
+			if(!(value in GLOB.possible_vagina_sprites))
+				return
+			human.vagina = GLOB.possible_vagina_sprites[value]
+			human.client?.prefs?.genitalia_vagina = human.vagina
+		if("testicles")
+			if(!(value in GLOB.possible_testicle_sprites))
+				return
+			human.testicles = GLOB.possible_testicle_sprites[value]
+			human.client?.prefs?.genitalia_testicles = human.testicles
+		if("belly")
+			if(!(value in GLOB.possible_belly_sprites))
+				return
+			human.belly = GLOB.possible_belly_sprites[value]
+			human.client?.prefs?.genitalia_belly = human.belly
+		else
+			return
+	if(field in list("cock", "cockStorage"))
+		update_arousal_appearance()
+	human.update_genitals()
+
+/datum/sex_controller/proc/handle_genital_size(field, value)
+	if(!ishuman(user))
+		return
+	var/mob/living/carbon/human/human = user
+	switch(field)
+		if("assSize")
+			human.ass_size = sanitize_integer(value, 1, 8, initial(human.ass_size))
+			human.client?.prefs?.genitalia_ass_size = human.ass_size
+		if("boobsSize")
+			if(!(value in GLOB.breast_size_to_number))
+				return
+			human.boobs_size = GLOB.breast_size_to_number[value]
+			human.client?.prefs?.genitalia_boobs_size = human.boobs_size
+		if("cockSize")
+			human.cock_size = sanitize_integer(value, 1, 7, initial(human.cock_size))
+			human.client?.prefs?.genitalia_cock_size = human.cock_size
+		if("bellySize")
+			human.belly_size = sanitize_integer(value, 0, 10, initial(human.belly_size))
+			human.client?.prefs?.genitalia_belly_size = human.belly_size
+		if("testiclesSize")
+			human.testicles_size = sanitize_integer(value, 0, 8, initial(human.testicles_size))
+			human.client?.prefs?.genitalia_testicles_size = human.testicles_size
+		else
+			return
+	human.update_genitals()
+
+/datum/sex_controller/proc/reset_genital_panel_data()
+	if(!ishuman(user))
+		return
+	var/mob/living/carbon/human/human = user
+	human.boobs = null
+	human.ass = null
+	human.cock = null
+	human.cock_storage = null
+	human.cock_state = initial(human.cock_state)
+	human.vagina = null
+	human.belly = null
+	human.testicles = null
+	human.boobs_size = initial(human.boobs_size)
+	human.ass_size = initial(human.ass_size)
+	human.cock_size = initial(human.cock_size)
+	human.belly_size = initial(human.belly_size)
+	human.testicles_size = initial(human.testicles_size)
+	human.sexcon_genital_visibility = null
+	human.sexcon_genital_accessibility = null
+	human.client?.prefs?.genitalia_boobs = null
+	human.client?.prefs?.genitalia_ass = null
+	human.client?.prefs?.genitalia_cock = null
+	human.client?.prefs?.genitalia_cock_storage = null
+	human.client?.prefs?.genitalia_vagina = null
+	human.client?.prefs?.genitalia_belly = null
+	human.client?.prefs?.genitalia_testicles = null
+	human.client?.prefs?.genitalia_boobs_size = human.boobs_size
+	human.client?.prefs?.genitalia_ass_size = human.ass_size
+	human.client?.prefs?.genitalia_cock_size = human.cock_size
+	human.client?.prefs?.genitalia_belly_size = human.belly_size
+	human.client?.prefs?.genitalia_testicles_size = human.testicles_size
+	update_arousal_appearance()
+	human.update_genitals()
 
 /datum/sex_controller/Topic(href, href_list)
 	if(usr != user)
@@ -647,17 +1098,11 @@
 		return
 	if(!client)
 		return
-	if(href_list["harmful_sex_toggle_on"])
-		ENABLE_BITFIELD(client.prefs.harmful_sex_flags, text2num(href_list["harmful_sex_toggle_on"]))
+	if(href_list["sex_prefs_toggle_on"])
+		ENABLE_BITFIELD(client.prefs.sex_pref_flags, text2num(href_list["sex_prefs_toggle_on"]))
 		. = TRUE
-	if(href_list["harmful_sex_toggle_off"])
-		DISABLE_BITFIELD(client.prefs.harmful_sex_flags, text2num(href_list["harmful_sex_toggle_off"]))
-		. = TRUE
-	if(href_list["quick_sex_toggle_on"])
-		ENABLE_BITFIELD(client.prefs.quick_sex_flags, text2num(href_list["quick_sex_toggle_on"]))
-		. = TRUE
-	if(href_list["quick_sex_toggle_off"])
-		DISABLE_BITFIELD(client.prefs.quick_sex_flags, text2num(href_list["quick_sex_toggle_off"]))
+	if(href_list["sex_prefs_toggle_off"])
+		DISABLE_BITFIELD(client.prefs.sex_pref_flags, text2num(href_list["sex_prefs_toggle_off"]))
 		. = TRUE
 	if(. && usr?.client)
 		sex_prefs()
@@ -704,7 +1149,7 @@
 		if(user.getStaminaLoss() > 150)
 			break
 		//loc check for proximity instead of move disruption.
-		if(!(target in view(1, user)))
+		if(action.check_proximity && !(target in view(1, user)))
 			if(current_action)
 				stop_current_action()
 			return
@@ -726,23 +1171,25 @@
 			break
 	stop_current_action()
 
-/datum/sex_controller/proc/can_perform_action(action_type)
+/datum/sex_controller/proc/can_perform_action(action_type, check_proximity = TRUE)
 	if(!action_type)
 		return FALSE
 	var/datum/sex_action/action = SEX_ACTION(action_type)
-	if(!inherent_perform_check(action_type))
+	if(!inherent_perform_check(action_type, check_proximity))
 		return FALSE
 	if(!action.can_perform(user, target))
 		return FALSE
+	if(!action.meets_anatomy_requirements(user, target))
+		return FALSE
 	return TRUE
 
-/datum/sex_controller/proc/inherent_perform_check(action_type)
+/datum/sex_controller/proc/inherent_perform_check(action_type, check_proximity = TRUE)
 	var/datum/sex_action/action = SEX_ACTION(action_type)
 	if(!target)
 		return FALSE
 	if(user.stat != CONSCIOUS)
 		return FALSE
-	if(!user.Adjacent(target))
+	if(check_proximity && action.check_proximity && !user.Adjacent(target))
 		return FALSE
 	if(action.check_incapacitated && user.incapacitated())
 		return FALSE
@@ -846,6 +1293,17 @@
 		if(SEX_FORCE_EXTREME)
 			return "<font color='#d146f5'>BRUTAL</font>"
 
+/datum/sex_controller/proc/get_force_plaintext()
+	switch(force)
+		if(SEX_FORCE_LOW)
+			return "Gentle"
+		if(SEX_FORCE_MID)
+			return "Firm"
+		if(SEX_FORCE_HIGH)
+			return "Rough"
+		if(SEX_FORCE_EXTREME)
+			return "Brutal"
+
 /datum/sex_controller/proc/get_speed_string()
 	switch(speed)
 		if(SEX_SPEED_LOW)
@@ -856,6 +1314,17 @@
 			return "<font color='#f05ee1'>QUICK</font>"
 		if(SEX_SPEED_EXTREME)
 			return "<font color='#d146f5'>UNRELENTING</font>"
+
+/datum/sex_controller/proc/get_speed_plaintext()
+	switch(speed)
+		if(SEX_SPEED_LOW)
+			return "Slow"
+		if(SEX_SPEED_MID)
+			return "Steady"
+		if(SEX_SPEED_HIGH)
+			return "Quick"
+		if(SEX_SPEED_EXTREME)
+			return "Unrelenting"
 
 /datum/sex_controller/proc/get_drain_style_string()
 	switch(drain_style)
@@ -868,6 +1337,17 @@
 		if(SEX_DRAIN_STYLE_DRAIN_BLOOD_SLOW)
 			return "<font color='#d146f5'>DRAIN LIFE/BLOOD (slow)</font>"
 
+/datum/sex_controller/proc/get_drain_style_plaintext()
+	switch(drain_style)
+		if(SEX_DRAIN_STYLE_HEAL_TARGET)
+			return "Heal Target"
+		if(SEX_DRAIN_STYLE_DRAIN_STAMINA)
+			return "Drain Stamina"
+		if(SEX_DRAIN_STYLE_DRAIN_BLOOD_FAST)
+			return "Drain Life/Blood (Fast)"
+		if(SEX_DRAIN_STYLE_DRAIN_BLOOD_SLOW)
+			return "Drain Life/Blood (Slow)"
+
 /datum/sex_controller/proc/get_manual_arousal_string()
 	switch(manual_arousal)
 		if(SEX_MANUAL_AROUSAL_DEFAULT)
@@ -875,9 +1355,20 @@
 		if(SEX_MANUAL_AROUSAL_UNAROUSED)
 			return "<font color='#e9a8d1'>UNAROUSED</font>"
 		if(SEX_MANUAL_AROUSAL_PARTIAL)
-			return "<font color='#f05ee1'>PARTIALLY ERECT</font>"
+			return "<font color='#f05ee1'>FLACCID</font>"
 		if(SEX_MANUAL_AROUSAL_FULL)
 			return "<font color='#d146f5'>FULLY ERECT</font>"
+
+/datum/sex_controller/proc/get_manual_arousal_plaintext()
+	switch(manual_arousal)
+		if(SEX_MANUAL_AROUSAL_DEFAULT)
+			return "Natural"
+		if(SEX_MANUAL_AROUSAL_UNAROUSED)
+			return "Unaroused"
+		if(SEX_MANUAL_AROUSAL_PARTIAL)
+			return "Flaccid"
+		if(SEX_MANUAL_AROUSAL_FULL)
+			return "Fully Erect"
 
 /datum/sex_controller/proc/get_generic_force_adjective()
 	switch(force)

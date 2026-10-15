@@ -77,7 +77,7 @@
 /datum/loadout_item/secondary/gun/marine/laser_pistol
 	name = "TE-P"
 	desc = "A Ninetails standard issue laser pistol abbreviated as TE-P. It has an integrated charge selector for normal, heat and taser settings. \
-	Uses standard Terra Experimental (abbreviated as TE) power cells. \
+	Uses standard old world (abbreviated as TE) power cells. \
 	As with all TE Laser weapons, they use a lightweight alloy combined without the need for bullets any longer decreases their weight and aiming speed quite some vs their ballistic counterparts."
 	ui_icon = "default"
 	item_typepath = /obj/item/weapon/gun/energy/lasgun/lasrifle/standard_marine_pistol/tactical

@@ -72,3 +72,44 @@
 	notes = "A circuitboard used to build a fusion reactor."
 	contains = list(/obj/item/circuitboard/machine/fusionengine)
 	cost = 1200
+
+/datum/supply_packs/engineering/towerboard/ntc
+	name = "TC-4T Telecommunications Circuit Board (NTC)"
+	notes = "A modular component commonly used in machines."
+	contains = list(/obj/item/circuitboard/machine/telecomms/relay/tower/faction)
+	cost = 50
+	faction_lock = list(FACTION_TERRAGOV, FACTION_NANOTRASEN)
+
+/datum/supply_packs/engineering/towerboard/som
+	name = "TC-4T Telecommunications Circuit Board (SOM)"
+	notes = "A modular component commonly used in machines."
+	contains = list(/obj/item/circuitboard/machine/telecomms/relay/tower/faction/som)
+	cost = 50
+	faction_lock = list(FACTION_SOM)
+
+/datum/supply_packs/engineering/towerboard/icc
+	name = "TC-4T Telecommunications Circuit Board (CM/Colony)"
+	notes = "A modular component commonly used in machines."
+	contains = list(/obj/item/circuitboard/machine/telecomms/relay/tower/faction/icc)
+	cost = 50
+	faction_lock = list(FACTION_ICC, FACTION_NEUTRAL)
+
+/datum/supply_packs/engineering/towerboard/clf
+	name = "TC-4T Telecommunications Circuit Board (COE)"
+	notes = "A modular component commonly used in machines."
+	contains = list(/obj/item/circuitboard/machine/telecomms/relay/tower/faction/clf)
+	cost = 50
+	faction_lock = list(FACTION_CLF)
+
+/datum/supply_packs/engineering/towerboard/kz
+	name = "TC-4T Telecommunications Circuit Board (KZ)"
+	notes = "A modular component commonly used in machines."
+	contains = list(/obj/item/circuitboard/machine/telecomms/relay/tower/faction/kz)
+	cost = 50
+	faction_lock = list(FACTION_VSD)
+
+/datum/supply_packs/engineering/floodlight
+	name = "floodlight crate (x4)"
+	notes = "Four large floodlights, used to illuminate large areas."
+	contains = list(/obj/structure/largecrate/supply/floodlights)
+	cost = 100

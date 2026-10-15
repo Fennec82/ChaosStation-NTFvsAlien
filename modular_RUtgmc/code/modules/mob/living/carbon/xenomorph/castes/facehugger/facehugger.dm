@@ -44,7 +44,11 @@
 	if(hive.color)
 		color = hive.color
 	if(hugger_type.filter_color)
-		add_filter("base_color", -10, color_matrix_filter(hugger_type.filter_color))
+		set_filtercolor(hugger_type.filter_color)
+
+/mob/living/carbon/xenomorph/facehugger/proc/set_filtercolor(color)
+	filtercolor = color
+	add_filter("base_color", -10, color_matrix_filter(filtercolor))
 
 // ***************************************
 // *********** Mob overrides

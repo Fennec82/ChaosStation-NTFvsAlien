@@ -193,6 +193,8 @@
 /obj/machinery/door/poddoor/shutters/transit/nonsmoothing{
 	dir = 1
 	},
+/obj/structure/barricade/solid/plasteel,
+/obj/effect/landmark/autowire,
 /turf/open/floor/carpet/side,
 /area/shuttle/minidropship)
 "M" = (
@@ -210,6 +212,8 @@
 /obj/machinery/door/poddoor/shutters/transit/nonsmoothing{
 	dir = 1
 	},
+/obj/structure/barricade/folding,
+/obj/effect/landmark/autowire,
 /turf/open/floor/carpet/side{
 	dir = 6
 	},

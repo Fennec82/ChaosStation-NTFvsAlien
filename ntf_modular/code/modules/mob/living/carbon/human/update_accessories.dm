@@ -27,6 +27,7 @@
 	update_taur_body()
 	update_xenodorsal()
 	update_xenohead()
+	update_moth_wings()
 	update_tail_and_wings()
 	update_snout()
 	update_ears()
@@ -146,7 +147,13 @@
 
 /mob/living/carbon/human/proc/ntf_should_render_emissives()
 	// Preference previews flatten planes, which makes emissive masks draw as red sprites.
-	return allow_emissives && !istype(src, /mob/living/carbon/human/dummy)
+	return (allow_emissives || species?.force_emissives) && !istype(src, /mob/living/carbon/human/dummy)
+
+/mob/living/carbon/human/proc/ntf_hair_emissive_enabled()
+	return ntf_should_render_emissives() && (hair_emissive || species?.force_hair_emissive)
+
+/mob/living/carbon/human/proc/ntf_eye_emissive_enabled()
+	return ntf_should_render_emissives() && (eye_emissive || species?.force_eye_emissive)
 
 /mob/living/carbon/human/proc/accessory_emissive_enabled(list/emissive_list, color_index)
 	return ntf_should_render_emissives() && islist(emissive_list) && emissive_list[color_index]
@@ -302,8 +309,7 @@
 
 /mob/living/carbon/human/proc/update_fluff()
 	remove_overlay(ACCESSORY_FLUFF_LAYER)
-	return // Disabled until fluff can be anchored through an organ/bodypart overlay, like SPLURT.
-	/*
+
 	if(!fluff || fluff == "None")
 		return
 
@@ -332,7 +338,35 @@
 
 	overlays_standing[ACCESSORY_FLUFF_LAYER] = fluff_layers
 	apply_overlay(ACCESSORY_FLUFF_LAYER)
-	*/
+
+/mob/living/carbon/human/proc/update_moth_wings()
+	remove_overlay(MOTH_WINGS_LAYER)
+	remove_underlay(MOTH_WINGS_BEHIND_LAYER)
+
+	if(!moth_wings)
+		return
+	if(species?.name != "Moth" && moth_wings == initial(moth_wings))
+		return
+
+	var/datum/sprite_accessory/moth_wings/wings = GLOB.moth_wings_list[moth_wings]
+	if(!wings || !wings.icon_state)
+		return
+
+	var/image/front_wings = image(wings.icon, icon_state = "[wings.icon_prefix]_[wings.icon_state]_FRONT")
+	var/image/behind_wings = image(wings.icon, icon_state = "[wings.icon_prefix]_[wings.icon_state]_BEHIND")
+	front_wings.layer = ACCESSORY_WING_FRONT_LAYER
+	behind_wings.layer = ACCESSORY_WING_SOUTH_BEHIND_LAYER
+	if(wings.center)
+		center_image(front_wings, wings.dimension_x, wings.dimension_y)
+		center_image(behind_wings, wings.dimension_x, wings.dimension_y)
+	front_wings.pixel_w += wings.pixel_w_offset
+	front_wings.pixel_z += wings.pixel_z_offset
+	behind_wings.pixel_w += wings.pixel_w_offset
+	behind_wings.pixel_z += wings.pixel_z_offset
+	overlays_standing[MOTH_WINGS_LAYER] = front_wings
+	underlays_standing[MOTH_WINGS_BEHIND_LAYER] = behind_wings
+	apply_overlay(MOTH_WINGS_LAYER)
+	apply_underlay(MOTH_WINGS_BEHIND_LAYER)
 
 /mob/living/carbon/human/proc/update_synth_antenna()
 	remove_overlay(ACCESSORY_ANTENNA_LAYER)
@@ -440,14 +474,12 @@
 		add_accessory_color_layers(snout_layers, snout_data, render_layer, snout_render_color, snout_color_secondary, snout_color_tertiary, snout_emissive, accessory_snout_draw_layer(snout_data, render_layer))
 
 	if(snout_data.restore_body_eyes)
-		var/eye_icon_state = get_eye_icon_state()
-		if(eye_icon_state && eye_icon_state != "blank_eyes")
-			var/icon/restored_eye_icon = new/icon('icons/mob/human_face.dmi', eye_icon_state)
-			restored_eye_icon.Blend(rgb(r_eyes, g_eyes, b_eyes), ICON_ADD)
+		var/icon/restored_eye_icon = get_eye_overlay_icon()
+		if(restored_eye_icon)
 			var/image/restored_eyes = image(icon = restored_eye_icon)
 			restored_eyes.layer = ACCESSORY_FACE_TOP_LAYER
 			snout_layers += restored_eyes
-			if(eye_emissive && ntf_should_render_emissives())
+			if(ntf_eye_emissive_enabled())
 				var/mutable_appearance/restored_eye_glow = ntf_emissive_appearance_copy(restored_eyes, src)
 				if(restored_eye_glow)
 					snout_layers += restored_eye_glow

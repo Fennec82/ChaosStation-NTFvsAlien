@@ -89,10 +89,10 @@
 		return
 	if(CHECK_MULTIPLE_BITFIELDS(crosser.allow_pass_flags, HOVERING))
 		return
-	if(issamexenohive(crosser))
-		if(isxeno(crosser))
-			var/mob/living/carbon/xenomorph/xeno = crosser
-			xeno.next_move_slowdown += xeno?.xeno_caste?.weeds_speed_mod
+	//if(issamexenohive(crosser))
+	if(isxeno(crosser))
+		var/mob/living/carbon/xenomorph/xeno = crosser
+		xeno.next_move_slowdown += xeno?.xeno_caste?.weeds_speed_mod
 		return
 	if(issealedvehicle(crosser))
 		var/obj/vehicle/sealed/vehicle = crosser

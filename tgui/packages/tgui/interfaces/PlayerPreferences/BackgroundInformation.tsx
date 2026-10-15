@@ -1,15 +1,100 @@
 import { useState } from 'react';
-import {
-  Box,
-  Button,
-  LabeledList,
-  Section,
-  Stack,
-  TextArea,
-} from 'tgui-core/components';
+import { Box, Button, LabeledList, Section, Stack, TextArea } from 'tgui-core/components';
 
 import { useBackend } from '../../backend';
 import { SelectFieldPreference, TextFieldPreference } from './FieldPreferences';
+
+const EditableTextSection = ({
+  title,
+  value,
+  original,
+  action,
+  param,
+  onChange,
+  height = '110px',
+  maxLength = 12000,
+}) => {
+  const { act } = useBackend<BackgroundInformationData>();
+
+  return (
+    <Section
+      title={title}
+      buttons={
+        <Box>
+          <Button
+            icon="save"
+            disabled={value === original}
+            onClick={() => act(action, { [param]: value })}
+          >
+            Save
+          </Button>
+          <Button icon="times" onClick={() => onChange(original)}>
+            Reset
+          </Button>
+        </Box>
+      }
+    >
+      <TextArea
+        expensive
+        fluid
+        height={height}
+        maxLength={maxLength}
+        value={value}
+        onChange={onChange}
+      />
+    </Section>
+  );
+};
+
+const PictureSection = ({
+  title,
+  value,
+  original,
+  action,
+  param,
+  onChange,
+  width,
+  height,
+}) => {
+  const { act } = useBackend<BackgroundInformationData>();
+
+  return (
+    <Section
+      title={title}
+      buttons={
+        <Box>
+          <Button
+            icon="save"
+            disabled={value === original}
+            onClick={() => act(action, { [param]: value })}
+          >
+            Save
+          </Button>
+          <Button icon="times" onClick={() => onChange(original)}>
+            Reset
+          </Button>
+        </Box>
+      }
+    >
+      (Width:{width} Height:{height})
+      <br />
+      Set to &quot;!clear&quot; to clear
+      <TextArea
+        expensive
+        fluid
+        height="72px"
+        maxLength={2048}
+        value={value}
+        onChange={onChange}
+      />
+      {original ? (
+        <Box mt={1} textAlign="center">
+          <img src={original} width={width} height={height} />
+        </Box>
+      ) : null}
+    </Section>
+  );
+};
 
 export const BackgroundInformation = (props) => {
   const { act, data } = useBackend<BackgroundInformationData>();
@@ -23,7 +108,14 @@ export const BackgroundInformation = (props) => {
     profile_pic,
     nsfwprofile_pic,
     xenoprofile_pic,
+    metadata,
+    metadata_favs,
+    metadata_likes,
+    metadata_maybes,
+    metadata_dislikes,
+    metadata_ooc_style,
   } = data;
+
   const [characterDesc, setCharacterDesc] = useState(flavor_text);
   const [medicalDesc, setMedicalDesc] = useState(med_record);
   const [employmentDesc, setEmploymentDesc] = useState(gen_record);
@@ -33,314 +125,226 @@ export const BackgroundInformation = (props) => {
   const [profilePic, setProfilePic] = useState(profile_pic);
   const [nsfwprofilePic, setNSFWProfilePic] = useState(nsfwprofile_pic);
   const [xenoprofilePic, setXenoProfilePic] = useState(xenoprofile_pic);
+  const [oocNotes, setOocNotes] = useState(metadata);
+  const [oocFavs, setOocFavs] = useState(metadata_favs);
+  const [oocLikes, setOocLikes] = useState(metadata_likes);
+  const [oocMaybes, setOocMaybes] = useState(metadata_maybes);
+  const [oocDislikes, setOocDislikes] = useState(metadata_dislikes);
+
   return (
-    <Section title="Background information">
-      <Section title="Identity">
-        <LabeledList>
-          <TextFieldPreference label={'Age'} value={'age'} />
-          <SelectFieldPreference
-            label={'Citizenship'}
-            value={'citizenship'}
-            action={'citizenship'}
-          />
-          <SelectFieldPreference
-            label={'Religion'}
-            value={'religion'}
-            action={'religion'}
-          />
-        </LabeledList>
-      </Section>
-      <Section
-        title="Character Description"
-        buttons={
-          <Box>
-            <Button
-              icon="save"
-              disabled={characterDesc === flavor_text}
-              onClick={() => act('flavor_text', { characterDesc })}
+    <Stack vertical>
+      <Stack.Item>
+        <Section title="Identity">
+          <LabeledList>
+            <TextFieldPreference label="Age" value="age" />
+            <SelectFieldPreference
+              label="Citizenship"
+              value="citizenship"
+              action="citizenship"
+            />
+            <SelectFieldPreference
+              label="Religion"
+              value="religion"
+              action="religion"
+            />
+          </LabeledList>
+        </Section>
+      </Stack.Item>
+
+      <Stack.Item>
+        <Stack>
+          <Stack.Item grow>
+            <EditableTextSection
+              title="Character Description"
+              value={characterDesc}
+              original={flavor_text}
+              action="flavor_text"
+              param="characterDesc"
+              onChange={setCharacterDesc}
+              height="170px"
+            />
+          </Stack.Item>
+          <Stack.Item grow>
+            <EditableTextSection
+              title="Xenomorph Description"
+              value={xenoDesc}
+              original={xeno_desc}
+              action="xeno_desc"
+              param="xenoDesc"
+              onChange={setXenoDesc}
+              height="170px"
+            />
+          </Stack.Item>
+        </Stack>
+      </Stack.Item>
+
+      <Stack.Item>
+        <Section
+          title="OOC Notes"
+          buttons={
+            <Button.Checkbox
+              checked={metadata_ooc_style}
+              onClick={() => act('metadata_ooc_style')}
             >
-              Save
-            </Button>
-            <Button icon="times" onClick={() => setCharacterDesc(flavor_text)}>
-              Reset
-            </Button>
-          </Box>
-        }
-      >
-        <TextArea
-          expensive
-          key="character"
-          fluid
-          height="200px"
-          maxLength={12000}
-          value={characterDesc}
-          onChange={setCharacterDesc}
-        />
-      </Section>
-      <Section
-        title="Xenomorph Description"
-        buttons={
-          <Box>
-            <Button
-              icon="save"
-              disabled={xenoDesc === xeno_desc}
-              onClick={() => act('xeno_desc', { xenoDesc })}
-            >
-              Save
-            </Button>
-            <Button icon="times" onClick={() => setXenoDesc(xeno_desc)}>
-              Reset
-            </Button>
-          </Box>
-        }
-      >
-        <TextArea
-          expensive
-          key="xeno"
-          fluid
-          height="200px"
-          maxLength={12000}
-          value={xenoDesc}
-          onChange={(value) => setXenoDesc(value)}
-        />
-      </Section>
-      <Stack>
-        <Stack.Item grow>
-          <Section
-            title="Medical Records"
-            buttons={
-              <Box>
-                <Button
-                  icon="save"
-                  disabled={medicalDesc === med_record}
-                  onClick={() => act('med_record', { medicalDesc })}
-                >
-                  Save
-                </Button>
-                <Button icon="times" onClick={() => setMedicalDesc(med_record)}>
-                  Reset
-                </Button>
-              </Box>
-            }
-          >
-            <TextArea
-              fluid
-              height="100px"
-              expensive
-              maxLength={1024}
-              value={medicalDesc}
-              onChange={setMedicalDesc}
-            />
-          </Section>
-        </Stack.Item>
-        <Stack.Item grow>
-          <Section
-            title="Employment Records"
-            buttons={
-              <Box>
-                <Button
-                  icon="save"
-                  disabled={employmentDesc === gen_record}
-                  onClick={() => act('gen_record', { employmentDesc })}
-                >
-                  Save
-                </Button>
-                <Button
-                  icon="times"
-                  onClick={() => setEmploymentDesc(gen_record)}
-                >
-                  Reset
-                </Button>
-              </Box>
-            }
-          >
-            <TextArea
-              fluid
-              height="100px"
-              maxLength={1024}
-              value={employmentDesc}
-              expensive
-              onChange={setEmploymentDesc}
-            />
-          </Section>
-        </Stack.Item>
-      </Stack>
-      <Stack>
-        <Stack.Item grow>
-          <Section
-            title="Security Records"
-            buttons={
-              <Box>
-                <Button
-                  icon="save"
-                  disabled={securityDesc === sec_record}
-                  onClick={() => act('sec_record', { securityDesc })}
-                >
-                  Save
-                </Button>
-                <Button
-                  icon="times"
-                  onClick={() => setSecurityDesc(sec_record)}
-                >
-                  Reset
-                </Button>
-              </Box>
-            }
-          >
-            <TextArea
-              fluid
-              height="100px"
-              maxLength={1024}
-              value={securityDesc}
-              expensive
-              onChange={setSecurityDesc}
-            />
-          </Section>
-        </Stack.Item>
-        <Stack.Item grow>
-          <Section
-            title="Exploit Records"
-            buttons={
-              <Box>
-                <Button
-                  icon="save"
-                  disabled={exploitsDesc === exploit_record}
-                  onClick={() => act('exploit_record', { exploitsDesc })}
-                >
-                  Save
-                </Button>
-                <Button
-                  icon="times"
-                  onClick={() => setExploitsDesc(exploit_record)}
-                >
-                  Reset
-                </Button>
-              </Box>
-            }
-          >
-            <TextArea
-              fluid
-              height="100px"
-              maxLength={1024}
-              value={exploitsDesc}
-              expensive
-              onChange={setExploitsDesc}
-            />
-          </Section>
-        </Stack.Item>
-      </Stack>
-      Set picture to &lsquo;!clear&rsquo; to clear.
-      <hr />
-      <Stack>
-        <Stack.Item grow>
-          <Section
-            title="Human Picture"
-            buttons={
-              <Box>
-                <Button
-                  icon="save"
-                  disabled={profilePic === profile_pic}
-                  onClick={() => act('profile_pic', { profilePic })}
-                >
-                  Save
-                </Button>
-                <Button icon="times" onClick={() => setProfilePic(profile_pic)}>
-                  Reset
-                </Button>
-              </Box>
-            }
-          >
-            (Width:300 Height:350)
-            <TextArea
-              expensive
-              fluid
-              height="100px"
-              maxLength={2048}
+              OOC Styling
+            </Button.Checkbox>
+          }
+        >
+          <EditableTextSection
+            title="General Notes"
+            value={oocNotes}
+            original={metadata}
+            action="metadata"
+            param="oocNotes"
+            onChange={setOocNotes}
+            height="120px"
+          />
+          <Stack>
+            <Stack.Item grow>
+              <EditableTextSection
+                title="Favourites"
+                value={oocFavs}
+                original={metadata_favs}
+                action="metadata_favs"
+                param="oocFavs"
+                onChange={setOocFavs}
+                height="82px"
+              />
+            </Stack.Item>
+            <Stack.Item grow>
+              <EditableTextSection
+                title="Likes"
+                value={oocLikes}
+                original={metadata_likes}
+                action="metadata_likes"
+                param="oocLikes"
+                onChange={setOocLikes}
+                height="82px"
+              />
+            </Stack.Item>
+            <Stack.Item grow>
+              <EditableTextSection
+                title="Maybes"
+                value={oocMaybes}
+                original={metadata_maybes}
+                action="metadata_maybes"
+                param="oocMaybes"
+                onChange={setOocMaybes}
+                height="82px"
+              />
+            </Stack.Item>
+            <Stack.Item grow>
+              <EditableTextSection
+                title="Dislikes"
+                value={oocDislikes}
+                original={metadata_dislikes}
+                action="metadata_dislikes"
+                param="oocDislikes"
+                onChange={setOocDislikes}
+                height="82px"
+              />
+            </Stack.Item>
+          </Stack>
+        </Section>
+      </Stack.Item>
+
+      <Stack.Item>
+        <Section title="Records">
+          <Stack>
+            <Stack.Item grow>
+              <EditableTextSection
+                title="Medical"
+                value={medicalDesc}
+                original={med_record}
+                action="med_record"
+                param="medicalDesc"
+                onChange={setMedicalDesc}
+                height="90px"
+                maxLength={1024}
+              />
+            </Stack.Item>
+            <Stack.Item grow>
+              <EditableTextSection
+                title="Employment"
+                value={employmentDesc}
+                original={gen_record}
+                action="gen_record"
+                param="employmentDesc"
+                onChange={setEmploymentDesc}
+                height="90px"
+                maxLength={1024}
+              />
+            </Stack.Item>
+          </Stack>
+          <Stack>
+            <Stack.Item grow>
+              <EditableTextSection
+                title="Security"
+                value={securityDesc}
+                original={sec_record}
+                action="sec_record"
+                param="securityDesc"
+                onChange={setSecurityDesc}
+                height="90px"
+                maxLength={1024}
+              />
+            </Stack.Item>
+            <Stack.Item grow>
+              <EditableTextSection
+                title="Exploits"
+                value={exploitsDesc}
+                original={exploit_record}
+                action="exploit_record"
+                param="exploitsDesc"
+                onChange={setExploitsDesc}
+                height="90px"
+                maxLength={1024}
+              />
+            </Stack.Item>
+          </Stack>
+        </Section>
+      </Stack.Item>
+
+      <Stack.Item>
+        <Stack>
+          <Stack.Item grow>
+            <PictureSection
+              title="Human Picture"
               value={profilePic}
-              onChange={(value) => setProfilePic(value)}
+              original={profile_pic}
+              action="profile_pic"
+              param="profilePic"
+              onChange={setProfilePic}
+              width={300}
+              height={350}
             />
-            {profile_pic ? (
-              <img src={profile_pic} width={300} height={350} />
-            ) : (
-              ''
-            )}
-          </Section>
-        </Stack.Item>
-        <Stack.Item grow>
-          <Section
-            title="Human Nakie Picture"
-            buttons={
-              <Box>
-                <Button
-                  icon="save"
-                  disabled={nsfwprofilePic === nsfwprofile_pic}
-                  onClick={() => act('nsfwprofile_pic', { nsfwprofilePic })}
-                >
-                  Save
-                </Button>
-                <Button
-                  icon="times"
-                  onClick={() => setProfilePic(nsfwprofile_pic)}
-                >
-                  Reset
-                </Button>
-              </Box>
-            }
-          >
-            (Width:300 Height:350)
-            <TextArea
-              expensive
-              fluid
-              height="100px"
-              maxLength={2048}
+          </Stack.Item>
+          <Stack.Item grow>
+            <PictureSection
+              title="Human Nude Picture"
               value={nsfwprofilePic}
-              onChange={(value) => setNSFWProfilePic(value)}
+              original={nsfwprofile_pic}
+              action="nsfwprofile_pic"
+              param="nsfwprofilePic"
+              onChange={setNSFWProfilePic}
+              width={300}
+              height={350}
             />
-            {nsfwprofile_pic ? (
-              <img src={nsfwprofile_pic} width={300} height={350} />
-            ) : (
-              ''
-            )}
-          </Section>
-        </Stack.Item>
-        <Stack.Item grow>
-          <Section
-            title="Xeno Profile Picture"
-            buttons={
-              <Box>
-                <Button
-                  icon="save"
-                  disabled={xenoprofilePic === xenoprofile_pic}
-                  onClick={() => act('xenoprofile_pic', { xenoprofilePic })}
-                >
-                  Save
-                </Button>
-                <Button
-                  icon="times"
-                  onClick={() => setXenoProfilePic(xenoprofile_pic)}
-                >
-                  Reset
-                </Button>
-              </Box>
-            }
-          >
-            (Width:300 Height:350)
-            <TextArea
-              expensive
-              fluid
-              height="100px"
-              maxLength={2048}
+          </Stack.Item>
+          <Stack.Item grow>
+            <PictureSection
+              title="Xeno Picture"
               value={xenoprofilePic}
-              onChange={(value) => setXenoProfilePic(value)}
+              original={xenoprofile_pic}
+              action="xenoprofile_pic"
+              param="xenoprofilePic"
+              onChange={setXenoProfilePic}
+              width={300}
+              height={350}
             />
-            {xenoprofile_pic ? (
-              <img src={xenoprofile_pic} width={300} height={350} />
-            ) : (
-              ''
-            )}
-          </Section>
-        </Stack.Item>
-      </Stack>
-    </Section>
+          </Stack.Item>
+        </Stack>
+      </Stack.Item>
+    </Stack>
   );
 };

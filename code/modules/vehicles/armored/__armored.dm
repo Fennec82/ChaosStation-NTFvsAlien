@@ -96,6 +96,10 @@
 	///How close a wrecked vehicle is to being prepared for repair
 	var/wreck_repair_stage = 0
 
+	//ntf addition
+	///what fraction of the soft_armor AP needed to damage at all? 3 would make it so 33 ap needed if it has 100 soft bullet armor, this decrases as integrity does.
+	var/armor_integrity_mod = 4
+
 /obj/vehicle/sealed/armored/Initialize(mapload)
 	if(type != /obj/vehicle/sealed/armored/multitile) //TODO: TESTING ONLY, SO MRAP DOESN'T HAVE A VALUE OF 5 IN A SEPARATE PR
 		larva_value = 0
@@ -480,26 +484,28 @@
 			return FALSE
 	if(src == proj.shot_from)
 		return FALSE
+	var/temp_armor_integrity_mod = armor_integrity_mod
 	if(soft_armor)
-		var/armor_integrity_mod = 3 // one third of armor as ap needed to penetrate, usually 30 due to 100 bullet armor
 		var/proj_initial_penetration = proj.penetration
+		if(istype(proj.ammo, /datum/ammo/bullet) && proj.armor_type == BOMB) //usually this means its a squash head
+			proj_initial_penetration /= 3 //squash head is worthless against armor.
 		//this may look like double-sided pen adjustion but the integrity mod only changes the minimum integrity required to even NOT bounce off, this makes it actually go through the armor.
 		if(obj_integrity <= (max_integrity/2)) //50% integrity or less, now 1/4 needed to penetrate
-			armor_integrity_mod ++
-			proj.penetration *= 1.5
+			temp_armor_integrity_mod ++
+			proj_initial_penetration *= 1.5
 		if(obj_integrity <= max_integrity/4) //25% integrity or less, now 1/5 needed to penetrate
-			armor_integrity_mod ++
-			proj.penetration *= 1.5
-		if(proj_initial_penetration < (soft_armor.getRating(proj.ammo.armor_type) / armor_integrity_mod) && prob(90))
+			temp_armor_integrity_mod ++
+			proj_initial_penetration *= 1.5
+		temp_armor_integrity_mod = max(1, temp_armor_integrity_mod) //cant divide by 0
+		if(proj_initial_penetration < (soft_armor.getRating(proj.ammo.armor_type) / temp_armor_integrity_mod) && prob(90))
 			proj.shot_from = src
 			if(proj.ammo.sound_bounce)
 				playsound(loc, proj.ammo.sound_bounce, 15, TRUE, 7, 5, pitch)
 			do_sparks(rand(1,2), TRUE, loc)
 			proj.ammo.bonus_projectiles_type = proj.ammo.type
 			proj.proj_max_range /= rand(2,3)
-			proj.damage_falloff *= 3
-			proj.accuracy /= 3
-			proj.ammo.reflect(get_turf(src), proj, 20)
+			proj.ammo.reflect(get_turf(src), proj, 90)
+			proj.proj_max_range = 0 //kill original proj
 			return FALSE
 	if(src == proj.original_target)
 		return TRUE

@@ -157,7 +157,7 @@
 		if(3)
 			. += span_info("The metal cover has been sliced through. A crowbar should pry it off.")
 		if(4)
-			. += span_info("The metal cover has been removed. A wrench will remove the anchor bolts.")
+			. += span_info("The metal cover has been removed. A wrench will remove the anchor bolts.") //ntf addition will make normal walls dismantle here
 		if(5)
 			. += span_info("The anchor bolts have been removed. Wirecutters will take care of the hydraulic lines.")
 		if(6)
@@ -430,6 +430,8 @@
 					d_state = 5
 					user.visible_message(span_notice("[user] removes the bolts anchoring the support rods."),
 					span_notice("You remove the bolts anchoring the support rods."))
+					if(!istype(src, /turf/closed/wall/r_wall))
+						dismantle_wall() // NTF ADDITION, makes it faster to dismantle walls
 			if(5)
 				if(iswirecutter(I))
 					user.visible_message(span_notice("[user] begins uncrimping the hydraulic lines."),

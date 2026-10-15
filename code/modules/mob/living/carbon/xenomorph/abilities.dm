@@ -874,6 +874,20 @@ GLOBAL_LIST_INIT(xeno_resin_costs, list(
 	playsound(owner.loc, 'sound/voice/alien/drool1.ogg', 50, 1)
 	to_chat(owner, span_xenodanger("We feel our acid glands refill. We can spray acid again."))
 
+/datum/action/ability/activable/xeno/spray_acid/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/activable/xeno/spray_acid/ai_should_use(atom/target)
+	if(!iscarbon(target))
+		return FALSE
+	if(get_dist(target, owner) > 6)
+		return FALSE
+	if(!line_of_sight(owner, target))
+		return FALSE
+	if(owner.issamexenohive(target))
+		return FALSE
+	return TRUE
+
 /datum/action/ability/activable/xeno/xeno_spit
 	name = "Xeno Spit"
 	action_icon_state = "shift_spit_neurotoxin"
@@ -1032,8 +1046,6 @@ GLOBAL_LIST_INIT(xeno_resin_costs, list(
 	if(!iscarbon(target))
 		return FALSE
 	if(get_dist(target, owner) > 6)
-		return FALSE
-	if(!can_use_ability(target, override_flags = ABILITY_IGNORE_SELECTED_ABILITY))
 		return FALSE
 	if(!line_of_sight(owner, target))
 		return FALSE
@@ -1565,22 +1577,8 @@ GLOBAL_LIST_INIT(xeno_resin_costs, list(
 			to_chat(victim, span_warning("[X] fucks you!"))
 		if(X.client?.prefs?.xenogender > 2)
 			X.impregify(victim, HOLE_VAGINA, damagemult = 3)
-			log_combat(X, victim, "impregnated", addition="with their impregnate ability")
 		else
-			if(ishuman(victim) && !(SSticker.mode.round_type_flags2 & MODE_2_CHILL_RULES))
-				if(victim.getCloneLoss() >= 45 || HAS_TRAIT(victim, TRAIT_PSY_DRAINED))
-					to_chat(A, "This person is too devestated to impregnate you anymore!")
-					X.claim_hive_target_reward(victim)
-					return
-				if(victim.status_flags & XENO_HOST)
-					to_chat(A, "This targets pregnancy prevents you from becoming pregnant!")
-					X.claim_hive_target_reward(victim)
-					return
-				if(X.xenoimpregify())
-					victim.adjustCloneLoss(45)
-					victim.Shake(duration = 2 SECONDS)
-			X.xenoimpregify()
-			log_combat(X, victim, "got impregnated by", addition="with their impregnate ability")
+			X.xenoimpregify(victim)
 		add_cooldown()
 		succeed_activate()
 	if(isxeno(A))
@@ -1598,10 +1596,10 @@ GLOBAL_LIST_INIT(xeno_resin_costs, list(
 		if(victim.stat == CONSCIOUS)
 			to_chat(victim, span_warning("[X] fucks you!"))
 			victim.emote("moan")
-		if(victim.gender == FEMALE && (SSticker.mode.round_type_flags2 & MODE_2_CHILL_RULES))
-			victim.xenoimpregify()
-		if(X.gender == FEMALE && (SSticker.mode.round_type_flags2 & MODE_2_CHILL_RULES))
-			X.xenoimpregify()
+		if(victim.gender == FEMALE)
+			victim.xenoimpregify(X)
+		if(X.gender == FEMALE)
+			X.xenoimpregify(victim)
 		succeed_activate()
 /////////////////////////////////
 // Cocoon

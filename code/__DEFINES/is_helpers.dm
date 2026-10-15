@@ -89,6 +89,7 @@ GLOBAL_LIST_INIT(turfs_openspace, typecacheof(list(
 #define issectoid(H) (is_species(H, /datum/species/sectoid))
 #define ishumanbasic(H) (is_species(H, /datum/species/human))
 #define iszombie(H) (is_species(H, /datum/species/zombie))
+#define isxenohybrid(H) (is_species(H, /datum/species/xenohybrid))
 
 //Monkey species and subtypes
 #define ismonkey(H) (is_species(H, /datum/species/monkey))

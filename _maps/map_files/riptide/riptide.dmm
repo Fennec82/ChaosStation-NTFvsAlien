@@ -11304,6 +11304,10 @@
 	dir = 9
 	},
 /area/riptide/outside/volcano)
+"hQV" = (
+/obj/effect/landmark/patrol_point/xeno/xeno_11,
+/turf/open/ground,
+/area/riptide/outside/northislands)
 "hRa" = (
 /obj/structure/flora/ausbushes/leafybush,
 /turf/open/ground/grass/weedable,
@@ -22514,6 +22518,11 @@
 /obj/effect/landmark/corpsespawner/colonist/regular,
 /turf/open/floor/tile/dark2,
 /area/riptide/inside/riverblocker)
+"pAP" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/landmark/patrol_point/xeno/xeno_21,
+/turf/open/floor/wood,
+/area/riptide/inside/southtower)
 "pAW" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/light{
@@ -46880,7 +46889,7 @@ aBC
 pCJ
 xnU
 utn
-aBC
+pAP
 hEy
 oUL
 nMF
@@ -49404,7 +49413,7 @@ eyC
 pdT
 pdT
 pdT
-pdT
+hQV
 pdT
 rWW
 pdT

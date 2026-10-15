@@ -351,6 +351,7 @@
 
 		if(!L.buckled && !L.anchored)
 			var/mob_swap_mode = NO_SWAP
+			var/allied = GLOB.faction_to_iff[faction] & GLOB.faction_to_iff[L.faction]
 			//the puller can always swap with its victim if on grab intent
 			if(L.pulledby == src && a_intent == INTENT_GRAB)
 				mob_swap_mode = SWAPPING
@@ -359,7 +360,8 @@
 				if(xeno.handcuffed)
 					mob_swap_mode = SWAPPING
 			//restrained people act if they were on 'help' intent to prevent a person being pulled from being seperated from their puller
-			else if((L.restrained() || L.a_intent == INTENT_HELP) && (restrained() || a_intent == INTENT_HELP) && L.move_force < MOVE_FORCE_VERY_STRONG)
+			//allied players can shuffle bots regardless of bot intents
+			else if((L.restrained() || L.a_intent == INTENT_HELP || (allied && client && !L.client)) && (restrained() || a_intent == INTENT_HELP) && L.move_force < MOVE_FORCE_VERY_STRONG)
 				mob_swap_mode = SWAPPING
 			else if(get_xeno_hivenumber() == L.get_xeno_hivenumber() && (L.pass_flags & PASS_XENO || pass_flags & PASS_XENO))
 				mob_swap_mode = PHASING
@@ -370,6 +372,8 @@
 			*/
 			if(moving_diagonally && (get_dir(src, L) in GLOB.cardinals) && (L.faction == faction || L.get_move_resist() <= move_force) && get_step(src, dir).Enter(src, loc))
 				mob_swap_mode = PHASING
+			if(allied && (!client) && (L.client)) //bots can't shuffle allied players
+				mob_swap_mode = NO_SWAP
 			if(mob_swap_mode)
 				//switch our position with L
 				if(loc && !loc.Adjacent(L.loc))
@@ -421,7 +425,7 @@
 	var/mob/mob_to_push = AM
 	if(istype(mob_to_push) && mob_to_push.lying_angle)
 		return
-	if(!client && istype(mob_to_push) && mob_to_push.client && !prob(10))
+	if(!client && istype(mob_to_push) && mob_to_push.client && (GLOB.faction_to_iff[faction] & GLOB.faction_to_iff[mob_to_push.faction]))
 		return
 	now_pushing = TRUE
 	var/dir_to_target = get_dir(src, AM)

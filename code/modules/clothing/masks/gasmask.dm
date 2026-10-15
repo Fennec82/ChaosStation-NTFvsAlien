@@ -117,7 +117,7 @@
 	name = "\improper SWAT mask"
 	desc = "A close-fitting tactical mask that can be connected to an air supply."
 	icon_state = "swat"
-	anti_hug = 1
+	anti_hug = 3
 	siemens_coefficient = 0.7
 	armor_protection_flags = FACE|EYES
 	voice_filter = "lowpass=f=750,volume=2"

@@ -125,6 +125,7 @@
 		/obj/item/stack/nanopaste = 100,
 		/obj/item/tool/surgery/bonegel = 30,
 		/obj/item/tool/screwdriver = 70,
+		/obj/item/tool/surgery/solderingtool = 70,
 	)
 
 	min_duration = 60

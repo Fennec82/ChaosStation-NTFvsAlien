@@ -149,6 +149,15 @@ GLOBAL_LIST_INIT(marking_zone_to_bitflag, list(
 	default_color = "#CCCCCC"
 	affected_bodyparts = HEAD
 
+/datum/body_marking/ntf
+	icon = 'ntf_modular/icons/customization/body_markings/markings.dmi'
+
+/datum/body_marking/ntf/xeno_fangs
+	name = "Xeno Fangs"
+	icon_state = "fangs"
+	default_color = "#CCCCCC"
+	affected_bodyparts = HEAD
+
 /datum/body_marking/other/drake_bone
 	name = "Drake Bone"
 	icon_state = "drakebone"

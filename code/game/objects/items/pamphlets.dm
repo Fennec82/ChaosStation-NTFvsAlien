@@ -54,6 +54,12 @@
 	large_vehicle = 3
 	max_skills = list(SKILL_LARGE_VEHICLE = SKILL_LARGE_VEHICLE_VETERAN)
 
+/obj/item/pamphlet/tank_driver
+	name = "tank driver instruction manual"
+	desc = "Driving tanks for dummies."
+	large_vehicle = 2
+	max_skills = list(SKILL_LARGE_VEHICLE = SKILL_LARGE_VEHICLE_TRAINED)
+
 /obj/item/pamphlet/pistoleer
 	name = "advanced pistol handling guide"
 	desc = "A pamphlet containing a detailed guide on how to best hold, draw and mitigate the recoil of various handguns. There's a chibi drawing of a cowboy on the free space of the last page."
@@ -83,7 +89,7 @@
 	desc = "A pamphlet containing a series of detailed guides and imagery on the subject of handling, controlling and reloading submachineguns. Demonstrates techinques on how to efficiently \"tilt\" and \"mitigate recoil\" with SMGs."
 	smgs = 1
 	max_skills = list(SKILL_SMGS = SKILL_SMGS_TRAINED)
-	
+
 /obj/item/pamphlet/heavyweapons
 	name = "advanced heavy weapons handling guide"
 	desc = "A pamphlet containing a series of detailed guides and illustrations on the subject of carrying, handling, reloading and operating various heavy weapons. Demonstrates techinques on how to efficiently \"feed\" machineguns to \"loading\" rocket launchers and heavy railguns."

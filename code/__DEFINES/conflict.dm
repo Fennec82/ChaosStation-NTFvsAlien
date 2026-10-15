@@ -152,16 +152,18 @@
 //Slowdown from various armors.
 #define SHOES_SLOWDOWN -1.0			// How much shoes slow you down by default. Negative values speed you up
 
-#define SLOWDOWN_ARMOR_VERY_LIGHT 0.15
+#define SLOWDOWN_ARMOR_VERY_LIGHT 0.1
 #define SLOWDOWN_ARMOR_LIGHT 0.2
 #define SLOWDOWN_ARMOR_MEDIUM 0.5
 #define SLOWDOWN_ARMOR_HEAVY 0.7
-#define SLOWDOWN_ARMOR_VERY_HEAVY 1.25
+#define SLOWDOWN_ARMOR_VERY_HEAVY 1
 
 //Marine armor defines
 #define MARINE_ARMOR_LIGHT list(MELEE = 35, BULLET = 55, LASER = 55, ENERGY = 50, BOMB = 45, BIO = 45, FIRE = 45, ACID = 45)
 #define MARINE_ARMOR_MEDIUM list(MELEE = 45, BULLET = 65, LASER = 65, ENERGY = 55, BOMB = 50, BIO = 50, FIRE = 50, ACID = 55)
 #define MARINE_ARMOR_HEAVY list(MELEE = 50, BULLET = 70, LASER = 70, ENERGY = 60, BOMB = 55, BIO = 55, FIRE = 55, ACID = 60)
+#define MARINE_ARMOR_VERY_HEAVY list(MELEE = 60, BULLET = 80, LASER = 80, ENERGY = 70, BOMB = 65, BIO = 65, FIRE = 65, ACID = 70)
+
 
 //=================================================
 

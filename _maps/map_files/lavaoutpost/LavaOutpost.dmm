@@ -176,7 +176,6 @@
 /turf/open/lavaland/basalt,
 /area/lavaland/cave/north)
 "bM" = (
-/obj/machinery/power/geothermal,
 /obj/structure/cable,
 /turf/open/floor/plating,
 /area/lavaland/engie/one)
@@ -1630,6 +1629,11 @@
 /obj/structure/barricade/solid,
 /turf/open/lavaland/basalt,
 /area/lavaland/cave/west)
+"qH" = (
+/obj/structure/cable,
+/obj/machinery/power/port_gen/pacman/super,
+/turf/open/floor/plating,
+/area/lavaland/engie/three)
 "qK" = (
 /obj/machinery/light/small{
 	dir = 1
@@ -3063,7 +3067,6 @@
 /turf/open/floor/plating,
 /area/lavaland/cave/central)
 "Ew" = (
-/obj/machinery/power/geothermal,
 /obj/structure/cable,
 /turf/open/floor/plating,
 /area/lavaland/engie/three)
@@ -3071,7 +3074,6 @@
 /turf/open/floor/tile/white,
 /area/lavaland/security)
 "Ez" = (
-/obj/machinery/power/geothermal,
 /obj/structure/cable,
 /obj/machinery/light/small,
 /turf/open/floor/plating,
@@ -3249,7 +3251,6 @@
 /turf/closed/wall,
 /area/lavaland/cave/west)
 "Gg" = (
-/obj/machinery/power/geothermal,
 /obj/structure/cable,
 /obj/machinery/light/small,
 /turf/open/floor/plating,
@@ -3506,6 +3507,11 @@
 	},
 /turf/closed/wall/r_wall,
 /area/shuttle/drop2/lz2)
+"Ja" = (
+/obj/structure/cable,
+/obj/machinery/power/port_gen/pacman/super,
+/turf/open/floor/plating,
+/area/lavaland/engie/one)
 "Jb" = (
 /obj/machinery/landinglight/lz1{
 	dir = 8
@@ -3684,6 +3690,11 @@
 /obj/structure/window/framed/colony,
 /turf/open/floor/plating,
 /area/lavaland/security)
+"KW" = (
+/obj/structure/cable,
+/obj/machinery/power/port_gen/pacman/super,
+/turf/open/floor/plating,
+/area/lavaland/engie/two)
 "KX" = (
 /obj/effect/decal/cleanable/blood,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
@@ -4149,7 +4160,6 @@
 /turf/open/lavaland/basalt,
 /area/lavaland/cave/central)
 "Qc" = (
-/obj/machinery/power/geothermal,
 /obj/structure/cable,
 /turf/open/floor/plating,
 /area/lavaland/engie/two)
@@ -4167,7 +4177,6 @@
 /turf/open/lavaland/basalt/glowing,
 /area/lavaland/cave/west)
 "Qm" = (
-/obj/machinery/power/geothermal,
 /obj/structure/cable,
 /obj/machinery/light/small{
 	dir = 1
@@ -35925,7 +35934,7 @@ Yy
 sS
 tE
 jc
-bM
+Ja
 sS
 ZK
 ZK
@@ -36875,7 +36884,7 @@ CY
 Dg
 Ep
 Eq
-Ew
+qH
 Dg
 YL
 YL
@@ -44361,7 +44370,7 @@ rR
 vR
 EB
 PL
-Qc
+KW
 QN
 Rg
 PL

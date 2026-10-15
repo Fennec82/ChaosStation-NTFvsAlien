@@ -448,6 +448,47 @@
 		"Digitigrade" = "digitigrade_1",
 		"Digitigrade 2" = "digitigrade_2",
 	)
+	default_language_holder = /datum/language_holder/xeno
+	burn_mod = 1.05
+	brute_mod = 0.95
+	var/list/action_list = list(
+		/datum/action/ability/activable/xenohybrid_tail_sting,
+	)
+	species_description = "<br /><br /><b>Lore</b>:<br /><br /> \
+	Result of few years of totally ethical xenomorph research of collective corporate research. They are hybirdisation of humanoid species and xenomorphs.<br /><br /> \
+	<b>Physiology</b>:<br /><br /> \
+	They are much like humans but are slightly more suspectible to burn damage, but they can use their tail to sting their enemies with aphrotoxin or neurotoxin and can use their physiology to speak in the xenomorph language.<br /><br /> \
+	<b>Psychology</b>:<br /><br /> \
+	Xenomorph hybrids are a complex species that were man-made, they usually behave similiar to xenomorphs but take their faction for their 'hive'. But it varies, they could be acting more human instead.<br /><br /> \
+	<br /><br /><b>Mechanics:</b><br /><br /> \
+	-Xenomorph-<br /><br /> \
+	Xenomorph hybrids can use their hybrid physique to do a variety of maneuvers, from biting to tail swing that injects aphrotoxin or neurotoxin.<br /><br /> \
+	-Exoskeleton-<br /><br /> \
+	Xenomorph hybrids have a tough exoskeleton that provides them with some brute protection.<br /><br /> \
+	-Fire Weakness-<br /><br /> \
+	Xenomorph hybrids have a slight weakness to fire damage."
+
+/datum/species/xenohybrid/on_species_gain(mob/living/carbon/human/H, datum/species/old_species)
+	. = ..()
+	if(!islist(H.body_markings))
+		H.body_markings = list()
+	if(!islist(H.body_markings["head"]) || !length(H.body_markings["head"]))
+		H.body_markings["head"] = list("Xeno Fangs" = list("#CCCCCC", FALSE))
+		H.update_body()
+	for(var/action_type in action_list)
+		if(H.actions_by_path[action_type])
+			continue
+		var/datum/action/action = new action_type()
+		action.give_action(H)
+
+/datum/species/xenohybrid/post_species_loss(mob/living/carbon/human/H)
+	. = ..()
+	for(var/action_type in action_list)
+		var/datum/action/action = H.actions_by_path[action_type]
+		if(!action)
+			continue
+		action.remove_action(H)
+		qdel(action)
 
 /datum/species/tajaran
 	name = "Tajaran"
@@ -511,6 +552,9 @@
 /datum/species/teshari
 	name = "Teshari"
 	icobase = BODYPART_ICON_TESHARI
+	eyes = "eyes"
+	eye_icon = 'modular_skyrat/modules/organs/icons/teshari_eyes.dmi'
+	eye_color_blend_mode = ICON_MULTIPLY
 	unarmed_type = /datum/unarmed_attack/claws
 	species_flags = HAS_LIPS|HAS_UNDERWEAR|HAS_SKIN_COLOR
 	count_human = TRUE

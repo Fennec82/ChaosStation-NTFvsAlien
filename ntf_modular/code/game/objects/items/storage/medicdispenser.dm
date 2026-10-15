@@ -1,6 +1,6 @@
 /obj/machinery/deployable/dispenser/medic
 	name = "NM Automedical dispenser"
-	desc = "The Novamed Automedical dispenser is a machine capable of holding a large amount of items on it, while also healing nearby non-synthetics. Your allies will often ask you to lay down one of these. It can be climbed onto by more heal-slutty medics to provide even better healing in the vicinity... Being 'used' by another during that will boost the effect even more."
+	desc = "The Novamed Automedical dispenser is a machine capable of holding a large amount of items on it, while also healing nearby non-synthetics. Your allies will often ask you to lay down one of these. It can be climbed onto by more heal-slutty medics to provide even better healing in the vicinity... Being 'used' by another person during that will boost the effect even more."
 	color = COLOR_DARK_CYAN
 	obj_flags = CAN_BE_HIT
 	allow_pass_flags = PASS_AIR
@@ -56,7 +56,13 @@
 	RegisterSignal(climbed_mob, COMSIG_RECEIVED_SEX, PROC_REF(sexboost))
 	RegisterSignal(climbed_mob, COMSIG_MOVABLE_MOVED, PROC_REF(disconnect_from_climbed))
 	user.visible_message(span_warning("[user] [atom_flags & ON_BORDER ? "leaps over" : "climbs onto"] \the [src]!"))
-	user.visible_message(span_warning("[src]'s 'mana-uplink' pops out and slides itself into [user.gender == MALE ? "onto [user]'s cock!" : "into [user]'s pussy!"]"))
+	var/usedverb = "into [user]'s ass!" //i guess everyone have an ass
+	if(user.sexcon.can_use_penis())
+		usedverb = "around [user]'s cock!"
+	else if(user.sexcon.can_use_vagina())
+		usedverb = "into [user]'s cunt!"
+
+	user.visible_message(span_warning("[src]'s 'mana-uplink' pops out and slides itself [usedverb]"))
 	playsound(user, pick(list('ntf_modular/sound/misc/mat/insert (1).ogg','ntf_modular/sound/misc/mat/insert (2).ogg')), 20, TRUE, 7, ignore_walls = FALSE)
 
 /obj/machinery/deployable/dispenser/medic/deploy()
@@ -120,7 +126,12 @@
 			do_thrust_animate(climbed_mob,src) //carries them up with the machine
 			for(var/mob/living/person in affecting_list)
 				affecting_list[person] = beam(person, "bsa_beam", maxdistance = 3, time = 1.9 SECONDS)
-			climbed_mob.visible_message(span_loveextreme("[src] roughly thrusts it's 'mana-uplink' [climbed_mob.gender == MALE ? "around [climbed_mob]'s cock!" : "into [climbed_mob]'s cunt!"]!"))
+			var/usedverb = "into [climbed_mob]'s ass!" //i guess everyone have an ass
+			if(climbed_mob.sexcon.can_use_penis())
+				usedverb = "around [climbed_mob]'s cock!"
+			else if(climbed_mob.sexcon.can_use_vagina())
+				usedverb = "into [climbed_mob]'s cunt!"
+			climbed_mob.visible_message(span_loveextreme("[src] roughly thrusts it's 'mana-uplink' [usedverb]!"))
 			playsound(climbed_mob, 'ntf_modular/sound/misc/mat/segso.ogg', 50, TRUE, 5, ignore_walls = FALSE)
 			climbed_mob.sexcon.adjust_arousal(5)
 		else

@@ -8,3 +8,13 @@
 				living_carbon.Knockdown(2 SECONDS) //Leaping into barbed wire is VERY bad
 				playsound(living_carbon, 'ntf_modular/sound/machines/bonk.ogg', 75, FALSE)
 	..()
+
+/obj/structure/barricade/proc/eord_stuff()
+	if(istype(get_area(src), /area/deathmatch))
+		modify_max_integrity(max_integrity + 200)
+		faction = FACTION_SPATIAL_AGENT
+
+/obj/structure/barricade/Initialize(mapload, mob/user)
+	. = ..()
+	if(!user)
+		addtimer(CALLBACK(src, PROC_REF(eord_stuff)), 2 SECONDS)

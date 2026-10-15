@@ -96,8 +96,6 @@
 			return "insect"
 		if("Skrell")
 			return "skrell"
-		if("Resurgentis")
-			return "resurgentis"
 		if("Xenomorph Hybrid")
 			return "xeno"
 		if("Teshari")
@@ -409,6 +407,73 @@
 		return "blank_eyes"
 	return visual_species.eyes
 
+/mob/living/carbon/human/proc/get_eye_icon_file()
+	var/datum/species/visual_species = get_visual_species()
+	if(istype(visual_species, /datum/species/robot))
+		return 'icons/mob/human_face.dmi'
+	return visual_species.eye_icon || 'icons/mob/human_face.dmi'
+
+/mob/living/carbon/human/proc/get_eye_color_blend_mode()
+	var/datum/species/visual_species = get_visual_species()
+	if(!visual_species)
+		return ICON_ADD
+	return visual_species.eye_color_blend_mode
+
+/mob/living/carbon/human/proc/color_eye_overlay(icon/eye_icon, blend_mode_override)
+	if(!eye_icon)
+		return null
+	eye_icon.Blend(rgb(r_eyes, g_eyes, b_eyes), blend_mode_override || get_eye_color_blend_mode())
+	return eye_icon
+
+/mob/living/carbon/human/proc/shift_eye_overlay(icon/eye_icon, horizontal_offset = 0, vertical_offset = 0)
+	if(!eye_icon)
+		return null
+	if(horizontal_offset > 0)
+		eye_icon.Shift(EAST, horizontal_offset)
+	else if(horizontal_offset < 0)
+		eye_icon.Shift(WEST, -horizontal_offset)
+	if(vertical_offset > 0)
+		eye_icon.Shift(NORTH, vertical_offset)
+	else if(vertical_offset < 0)
+		eye_icon.Shift(SOUTH, -vertical_offset)
+	return eye_icon
+
+/mob/living/carbon/human/proc/get_eye_overlay_icon()
+	var/eye_icon_state = get_eye_icon_state()
+	if(!eye_icon_state || eye_icon_state == "blank_eyes")
+		return null
+
+	var/eye_icon_file = get_eye_icon_file()
+	var/icon/eyes = color_eye_overlay(new/icon(eye_icon_file, eye_icon_state))
+	if(!HAS_TRAIT(src, TRAIT_QUAD_EYES))
+		return eyes
+
+	var/list/eye_states = icon_states(eye_icon_file)
+	var/quad_eye_icon_file = eye_icon_file
+	var/quad_eye_blend_mode
+	var/left_eye_state = "[eye_icon_state]_l"
+	var/right_eye_state = "[eye_icon_state]_r"
+	if(!(left_eye_state in eye_states) || !(right_eye_state in eye_states))
+		if(eye_icon_state != "eyes_s")
+			return eyes
+		quad_eye_icon_file = 'icons/mob/human/human_eyes.dmi'
+		quad_eye_blend_mode = ICON_MULTIPLY
+		left_eye_state = "eyes_l"
+		right_eye_state = "eyes_r"
+		eye_states = icon_states(quad_eye_icon_file)
+		if(!(left_eye_state in eye_states) || !(right_eye_state in eye_states))
+			return eyes
+
+	var/icon/left_eye = color_eye_overlay(new/icon(quad_eye_icon_file, left_eye_state), quad_eye_blend_mode)
+	shift_eye_overlay(left_eye, -quad_eyes_offset_width, quad_eyes_offset)
+	eyes.Blend(left_eye, ICON_OVERLAY)
+
+	var/icon/right_eye = color_eye_overlay(new/icon(quad_eye_icon_file, right_eye_state), quad_eye_blend_mode)
+	shift_eye_overlay(right_eye, quad_eyes_offset_width, quad_eyes_offset)
+	eyes.Blend(right_eye, ICON_OVERLAY)
+
+	return eyes
+
 /mob/living/carbon/human/proc/get_render_body_color()
 	if(get_effective_human_body_style() == HUMAN_BODY_STYLE_TGMC)
 		return "#FFFFFF"
@@ -664,86 +729,9 @@
 		return
 	inactive_hand.attackby(active_hand, src)
 
-/mob/living/MouseDrop_T(atom/dropping, mob/user)
-	. = ..()
-	if(!user.client || !user.client.prefs)
-		return
-	if(dropping != usr)
-		return
-	if(!isliving(dropping))
-		return
-	if(!isliving(user))
-		return
-	if(!user.sexcon || !sexcon)
-		return
-	if(user.incapacitated(TRUE))
-		return
-	if(dropping != src)
-		if(!(user.client?.prefs.quick_sex_flags & QUICK_SEX))
-			balloon_alert(user,"Your QK sex pref is OFF!")
-			return
-		//they are just warnings to show your action isnt working on this fucking snowflake
-		if(user.a_intent == INTENT_DISARM && !((client?.prefs.quick_sex_flags & QUICK_SEX_HEAL)))
-			balloon_alert_to_viewers("QK Heal sex is off!")
-			return
-		if(user.a_intent == INTENT_DISARM && !((client?.prefs.harmful_sex_flags & HARMFUL_SEX_STAMINA_DRAIN) && (client?.prefs.harmful_sex_flags & HARMFUL_SEX_CHOKING)))
-			balloon_alert_to_viewers("Some Stam sex prefs are OFF!")
-			return
-		if(user.a_intent == INTENT_HARM && !(client?.prefs.harmful_sex_flags & HARMFUL_SEX_BLOOD_DRAIN) && ((client?.prefs.harmful_sex_flags & HARMFUL_SEX_ALL) && (client?.prefs.harmful_sex_flags & HARMFUL_SEX_ROUGH_SEX)))
-			balloon_alert_to_viewers("Some Harm sex prefs are OFF!")
-			return
-		user.sexcon.set_target(src)
-		if(user.a_intent != INTENT_HELP && !user.sexcon.current_action)
-			user.face_atom(src)
-			face_atom(user)
-			var/action = /datum/sex_action/rimming // neuter things ig
-			if(gender == MALE)
-				if(user.gender == MALE || (isxeno(user) && user.client?.prefs?.xenogender > 2))
-					action = pick(/datum/sex_action/anal_sex, /datum/sex_action/throat_sex, /datum/sex_action/frotting) //funny frot
-					if(user.a_intent == INTENT_DISARM) //prioritise stamdrain acts
-						action = /datum/sex_action/throat_sex
-				else if(user.gender == FEMALE)
-					action = pick(/datum/sex_action/vaginal_ride_sex, /datum/sex_action/anal_ride_sex, /datum/sex_action/blowjob)
-					if(user.a_intent == INTENT_DISARM)
-						action = /datum/sex_action/facesitting
-			else if(gender == FEMALE)
-				if(user.gender == MALE || (isxeno(user) && user.client?.prefs?.xenogender <= 2))
-					action = pick(/datum/sex_action/vaginal_sex, /datum/sex_action/anal_sex, /datum/sex_action/throat_sex)
-					if(user.a_intent == INTENT_DISARM)
-						action = /datum/sex_action/throat_sex
-				else if(user.gender == FEMALE)
-					action = pick(/datum/sex_action/scissoring, /datum/sex_action/cunnilingus)
-					if(user.a_intent == INTENT_DISARM)
-						action = /datum/sex_action/facesitting
-			user.sexcon.speed = SEX_SPEED_HIGH
-			if(user.a_intent == INTENT_GRAB) //in place of help cuz that opens regular sexcon
-				balloon_alert_to_viewers("QK heal sex")
-				if(!buckled)
-					user.start_pulling(src)
-				user.sexcon.drain_style = SEX_DRAIN_STYLE_HEAL_TARGET
-				user.sexcon.force = SEX_FORCE_LOW
-			if(user.a_intent == INTENT_HARM)
-				balloon_alert_to_viewers("QK health-drain sex")
-				user.sexcon.drain_style = SEX_DRAIN_STYLE_DRAIN_BLOOD_FAST
-				user.sexcon.force = SEX_FORCE_EXTREME
-			if(user.a_intent == INTENT_DISARM)
-				balloon_alert_to_viewers("QK stam-drain sex")
-				if(!buckled)
-					user.start_pulling(src)
-				user.sexcon.drain_style = SEX_DRAIN_STYLE_DRAIN_STAMINA
-				user.sexcon.force = SEX_FORCE_EXTREME
-			if(lying_angle)
-				AdjustParalyzed(3 SECONDS)
-				user.Move(loc)
-				user.sexcon.speed = SEX_SPEED_EXTREME
-			else
-				AdjustImmobilized(1 SECONDS)
-			user.sexcon.try_start_action(action)
-			return
-	erptime(user, src)
-
 /mob/living/carbon/human/proc/npc_characterise()
 	//gives extra stuff to npc appearance, maybe one day updated to randomise race but too much work rn
+	blood_type = pick(7;"O-", 38;"O+", 6;"A-", 34;"A+", 2;"B-", 9;"B+", 1;"AB-", 3;"AB+")
 	body_color = pick(38;"#F1D0B5",34;"#E6B98F",9;"#C8895A",6;"#A66A43",2;"#7A4A2E",1;"#4A2C1F") //ghetto npc skin randomiser
 	if(gender == MALE)
 		cock = "human"
@@ -763,3 +751,4 @@
 		ass = "pair"
 		ass_color = body_color
 		ass_size = boobs_size //proportions
+	update_icon()

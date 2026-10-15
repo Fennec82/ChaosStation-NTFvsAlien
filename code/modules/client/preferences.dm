@@ -122,6 +122,9 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	var/g_eyes = 0
 	var/b_eyes = 0
 	var/eye_emissive = FALSE
+	var/quad_eyes = FALSE
+	var/quad_eyes_offset = 0
+	var/quad_eyes_offset_width = 1
 
 	/// Genitalia overlay system
 	var/genitalia_ass = null
@@ -227,9 +230,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	var/nsfwprofile_pic = ""
 	var/xenoprofile_pic = ""
 	var/xenogender = 1
-	var/harmful_sex_flags = HARMFUL_SEX_ALL
-	var/quick_sex_flags = QUICK_SEX_ALL
-	var/burst_screams_enabled = TRUE
+	var/sex_pref_flags = SEXPREF_ALL
 
 	var/list/exp = list()
 	var/list/menuoptions = list()

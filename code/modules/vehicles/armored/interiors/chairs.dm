@@ -37,7 +37,7 @@
 	///owner of this object, assigned during interior linkage
 	var/obj/vehicle/sealed/armored/owner
 	///The skill required to man this chair
-	var/skill_req = SKILL_LARGE_VEHICLE_VETERAN
+	var/skill_req = SKILL_LARGE_VEHICLE_DEFAULT
 	///Control flags given to the mob on buckle
 	var/control_flags = NONE
 
@@ -110,7 +110,6 @@
 
 /obj/structure/bed/chair/vehicle_crew/driver_gunner
 	name = "apc commander seat"
-	skill_req = SKILL_LARGE_VEHICLE_EXPERIENCED
 	control_flags = VEHICLE_CONTROL_MELEE|VEHICLE_CONTROL_EQUIPMENT|VEHICLE_CONTROL_DRIVE|VEHICLE_CONTROL_SETTINGS
 
 /obj/structure/bed/chair/vehicle_crew/driver/som

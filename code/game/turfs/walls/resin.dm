@@ -310,6 +310,6 @@
 	name = "hardy resin wall"
 	desc = "Weird slime soldified into a wall. Looks sturdy."
 	max_upgrade_per_tick = 12 //Upgrades faster, but if damaged at all it will be put on cooldown still to help against walling in combat.
-	soft_armor = list(MELEE = 80, BULLET = 30, LASER = 25, ENERGY = 75, BOMB = 80, BIO = 0, FIRE = 0, ACID = 0)
+	soft_armor = list(MELEE = 80, BULLET = 30, LASER = 25, ENERGY = 75, BOMB = 40, BIO = 0, FIRE = 0, ACID = 0)
 	filtercolor = COLOR_WALL_HARDY
 	wall_mult = HARDY_WALL_MULT

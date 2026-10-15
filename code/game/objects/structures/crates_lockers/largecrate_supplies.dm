@@ -78,6 +78,7 @@
 		/obj/structure/largecrate/machine/bodyscanner = 1,
 		/obj/structure/largecrate/machine/sleeper = 2,
 		/obj/structure/largecrate/supply/medicine/optable = 1,
+		/obj/structure/largecrate/supply/medicine/optablestasis = 1,
 		/obj/structure/largecrate/supply/supplies/tables_racks = 1,
 	)
 /*NEW SUPPLY CRATES*/
@@ -104,22 +105,22 @@
 /obj/structure/largecrate/supply/weapons/standard_carbine
 	name = "\improper AR-18 Carbine weapons chest (x10)"
 	desc = "A weapons chest containing ten AR-18 Carbines."
-	supplies = list(/obj/item/weapon/gun/rifle/standard_carbine = 10)
+	supplies = list(/obj/item/weapon/gun/rifle/standard_carbine = 10, /obj/item/storage/box/visual/magazine/compact/standard_carbine/full = 2)
 
 /obj/structure/largecrate/supply/weapons/shotgun
 	name = "\improper SH-35 pump action shotgun weapons chest (x10)"
 	desc = "A weapons chest containing ten SH-35 pump shotguns."
-	supplies = list(/obj/item/weapon/gun/shotgun/pump/t35 = 10)
+	supplies = list(/obj/item/weapon/gun/shotgun/pump/t35 = 10, /obj/item/big_ammo_box/shotgun/buckshot = 1, /obj/item/big_ammo_box/shotgun/flechette = 1)
 
 /obj/structure/largecrate/supply/weapons/standard_smg
 	name = "\improper SMG-90 sub machinegun weapons chest (x8)"
 	desc = "A weapons chest containing eight SMG-90 submachine guns."
-	supplies = list(/obj/item/weapon/gun/smg/standard_smg = 8)
+	supplies = list(/obj/item/weapon/gun/smg/standard_smg = 8, /obj/item/storage/box/visual/magazine/compact/standard_smg/full = 2)
 
 /obj/structure/largecrate/supply/weapons/pistols
 	name = "sidearm weapons chest (x20)"
 	desc = "A weapons chest containing eight R-44 revolvers, and twelve P-14 service pistols."
-	supplies = list(/obj/item/weapon/gun/revolver/standard_revolver = 6, /obj/item/weapon/gun/pistol/standard_pistol = 12)
+	supplies = list(/obj/item/weapon/gun/revolver/standard_revolver = 6, /obj/item/weapon/gun/pistol/standard_pistol = 12, /obj/item/storage/box/visual/magazine/compact/standard_revolver/full = 2, /obj/item/storage/box/visual/magazine/compact/standard_pistol/full = 2)
 
 /obj/structure/largecrate/supply/weapons/flamers
 	name = "\improper FL-240 incinerator weapons chest (x4)"
@@ -129,7 +130,7 @@
 /obj/structure/largecrate/supply/weapons/hpr
 	name = "\improper MG-42 LMG weapons chest (x2)"
 	desc = "A weapons chest containing two MG-42 LMG."
-	supplies = list(/obj/item/weapon/gun/rifle/standard_lmg = 2)
+	supplies = list(/obj/item/weapon/gun/rifle/standard_lmg = 2, /obj/item/storage/box/visual/magazine/compact/standard_lmg/full = 1)
 
 /obj/structure/largecrate/supply/weapons/sentries
 	name = "\improper ST-571 sentry chest (x2)"
@@ -366,8 +367,8 @@
 	supplies = list(/obj/machinery/optable = 1, /obj/item/storage/surgical_tray = 1, /obj/item/tank/anesthetic = 2, /obj/item/reagent_containers/spray/cleaner = 1)
 
 /obj/structure/largecrate/supply/medicine/medivend
-	name = "\improper NinetailsMed Plus crate (x1)"
-	desc = "A crate containing one Ninetails Plus medical vendor."
+	name = "\improper NovaMed Plus crate (x1)"
+	desc = "A crate containing one fully-stocked Novamed Plus medical vendor."
 	supplies = list(/obj/machinery/vending/medical = 1)
 
 

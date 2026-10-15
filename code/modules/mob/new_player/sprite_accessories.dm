@@ -1370,6 +1370,9 @@
 	var/pixel_w_offset = 6
 	var/pixel_z_offset = 0
 
+/datum/sprite_accessory/moth_wings/none
+	name = "None"
+
 /datum/sprite_accessory/moth_wings/plain
 	name = "Plain"
 	icon_state = "plain"

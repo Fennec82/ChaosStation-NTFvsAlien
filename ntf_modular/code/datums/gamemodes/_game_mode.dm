@@ -29,7 +29,7 @@ GLOBAL_LIST_EMPTY(reclone_tp_spots)
 	QDEL_LIST(GLOB.comm_tower_landmarks_net_two)
 
 /datum/game_mode/LateSpawn(mob/new_player/player)
-	if(!WHITELIST_CHECK(player.client))
+	if(player.client && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(player.client))
 		WHITELIST_MESSAGE(player.client)
 		return
 	for(var/mob/living/carbon/human/foundfucko in GLOB.ssd_living_mobs)

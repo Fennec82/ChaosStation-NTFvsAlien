@@ -313,41 +313,51 @@
 	set desc = "Open a panel that allows toggling preferences for sex mechanics."
 	set category = "IC"
 	var/list/dat = list()
-	var/flags = client.prefs.harmful_sex_flags
-	var/flags_qs = client.prefs.quick_sex_flags
-	if(flags & HARMFUL_SEX_ROUGH_SEX)
-		dat += "<center>Harm from rough/forceful sex : Enabled|<a href='?_src_=usr;harmful_sex_toggle_off=[HARMFUL_SEX_ROUGH_SEX]'>Disable</a></center>"
+	var/flags = client.prefs.sex_pref_flags
+	dat += "<center>Some of those are purely visual/message changes that do not alter the function, while some will cause have other negative effects instead of arousal etc.</center>"
+	if(flags & SEXPREF_BURSTSCREAMS)
+		dat += "<center>Larva burst screams : Enabled|<a href='?_src_=usr;sex_prefs_toggle_off=[SEXPREF_BURSTSCREAMS]'>Disable</a></center>"
 	else
-		dat += "<center>Harm from rough/forceful sex : <a href='?_src_=usr;harmful_sex_toggle_on=[HARMFUL_SEX_ROUGH_SEX]'>Enable</a>|Disabled</center>"
-	if(flags & HARMFUL_SEX_CHOKING)
-		dat += "<center>Oxygen loss from rough oral : Enabled|<a href='?_src_=usr;harmful_sex_toggle_off=[HARMFUL_SEX_CHOKING]'>Disable</a></center>"
+		dat += "<center>Larva burst screams : <a href='?_src_=usr;sex_prefs_toggle_on=[SEXPREF_BURSTSCREAMS]'>Enable</a>|Disabled</center>"
+	if(flags & SEXPREF_APHRO)
+		dat += "<center>Aphrodisiacs : Enabled|<a href='?_src_=usr;sex_prefs_toggle_off=[SEXPREF_APHRO]'>Disable</a></center>"
 	else
-		dat += "<center>Oxygen loss from rough oral : <a href='?_src_=usr;harmful_sex_toggle_on=[HARMFUL_SEX_CHOKING]'>Enable</a>|Disabled</center>"
-	if(flags & HARMFUL_SEX_STAMINA_DRAIN)
-		dat += "<center>Having stamina drained via sex : Enabled|<a href='?_src_=usr;harmful_sex_toggle_off=[HARMFUL_SEX_STAMINA_DRAIN]'>Disable</a></center>"
+		dat += "<center>Aphrodisiacs : <a href='?_src_=usr;sex_prefs_toggle_on=[SEXPREF_APHRO]'>Enable</a>|Disabled</center>"
+	if(flags & SEXPREF_FACEHUGGER_LEWD)
+		dat += "<center>Lewd Facehuggers (Will go into rough sex territory, disabling will re-enable chestbursters.) : Enabled|<a href='?_src_=usr;sex_prefs_toggle_off=[SEXPREF_FACEHUGGER_LEWD]'>Disable</a></center>"
 	else
-		dat += "<center>Having stamina drained via sex : <a href='?_src_=usr;harmful_sex_toggle_on=[HARMFUL_SEX_STAMINA_DRAIN]'>Enable</a>|Disabled</center>"
-	if(flags & HARMFUL_SEX_BLOOD_DRAIN)
-		dat += "<center>Having blood/life drained via sex : Enabled|<a href='?_src_=usr;harmful_sex_toggle_off=[HARMFUL_SEX_BLOOD_DRAIN]'>Disable</a></center>"
+		dat += "<center>Lewd Facehuggers (Will go into rough sex territory, disabling will re-enable chestbursters.) : <a href='?_src_=usr;sex_prefs_toggle_on=[SEXPREF_FACEHUGGER_LEWD]'>Enable</a>|Disabled</center>"
+	if(flags & SEXPREF_TENTACLE_NEST)
+		dat += "<center>Lewd Tentacle Nests : Enabled|<a href='?_src_=usr;sex_prefs_toggle_off=[SEXPREF_FACEHUGGER_LEWD]'>Disable</a></center>"
 	else
-		dat += "<center>Having blood/life drained via sex : <a href='?_src_=usr;harmful_sex_toggle_on=[HARMFUL_SEX_BLOOD_DRAIN]'>Enable</a>|Disabled</center>"
-	if(flags_qs & QUICK_SEX)
-		dat += "<center>Initiating quick-sex yourself : Enabled|<a href='?_src_=usr;quick_sex_toggle_off=[QUICK_SEX]'>Disable</a></center>"
+		dat += "<center>Lewd Tentacle Nests : <a href='?_src_=usr;sex_prefs_toggle_on=[SEXPREF_FACEHUGGER_LEWD]'>Enable</a>|Disabled</center>"
+	dat += "<center>--------------------------</center>"
+	if(flags & SEXPREF_ROUGH_SEX)
+		dat += "<center>Harm from rough/forceful sex : Enabled|<a href='?_src_=usr;sex_prefs_toggle_off=[SEXPREF_ROUGH_SEX]'>Disable</a></center>"
 	else
-		dat += "<center>Initiating quick-sex yourself  : <a href='?_src_=usr;quick_sex_toggle_on=[QUICK_SEX]'>Enable</a>|Disabled</center>"
-	if(flags_qs & QUICK_SEX_HEAL)
-		dat += "<center>Being healed via quick-sex (gives perms to medics w/o the need to ask again.) : Enabled|<a href='?_src_=usr;quick_sex_toggle_off=[QUICK_SEX_HEAL]'>Disable</a></center>"
+		dat += "<center>Harm from rough/forceful sex : <a href='?_src_=usr;sex_prefs_toggle_on=[SEXPREF_ROUGH_SEX]'>Enable</a>|Disabled</center>"
+	if(flags & SEXPREF_CHOKING)
+		dat += "<center>Oxygen loss from rough oral : Enabled|<a href='?_src_=usr;sex_prefs_toggle_off=[SEXPREF_CHOKING]'>Disable</a></center>"
 	else
-		dat += "<center>Being healed via quick-sex (gives perms to medics w/o the need to ask again.) : <a href='?_src_=usr;quick_sex_toggle_on=[QUICK_SEX_HEAL]'>Enable</a>|Disabled</center>"
+		dat += "<center>Oxygen loss from rough oral : <a href='?_src_=usr;sex_prefs_toggle_on=[SEXPREF_CHOKING]'>Enable</a>|Disabled</center>"
+	if(flags & SEXPREF_STAMINA_DRAIN)
+		dat += "<center>Having stamina drained via sex : Enabled|<a href='?_src_=usr;sex_prefs_toggle_off=[SEXPREF_STAMINA_DRAIN]'>Disable</a></center>"
+	else
+		dat += "<center>Having stamina drained via sex : <a href='?_src_=usr;sex_prefs_toggle_on=[SEXPREF_STAMINA_DRAIN]'>Enable</a>|Disabled</center>"
+	if(flags & SEXPREF_BLOOD_DRAIN)
+		dat += "<center>Having blood/life drained via sex : Enabled|<a href='?_src_=usr;sex_prefs_toggle_off=[SEXPREF_BLOOD_DRAIN]'>Disable</a></center>"
+	else
+		dat += "<center>Having blood/life drained via sex : <a href='?_src_=usr;sex_prefs_toggle_on=[SEXPREF_BLOOD_DRAIN]'>Enable</a>|Disabled</center>"
+	dat += "<center>--------------------------</center>"
+	if(flags & SEXPREF_QUICK_SEX)
+		dat += "<center>Initiating quick-sex yourself : Enabled|<a href='?_src_=usr;quick_sex_toggle_off=[SEXPREF_QUICK_SEX]'>Disable</a></center>"
+	else
+		dat += "<center>Initiating quick-sex yourself  : <a href='?_src_=usr;quick_sex_toggle_on=[SEXPREF_QUICK_SEX]'>Enable</a>|Disabled</center>"
+	if(flags & SEXPREF_QUICK_SEX_HEAL)
+		dat += "<center>Being healed via quick-sex : Enabled|<a href='?_src_=usr;quick_sex_toggle_off=[SEXPREF_QUICK_SEX_HEAL]'>Disable</a></center>"
+	else
+		dat += "<center>Being healed via quick-sex : <a href='?_src_=usr;quick_sex_toggle_on=[SEXPREF_QUICK_SEX_HEAL]'>Enable</a>|Disabled</center>"
 
 	var/datum/browser/popup = new(usr, "sexharmprefs", "<center>Sex Preferences</center>", 400, 150)
 	popup.set_content(dat.Join())
 	popup.open()
-
-/mob/living/verb/toggle_burst_scream()
-	set name = "Toggle Burst Screams"
-	set desc = "Toggle screaming from bursts."
-	set category = "IC"
-
-	client.prefs.burst_screams_enabled = !client.prefs.burst_screams_enabled
-	to_chat(src, span_notice("Screams from larva bursting are now [client.prefs.burst_screams_enabled ? "enabled" : "disabled"]"))

@@ -369,8 +369,13 @@
 			else
 				icon = attachment_data[OVERLAY_ICON]
 				suffix = attachment.icon == icon ? "_a" : ""
+		var/final_icon_state = icon_state + suffix
+		var/list/teshari_attachment_overlay = get_teshari_attachment_overlay(wearer, icon, final_icon_state, attachment_data[ATTACHMENT_LAYER])
+		if(teshari_attachment_overlay)
+			icon = teshari_attachment_overlay["icon"]
+			final_icon_state = teshari_attachment_overlay["state"]
 		//if we have no specific attachment layer, we need to pass null as the layer so it uses the default layer for MA. However -null = -0 instead of staying as null so we use a ternary
-		var/mutable_appearance/new_overlay = mutable_appearance(icon, icon_state + suffix, attachment_data[ATTACHMENT_LAYER] ? -attachment_data[ATTACHMENT_LAYER] : null)
+		var/mutable_appearance/new_overlay = mutable_appearance(icon, final_icon_state, attachment_data[ATTACHMENT_LAYER] ? -attachment_data[ATTACHMENT_LAYER] : null)
 		if(CHECK_BITFIELD(attachment_data[FLAGS_ATTACH_FEATURES], ATTACH_SAME_ICON))
 			new_overlay.overlays += attachment.overlays
 		if(attachment_data[MOB_PIXEL_SHIFT_X])

@@ -124,47 +124,43 @@
 /datum/ammo/bullet/sniper/pfc/bluescreen
 	name = "high caliber bluescreen rifle bullet"
 	hud_state = "sniper_heavy"
-	damage = 50
-	penetration = 10
+	damage = 60
 	damage_falloff = 0.1
 	shrapnel_chance = 1
 
 /datum/ammo/bullet/sniper/pfc/bluescreen/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
 	. = ..()
-	//no emp on robot they had enough
 	do_sparks(3, TRUE, target_mob)
+	empulse(target_mob.loc, 0,0,1,1)
 	if(!ishuman(target_mob))
 		return
 	var/mob/living/carbon/human/human_victim = target_mob
-	empulse(target_mob.loc, 0,0,0,1)
 	if(human_victim.species.species_flags & ROBOTIC_LIMBS)
 		human_victim.adjustStaminaLoss(proj.damage)
 		human_victim.add_slowdown(0.2,1)
-		human_victim.AdjustStun(0.3 SECONDS)
+		human_victim.AdjustStun(0.5 SECONDS)
 		if(human_victim.getStaminaLoss() > 20)
 			human_victim.overlay_fullscreen_timer(human_victim.getStaminaLoss(), 10, "glitch", /atom/movable/screen/fullscreen/robot_glitch)
-		if((human_victim.getStaminaLoss() >= human_victim.maxHealth*2) && !human_victim.IsUnconscious())
+		if((human_victim.getStaminaLoss() >= human_victim.maxHealth*2) && !human_victim.IsParalyzed())
 			human_victim.ParalyzeNoChain(15 SECONDS) //fake unconscious basically
 			human_victim.AdjustMute(15 SECONDS)
 			human_victim.overlay_fullscreen_timer(15 SECONDS, 10, "bluescreen", /atom/movable/screen/fullscreen/dead/robot)
 			human_victim.visible_message(span_warning("[human_victim] shudders violently whilst spitting out error text before collapsing, flailing on the ground randomly."), span_blue("You are bluescreening, but you should be able to recover from this by rebooting automatically in about 15s."), span_notice("You hear a clanker glitching."))
 	else
 		human_victim.adjustStaminaLoss(proj.damage/2)
-		human_victim.AdjustStun(0.2 SECONDS)
+		human_victim.AdjustStun(0.25 SECONDS)
 		human_victim.jitter(3)
 		human_victim.add_slowdown(0.1,1)
 		human_victim.visible_message(span_warning("[human_victim] shakes with an electric shock!"), span_warning("You feel lightning mess up your nerves, locking your body!"), span_notice("You hear a clanker glitching."))
 
 /datum/ammo/bullet/sniper/pfc/bluescreen/on_hit_obj(obj/target_obj, atom/movable/projectile/proj)
 	. = ..()
-	if(prob(50))
-		empulse(target_obj.loc, 0,0,0,1)
+	empulse(target_obj.loc, 0,0,1,1)
 	do_sparks(3, TRUE, target_obj)
 
 /datum/ammo/bullet/sniper/pfc/bluescreen/on_hit_turf(turf/target_turf, atom/movable/projectile/proj)
 	. = ..()
-	if(prob(50))
-		empulse(target_turf, 0,0,0,1)
+	empulse(target_turf, 0,0,1,1)
 	do_sparks(3, TRUE, target_turf)
 
 /obj/item/ammo_magazine/packet/p86x70mm/tranq
@@ -330,7 +326,7 @@
 //emp mag
 /obj/item/ammo_magazine/rifle/nt_halter/charged
 	name = "\improper NT 'Halter' taser magazine (7.62x39mm Taser)"
-	desc = "A magazine filled with specialized 7.62x39mm rifle rounds to deliver a powerful shock ontop of blunt force, for the Halter series of firearms."
+	desc = "A magazine filled with specialized 7.62x39mm rifle rounds to deliver a powerful shock ontop of blunt force, for the Halter series of firearms. This has a 15% chance per shot to deliver an EM pulse."
 	icon_state = "halter_charged"
 	bonus_overlay = "halter_charged"
 	default_ammo = /datum/ammo/bullet/rifle/heavy/halter/charged
@@ -360,7 +356,7 @@
 		human_victim.AdjustStun(0.1 SECONDS)
 		if(human_victim.getStaminaLoss() > 20)
 			human_victim.overlay_fullscreen_timer(human_victim.getStaminaLoss(), 10, "glitch", /atom/movable/screen/fullscreen/robot_glitch)
-		if((human_victim.getStaminaLoss() >= human_victim.maxHealth*2) && !human_victim.IsUnconscious())
+		if((human_victim.getStaminaLoss() >= human_victim.maxHealth*2) && !human_victim.IsParalyzed())
 			human_victim.ParalyzeNoChain(15 SECONDS) //fake unconscious basically
 			human_victim.AdjustMute(15 SECONDS)
 			human_victim.overlay_fullscreen_timer(15 SECONDS, 10, "bluescreen", /atom/movable/screen/fullscreen/dead/robot)
@@ -610,7 +606,7 @@
 		carbon_victim.reagents.add_reagent(/datum/reagent/toxin/poxomelanin, 4, no_overdose = FALSE)
 
 //mg27-e
-/obj/item/weapon/gun/standard_mmg/machinegunner/spec
+/obj/item/weapon/gun/standard_mmg/spec
 	name = "\improper MG-27-E medium machinegun"
 	desc = "The MG-27-E is the home improved version of the olden MG-27, it sports lighter post-factory components and a soulsteel rifle shield that must be installed and uninstalled between deployments, allowing it to take a lot of punishment while deployed and work as if a shield for the gunner, it can be shot without being deployed in a pinch but It's impossible to utilize the gun and the bullet shield together due the weight while undeployed, therefore it is uninstalled while taking the weapon in hand. It uses 10x27mm boxes."
 	icon = 'ntf_modular/icons/obj/machines/deployable/mounted_machinegun.dmi'
@@ -1220,7 +1216,7 @@
 		human_victim.AdjustStun(0.1 SECONDS)
 		if(human_victim.getStaminaLoss() > 25)
 			human_victim.overlay_fullscreen_timer(human_victim.getStaminaLoss(), 10, "glitch", /atom/movable/screen/fullscreen/robot_glitch)
-		if((human_victim.getStaminaLoss() >= human_victim.maxHealth*2) && !human_victim.IsUnconscious())
+		if((human_victim.getStaminaLoss() >= human_victim.maxHealth*2) && !human_victim.IsParalyzed())
 			human_victim.ParalyzeNoChain(15 SECONDS) //fake unconscious basically
 			human_victim.AdjustMute(15 SECONDS)
 			human_victim.overlay_fullscreen_timer(10 SECONDS, 10, "bluescreen", /atom/movable/screen/fullscreen/dead/robot)

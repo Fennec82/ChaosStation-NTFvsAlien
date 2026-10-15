@@ -107,7 +107,7 @@ const NavigationSelector = (props) => {
         selected={tabIndex === 2}
         onClick={() => act('tab_change', { tabIndex: 2 })}
       >
-        Background Information
+        Character Directory
       </Tabs.Tab>
       <Tabs.Tab
         selected={tabIndex === 3}

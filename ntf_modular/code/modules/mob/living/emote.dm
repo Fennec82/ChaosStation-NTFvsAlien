@@ -300,7 +300,7 @@
 
 /datum/emote/living/carbon/human/species/robot/droidcritical
 	key = "critical"
-	message = "emits a fearful alarm!"
+	message = "emits a highly fearful alarm!"
 	sound = "ntf_modular/sound/mecha/internaldmgcritalarm.ogg"
 
 /datum/emote/living/carbon/human/species/robot/droidcritdest

@@ -166,8 +166,8 @@
 	name = "\improper M5 riot control armor"
 	desc = "A heavily modified suit of M2 MP Armor used to supress riots from buckethead marines and their guns. Slows you down a lot."
 	icon_state = "marine_riot"
-	slowdown = 1.3
-	stamina_regen_mod = -0.4
+	slowdown = SLOWDOWN_ARMOR_HEAVY
+	stamina_regen_mod = -0.1
 	soft_armor = list(MELEE = 65, BULLET = 75, LASER = 75, ENERGY = 10, BOMB = 45, BIO = 10, FIRE = 10, ACID = 10)
 	allowed = list(
 		/obj/item/weapon/gun,
@@ -191,6 +191,7 @@
 	slowdown = SLOWDOWN_ARMOR_MEDIUM
 	resistance_flags = UNACIDABLE
 	autobalance_monitor_value = B18_PRICE
+	anti_hug = 1 //binary for body
 
 /obj/item/clothing/suit/storage/marine/specialist/Initialize(mapload, ...)
 	. = ..()
@@ -1073,10 +1074,10 @@
 	desc = "The Kaizoku Corporation's juggernaut set, given to the best and trusted veterans. Protects the user from almost all bullet calibers."
 	icon = 'icons/mob/clothing/suits/ert_suits.dmi'
 	slowdown = SLOWDOWN_ARMOR_VERY_HEAVY
-	stamina_regen_mod = - 0.4
+	stamina_regen_mod = -0.2
 	icon_state = "vsd_juggernaut_ballistic"
 	worn_icon_state = "vsd_juggernaut_ballistic"
-	soft_armor = list(MELEE = 75, BULLET = 85, LASER = 75, ENERGY = 65, BOMB = 60, BIO = 55, FIRE = 60, ACID = 75)
+	soft_armor = list(MELEE = 60, BULLET = 85, LASER = 75, ENERGY = 65, BOMB = 65, BIO = 65, FIRE = 65, ACID = 70)
 
 /obj/item/clothing/suit/storage/marine/vsd/juggernaut/Initialize(mapload, ...)
 	. = ..()
@@ -1089,18 +1090,18 @@
 	desc = "The Kaizoku Corporation's EOD-based armor, protects the user from most threats and heavily protects them against explosives."
 	icon = 'icons/mob/clothing/suits/ert_suits.dmi'
 	slowdown = SLOWDOWN_ARMOR_VERY_HEAVY
-	stamina_regen_mod = - 0.4
+	stamina_regen_mod = -0.2
 	icon_state = "vsd_juggernaut_explosive"
 	worn_icon_state = "vsd_juggernaut_explosive"
-	soft_armor = list(MELEE = 70, BULLET = 75, LASER = 75, ENERGY = 65, BOMB = 90, BIO = 55, FIRE = 60, ACID = 75)
+	soft_armor = list(MELEE = 60, BULLET = 75, LASER = 75, ENERGY = 65, BOMB = 90, BIO = 60, FIRE = 60, ACID = 65)
 
 /obj/item/clothing/suit/storage/marine/vsd/flamer
 	name = "\improper Crasher MT-H/43 'Apollo' powered fire-protected armor"
 	desc = "The Kaizoku Corporation's flamer armor, protects the user from most threats and suits them against fire and heat."
 	icon = 'icons/mob/clothing/suits/ert_suits.dmi'
 	slowdown = SLOWDOWN_ARMOR_VERY_HEAVY
-	stamina_regen_mod = - 0.4
+	stamina_regen_mod = -0.2
 	icon_state = "vsd_juggernaut_flamer"
 	worn_icon_state = "vsd_juggernaut_flamer"
-	soft_armor = list(MELEE = 70, BULLET = 75, LASER = 75, ENERGY = 65, BOMB = 60, BIO = 40, FIRE = 90, ACID = 60)
+	soft_armor = list(MELEE = 60, BULLET = 75, LASER = 75, ENERGY = 65, BOMB = 60, BIO = 60, FIRE = 90, ACID = 65)
 	armor_features_flags = ARMOR_FIRE_RESISTANT

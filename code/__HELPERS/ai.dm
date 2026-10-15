@@ -160,6 +160,13 @@
 				continue
 			if(HAS_TRAIT(nearby_human, TRAIT_HAULED))
 				continue
+			if(ismob(nearby_human.loc) && source.issamexenohive(nearby_human.loc))
+				continue
+			if(HAS_TRAIT(nearby_human, TRAIT_XENO_HOST(attacker_hive)))
+				if(nearby_human.incapacitated())
+					continue
+				if(nearby_human.pulledby && source.issamexenohive(nearby_human.pulledby))
+					continue
 			//ntf addition end
 			if(get_dist(source, nearby_human) < shorter_distance)
 				nearest_target = nearby_human

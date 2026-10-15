@@ -31,7 +31,10 @@ export const Exports = (props) => {
           <Table.Row key={exp.id}>
             <Table.Cell>{exp.name}</Table.Cell>
             <Table.Cell>
-              {exp.amount} x {exp.points} points ({exp.total})
+              {exp.amount} x {exp.points} supply points ({exp.total})
+            </Table.Cell>
+            <Table.Cell>
+              {exp.amount} x {exp.dropshippoints} dropship points ({exp.dropshiptotal})
             </Table.Cell>
           </Table.Row>
         ))}

@@ -504,12 +504,10 @@ GLOBAL_LIST_EMPTY(damage_icon_parts)
 
 	if(has_head)
 		//Eyes
-		var/eye_icon_state = get_eye_icon_state()
-		if(eye_icon_state && eye_icon_state != "blank_eyes")
-			var/icon/eyes = new/icon('icons/mob/human_face.dmi', eye_icon_state)
-			eyes.Blend(rgb(r_eyes, g_eyes, b_eyes), ICON_ADD)
+		var/icon/eyes = get_eye_overlay_icon()
+		if(eyes)
 			stand_icon.Blend(eyes, ICON_OVERLAY)
-			if(eye_emissive && ntf_should_render_emissives())
+			if(ntf_eye_emissive_enabled())
 				var/mutable_appearance/eye_glow = emissive_appearance(eyes, "", src, layer = -BODYPARTS_LAYER)
 				eye_glow.dir = dir
 				overlays_standing[EYE_EMISSIVE_LAYER] = eye_glow
@@ -627,7 +625,7 @@ GLOBAL_LIST_EMPTY(damage_icon_parts)
 	overlays_standing[HAIR_LAYER] = hair_final
 	apply_overlay(HAIR_LAYER)
 
-	if(hair_emissive && ntf_should_render_emissives())
+	if(ntf_hair_emissive_enabled())
 		var/mutable_appearance/hair_glow = emissive_appearance(hair_final.icon, hair_final.icon_state, src, layer = hair_final.layer, appearance_flags = hair_final.appearance_flags)
 		hair_glow.dir = dir
 		hair_glow.overlays = hair_final.overlays.Copy()

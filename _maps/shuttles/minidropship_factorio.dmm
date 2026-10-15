@@ -20,6 +20,31 @@
 	dir = 1
 	},
 /area/shuttle/minidropship)
+"h" = (
+/obj/machinery/door/poddoor/shutters/transit/nonsmoothing,
+/obj/machinery/door/poddoor/mainship/open{
+	id = "minidropship_podlock"
+	},
+/obj/structure/barricade/folding{
+	dir = 4
+	},
+/obj/effect/landmark/autowire,
+/turf/open/floor/mainship/mono,
+/area/shuttle/minidropship)
+"i" = (
+/obj/machinery/door/poddoor/shutters/transit/nonsmoothing,
+/obj/machinery/door/poddoor/mainship/open{
+	id = "minidropship_podlock"
+	},
+/obj/machinery/light{
+	dir = 1
+	},
+/obj/structure/barricade/solid/plasteel{
+	dir = 4
+	},
+/obj/effect/landmark/autowire,
+/turf/open/floor/mainship/mono,
+/area/shuttle/minidropship)
 "j" = (
 /obj/structure/dropship_piece/singlewindow/tadpole{
 	dir = 1
@@ -75,6 +100,17 @@
 /obj/item/storage/toolbox/mechanical,
 /turf/open/floor/plating/plating_catwalk,
 /area/shuttle/minidropship)
+"s" = (
+/obj/machinery/door/poddoor/shutters/transit/nonsmoothing,
+/obj/machinery/door/poddoor/mainship/open{
+	id = "minidropship_podlock"
+	},
+/obj/structure/barricade/folding{
+	dir = 8
+	},
+/obj/effect/landmark/autowire,
+/turf/open/floor/mainship/mono,
+/area/shuttle/minidropship)
 "t" = (
 /obj/structure/table/mainship,
 /obj/item/stack/sheet/metal/medium_stack,
@@ -115,6 +151,17 @@
 /area/shuttle/minidropship)
 "C" = (
 /obj/machinery/vending/nanoammo/directional/west,
+/turf/open/floor/mainship/mono,
+/area/shuttle/minidropship)
+"E" = (
+/obj/machinery/door/poddoor/shutters/transit/nonsmoothing,
+/obj/machinery/door/poddoor/mainship/open{
+	id = "minidropship_podlock"
+	},
+/obj/structure/barricade/solid/plasteel{
+	dir = 4
+	},
+/obj/effect/landmark/autowire,
 /turf/open/floor/mainship/mono,
 /area/shuttle/minidropship)
 "F" = (
@@ -158,6 +205,10 @@
 /obj/machinery/door/poddoor/mainship/open{
 	id = "minidropship_podlock"
 	},
+/obj/structure/barricade/solid/plasteel{
+	dir = 8
+	},
+/obj/effect/landmark/autowire,
 /turf/open/floor/mainship/mono,
 /area/shuttle/minidropship)
 "V" = (
@@ -174,6 +225,8 @@
 	dir = 2;
 	id = "minidropship_podlock"
 	},
+/obj/structure/barricade/folding,
+/obj/effect/landmark/autowire,
 /turf/open/floor/plating/plating_catwalk,
 /area/shuttle/minidropship)
 "Y" = (
@@ -184,6 +237,10 @@
 /obj/machinery/light{
 	dir = 1
 	},
+/obj/structure/barricade/solid/plasteel{
+	dir = 8
+	},
+/obj/effect/landmark/autowire,
 /turf/open/floor/mainship/mono,
 /area/shuttle/minidropship)
 "Z" = (
@@ -201,9 +258,9 @@
 b
 A
 Y
-U
-U
-U
+s
+s
+s
 U
 F
 a
@@ -266,11 +323,11 @@ F
 (7,1,1) = {"
 b
 k
-Y
-U
-U
-U
-U
+i
+h
+h
+h
+E
 F
 f
 "}

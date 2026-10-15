@@ -16,6 +16,10 @@
 	toxpwr = 0.5
 	meltprob = 0
 
+/datum/reagent/toxin/acid/xeno_cum/sfw
+	name = "Corrosive Secretion"
+	description = "Acidic xenomorphic liquid, corrosive."
+
 /datum/reagent/consumable/milk/xeno
 	name = "Xenomorphic Milk"
 	description = "An opaque greenish liquid produced by the mammary glands of xenomorphs."
@@ -32,6 +36,10 @@
 	brute_heal = 1.2
 	burn_heal = 1.2
 	blood_gain = 0.4
+
+/datum/reagent/consumable/nutriment/cum/xeno/sfw
+	name = "Nutrient Slush"
+	description = "Nutrient slush fed by a xenomorph to keep their hosts alive for a while..."
 
 //generates genetic material
 /datum/reagent/consumable/nutriment/cum/xeno/strong
@@ -61,6 +69,10 @@
 	brute_heal = 1.4
 	burn_heal = 1.4
 	blood_gain = 0.2
+
+/datum/reagent/consumable/nutriment/cum/xeno/resin/sfw
+	name = "Xenomorphic Resin"
+	description = "Strange xenomorph resin thet numbs the victim, slowing them. Hard to remove."
 
 /datum/reagent/consumable/nutriment/cum/xeno/resin/on_mob_life(mob/living/L, metabolism)
 	L.reagent_pain_modifier += PAIN_REDUCTION_VERY_HEAVY
@@ -195,6 +207,7 @@
 	var/obj/effect/abstract/particle_holder/particle_holder
 	var/mob/living/carbon/human/debuff_ownerhuman
 	var/clothesundoed = 0
+	var/neuro_stun_cd
 
 /particles/aphrodisiac
 	icon = 'ntf_modular/icons/effects/particles/generic_particles.dmi'
@@ -218,35 +231,63 @@
 	if(debuff_owner)
 		particle_holder.particles.spawning = 1 + round(debuff_owner.reagents.get_reagent_amount(/datum/reagent/toxin/xeno_aphrotoxin) / 4)
 	var/arousal_to_add = 5
+	var/power = 0 //stamina damage to do
+	var/flags = L.client.prefs.sex_pref_flags
 	if(L.sexcon)
 		arousal_to_add += min(25, (L.reagents.get_reagent_amount(/datum/reagent/toxin/xeno_aphrotoxin)))
 		switch(L.sexcon.arousal)
 			if(1 to MAX_AROUSAL*0.3)
 				if(prob(15))
-					to_chat(L, span_warning("You feel your [L.gender==MALE ? "cock throb a little," : "vagina get a bit wet,"] distracting you.") )
+					if(flags & SEXPREF_APHRO)
+						to_chat(L, span_warning("You feel your [L.gender==MALE ? "cock throb a little," : "vagina get a bit wet,"] distracting you.") )
+					else
+						to_chat(L, span_warning("You off...") )
 			if(MAX_AROUSAL*0.3 to MAX_AROUSAL*0.5)
 				if(prob(15))
-					to_chat(L, span_warning("You feel your [L.gender==MALE ? "cock harden and throb." : "vagina drip down your legs."] your knees feel weak!") )
+					if(flags & SEXPREF_APHRO)
+						to_chat(L, span_warning("You feel your [L.gender==MALE ? "cock harden and throb." : "vagina drip down your legs."] your knees feel weak!") )
+					else
+						to_chat(L, span_warning("You weak and disoriented...") )
 			if(MAX_AROUSAL*0.5 to MAX_AROUSAL*0.7)
 				if(prob(15))
-					L.emote("blush")
+					if(flags & SEXPREF_APHRO)
+						L.emote("blush")
 					L.AdjustConfused(1 SECONDS)
 				if(prob(15))
-					to_chat(L, span_warning("You feel your [L.gender==MALE ? "cock throb with need!" : "vagina is dripping a trail!"] Your legs tremble, too weak to walk for a moment.") )
-				L.adjustStaminaLoss(5)
+					if(flags & SEXPREF_APHRO)
+						to_chat(L, span_warning("You feel your [L.gender==MALE ? "cock throb with need!" : "vagina is dripping a trail!"] Your legs tremble, too weak to walk for a moment.") )
+					else
+						to_chat(L, span_warning("You feel confused and nauseous..!") )
+				power = 5
 			if(MAX_AROUSAL*0.7 to MAX_AROUSAL)
 				if(prob(15))
-					L.emote("moan")
+					if(flags & SEXPREF_APHRO)
+						L.emote("moan")
 					L.AdjustConfused(2 SECONDS)
 				if(prob(15))
-					to_chat(L, span_warning("You feel your [L.gender==MALE ? "cock throb hard as steel!" : "vagina is dripping like a waterfall!"] your legs almost give up as you come near orgasm!") )
-				L.adjustStaminaLoss(5)
-	if(L.sexcon.arousal + arousal_to_add < (MAX_AROUSAL - 30))
-		L.sexcon.adjust_arousal(arousal_to_add)
+					if(flags & SEXPREF_APHRO)
+						to_chat(L, span_warning("You feel your [L.gender==MALE ? "cock throb hard as steel!" : "vagina is dripping like a waterfall!"] your legs almost give up as you come near orgasm!") )
+					else
+						to_chat(L, span_warning("You feel extremely sick and disoriented..!") )
+				power = 5
+	var/stamina_loss_limit = L.maxHealth * STAMINA_LOSS_LIMIT_MULTIPLIER
+	var/applied_damage = clamp(power, 0, (stamina_loss_limit - L.getStaminaLoss()))
+	var/damage_overflow = power - applied_damage
+	if((damage_overflow > 0) && COOLDOWN_FINISHED(src, neuro_stun_cd))
+		L.adjustStaminaLoss(power)
+		COOLDOWN_START(src, neuro_stun_cd, 5 MINUTES) //only do the hard stun once every five minutes, unless the reagent is cleared completely
 	else
+		L.adjustStaminaLoss(applied_damage)
+	if(L.sexcon.arousal + arousal_to_add < (MAX_AROUSAL - 30))
+		if(flags & SEXPREF_APHRO)
+			L.sexcon.adjust_arousal(arousal_to_add)
+		else
+			L.adjustOxyLoss(max(1, arousal_to_add/8))
+	else //rest here shouldnt be relevant if pref is off
 		if(prob(5))
-			to_chat(L, span_warning("You HAVE to [L.gender==MALE ? "fuck!" : "get fucked!"] you are going crazy with need!") )
-			L.sexcon.adjust_arousal(5) //slow creep of cooming
+			if(flags & SEXPREF_APHRO)
+				to_chat(L, span_warning("You HAVE to [L.gender==MALE ? "fuck!" : "get fucked!"] you are going crazy with need!") )
+				L.sexcon.adjust_arousal(5) //slow creep of cooming
 	return ..()
 
 /// Called when the debuff's owner uses the Resist action for this debuff.
@@ -257,11 +298,13 @@
 /// Resisting the debuff will allow the debuff's owner to remove some stacks from themselves.
 /datum/reagent/toxin/xeno_aphrotoxin/proc/resist_debuff()
 	var/channel = SSsounds.random_available_channel()
+	var/flags = debuff_owner.client.prefs.sex_pref_flags
 	if(length(debuff_owner.do_actions))
 		return
 	if(clothesundoed != 1)
 		if(debuff_ownerhuman.w_uniform)
-			debuff_ownerhuman.visible_message(span_warning("[debuff_ownerhuman] begins to undo [debuff_ownerhuman.p_their()] clothes and expose [debuff_ownerhuman.p_their()] [debuff_ownerhuman.gender==MALE ? "cock" : "pussy"]!"), span_warning("You begin to undo your clothes and expose your [debuff_ownerhuman.gender==MALE ? "cock" : "pussy"]."), span_warning("You hear ruffling."), 5)
+			if(flags & SEXPREF_APHRO)
+				debuff_ownerhuman.visible_message(span_warning("[debuff_ownerhuman] begins to undo [debuff_ownerhuman.p_their()] clothes and expose [debuff_ownerhuman.p_their()] [debuff_ownerhuman.gender==MALE ? "cock" : "pussy"]!"), span_warning("You begin to undo your clothes and expose your [debuff_ownerhuman.gender==MALE ? "cock" : "pussy"]."), span_warning("You hear ruffling."), 5)
 			if(!do_after(debuff_owner, 1.5 SECONDS, TRUE, debuff_owner, BUSY_ICON_CLOCK))
 				debuff_owner?.balloon_alert(debuff_owner, "Interrupted")
 				return
@@ -274,21 +317,28 @@
 		clothesundoed = 0
 		return
 	if(!debuff_owner)
-		usr.stop_sound_channel(channel)
+		debuff_owner.stop_sound_channel(channel)
 		return
-	debuff_owner.emote("moan")
-	debuff_owner.visible_message(span_warning("[debuff_owner] cums on the floor!"), span_warning("You cum on the floor."), span_warning("You hear a splatter."), 5)
-	debuff_owner.balloon_alert(debuff_owner, "Orgasmed.")
+	if(flags & SEXPREF_APHRO)
+		debuff_owner.emote("moan")
+		debuff_owner.visible_message(span_warning("[debuff_owner] cums on the floor!"), span_warning("You cum on the floor."), span_warning("You hear a splatter."), 5)
+		debuff_owner.balloon_alert(debuff_owner, "Orgasmed.")
+		debuff_owner.sexcon.set_arousal(0)
 	debuff_owner.adjustStaminaLoss(75)
 
-	playsound(usr.loc, "sound/effects/splat.ogg", 30)
-	debuff_owner.update_eye_blur()
+	if(flags & SEXPREF_APHRO)
+		playsound(debuff_owner.loc, "sound/effects/splat.ogg", 30)
+	else
+		playsound(debuff_owner.loc, 'sound/effects/slosh.ogg', 30)
 	debuff_owner.reagents.remove_reagent(/datum/reagent/toxin/xeno_aphrotoxin, 20)
-	debuff_owner.sexcon?.ejaculate(debuff_owner)
-	if(debuff_owner.getStaminaLoss() > 120)
-		if(prob(5))
+	debuff_owner.update_eye_blur()
+	if(flags & SEXPREF_APHRO)
+		debuff_owner.sexcon?.ejaculate(debuff_owner)
+	if(debuff_owner.getStaminaLoss() > 150)
+		if(flags & SEXPREF_APHRO)
 			debuff_owner.visible_message(span_warning("[debuff_owner] manages to black out from cumming too hard..."), 4)
-			debuff_owner.SetUnconscious(8 SECONDS)
+			debuff_owner.reagents.remove_reagent(/datum/reagent/toxin/xeno_aphrotoxin, 50) //gonna be knocked out so lets
+		debuff_owner.SetUnconscious(8 SECONDS)
 	if(debuff_owner.reagents.get_reagent_amount(/datum/reagent/toxin/xeno_aphrotoxin) > 0)
 		resist_debuff() // We repeat ourselves as long as the debuff persists.
 		return
@@ -337,3 +387,7 @@
 /datum/reagent/toxin/acid/potent_xenocum/on_mob_life(mob/living/L, metabolism)
 	L.take_limb_damage(0, 1.5*effect_str)
 	return ..()
+
+/datum/reagent/toxin/acid/potent_xenocum/sfw
+	name = "High-Corrosive Acid"
+	description = "A very corrosive acid, get it out quick."

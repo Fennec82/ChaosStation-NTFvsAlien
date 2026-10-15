@@ -45,6 +45,9 @@
 /datum/ammo/xeno/hugger/aphrotoxin
 	hugger_type = /obj/item/clothing/mask/facehugger/combat/chem_injector/aphrotoxin
 
+/datum/ammo/xeno/hugger/tricordrazine
+	hugger_type = /obj/item/clothing/mask/facehugger/combat/chem_injector/tricordrazine
+
 /datum/ammo/xeno/hugger/resin
 	hugger_type = /obj/item/clothing/mask/facehugger/combat/resin
 

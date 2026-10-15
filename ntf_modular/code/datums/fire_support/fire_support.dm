@@ -18,7 +18,7 @@
 	uses = 4
 	solmode_rearm_duration = 5 MINUTES
 	cooldown_duration = 1 MINUTES
-	bino_cooldown_mult = 0.2
+	bino_cooldown_mult = 0.1
 
 /datum/fire_support/rockets/solmode
 	fire_support_type = FIRESUPPORT_TYPE_ROCKETS_SOLMODE

@@ -13,8 +13,6 @@
 /datum/sex_action/force_armpit_nuzzle/can_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	if(user == target)
 		return FALSE
-
-
 	return TRUE
 
 /datum/sex_action/force_armpit_nuzzle/on_start(mob/living/carbon/user, mob/living/carbon/target)
@@ -22,7 +20,7 @@
 	user.visible_message(span_warning("[user] forces [target]'s head against [user.p_their()] armpit!"))
 
 /datum/sex_action/force_armpit_nuzzle/on_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
-	if(user.sexcon.do_message_signature("[type]"))
+	if(user.sexcon.do_message_signature("[type]", FALSE))
 		user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] forces [target] to nuzzle [user.p_their()]  armpit."))
 	do_thrust_animate(target, user)
 

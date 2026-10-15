@@ -107,14 +107,12 @@
 	hitscan_effect_icon = "beam_stun"
 	max_range = 9
 	bullet_color = COLOR_LIGHT_ORANGE
-	var/emp_chance = 100
 
 /datum/ammo/energy/tesla/emp/on_hit_mob(mob/target_mob, atom/movable/projectile/proj)
 	. = ..()
-	if(prob(emp_chance))
-		do_sparks(3, TRUE, target_mob)
-		empulse(target_mob, 0, 1, 1, 2)
-		staggerstun(target_mob, proj, stun = 0.5 SECONDS)
+	do_sparks(3, TRUE, target_mob)
+	empulse(target_mob, 0, 1, 1, 2)
+	staggerstun(target_mob, proj, stun = 0.5 SECONDS)
 	var/mob/living/carbon/human/human_victim = target_mob
 	if(human_victim.species.species_flags & ROBOTIC_LIMBS)
 		human_victim.adjustStaminaLoss(proj.damage/2)
@@ -122,7 +120,7 @@
 		human_victim.AdjustStun(0.2 SECONDS)
 		if(human_victim.getStaminaLoss() > 20)
 			human_victim.overlay_fullscreen_timer(human_victim.getStaminaLoss(), 10, "glitch", /atom/movable/screen/fullscreen/robot_glitch)
-		if((human_victim.getStaminaLoss() >= human_victim.maxHealth*2) && !human_victim.IsUnconscious())
+		if((human_victim.getStaminaLoss() >= human_victim.maxHealth*2) && !human_victim.IsParalyzed())
 			human_victim.ParalyzeNoChain(15 SECONDS) //fake unconscious basically
 			human_victim.AdjustMute(15 SECONDS)
 			human_victim.overlay_fullscreen_timer(15 SECONDS, 10, "bluescreen", /atom/movable/screen/fullscreen/dead/robot)
@@ -130,15 +128,13 @@
 
 /datum/ammo/energy/tesla/emp/on_hit_obj(obj/target_obj, atom/movable/projectile/proj)
 	. = ..()
-	if(prob(emp_chance))
-		do_sparks(3, TRUE, target_obj)
-		empulse(target_obj, 0, 0, 1, 2)
+	do_sparks(3, TRUE, target_obj)
+	empulse(target_obj, 0, 0, 1, 2)
 
 /datum/ammo/energy/tesla/emp/on_hit_turf(turf/target_turf, atom/movable/projectile/proj)
 	. = ..()
-	if(prob(emp_chance))
-		do_sparks(3, TRUE, target_turf)
-		empulse(target_turf, 0, 0, 1, 2)
+	do_sparks(3, TRUE, target_turf)
+	empulse(target_turf, 0, 0, 1, 2)
 
 #define BFG_SOUND_DELAY_SECONDS 1
 /datum/ammo/energy/bfg
@@ -490,7 +486,7 @@
 	name = "sniper laser bolt"
 	hud_state = "laser_sniper"
 	damage = 60
-	penetration = 20
+	penetration = 30
 	accurate_range_min = 5
 	ammo_behavior_flags = AMMO_ENERGY|AMMO_HITSCAN|AMMO_BETTER_COVER_RNG|AMMO_SNIPER
 	sundering = 5
@@ -515,7 +511,7 @@
 	icon_state = "microwavelaser"
 	hud_state = "laser_impact"
 	damage = 40
-	penetration = 10
+	penetration = 30
 	accurate_range_min = 5
 	sundering = 10
 	hitscan_effect_icon = "pu_laser"
@@ -538,8 +534,8 @@
 	name = "sniper laser bolt"
 	icon_state = "microwavelaser"
 	hud_state = "laser_disabler"
-	damage = 100
-	penetration = 30
+	damage = 40
+	penetration = 10
 	ammo_behavior_flags = AMMO_ENERGY|AMMO_HITSCAN|AMMO_BETTER_COVER_RNG|AMMO_SNIPER
 	sundering = 1
 	hitscan_effect_icon = "u_laser_beam"
@@ -547,19 +543,23 @@
 	bullet_color = COLOR_DISABLER_BLUE
 
 /datum/ammo/energy/lasgun/marine/ricochet/one
-	damage = 80
+	damage = 35
+	ammo_behavior_flags = AMMO_ENERGY|AMMO_HITSCAN
 	bonus_projectiles_type = /datum/ammo/energy/lasgun/marine/ricochet
 
 /datum/ammo/energy/lasgun/marine/ricochet/two
-	damage = 65
+	damage = 30
+	ammo_behavior_flags = AMMO_ENERGY|AMMO_HITSCAN
 	bonus_projectiles_type = /datum/ammo/energy/lasgun/marine/ricochet/one
 
 /datum/ammo/energy/lasgun/marine/ricochet/three
-	damage = 50
+	damage = 25
+	ammo_behavior_flags = AMMO_ENERGY|AMMO_HITSCAN
 	bonus_projectiles_type = /datum/ammo/energy/lasgun/marine/ricochet/two
 
 /datum/ammo/energy/lasgun/marine/ricochet/four
-	damage = 40
+	damage = 20
+	ammo_behavior_flags = AMMO_ENERGY|AMMO_HITSCAN
 	bonus_projectiles_type = /datum/ammo/energy/lasgun/marine/ricochet/three
 
 /datum/ammo/energy/lasgun/marine/ricochet/on_hit_turf(turf/target_turf, atom/movable/projectile/proj)

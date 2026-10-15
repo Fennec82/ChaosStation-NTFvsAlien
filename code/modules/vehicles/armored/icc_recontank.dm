@@ -16,7 +16,7 @@
 	soft_armor = list(MELEE = 40, BULLET = 60 , LASER = 60, ENERGY = 60, BOMB = 40, BIO = 60, FIRE = 40, ACID = 40)
 	hard_armor = list(MELEE = 0, BULLET = 5, LASER = 5, ENERGY = 5, BOMB = 10, BIO = 60, FIRE = 0, ACID = 0)
 	max_occupants = 5 //Boy is TINY.
-	pixel_x = 0
+	pixel_x = -16
 	pixel_y = -40
 	enter_delay = 0.5 SECONDS
 	ram_damage = 200

@@ -7,6 +7,10 @@
 /datum/language_holder/xeno
 	languages = list(/datum/language/xenocommon, /datum/language/telepathy)
 
+/datum/language_holder/xeno/puppet
+	languages = list(/datum/language/xenocommon, /datum/language/common, /datum/language/telepathy)
+	shadow_languages = list(/datum/language/moth)
+
 /datum/language_holder/synthetic
 	shadow_languages = list(/datum/language/xenocommon, /datum/language/telepathy) // psychic whisper works on them and telepathy is basically the same
 

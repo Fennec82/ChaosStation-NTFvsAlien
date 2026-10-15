@@ -191,4 +191,3 @@ OPERATIONS
 	name = "100 dropship fabricator points"
 	contains = list(/obj/item/dropship_points_voucher)
 	cost = 40
-	containertype = null

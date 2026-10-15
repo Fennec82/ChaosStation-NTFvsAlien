@@ -613,6 +613,7 @@
 #define COMSIG_ARMORED_STOP_FIRE "armored_stop_fire"
 
 #define COMSIG_ARMORED_DO_EXTRACT "armored_do_extract"
+#define COMSIG_ARMORED_DO_EXTRACT_FAKE "armored_do_extract_fake"
 
 // /obj/item/clothing signals
 #define COMSIG_SHOES_STEP_ACTION "shoes_step_action"			//from base of obj/item/clothing/shoes/proc/step_action(): ()

@@ -321,9 +321,6 @@
 				power_output++
 				. = TRUE
 
-/obj/machinery/power/port_gen/pacman/empty
-	start_full = FALSE
-
 /obj/machinery/power/port_gen/pacman/super
 	name = "\improper S.U.P.E.R.P.A.C.M.A.N.-type portable generator"
 	icon_state = "portgen1"
@@ -335,9 +332,6 @@
 
 /obj/machinery/power/port_gen/pacman/super/overheat()
 	explosion(loc, 4, explosion_cause=src)
-
-/obj/machinery/power/port_gen/pacman/super/empty
-	start_full = FALSE
 
 /obj/machinery/power/port_gen/pacman/mrs
 	name = "\improper M.R.S.P.A.C.M.A.N.-type portable generator"

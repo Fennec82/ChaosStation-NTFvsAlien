@@ -12,5 +12,6 @@
 #define TRAIT_RESEARCHER "researcher"
 /// Can only store or throw latching huggers
 #define TRAIT_LATCHING_HUGGERS_ONLY "latching_huggers_only"
+#define TRAIT_XENO_HOST(hivenumber) "xeno_host([hivenumber])"
 
 #define TRAIT_EXOSUIT_NV "exosuit_nightvision" //Able to see in dark

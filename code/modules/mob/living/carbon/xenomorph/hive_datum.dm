@@ -1010,10 +1010,9 @@ to_chat will check for valid clients itself already so no need to double check f
 /// Sets up the siloless collapse hud timer for all xenos in the hive
 /datum/hive_status/normal/proc/setup_siloless_hud_timer()
 	SIGNAL_HANDLER
-	if(!istype(SSticker.mode, /datum/game_mode/infestation/nuclear_war))
+	if(!SSticker.mode.siloless_hive_timer)
 		return
-	var/datum/game_mode/infestation/nuclear_war/D = SSticker.mode
-	siloless_hud_timer = new(null, null, get_all_xenos() , D.siloless_hive_timer, "Siloless Collapse: ${timer}")
+	siloless_hud_timer = new(null, null, get_all_xenos() , SSticker.mode.siloless_hive_timer, "Siloless Collapse: ${timer}")
 
 /datum/hive_status/burrow_larva(mob/living/carbon/xenomorph/larva/L)
 	if(!is_ground_level(L.z) && !L.get_xeno_hivenumber() == XENO_HIVE_CORRUPTED)

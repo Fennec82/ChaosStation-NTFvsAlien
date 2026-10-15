@@ -36,17 +36,8 @@
 /turf/open/floor/plating/plating_catwalk,
 /area/shuttle/minidropship)
 "i" = (
-/obj/machinery/door/poddoor/shutters/transit/nonsmoothing{
-	dir = 1
-	},
-/obj/machinery/door/poddoor/mainship/open{
-	dir = 2;
-	id = "minidropship_podlocksom"
-	},
-/obj/structure/barricade/folding/metal{
-	faction = "Sons of Mars"
-	},
-/turf/open/floor/mainship/mono,
+/obj/item/storage/toolbox/mechanical,
+/turf/open/floor/plating/plating_catwalk,
 /area/shuttle/minidropship)
 "k" = (
 /obj/structure/bed/chair/dropship/passenger{
@@ -81,6 +72,7 @@
 	dir = 8;
 	faction = "Sons of Mars"
 	},
+/obj/effect/landmark/autowire,
 /turf/open/floor/plating/plating_catwalk,
 /area/shuttle/minidropship)
 "q" = (
@@ -165,7 +157,8 @@
 	dir = 2;
 	id = "minidropship_podlocksom"
 	},
-/obj/structure/barricade/solid,
+/obj/effect/landmark/autowire,
+/obj/structure/barricade/folding,
 /turf/open/floor/plating/plating_catwalk,
 /area/shuttle/minidropship)
 "D" = (
@@ -180,7 +173,8 @@
 /obj/machinery/door/poddoor/mainship/open{
 	id = "minidropship_podlocksom"
 	},
-/obj/structure/barricade/solid{
+/obj/effect/landmark/autowire,
+/obj/structure/barricade/solid/plasteel{
 	dir = 8
 	},
 /turf/open/floor/plating/plating_catwalk,
@@ -217,7 +211,8 @@
 	dir = 2;
 	id = "minidropship_podlocksom"
 	},
-/obj/structure/barricade/solid,
+/obj/effect/landmark/autowire,
+/obj/structure/barricade/folding,
 /turf/open/floor/mainship/mono,
 /area/shuttle/minidropship)
 "L" = (
@@ -252,7 +247,8 @@
 /obj/machinery/door/poddoor/mainship/open{
 	id = "minidropship_podlocksom"
 	},
-/obj/structure/barricade/solid{
+/obj/effect/landmark/autowire,
+/obj/structure/barricade/solid/plasteel{
 	dir = 4
 	},
 /turf/open/floor/plating/plating_catwalk,
@@ -266,6 +262,7 @@
 	dir = 4;
 	faction = "Sons of Mars"
 	},
+/obj/effect/landmark/autowire,
 /turf/open/floor/plating/plating_catwalk,
 /area/shuttle/minidropship)
 "T" = (
@@ -365,10 +362,10 @@ y
 Z
 P
 s
-c
+i
 k
 n
-i
+K
 "}
 (4,1,1) = {"
 q

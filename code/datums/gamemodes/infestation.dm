@@ -37,26 +37,26 @@
 	for(var/turf/T in GLOB.xeno_weed_node_turfs)
 		if(!spawn_xeno_shit)
 			var/area/thearea = get_area(T)
-			if(thearea.ceiling < CEILING_DEEP_UNDERGROUND)
+			if(thearea.ceiling < CEILING_UNDERGROUND)
 				continue
 		weed_type = pickweight(GLOB.weed_prob_list)
 		new weed_type(T)
 	for(var/turf/T AS in GLOB.xeno_resin_wall_turfs)
 		if(!spawn_xeno_shit)
 			var/area/thearea = get_area(T)
-			if(thearea.ceiling < CEILING_DEEP_UNDERGROUND)
+			if(thearea.ceiling < CEILING_UNDERGROUND)
 				continue
 		T.ChangeTurf(/turf/closed/wall/resin/regenerating, T.type)
 	for(var/i in GLOB.xeno_resin_door_turfs)
 		if(!spawn_xeno_shit)
 			var/area/thearea = get_area(i)
-			if(thearea.ceiling < CEILING_DEEP_UNDERGROUND)
+			if(thearea.ceiling < CEILING_UNDERGROUND)
 				continue
 		new /obj/structure/mineral_door/resin(i)
 	for(var/i in GLOB.xeno_tunnel_spawn_turfs)
 		if(!spawn_xeno_shit)
 			var/area/thearea = get_area(i)
-			if(thearea.ceiling < CEILING_DEEP_UNDERGROUND)
+			if(thearea.ceiling < CEILING_UNDERGROUND)
 				continue
 		var/obj/structure/xeno/tunnel/new_tunnel = new /obj/structure/xeno/tunnel(i, XENO_HIVE_NORMAL)
 		new_tunnel.name = "[get_area_name(new_tunnel)] tunnel"
@@ -64,7 +64,7 @@
 	for(var/i in GLOB.xeno_jelly_pod_turfs)
 		if(!spawn_xeno_shit)
 			var/area/thearea = get_area(i)
-			if(thearea.ceiling < CEILING_DEEP_UNDERGROUND)
+			if(thearea.ceiling < CEILING_UNDERGROUND)
 				continue
 		new /obj/structure/xeno/resin_jelly_pod(i, XENO_HIVE_NORMAL)
 
@@ -442,8 +442,8 @@
 	var/disk_cycle_reward = DISK_CYCLE_REWARD_MIN + ((DISK_CYCLE_REWARD_MAX - DISK_CYCLE_REWARD_MIN) * (SSmonitor.maximum_connected_players_count / HIGH_PLAYER_POP))
 	disk_cycle_reward = ROUND_UP(clamp(disk_cycle_reward, DISK_CYCLE_REWARD_MIN, DISK_CYCLE_REWARD_MAX))
 
-	SSpoints.supply_points[FACTION_TERRAGOV] += disk_cycle_reward
-	SSpoints.dropship_points += disk_cycle_reward/10
+	SSpoints.add_supply_points(FACTION_TERRAGOV, disk_cycle_reward)
+	SSpoints.add_dropship_points(FACTION_TERRAGOV, disk_cycle_reward/10)
 	GLOB.round_statistics.points_from_objectives += disk_cycle_reward
 
 	generating_computer.say("Program has execution has rewarded [disk_cycle_reward] requisitions points!")

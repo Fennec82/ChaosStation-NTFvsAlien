@@ -45,6 +45,10 @@
 /area/template_noop)
 "i" = (
 /obj/effect/turf_decal/warning_stripes/box,
+/obj/structure/barricade/folding{
+	dir = 8
+	},
+/obj/effect/landmark/autowire,
 /turf/open/floor/mainship/mono,
 /area/shuttle/minidropship)
 "j" = (

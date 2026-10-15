@@ -76,7 +76,8 @@
 		valid_docks += potential_crash_site
 
 	if(!length(valid_docks))
-		CRASH("No valid crash sides found!")
+		message_admins("No valid crash sides found for [id]!")
+		SSshuttle.moveShuttleToTransit(id, TRUE)
 	var/obj/docking_port/stationary/crashmode/actual_crash_site = pick(valid_docks)
 	SSshuttle.moveShuttleToDock(id, actual_crash_site, TRUE)
 

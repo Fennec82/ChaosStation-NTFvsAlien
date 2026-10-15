@@ -181,6 +181,10 @@
 		if(i == mover || i == mover.loc) // Multi tile objects and moving out of other objects
 			continue
 		var/atom/movable/thing = i
+		if(ishitbox(thing))
+			var/obj/hitbox/the_hitbox = thing
+			if(the_hitbox.root == mover || the_hitbox.root == src) //dont collide with your own root or self if you are a hitbox.
+				continue
 		if(CHECK_MULTIPLE_BITFIELDS(thing.pass_flags, HOVERING))
 			continue
 		if(thing.status_flags & INCORPOREAL)

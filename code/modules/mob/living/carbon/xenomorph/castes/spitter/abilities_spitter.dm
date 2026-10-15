@@ -160,6 +160,20 @@
 	owner.playsound_local(owner, 'sound/voice/alien/drool1.ogg', 25, 0, 1)
 	return ..()
 
+/datum/action/ability/activable/xeno/scatter_spit/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/activable/xeno/scatter_spit/ai_should_use(atom/target)
+	if(!iscarbon(target))
+		return FALSE
+	if(get_dist(target, owner) > 6)
+		return FALSE
+	if(!line_of_sight(owner, target))
+		return FALSE
+	if(owner.issamexenohive(target))
+		return FALSE
+	return TRUE
+
 // ***************************************
 // *********** Acid Grenade
 // ***************************************
@@ -184,6 +198,14 @@ GLOBAL_LIST_INIT(globadier_images_list, list(
 	RESIN_GRENADE = image('icons/xeno/effects.dmi', icon_state = "sticky"),
 	GAS_GRENADE = image('icons/effects/effects.dmi', icon_state = "smoke"),
 	HEAL_GRENADE = image('icons/effects/effects.dmi', icon_state = "mech_toxin"),
+))
+
+GLOBAL_LIST_INIT(globadier_grenade_types_list, list(
+	ACID_GRENADE,
+	FIRE_GRENADE,
+	RESIN_GRENADE,
+	GAS_GRENADE,
+	HEAL_GRENADE,
 ))
 
 /datum/action/ability/activable/xeno/toss_grenade
@@ -308,6 +330,21 @@ GLOBAL_LIST_INIT(globadier_images_list, list(
 	xeno_owner.selected_grenade = grenade_choice
 	to_chat(xeno_owner, span_info("Grenade Effects: " + grenade_choice.select_message))
 	to_chat(xeno_owner, span_info("Mine Effects: " + grenade_choice.mine_message))
+
+/datum/action/ability/activable/xeno/toss_grenade/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/activable/xeno/toss_grenade/ai_should_use(atom/target)
+	if(!iscarbon(target))
+		return FALSE
+	if(get_dist(target, owner) > 6)
+		return FALSE
+	if(!line_of_sight(owner, target))
+		return FALSE
+	if(owner.issamexenohive(target))
+		return FALSE
+	xeno_owner.selected_grenade = pick(GLOB.globadier_grenade_types_list)
+	return TRUE
 
 // ***************************************
 // *********** Acid Grenade
@@ -578,6 +615,13 @@ GLOBAL_LIST_INIT(globadier_images_list, list(
 	visual_references[timervref] = time
 	button.add_overlay(visual_references[timervref])
 
+/datum/action/ability/activable/xeno/acid_mine/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/activable/xeno/acid_mine/ai_should_use(atom/target)
+	xeno_owner.selected_grenade = pick(GLOB.globadier_grenade_types_list)
+	return TRUE
+
 // ***************************************
 // *********** Gas Mine
 // ***************************************
@@ -646,3 +690,18 @@ GLOBAL_LIST_INIT(globadier_images_list, list(
 	add_cooldown()
 	GLOB.round_statistics.globadier_XADAR_fired++
 	SSblackbox.record_feedback("tally", "round_statistics", 1, "globadier_XADAR_fired")
+
+/datum/action/ability/activable/xeno/acid_rocket/ai_should_start_consider()
+	return TRUE
+
+/datum/action/ability/activable/xeno/acid_rocket/ai_should_use(atom/target)
+	if(!iscarbon(target))
+		return FALSE
+	if(get_dist(target, owner) > 6)
+		return FALSE
+	if(!line_of_sight(owner, target))
+		return FALSE
+	if(owner.issamexenohive(target))
+		return FALSE
+	return TRUE
+

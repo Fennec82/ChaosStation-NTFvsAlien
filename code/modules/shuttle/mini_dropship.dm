@@ -93,12 +93,14 @@
 	var/launching_delay = 10 SECONDS
 	///Minimap for use while in landing cam mode
 	var/datum/action/minimap/marine/external/tadmap
+	faction = FACTION_TERRAGOV
 
 /obj/machinery/computer/camera_advanced/shuttle_docker/minidropship/som
 	name = "SOM Tadpole navigation computer"
 	shuttleId = SHUTTLE_SOMTADPOLE
 	origin_port_id = SHUTTLE_SOMTADPOLE
 	req_one_access = null
+	faction = FACTION_SOM
 	req_access = list(ACCESS_SOM_TADPOLE)
 	networks = list(SOM_CAMERA_NETWORK)
 
@@ -108,6 +110,7 @@
 	origin_port_id = SHUTTLE_CLFTADPOLE
 	req_access = null
 	req_one_access = null
+	faction = FACTION_CLF
 	networks = null
 
 /obj/machinery/computer/camera_advanced/shuttle_docker/minidropship/colmil
@@ -116,6 +119,7 @@
 	origin_port_id = SHUTTLE_CMTADPOLE
 	req_access = null
 	req_one_access = null
+	faction = FACTION_ICC
 	networks = null
 
 /obj/machinery/computer/camera_advanced/shuttle_docker/minidropship/Initialize(mapload)

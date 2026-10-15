@@ -283,7 +283,7 @@
 	req_one_access = list(ACCESS_MARINE_CARGO, ACCESS_MARINE_LOGISTICS)
 
 /obj/machinery/door_control/mainship/req_hvh
-	name = "TGMC Requisition Shutters"
+	name = "NTF Requisition Shutters"
 	id = "req_hvh"
 
 /obj/machinery/door_control/mainship/req_hvh/som

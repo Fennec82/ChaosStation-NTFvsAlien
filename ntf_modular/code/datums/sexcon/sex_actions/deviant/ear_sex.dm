@@ -1,6 +1,7 @@
 /datum/sex_action/ear_sex
 	name = "Fuck their Ear"
 	stamina_cost = 1.0
+	menu_color = "red"
 
 /datum/sex_action/ear_sex/shows_on_menu(mob/living/carbon/user, mob/living/carbon/target)
 	if(user == target)
@@ -10,14 +11,6 @@
 /datum/sex_action/ear_sex/can_perform(mob/living/carbon/user, mob/living/carbon/target)
 	if(user == target)
 		return FALSE
-
-	if(isxeno(user))
-		var/mob/living/carbon/xenomorph/userxeno = user
-		if(userxeno.client?.prefs?.xenogender < 3)
-			return FALSE
-	else
-		if(user.gender != MALE && !user.sexcon.can_use_penis())
-			return FALSE
 	return TRUE
 
 /datum/sex_action/ear_sex/on_start(mob/living/carbon/user, mob/living/carbon/target)
@@ -32,7 +25,8 @@
 	user.sexcon.perform_sex_action(user, 2, 0, TRUE)
 	if(user.sexcon.check_active_ejaculation())
 		user.visible_message(span_love("[user] cums into [target]'s ear!"))
-		user.sexcon.cum_into()
+		target.reagents.add_reagent(/datum/reagent/medicine/alkysine, 8, safety = TRUE) //guess cum heals your ear and brain
+		user.sexcon.cum_into(FALSE, target)
 		if(isxeno(user))
 			var/mob/living/carbon/xenomorph/X = user
 			X.impregify(target, HOLE_EAR)
@@ -44,11 +38,15 @@
 		user.sexcon.perform_sex_action(target, 1.2, 3, FALSE)
 	else
 		user.sexcon.perform_sex_action(target, 2.4, 7, FALSE)
-		if(sc.force > SEX_FORCE_HIGH)
-			target.adjust_ear_damage(0.2)
-		if(sc.force > SEX_FORCE_HIGH)
-			if(prob(15))
-				to_chat(user, span_warning("I feel something squish against my tip..."))
+	var/flags = target.client.prefs.sex_pref_flags
+	if(flags & SEXPREF_ROUGH_SEX)
+		if(ishuman(target))
+			if(flags & SEXPREF_ROUGH_SEX)
+				if(sc.force > SEX_FORCE_HIGH)
+					target.adjust_ear_damage(0.2)
+				if(sc.force > SEX_FORCE_HIGH)
+					if(prob(15))
+						to_chat(user, span_warning("I feel something squish against my tip..."))
 			target.adjustBrainLoss(0.2)
 	target.sexcon.handle_passive_ejaculation(user)
 

@@ -12,6 +12,17 @@
 	},
 /turf/template_noop,
 /area/shuttle/minidropship)
+"e" = (
+/obj/machinery/door/poddoor/shutters/transit/nonsmoothing,
+/obj/machinery/door/poddoor/mainship/open{
+	id = "minidropship_podlock"
+	},
+/obj/effect/landmark/autowire,
+/obj/structure/barricade/solid/plasteel{
+	dir = 4
+	},
+/turf/open/floor/mainship/plate/outline,
+/area/shuttle/minidropship)
 "f" = (
 /obj/structure/dropship_piece/tadpole/engine{
 	dir = 1;
@@ -21,6 +32,17 @@
 /obj/structure/dropship_piece/glassone,
 /turf/open/floor/mainship/mono,
 /area/shuttle/minidropship)
+"i" = (
+/obj/machinery/door/poddoor/shutters/transit/nonsmoothing,
+/obj/machinery/door/poddoor/mainship/open{
+	id = "minidropship_podlock"
+	},
+/obj/effect/landmark/autowire,
+/obj/structure/barricade/folding{
+	dir = 4
+	},
+/turf/open/floor/mainship/plate/outline,
+/area/shuttle/minidropship)
 "k" = (
 /obj/machinery/door/poddoor/shutters/transit/nonsmoothing,
 /obj/machinery/door/poddoor/mainship/open{
@@ -29,6 +51,10 @@
 /obj/structure/closet/walllocker/hydrant/full{
 	pixel_x = -22;
 	pixel_y = -24
+	},
+/obj/effect/landmark/autowire,
+/obj/structure/barricade/solid/plasteel{
+	dir = 4
 	},
 /turf/open/floor/mainship/plate/outline,
 /area/shuttle/minidropship)
@@ -109,6 +135,10 @@
 /obj/machinery/door/poddoor/mainship/open{
 	id = "minidropship_podlock"
 	},
+/obj/effect/landmark/autowire,
+/obj/structure/barricade/solid/plasteel{
+	dir = 8
+	},
 /turf/open/floor/mainship/plate/outline,
 /area/shuttle/minidropship)
 "G" = (
@@ -154,6 +184,10 @@
 	pixel_x = -22;
 	pixel_y = -24
 	},
+/obj/effect/landmark/autowire,
+/obj/structure/barricade/solid/plasteel{
+	dir = 8
+	},
 /turf/open/floor/mainship/plate/outline,
 /area/shuttle/minidropship)
 "V" = (
@@ -166,6 +200,17 @@
 	pixel_y = -14
 	},
 /turf/open/floor/mainship/mono,
+/area/shuttle/minidropship)
+"Y" = (
+/obj/machinery/door/poddoor/shutters/transit/nonsmoothing,
+/obj/machinery/door/poddoor/mainship/open{
+	id = "minidropship_podlock"
+	},
+/obj/effect/landmark/autowire,
+/obj/structure/barricade/folding{
+	dir = 8
+	},
+/turf/open/floor/mainship/plate/outline,
 /area/shuttle/minidropship)
 "Z" = (
 /obj/structure/dropship_piece/singlewindow/tadpole{
@@ -195,7 +240,7 @@ M
 x
 v
 S
-E
+Y
 E
 v
 b
@@ -228,8 +273,8 @@ M
 t
 f
 k
-E
-E
+i
+e
 V
 q
 "}

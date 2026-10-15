@@ -12,7 +12,7 @@
 	armor_features_flags = ARMOR_NO_DECAP
 	inventory_flags = BLOCKSHARPOBJ
 	soft_armor = MARINE_ARMOR_HEAVY
-	var/anti_hug = 0
+	anti_hug = 0
 	attachments_by_slot = list(
 		ATTACHMENT_SLOT_VISOR,
 		ATTACHMENT_SLOT_STORAGE,
@@ -330,6 +330,9 @@
 	desc = "Perfect for winter in Siberia, da?"
 	icon_state = "ushankadown"
 	worn_icon_state = "ushankadown"
+	worn_icon_state_teshari = "ushanka_gagdown"
+	greyscale_config_worn_teshari = /datum/greyscale_config/ushanka/worn_teshari
+	greyscale_colors = "#C7B08B#5A4E44"
 	cold_protection_flags = HEAD
 	min_cold_protection_temperature = ICE_PLANET_MIN_COLD_PROTECTION_TEMPERATURE
 	inventory_flags = BLOCKSHARPOBJ
@@ -341,10 +344,12 @@
 	if(icon_state == "ushankadown")
 		icon_state = "ushankaup"
 		worn_icon_state = "ushankaup"
+		worn_icon_state_teshari = "ushanka_gagup"
 		to_chat(user, "You raise the ear flaps on the ushanka.")
 	else
 		icon_state = "ushankadown"
 		worn_icon_state = "ushankadown"
+		worn_icon_state_teshari = "ushanka_gagdown"
 		to_chat(user, "You lower the ear flaps on the ushanka.")
 
 

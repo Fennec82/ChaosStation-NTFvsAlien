@@ -31,6 +31,13 @@
 	var/shows_butt = FALSE
 	var/shows_bottom_genital = FALSE
 	var/shows_top_genital = FALSE
+	/// Used by auxiliary clothing layers, like undershirts, that should block exposed genital visuals/interactions.
+	var/blocks_butt = FALSE
+	var/blocks_bottom_genital = FALSE
+	var/blocks_top_genital = FALSE
+
+	//ntf moved here
+	var/anti_hug = 0
 
 /obj/item/clothing/Initialize(mapload)
 	. = ..()
@@ -280,7 +287,6 @@
 	equip_slot_flags = ITEM_SLOT_MASK
 	armor_protection_flags = FACE|EYES
 	blood_sprite_state = "maskblood"
-	var/anti_hug = 0
 	var/toggleable = FALSE
 	active = TRUE
 	/// If defined, what voice should we override with if TTS is active?

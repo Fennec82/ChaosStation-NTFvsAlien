@@ -196,7 +196,7 @@
 		if(ishuman(user) && (user.skills.getRating("medical") < SKILL_MEDICAL_PRACTICED && user.skills.getRating("chemistry") < SKILL_CHEM_TRAINED))
 			to_chat(user, span_warning("You don't understand how to use this machine properly."))
 			return
-		if(user.skills.getRating("chemistry") < SKILL_CHEM_EXPERT)
+		if(user.skills.getRating("chemistry") < SKILL_CHEM_TRAINED)
 			if(user.do_actions)
 				return
 			to_chat(user, span_notice("You start fiddling with \the [src]..."))

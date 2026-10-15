@@ -1,5 +1,6 @@
 /obj/structure/caspart/caschair/som
 	name = "\improper Manta Jet pilot seat"
+	req_access = list(ACCESS_SOM_COMMAND)
 	icon = 'icons/obj/structures/prop/somship.dmi'
 	icon_state = "somcas_cockpit"
 	dir = 1

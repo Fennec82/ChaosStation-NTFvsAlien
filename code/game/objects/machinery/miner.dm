@@ -16,6 +16,13 @@
 #define PLATINUM_CRATE_SELL_AMOUNT 80
 #define PHORON_DROPSHIP_BONUS_AMOUNT 20
 #define PLATINUM_DROPSHIP_BONUS_AMOUNT 80
+
+#define PHORON_CRATE_SELL_AMOUNT_WAR 175
+#define PLATINUM_CRATE_SELL_AMOUNT_WAR 325
+
+GLOBAL_VAR_INIT(phoron_crate_value, PHORON_CRATE_SELL_AMOUNT)
+GLOBAL_VAR_INIT(plat_crate_value, PLATINUM_CRATE_SELL_AMOUNT)
+
 ///Resource generator that produces a certain material that can be repaired by marines and attacked by xenos, Intended as an objective for marines to play towards to get more req gear
 /obj/machinery/miner
 	name = "\improper Ninetails phoron Mining Well"
@@ -384,6 +391,10 @@
 		var/marker_icon = "miner_[mineral_value >= PLATINUM_CRATE_SELL_AMOUNT ? "platinum" : "phoron"]_off"
 		SSminimaps.add_marker(src, MINIMAP_FLAG_ALL, image('ntf_modular/icons/UI_icons/map_blips.dmi', null, marker_icon, MINIMAP_BLIPS_LAYER))
 		return
+	if(is_platinum()) //update values
+		mineral_value = GLOB.plat_crate_value
+	else
+		mineral_value = GLOB.phoron_crate_value
 	if(add_tick >= required_ticks)
 		set_miner_status() // shouldn't be necessary but should fix the markers breaking
 		if(miner_upgrade_type == MINER_AUTOMATED)

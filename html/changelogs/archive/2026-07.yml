@@ -208,7 +208,105 @@
 2026-07-21:
   Lumipharon:
   - code_imp: fixed the install_byond.sh
+  mudzbe:
+  - rscadd: 'Added Encounter gamemode: 3 Teams, TGMC, SOM, xenos fight for control
+      over sensor towers, control over towers gives humans req points, for xenos both
+      kinds of psy points'
+  - rscadd: Added req area to combat patrol outpost, accessible on Encounter
+  - rscadd: Hive abilities, purchasable blessings that grant every caste access to
+      abilities, they can use if they have enough plasma, accessible on Encounter
+  - rscadd: Added Fireball, punch, resting weed, wall, fireproof jelly hive abilities
+2026-07-23:
+  Lumipharon:
+  - bugfix: fixed NPC's not holding still when healing in some cases
+  - qol: Added some missing feedback for certain abilities that can be blocked by
+      shields
+  - balance: Warrior lunge can be blocked by shields similarly to runners or hunters.
+  - bugfix: fixed shield code working the wrong way for certain interactions
+  - code_imp: Shield code works sensibly for touch interactions
+  - bugfix: fixed an infinite loop bug with gnome teleportation
+  - bugfix: NPC's will properly take ammo from ammo boxes
+  mudzbe:
+  - rscdel: Remove flaregun from civil war uniform
+  - rscadd: Added big MG60 belt box to zcrash vendor
 2026-07-24:
   CaputCapital:
   - rscadd: Neutral AI that uses Healdirt's modified monkey with the assistance of
       EaglePhntm.
+2026-07-25:
+  CaputCapital:
+  - rscadd: 'adds Vietzhuo-8 Borders & Turkenden-3 Excluzone
+
+      to be added: west vietzhuo national guard & east vietzhuo watchmen AI to properly
+      fight back with firearms
+
+      to be fixed(?): random streakers, naked civilians that aren''t assigned outfits'
+  Meghan-Rossi:
+  - balance: Aphrotoxin can now only stamcrit people once every five minutes, unless
+      purged completely
+  - balance: Neurotoxin now metabolizes half as fast
+  - balance: Increased time for blink drives to regain a charge from 3 seconds to
+      6 seconds
+  - balance: Added additional 12 second charging delay after blinking through a wall,
+      for a total of 18 seconds to gain a charge after blinking through a wall (previously
+      0 extra, 3 seconds total)
+  - balance: Increased length of blink drive instability after blinking through a
+      wall from 5 seconds to 30 seconds.
+2026-07-26:
+  CaputCapital:
+  - rscadd: Fixed pre-existing turtleneck sprites and added feminine alternatives
+  - bugfix: makes caves on T3E & V8B deep_underground so CAS can't strafe them
+  - balance: gives more silo spawns on T3E & sacrifices some xeno starting structures
+  - balance: gives more silo spawns on V8B (for more potential zombie spawns)
+  - balance: changes the total V8B civilian count from 116 to 48
+  - rscadd: more AI_nodes on V8B to help with AI pathfinding
+  SpooksAnno:
+  - rscadd: Added a Xenomorph Hybrid Tail Sting ability with selectable toxin and
+      delivery method.
+  - balance: Xenomorph Hybrids now take 5% more burn damage.
+  - balance: Xenomorph Hybrids are more resistant to xenomorph reproduction effects
+      and take reduced clone loss from larva birth.
+  - rscadd: Added additional mob interaction actions, including social, tail, self,
+      knot, and flare interactions.
+  - qol: Added controls for hiding or showing interactions that are unavailable due
+      to missing body parts.
+  - qol: Added genital visibility and clothing-rule controls to the mob interaction
+      menu.
+  - qol: Mob interaction menus can now be opened from farther away, with close-range
+      actions still requiring proximity.
+  - imageadd: Added and updated Teshari clothing and eye sprites across multiple equipment
+      slots.
+  - bugfix: Fixed several Teshari clothing items rendering with incorrect human-style
+      positioning.
+  - qol: OOC/background information can now be edited from character setup.
+  - qol: Added a None option for moth wings so they can be unselected.
+  - bugfix: Moth wing randomization no longer picks None or Burnt Off.
+  - rscadd: Resurgentis hair and eyes got a rule for forced glow (That one is on you
+      Vide) Currently disabled
+  - rscadd: Xenomorph Hybrids can now use the xenomorph language.
+2026-07-27:
+  Meghan-Rossi:
+  - balance: 'Colony fall evo requirements increased: Shrike: 6 -> 8, Queen: 8 ->
+      10, King, Dragon: 12 -> 14'
+  SpooksAnno:
+  - bugfix: Fixed simple sexcon interactions not applying quick-heal/healsex effects
+      for opted-in targets.
+2026-07-29:
+  CaputCapital:
+  - balance: edit V8B LZs to make it more defensible, as with one LZ on T3E
+2026-07-30:
+  Meghan-Rossi:
+  - rscadd: Added teleporter interior module as an alternative to the Sambar MRAP's
+      tesla module.  Taking it adds a special teleporter that can be used from within
+      the vehicle, but removes all vendors, periscopes and seats (except the driver
+      seat).  It also slows the vehicle down to the same speed as an Athena APC.
+  - rscdel: Removed deathrattles from survivor (colonist) jobs
+  - balance: SoM and NTC now have unlimited squash-head magazines for the vortex and
+      v-21, respectively
+2026-07-31:
+  CaputCapital:
+  - rscadd: PMR-14 Plasma Marksman Rifle
+  - rscadd: M55 PLASFIRE Grenade
+  - rscadd: M55 PLASFIRE Grenade box
+  - rscadd: PMR-14 Plasma Marksman Rifle & M55 PLASFIRE Grenade Boxes to requisitions
+  - rscadd: Bundles for attachments, top rail, bottom rail and muzzle

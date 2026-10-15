@@ -23,6 +23,11 @@
 	/// The looping sound that plays when the bike is operating
 	var/datum/looping_sound/som_tank_drive/hover_bike/engine_sound
 
+/obj/vehicle/ridden/hover_bike/buckle_mob(mob/living/buckling_mob, force, check_loc, lying_buckle, hands_needed, target_hands_needed, silent)
+	if(!do_after(buckling_mob, 2 SECONDS, IGNORE_HELD_ITEM, src, BUSY_ICON_GENERIC))
+		return FALSE
+	. = ..()
+
 /obj/vehicle/ridden/hover_bike/Initialize(mapload)
 	. = ..()
 	engine_sound = new()

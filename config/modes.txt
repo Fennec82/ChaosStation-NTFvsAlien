@@ -54,11 +54,6 @@ mode Prison Fall
 	votable 0
 endmode
 
-mode Colony Survival
-	requiredplayers 15
-	votable 1
-endmode
-
 mode Extended - Survivor-Heavy
 	requiredplayers 0
 	votable 1

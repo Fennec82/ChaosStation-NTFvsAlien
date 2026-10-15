@@ -51,14 +51,15 @@
 	charge_delay = 2 SECONDS
 
 /obj/item/cell/lasgun/lasrifle
-	name = "\improper Terra Experimental standard battery"
+	name = "\improper old world standard battery"
 	desc = "A specialized high density battery used to power most standard marine laser guns. It is simply known as the TE power cell."
 	charge_overlay = "te"
 	icon_state = "te"
 	icon_state_mini = "mag_cell_te"
 	maxcharge = 600
+
 /obj/item/cell/lasgun/lasrifle/recharger
-	name = "\improper Terra Experimental recharger battery"
+	name = "\improper old world recharger battery"
 	desc = "A prototype high density battery reverse-engineered from captured Volkite equipment. Due to developmental constraints and less than stellar jury-rigging, as well as space taken up by the recharger component, it boasts sub-par capacity."
 	icon_state = "ter"
 	maxcharge = 450

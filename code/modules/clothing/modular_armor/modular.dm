@@ -134,6 +134,7 @@
 		/obj/item/armor_module/module/chemsystem,
 		/obj/item/armor_module/module/knight,
 		/obj/item/armor_module/module/eshield,
+		/obj/item/armor_module/module/eshield/overclocked,
 		/obj/item/armor_module/module/eshield/absorbant/energy,
 		/obj/item/armor_module/module/eshield/absorbant/ballistic,
 		/obj/item/armor_module/module/mirage,

@@ -10,9 +10,9 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/exosuit/laser_rifle
 	name = "\improper exosuit-mounted AER-9 laser rifle"
 	icon = 'icons/mecha/mecha_equipment_64x32.dmi'
-	desc = "A standard laser rifle, adapted to be mounted on an exosuit."
+	desc = "An overcharge exosuit laser rifle, adapted to be mounted on an exosuit."
 	fire_sound = 'sound/mecha/weapons/mech_laser_light.ogg'
-	ammotype = /datum/ammo/energy/lasgun/marine
+	ammotype = /datum/ammo/energy/lasgun/marine/overcharge
 	energy_drain = 12
 	variance = 0
 	projectile_delay = 0.4 SECONDS
@@ -22,7 +22,7 @@
 	icon = 'icons/mecha/mecha_equipment_64x32.dmi'
 	desc = "An exosuit-mounted, tri-beam laser rifle. Fires a burst of three individual lasers, will melt you."
 	fire_sound = 'sound/mecha/weapons/mech_laser_heavy.ogg'
-	ammotype = /datum/ammo/bullet/shotgun/tribeam
+	ammotype = /datum/ammo/energy/lasgun/marine/mech/tribeam
 	energy_drain = 24
 	variance = 0
-	projectile_delay = 0.7 SECONDS
+	projectile_delay = 0.4 SECONDS

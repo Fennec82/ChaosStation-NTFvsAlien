@@ -43,6 +43,7 @@
 	passthroughable = FALSE
 	if(is_shifted)
 		is_shifted = FALSE
+		layer = initial(layer)
 		pixel_x = initial(pixel_x)
 		pixel_y = initial(pixel_y)
 
@@ -65,6 +66,7 @@
 				return FALSE
 			if(pixel_y <= MAXIMUM_PIXEL_SHIFT + initial(pixel_y))
 				pixel_y++
+				layer -= 0.1
 				is_shifted = TRUE
 		if(EAST)
 			if(!canface())
@@ -77,6 +79,7 @@
 				return FALSE
 			if(pixel_y >= -MAXIMUM_PIXEL_SHIFT + initial(pixel_y))
 				pixel_y--
+				layer += 0.1
 				is_shifted = TRUE
 		if(WEST)
 			if(!canface())

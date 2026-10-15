@@ -50,6 +50,7 @@
 
 	max_larva_preg_at_once = 1
 
+/datum/game_mode
 ///Timer used to track the countdown to hive collapse due to lack of silos or corrupted generators
 	var/siloless_hive_timer
 

@@ -52,9 +52,25 @@
 		user.temporarilyRemoveItemFromInventory(src) //Removes the item without qdeling it, qdeling it this early will break the rest of the procs
 		moveToNullspace()
 
-	if(isliving(spirited_away))
-		var/mob/living/spirited_away_living = spirited_away
-		spirited_away_living.despawn()
+	if(ishuman(spirited_away))
+		var/mob/living/carbon/human/liwwie = spirited_away
+		if(LAZYLEN(liwwie.ckey_history)) //sell ai humans or husks ig
+			var/turf/thespot = pick(GLOB.latejoinsurvivor) //gl
+			switch(liwwie.faction)
+				if(FACTION_CLF)
+					thespot = pick(GLOB.latejoinclf)
+				if(FACTION_SOM)
+					thespot = pick(GLOB.latejoinsom)
+				if(FACTION_VSD)
+					thespot = pick(GLOB.latejoinsurvivor)
+				if(FACTION_MOTHELLIAN)
+					thespot = pick(GLOB.latejoinmoff)
+				if(FACTION_NANOTRASEN,FACTION_TERRAGOV)
+					thespot = pick(GLOB.reclone_tp_spots)
+				else
+					thespot = pick(GLOB.latejoinsurvivor)
+			liwwie.forceMove(thespot.loc)
+			return
 	if(!QDELETED(spirited_away))
 		qdel(spirited_away)
 
@@ -145,6 +161,7 @@
 	if(!isarmoredvehicle(spirited_away))
 		return ..()
 	RegisterSignal(spirited_away, COMSIG_ARMORED_DO_EXTRACT, PROC_REF(extract_vehicle))
+	RegisterSignal(spirited_away, COMSIG_ARMORED_DO_EXTRACT_FAKE, PROC_REF(extract_vehicle_fake))
 
 	user.visible_message(span_notice("[user] finishes attaching [src] to [spirited_away], ready for fastening"),\
 	span_notice("You attach the pack to [spirited_away], ready for fastening."), null, 5)
@@ -157,6 +174,22 @@
 	do_extract(spirited_away, user)
 	spirited_away.moveToNullspace()
 	addtimer(CALLBACK(spirited_away, TYPE_PROC_REF(/obj/vehicle/sealed/armored, return_to_base)), 8 SECONDS)
+
+/obj/item/fulton_extraction_pack/tank/proc/extract_vehicle_fake(obj/vehicle/sealed/armored/spirited_away, mob/living/user)
+	SIGNAL_HANDLER
+	var/turf/return_loc = spirited_away.loc
+	do_extract(spirited_away, user)
+	balloon_alert(user, "Will return here in 16 seconds!")
+	addtimer(CALLBACK(src, PROC_REF(return_vehicle), spirited_away, user, return_loc), 16 SECONDS)
+
+/obj/item/fulton_extraction_pack/tank/proc/return_vehicle(obj/vehicle/sealed/armored/spirited_away, mob/living/user, turf/return_loc)
+	spirited_away.unwreck_vehicle()
+	spirited_away.pixel_z = 400
+	spirited_away.forceMove(return_loc)
+	playsound(loc, 'sound/items/fultext_deploy.ogg', 30, TRUE)
+	animate(spirited_away, time = 2 SECONDS, pixel_z = 0, easing=SINE_EASING|EASE_OUT, flags = ANIMATION_PARALLEL)
+	sleep(2 SECONDS)
+	playsound(spirited_away.loc, 'sound/effects/metal_crash.ogg', 50, TRUE)
 
 /obj/effect/fulton_extraction_holder
 	name = "fulton extraction holder"
@@ -315,6 +348,12 @@
 		if(isliving(movable_target))
 			REMOVE_TRAIT(movable_target, TRAIT_IMMOBILE, type)
 	else
+		if(ishuman(target))
+			var/mob/living/carbon/human/liwwie = target
+			if(LAZYLEN(liwwie.ckey_history))
+				if(uses < 1)
+					qdel(src)
+				return
 		qdel(target)
 		if(uses < 1)
 			qdel(src)

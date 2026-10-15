@@ -132,8 +132,8 @@
 	icon_state = "t76scope"
 
 /obj/item/attachable/scope/laser_sniper_scope
-	name = "Terra Experimental laser sniper rifle rail scope"
-	desc = "A marine standard mounted zoom sight scope made for the Terra Experimental laser sniper rifle otherwise known as TE-S abbreviated, allows zoom by activating the attachment."
+	name = "old world laser sniper rifle rail scope"
+	desc = "A marine standard mounted zoom sight scope made for the old world laser sniper rifle, allows zoom by activating the attachment."
 	icon_state = "tes"
 
 /obj/item/attachable/scope/unremovable

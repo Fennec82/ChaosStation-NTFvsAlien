@@ -13,7 +13,7 @@
 	if(IsGuestKey(key))
 		to_chat(src, "Guests may not use OOC.")
 		return
-	if(!WHITELIST_CHECK(src))
+	if(src && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(src))
 		WHITELIST_MESSAGE(src)
 		return
 
@@ -152,7 +152,7 @@
 	if(IsGuestKey(key))
 		to_chat(src, "Guests may not use XOOC.")
 		return
-	if(!WHITELIST_CHECK(src))
+	if(src && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(src))
 		WHITELIST_MESSAGE(src)
 		return
 	if(mob.stat == DEAD && !admin)
@@ -271,7 +271,7 @@
 	if(IsGuestKey(key))
 		to_chat(src, "Guests may not use MOOC.")
 		return
-	if(!WHITELIST_CHECK(src))
+	if(src && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(src))
 		WHITELIST_MESSAGE(src)
 		return
 	if(mob.stat == DEAD && !admin)
@@ -391,7 +391,7 @@
 	if(IsGuestKey(key))
 		to_chat(src, "Guests may not use XMOOC.")
 		return
-	if(!WHITELIST_CHECK(src))
+	if(src && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(src))
 		WHITELIST_MESSAGE(src)
 		return
 	var/mob/living/original_corpse
@@ -529,7 +529,7 @@
 	if(IsGuestKey(key))
 		to_chat(src, "Guests may not use LOOC.")
 		return
-	if(!WHITELIST_CHECK(src))
+	if(src && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(src))
 		WHITELIST_MESSAGE(src)
 		return
 
@@ -884,7 +884,7 @@
 	if  (IsGuestKey(ckey))
 		to_chat(src, span_danger("Guests can not link accounts."))
 		return
-	if(!WHITELIST_CHECK(src))
+	if(src && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(src))
 		WHITELIST_MESSAGE(src)
 		return
 

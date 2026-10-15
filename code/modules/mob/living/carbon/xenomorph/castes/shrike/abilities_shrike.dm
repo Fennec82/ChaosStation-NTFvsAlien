@@ -506,13 +506,16 @@
 	return TRUE
 
 /datum/action/ability/activable/xeno/psychic_cure/ai_should_use(atom/target)
-	if(!ismob(target))
+	if(!isliving(target))
 		return FALSE
 	if(get_dist(target, owner) > 6)
 		return FALSE
 	if(!line_of_sight(owner, target))
 		return FALSE
 	if(target.get_xeno_hivenumber() != owner.get_xeno_hivenumber())
+		return FALSE
+	var/mob/living/living_target = target
+	if(living_target.health == living_target.maxHealth)
 		return FALSE
 	return TRUE
 

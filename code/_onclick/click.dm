@@ -506,7 +506,7 @@ if(selected_ability.target_flags & flagname && !istype(A, typepath)){\
 	Unused except for AI
 */
 /mob/proc/CtrlShiftClickOn(atom/A)
-	A.CtrlShiftClick(src)
+	A.click_ctrl_shift(src)
 	return
 
 
@@ -516,7 +516,10 @@ if(selected_ability.target_flags & flagname && !istype(A, typepath)){\
 
 
 /atom/proc/CtrlShiftClick(mob/user)
-	SEND_SIGNAL(src, COMSIG_CLICK_CTRL_SHIFT)
+	return click_ctrl_shift(user)
+
+/atom/proc/click_ctrl_shift(mob/user)
+	SEND_SIGNAL(src, COMSIG_CLICK_CTRL_SHIFT, user)
 
 
 /*

@@ -27,6 +27,9 @@
 	burn_mod = 1.1
 	hunger_mult = 1.3
 	taste_sensitivity = TASTE_SENSITIVE
+	force_emissives = TRUE
+	force_hair_emissive = TRUE
+	force_eye_emissive = TRUE
 	species_description = "<br /><br /><b>Lore</b>:<br /><br /> \
 	The Resurgentis are one of the oldest species of humanoids after humans, they are the primary population of phantom city, the now biggest free city of the new world.<br /><br /> \
 	They have been allegedly, ancestrally created by the death god, from altered semi-undead humans who were supposed to be the superior race...<br /><br /> \

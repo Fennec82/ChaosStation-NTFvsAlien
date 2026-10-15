@@ -76,6 +76,8 @@
 
 ///Returns if a turf can be seen from another turf.
 /proc/can_see_through(turf/from_turf, turf/to_turf)
+	if(!isturf(from_turf) || !isturf(to_turf))
+		return FALSE //wtf is going on
 	if(IS_OPAQUE_TURF(to_turf))
 		return FALSE
 	for(var/obj/stuff_in_turf in to_turf)

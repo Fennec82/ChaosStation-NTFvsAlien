@@ -46,7 +46,7 @@
 
 /datum/loadout_item/suit_store/main_gun/marine/laser_rifle
 	name = "Laser rifle"
-	desc = "Equipped with a red dot sight, bayonet and miniflamer. The Terra Experimental laser rifle, is a powerful and flexible weapon thanks to a variety of firemodes. \
+	desc = "Equipped with a red dot sight, bayonet and miniflamer. The old world laser rifle, is a powerful and flexible weapon thanks to a variety of firemodes. \
 	Has good mobility and excellent falloff, although lacks the power offered by weapons with an underbarrel grenade launcher.\
 	Uses TE power cells that are shared across all NTF laser weaponry."
 	ui_icon = "ter"
@@ -280,7 +280,7 @@
 
 /datum/loadout_item/suit_store/main_gun/marine/laser_mg
 	name = "Laser machinegun"
-	desc = "Equipped with a mag harness, bayonet and underbarrel grenade launcher. The Terra Experimental machine laser gun is a more flexible weapon than its ballistic counterparts. \
+	desc = "Equipped with a mag harness, bayonet and underbarrel grenade launcher. The old world machine laser gun is a more flexible weapon than its ballistic counterparts. \
 	It has better mobility and handling than ballistic machineguns, which combined with its variable firemodes and underbarrel weaponry makes it effective in a variety of situations, \
 	but still ultimately excels at apply sustained supporting fire. Uses TE power cells that are shared across all NTF laser weaponry."
 	ui_icon = "tem"

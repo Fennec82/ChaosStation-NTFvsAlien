@@ -469,17 +469,18 @@
 //ntf
 /obj/machinery/camera/projectile_hit(atom/movable/projectile/proj, cardinal_move, uncrossing)
 	. = ..()
-	if(powered())
-		if(!CHECK_BITFIELD(machine_stat, PANEL_OPEN))
-			ENABLE_BITFIELD(machine_stat, PANEL_OPEN)
-			update_icon()
-			visible_message(span_danger("\The [src]'s cover swings open, exposing the wires!"))
-			return
+	if(obj_integrity)
+		if(powered())
+			if(!CHECK_BITFIELD(machine_stat, PANEL_OPEN))
+				ENABLE_BITFIELD(machine_stat, PANEL_OPEN)
+				update_icon()
+				visible_message(span_danger("\The [src]'s cover swings open, exposing the wires!"))
+				return
 
-		var/datum/effect_system/spark_spread/sparks = new
-		sparks.set_up(2, 0, src)
-		sparks.attach(src)
-		sparks.start()
+			var/datum/effect_system/spark_spread/sparks = new
+			sparks.set_up(2, 0, src)
+			sparks.attach(src)
+			sparks.start()
 
-		deactivate()
-		visible_message(span_danger("\The [src]'s wires snap apart in a rain of sparks!"))
+			deactivate()
+			visible_message(span_danger("\The [src]'s wires snap apart in a rain of sparks!"))

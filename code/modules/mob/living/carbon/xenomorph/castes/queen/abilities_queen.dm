@@ -178,10 +178,10 @@
 		to_chat(owner, span_danger("This Host is way too full! We overstuff them..."))
 		A.emote("scream")
 		A.apply_damage((damageperlarva/damagescaledivisor)*implanted_embryos, BRUTE, BODY_ZONE_PRECISE_GROIN, updating_health = TRUE) //Too many larvae!
-		A.apply_damage(1*implanted_embryos, CLONE, BODY_ZONE_PRECISE_GROIN, updating_health = TRUE) //ripping that womb
+		A.apply_damage(isxenohybrid(A) ? max(1, round(0.25*implanted_embryos)) : 1*implanted_embryos, CLONE, BODY_ZONE_PRECISE_GROIN, updating_health = TRUE) //ripping that womb
 		if(ismonkey(A) || HAS_TRAIT(A, TRAIT_FRAIL_LARVABURSTS))
 			A.apply_damage(50, BRUTE, BODY_ZONE_PRECISE_GROIN, updating_health = TRUE) //They CERTAINLY aren't fitting in a monkey.
-			A.apply_damage(10*implanted_embryos, CLONE, BODY_ZONE_PRECISE_GROIN, updating_health = TRUE)
+			A.apply_damage(isxenohybrid(A) ? max(1, round(2.5*implanted_embryos)) : 10*implanted_embryos, CLONE, BODY_ZONE_PRECISE_GROIN, updating_health = TRUE)
 			if(prob(50))
 				owner.visible_message(span_danger("[X] causes [A] to blow up in a gorey mess!"), span_danger("We make [A] explode into a gorey mess!"), span_warning("You hear a gorey explosion."), 5, A)
 				for(var/obj/item/alien_embryo/implanted in A.contents)
@@ -195,13 +195,13 @@
 			if(implanted_embryos >= (MAX_LARVA_PREGNANCIES*2))
 				for(var/D in damagetypes)
 					A.apply_damage((damageperlarva/damagescaledivisor)*implanted_embryos, D, BODY_ZONE_PRECISE_GROIN, updating_health = TRUE) //It'll get worse!
-				A.apply_damage(3, CLONE, BODY_ZONE_PRECISE_GROIN, updating_health = TRUE) //REALLY ripping that womb
+				A.apply_damage(isxenohybrid(A) ? 1 : 3, CLONE, BODY_ZONE_PRECISE_GROIN, updating_health = TRUE) //REALLY ripping that womb
 	if(prob(chancebunch)) //Queen has a higher chance to lay in batches.
 		implant_embryo(A, victimhole, 2, source = X, override_limit = MAX_LARVA_PREGNANCIES*2)
 		to_chat(owner, span_danger("You lay multiple larva at once!"))
 		to_chat(A, span_danger("You feel multiple larva being inserted at once!"))
 		if(ismonkey(A) || HAS_TRAIT(A, TRAIT_FRAIL_LARVABURSTS))
-			A.apply_damage(larvalbunch*10, CLONE, BODY_ZONE_PRECISE_GROIN, updating_health = TRUE)
+			A.apply_damage(isxenohybrid(A) ? max(1, round(larvalbunch*2.5)) : larvalbunch*10, CLONE, BODY_ZONE_PRECISE_GROIN, updating_health = TRUE)
 	else
 		implant_embryo(A, victimhole, source = X, override_limit = MAX_LARVA_PREGNANCIES*2)
 	if(A.stat == DEAD)
@@ -631,7 +631,7 @@
 		return FALSE
 
 	if(!hivemind_heal)
-		target.visible_message(span_xenowarning("\the [owner] healing resin over [target], mending their wounds!"))
+		target.visible_message(span_xenowarning("\the [owner] pours healing resin over [target], mending their wounds!"))
 	else
 		owner.visible_message(span_xenowarning("A faint psychic aura is suddenly emitted from \the [owner]!"), \
 		span_xenowarning("We cure [target] with the power of our mind!"))

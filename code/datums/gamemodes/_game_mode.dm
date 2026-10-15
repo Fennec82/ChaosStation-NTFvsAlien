@@ -71,7 +71,6 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 	var/waiting_for_candidates = FALSE
 	/// Ponderation rate of silos output. 1 is normal, 2 is twice
 	var/silo_scaling = 1
-
 	///If the gamemode has a whitelist of valid ship maps. Whitelist overrides the blacklist
 	var/list/whitelist_ship_maps
 	///If the gamemode has a blacklist of disallowed ship maps
@@ -79,7 +78,7 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 	///If the gamemode has a whitelist of valid ground maps. Whitelist overrides the blacklist
 	var/list/whitelist_ground_maps
 	///If the gamemode has a blacklist of disallowed ground maps
-	var/list/blacklist_ground_maps = list(MAP_WHISKEY_OUTPOST, MAP_OSCAR_OUTPOST, MAP_FORT_PHOBOS, MAP_COLONY1, MAP_CORSAT, MAP_LV_624BASES)
+	var/list/blacklist_ground_maps = list(MAP_WHISKEY_OUTPOST, MAP_DELTA_STATION, MAP_OSCAR_OUTPOST, MAP_FORT_PHOBOS, MAP_COLONY1, MAP_CORSAT, MAP_LV_624BASES)
 	///If the gamemode has a whitelist of valid antag maps. Whitelist overrides the blacklist
 	var/list/whitelist_antag_maps
 	///If the gamemode has a blacklist of disallowed antag maps
@@ -160,7 +159,7 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 	SHOULD_CALL_PARENT(TRUE)
 	if(custom_dnr_time)
 		GLOB.time_before_dnr = custom_dnr_time
-	SSpoints.prepare_supply_packs_list(CHECK_BITFIELD(round_type_flags, MODE_HUMAN_ONLY))
+	SSpoints.prepare_supply_packs_list(CHECK_BITFIELD(round_type_flags, MODE_HUMAN_ONLY|MODE_ENCOUNTER))
 	for(var/faction in human_factions)
 		SSpoints.dropship_points[faction] = 0
 		SSpoints.supply_points[faction] = 0
@@ -171,6 +170,15 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 	create_characters()
 	spawn_characters()
 	transfer_characters()
+/*
+	SSpoints.prepare_supply_packs_list(CHECK_BITFIELD(round_type_flags, MODE_HUMAN_ONLY|MODE_ENCOUNTER))
+	SSpoints.dropship_points = 0
+	SSpoints.supply_points[FACTION_TERRAGOV] = 0
+
+	for(var/hivenum in GLOB.hive_datums)
+		var/datum/hive_status/hive = GLOB.hive_datums[hivenum]
+		hive.purchases.setup_upgrades()
+*/
 	return TRUE
 
 ///Gamemode setup run after the game has started
@@ -807,7 +815,7 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 	return FALSE
 
 /datum/game_mode/proc/CanLateSpawn(mob/new_player/NP, datum/job/job)
-	if(!WHITELIST_CHECK(NP.client))
+	if(NP.client && CONFIG_GET(flag/amia_whitelist_enabled) && !WHITELIST_CHECK(NP.client))
 		WHITELIST_MESSAGE(NP.client)
 		return FALSE
 	if(!isnewplayer(NP))

@@ -42,7 +42,7 @@
 
 ///Creates this computer's eye object and sets up its references.
 /obj/machinery/computer/camera_advanced/proc/CreateEye()
-	eyeobj = new(null, parent_cameranet)
+	eyeobj = new(null, parent_cameranet, faction)
 	eyeobj.origin = src
 	RegisterSignal(eyeobj, COMSIG_QDELETING, PROC_REF(clear_eye_ref))
 

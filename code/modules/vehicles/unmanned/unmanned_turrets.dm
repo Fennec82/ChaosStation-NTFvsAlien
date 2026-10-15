@@ -24,7 +24,7 @@
 	name = "heavy unmanned vehicle turret"
 	icon_state = "heavy_cannon_obj"
 	turret_type = TURRET_TYPE_HEAVY
-	ammo_type = /datum/ammo/bullet/machinegun
+	ammo_type = /datum/ammo/bullet/rifle/heavy
 	fire_delay = 0.2 SECONDS
 	current_rounds = 50
 	max_rounds = 50

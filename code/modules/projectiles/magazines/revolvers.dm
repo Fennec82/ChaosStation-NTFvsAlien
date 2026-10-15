@@ -45,6 +45,7 @@
 	caliber = CALIBER_762X38
 	icon_state = "ny762"
 	icon_state_mini = "mag_revolver_blue"
+	max_rounds = 7
 
 
 /obj/item/ammo_magazine/revolver/small

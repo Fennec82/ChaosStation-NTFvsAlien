@@ -135,6 +135,7 @@
 /area/interior
 	name = "ERROR AREA DO NOT USE"
 	base_lighting_alpha = 128
+	requires_power = FALSE
 
 /turf/closed/interior
 	resistance_flags = RESIST_ALL

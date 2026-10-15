@@ -53,9 +53,11 @@
 	if(opacity)
 		icon_state = initial_icon_state
 		layer = ABOVE_MOB_LAYER
+		AddElement(/datum/element/light_blocking)
 	else
 		icon_state += "_open"
 		layer = OBJ_LAYER
+		RemoveElement(/datum/element/light_blocking)
 
 /obj/structure/curtain/shower
 	name = "shower curtain"

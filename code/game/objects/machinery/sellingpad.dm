@@ -83,6 +83,26 @@
 			points += export_report.points
 			dropship_points += export_report.dropship_points
 			SSpoints.export_history += export_report
+		if(ishuman(onpad))
+			var/mob/living/carbon/human/liwwie = onpad
+			if(LAZYLEN(liwwie.ckey_history))
+				var/turf/thespot = pick(GLOB.latejoinsurvivor) //gl
+				switch(liwwie.faction)
+					if(FACTION_CLF)
+						thespot = pick(GLOB.latejoinclf)
+					if(FACTION_SOM)
+						thespot = pick(GLOB.latejoinsom)
+					if(FACTION_VSD)
+						thespot = pick(GLOB.latejoinsurvivor)
+					if(FACTION_MOTHELLIAN)
+						thespot = pick(GLOB.latejoinmoff)
+					if(FACTION_NANOTRASEN,FACTION_TERRAGOV)
+						thespot = pick(GLOB.reclone_tp_spots)
+					else
+						thespot = pick(GLOB.latejoinsurvivor)
+				liwwie.forceMove(thespot.loc)
+				visible_message(span_notice("[src] buzzes: The [onpad] has been sold for [points ? points : "no"] supply point[points == 1 ? "" : "s"][dropship_points ? " and [dropship_points] dropship point[dropship_points == 1 ? "" : "s"]" : ""]."))
+				return
 		visible_message(span_notice("[src] buzzes: The [onpad] has been sold for [points ? points : "no"] supply point[points == 1 ? "" : "s"][dropship_points ? " and [dropship_points] dropship point[dropship_points == 1 ? "" : "s"]" : ""]."))
 		qdel(onpad)
 
